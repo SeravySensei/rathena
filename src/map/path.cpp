@@ -128,7 +128,7 @@ int path_blownpos(int16 m,int16 x0,int16 y0,int16 dx,int16 dy,int count)
 
 bool path_search_long(struct shootpath_data *spd, int16 m, int16 x0, int16 y0, int16 x1, int16 y1, cell_chk cell)
 {
-	return (spd, m, x0, y0, x1, y1, cell, MAX_WALKPATH);
+	return path_search_long(spd, m, x0, y0, x1, y1, cell, MAX_WALKPATH);
 }
 
 
