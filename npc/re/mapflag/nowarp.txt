@@ -12,16 +12,6 @@
 //============================================================
 
 // WOE:TE Maps ===================
-te_prtcas01	mapflag	nowarp
-te_prtcas02	mapflag	nowarp
-te_prtcas03	mapflag	nowarp
-te_prtcas04	mapflag	nowarp
-te_prtcas05	mapflag	nowarp
-te_aldecas1	mapflag	nowarp
-te_aldecas2	mapflag	nowarp
-te_aldecas3	mapflag	nowarp
-te_aldecas4	mapflag	nowarp
-te_aldecas5	mapflag	nowarp
 
 // Episode 15
 1@lab	mapflag	nowarp

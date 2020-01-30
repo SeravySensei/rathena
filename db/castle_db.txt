@@ -50,13 +50,13 @@
 33,arug_cas05,Bandis,Manager#arug_cas05			// kRO : Bandis
 
 // WOE TE castle
-34,te_aldecas1,Kafragarten 1,Manager_TE#Glaris
-35,te_aldecas2,Kafragarten 2,Manager_TE#Defolty
-36,te_aldecas3,Kafragarten 3,Manager_TE#Sorin
-37,te_aldecas4,Kafragarten 4,Manager_TE#Bennit
-38,te_aldecas5,Kafragarten 5,Manager_TE#W
-39,te_prtcas01,Gloria 1,Manager_TE#Gaebolg
-40,te_prtcas02,Gloria 2,Manager_TE#Richard
-41,te_prtcas03,Gloria 3,Manager_TE#Wigner
-42,te_prtcas04,Gloria 4,Manager_TE#Heine
-43,te_prtcas05,Gloria 5,Manager_TE#Nerious
+34,te_aldecas1,Glaris,Manager_TE#Glaris
+35,te_aldecas2,Defolty,Manager_TE#Defolty
+36,te_aldecas3,Sorin,Manager_TE#Sorin
+37,te_aldecas4,Bennit,Manager_TE#Bennit
+38,te_aldecas5,W,Manager_TE#W
+39,te_prtcas01,Gaebolg,Manager_TE#Gaebolg
+40,te_prtcas02,Richard,Manager_TE#Richard
+41,te_prtcas03,Wigner,Manager_TE#Wigner
+42,te_prtcas04,Heine,Manager_TE#Heine
+43,te_prtcas05,Nerious,Manager_TE#Nerious

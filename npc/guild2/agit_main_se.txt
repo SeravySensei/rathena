@@ -31,16 +31,17 @@ OnRecvCastle2:
 		callsub(Addmonster,"Evil Druid",1117,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Khalitzburg",1132,4, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Abysmal Knight",1219,3, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-		callsub(Addmonster,"Executioner",1205,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+		callsub(Addmonster,"Ice Titan",1777,20, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Penomena",1216,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Alarm",1193,18, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Clock",1269,9, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Raydric Archer",1276,12, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Wanderer",1208,3, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 		callsub(Addmonster,"Alice",1275,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-		callsub(Addmonster,"Bloody Knight",1268,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-		callsub(Addmonster,"Dark Lord",1272,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-		callsub(Addmonster,"Tower Keeper",1270,4, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+		callsub(Addmonster,"Alicel",1735,12, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+		callsub(Addmonster,"Dark Lord",1272,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+		callsub(Addmonster,"RSX",1623,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+		callsub(Addmonster,"Aliot",1736,12, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 	}
 	if (getcastledata(strnpcinfo(2),CD_ENABLED_KAFRA) < 1)
 		disablenpc "Kafra Employee#"+substr(strnpcinfo(2),0,1)+substr(strnpcinfo(2),8,9);

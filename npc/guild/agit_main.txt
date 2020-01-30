@@ -359,14 +359,14 @@ OnRecvCastle:
 			callsub(Addmonster,"Evil Druid",1117,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Khalitzburg",1132,4, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Abysmal Knight",1219,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Executioner",1205,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Acidus",1716,5, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Penomena",1216,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Alarm",1193,18, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Clock",1269,9, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Raydric Archer",1276,7, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Wanderer",1208,3, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Alice",1275,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Bloody Knight",1268,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Dragon Boss",2913,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Dark Lord",1272,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "aldeg_cas01") { setarray .@emproom[0],216,23; }
@@ -376,7 +376,8 @@ OnRecvCastle:
 			else if (strnpcinfo(2) == "aldeg_cas05") { setarray .@emproom[0],27,101; }
 			callsub(Addmonster,"Dark Lord",1272,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
 			callsub(Addmonster,"Baphomet",1039,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
-			callsub(Addmonster,"Tower Keeper",1270,4, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
+			callsub(Addmonster,"Tower Keeper",1270,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
+			callsub(Addmonster,"Elder",1377,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
 			callsub(Addmonster,"Bloody Knight",1268,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
 			callsub(Addmonster,"Abysmal Knight",1219,3, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
 			callsub(Addmonster,"Raydric Archer",1276,8, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),.@emproom[0],.@emproom[1]); 
@@ -432,15 +433,15 @@ OnRecvCastle:
 			// Normal Spawns
 			callsub(Addmonster,"Raydric",1163,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Khalitzburg",1132,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Abysmal Knight",1219,5, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Bloody Knight",1268,5, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Abysmal Knight",1219,12, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Bloody Knight",1268,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Stormy Knight",1251,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Garm",1252,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Raydric Archer",1276,5, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Gryphon",1259,2, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Chimera",1283,3, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Anubis",1098,10, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Chimera",1283,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			callsub(Addmonster,"Alice",1275,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
-			callsub(Addmonster,"Zealotus",1200,1, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
+			callsub(Addmonster,"Baphomet Jr",1101,5, getcastledata( strnpcinfo(2), CD_CURRENT_ECONOMY ),0,0); 
 			// Set Emperium room spawn coordinates and spawn monsters.
 			if (strnpcinfo(2) == "prtg_cas01") { setarray .@emproom[0],197,197; }
 			else if (strnpcinfo(2) == "prtg_cas02") { setarray .@emproom[0],157,174; }
