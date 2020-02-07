@@ -181,4 +181,6 @@ void do_final_unit(void);
 
 int endowneed(block_list * bl, va_list ap);
 
+int sgn(int x);
+
 #endif /* UNIT_HPP */

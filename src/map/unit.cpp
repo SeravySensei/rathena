@@ -334,7 +334,7 @@ static TIMER_FUNC(unit_walktoxy_timer){
 	TBL_MOB *md=NULL;
 
 	bl = map_id2bl(id);
-
+	
 	if(bl == NULL)
 		return 0;
 
@@ -795,6 +795,7 @@ int unit_walktobl(struct block_list *bl, struct block_list *tbl, int range, unsi
 
 	if (!status_bl_has_mode(bl,MD_CANMOVE))
 		return 0;
+
 
 	if (!unit_can_reach_bl(bl, tbl, distance_bl(bl, tbl)+1, flag&1, &ud->to_x, &ud->to_y)) {
 		ud->to_x = bl->x;
