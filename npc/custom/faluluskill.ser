@@ -83,7 +83,7 @@ close;
 }
 
 mes	"I want to be a Celeb Idol.";
-mes	"In order to become familiar with luxurious envirnments, I need 3 bars of Gold.";
+mes	"In order to become familiar with luxurious environments, I need 3 bars of Gold.";
 
 if(countitem(969)>=3){
 		next;
@@ -163,6 +163,827 @@ if(countitem(7300)>=5){
 		mes "[Gained 1 Skill Point!]";
 		set QSkillPoint005,1;
 		delitem 7300,5;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,124,143,6	script	Yuyulu::chfalulu6	18001,{
+.@name$ = "[Yuyulu]";
+mes .@name$;
+
+if (QSkillPoint006 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Cool Idol.";
+mes	"I think ghosts are super cool!";
+mes	"Please give me 3 Skeletal Armor Pieces?";
+
+if(countitem(7450)>=3){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint006,1;
+		delitem 7450,3;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,61,215,6	script	Urulu::chfalulu7	18001,{
+.@name$ = "[Urulu]";
+mes .@name$;
+
+if (QSkillPoint007 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Cool Idol.";
+mes "No, I want to be a Celeb Idol!.";
+mes "Arrghh I can't decide!";
+mes	"Fighting for Treasure is cool and it makes you rich too, it's perfect for both!";
+mes	"I'd like to request 10 Treasure Boxes, please. I heard the monsters near Hugel are guarding some!";
+
+if(countitem(7444)>=10){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint007,1;
+		delitem 7444,10;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,138,250,6	script	Suculu::chfalulu8	18001,{
+.@name$ = "[Suculu]";
+mes .@name$;
+
+if (QSkillPoint008 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I heard Succubi are popular with boys.";
+mes "Maybe that could be used to get more fans?";
+mes	"Could you please bring me a Succubbus Horn so I can try wearing that?";
+
+if(countitem(5066)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you do have it!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint008,1;
+		delitem 5066,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,203,137,3	script	Lululu::chfalulu9	18001,{
+.@name$ = "[Lululu]";
+mes .@name$;
+
+if (QSkillPoint009 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"Luck is essential to become famous.";
+mes	"I think 25 Amulets might be enough to become the greatest Idol ever!";
+
+if(countitem(609)>=25){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint009,1;
+		delitem 609,25;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,203,146,3	script	Wululu::chfalulu10	18001,{
+.@name$ = "[Wululu]";
+mes .@name$;
+
+if (QSkillPoint010 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I think studying is the best way to Idolhood.";
+mes	"Please bring me 40 Worn Out Scrolls!";
+
+if(countitem(618)>=40){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint010,1;
+		delitem 618,40;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prt_in,55,57,3	script	Erulu::chfalulu11	18001,{
+.@name$ = "[Erulu]";
+mes .@name$;
+
+if (QSkillPoint011 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I'm going to forge my own destiny!";
+mes	"Destinies cannot be forged on any common anvil though!";
+mes	"Pleae bring me an Emperium Anvil so I can start working!";
+
+if(countitem(989)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you do have it!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint011,1;
+		delitem 989,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,194,82,6	script	Charulu::chfalulu12	18001,{
+.@name$ = "[Charulu]";
+mes .@name$;
+
+if (QSkillPoint012 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"Magic is the answer to everything.";
+mes	"You can have as many fans as you want if you charm them!";
+mes	"If only I had 30 Old Magicbooks, I could do that too!";
+
+if(countitem(1006)>=30){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint012,1;
+		delitem 1006,30;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+
+prontera,167,142,3	script	Torulu::chfalulu13	18001,{
+.@name$ = "[Torulu]";
+mes .@name$;
+
+if (QSkillPoint013 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Cool Idol.";
+mes	"Tigers are so cool....";
+mes	"I wish I had 12 Tiger Skins!";
+
+if(countitem(1029)>=12){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint013,1;
+		delitem 1029,12;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,167,152,3	script	Kalulu::chfalulu14	18001,{
+.@name$ = "[Kalulu]";
+mes .@name$;
+
+if (QSkillPoint014 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Celeb idol.";
+mes	"No one is more famous than gods.";
+mes	"I feel if I had 3 Hands of God, I could be famous too!";
+
+if(countitem(1009)>=3){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint014,1;
+		delitem 1009,3;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,173,148,3	script	Fafalu::chfalulu15	18001,{
+.@name$ = "[Fafalu]";
+mes .@name$;
+
+if (QSkillPoint015 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Pop idol.";
+mes	"Fancy Flowers are so colorful, I wish I had some.";
+mes	"12 of them could be enough to decorate my room!";
+
+if(countitem(2207)>=12){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint015,1;
+		delitem 2207,12;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,172,176,3	script	Piruru::chfalulu16	18001,{
+.@name$ = "[Piruru]";
+mes .@name$;
+
+if (QSkillPoint016 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Cool idol.";
+mes	"Piracy is so cool!";
+mes "Let's show the filthy dogs of the copyright industry what a true goddess of copying can do!"; 
+mes	"But first, I need to look the part! Bring me a Pirate Bandana, mate!";
+
+if(countitem(2287)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you do have them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint016,1;
+		delitem 2287,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,160,128,3	script	Miruru::chfalulu17	18001,{
+.@name$ = "[Miruru]";
+mes .@name$;
+
+if (QSkillPoint017 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Pop idol!";
+mes	"I feel like I could give a stellar performance if I had a bit more self-confidence.";
+mes	"If only I had a Stellar hairpin to put in my hair!";
+
+if(countitem(2294)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you brought a Stellar!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint017,1;
+		delitem 2294,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,156,130,6	script	Malulu::chfalulu18	18001,{
+.@name$ = "[Malulu]";
+mes .@name$;
+
+if (QSkillPoint018 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Witch idol! Wait, is that even possible?";
+mes	"Anyway, I believe winning takes more than just being good and lucky.";
+mes	"Your rivals need to have bad luck as well!";
+mes	"Bring me 3 Cursed Brooches of a Goddess and I can be certain luck sides with the right person!";
+
+if(countitem(2652)>=3){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint018,1;
+		delitem 2652,3;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,158,122,6	script	Chiruru::chfalulu19	18001,{
+.@name$ = "[Chiruru]";
+mes .@name$;
+
+if (QSkillPoint019 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"We are all Mister Seravy's brides like big sister Falulu!";
+mes	"...except, we are going to need some rings for the ceremony.";
+mes	"There are 125 of us so could you please bring 125 Diamond Rings?";
+
+if(countitem(2613)>=125){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint019,1;
+		delitem 2613,125;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,152,122,6	script	Deruru::chfalulu20	18001,{
+.@name$ = "[Deruru]";
+mes .@name$;
+
+if (QSkillPoint020 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to become a Pop Idol!";
+mes	"Unfortunately, I'm getting nervous at the most critical moments!";
+mes	"I believe wearing a Critical Ring could help my problem.";
+
+if(countitem(2616)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you brought one!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint020,1;
+		delitem 2616,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,162,117,3	script	Ciruru::chfalulu21	18001,{
+.@name$ = "[Ciruru]";
+mes .@name$;
+
+if (QSkillPoint021 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to become a Cool Idol!";
+mes	"Ninjas are the coolest thing ever!";
+mes	"Could you please bring me 5 Shinobi Sashes so I can practice Ninjutsu?";
+
+if(countitem(2654)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint021,1;
+		delitem 2654,5;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,158,115,3	script	Joruru::chfalulu22	18001,{
+.@name$ = "[Joruru]";
+mes .@name$;
+
+if (QSkillPoint022 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be an awesome wizard like Seravy!";
+mes	"Singing? Yes, sure I love that too, but magic is really the best!";
+mes	"Could you bring me a spellbook of Comet? I have to start somewhere...";
+
+if(countitem(6195)>=1){
+		next;
+		mes .@name$;
+		mes "Oh, you brought one!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint022,1;
+		delitem 6195,1;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,154,127,3	script	Jururu::chfalulu23	18001,{
+.@name$ = "[Jururu]";
+mes .@name$;
+
+if (QSkillPoint023 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"Maid Idols seem to be popular lately!";
+mes	"Could you bring me some Alice's Aprons please?";
+mes	"I think 100 of them should suffice...";
+
+if(countitem(7047)>=100){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint023,1;
+		delitem 7047,100;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,153,118,3	script	Niruru::chfalulu24	18001,{
+.@name$ = "[Niruru]";
+mes .@name$;
+
+if (QSkillPoint024 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Lovely Idol like our big sister!";
+mes	"Those wings might be a key part to her success.. I have to research them.";
+mes	"Do you happen to have 100 False Angel Wings to spare?";
+
+if(countitem(7104)>=100){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint024,1;
+		delitem 7104,100;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,155,124,3	script	Fururu::chfalulu25	18001,{
+.@name$ = "[Fururu]";
+mes .@name$;
+
+if (QSkillPoint025 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Natural Idol!";
+mes	"After observing Fuwari I realized the most important things in being a Natural idol";
+mes	"are being nice to animals and... not wearing shoes. So animals should most definitely";
+mes "not wear shoes either! Horseshoes are unnatural and must be erased. If you agree,";
+mes "bring me 250 Burning Horseshoes to prove your loyality to nature!";
+
+if(countitem(7120)>=250){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint025,1;
+		delitem 7120,250;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,163,121,6	script	Silulu::chfalulu26	18001,{
+.@name$ = "[Silulu]";
+mes .@name$;
+
+if (QSkillPoint026 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I heard Super Cyalume Coords are made from a material called";
+mes	"Glistering Coat. I'm going to use it to upgrade my entire collection!";
+mes	"I estimate I'm going to need about...781 bottles!";
+
+if(countitem(7139)>=781){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint026,1;
+		delitem 7139,781;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,162,124,6	script	Sululu::chfalulu27	18001,{
+.@name$ = "[Sululu]";
+mes .@name$;
+
+if (QSkillPoint027 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to become a Pop Idol!";
+mes	"I heard eating Cloud Crumbs can make your dancing appear even lighter.";
+mes	"Could you bring me about 120 of those?";
+
+if(countitem(7162)>=100){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint027,1;
+		delitem 7162,100;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,116,94,6	script	Rululu::chfalulu28	18001,{
+.@name$ = "[Rululu]";
+mes .@name$;
+
+if (QSkillPoint028 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I thought it might help if I designed my own Coords.";
+mes	"Please bring me 170 Soft Silks as materials...";
+mes "I thought I can buy them at this marketplace but no one is selling any!";
+
+if(countitem(7166)>=170){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint028,1;
+		delitem 7166,170;
+		set SkillPoint,SkillPoint+1;
+	}
+close;
+}
+
+prontera,122,84,3	script	Zululu::chfalulu29	18001,{
+.@name$ = "[Zululu]";
+mes .@name$;
+
+if (QSkillPoint029 == 1) {
+mes "Thank you for your help!";
+close;
+}
+
+if (JobLevel<50) {
+mes "Master your job before looking for more";
+mes "things to learn!";
+close;
+}
+
+mes	"I want to be a Pop Idol!";
+mes	"I don't even have the basics though...";
+mes "Could you bring me 75 Striped Socks please?";
+
+if(countitem(7219)>=75){
+		next;
+		mes .@name$;
+		mes "Oh, you brought them!";
+		mes "Thank you very much!";
+		next;
+		mes "Let me teach you something!";
+		mes "[Gained 1 Skill Point!]";
+		set QSkillPoint029,1;
+		delitem 7219,75;
 		set SkillPoint,SkillPoint+1;
 	}
 close;

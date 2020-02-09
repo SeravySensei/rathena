@@ -1,7 +1,7 @@
 -	script	WoeMonsterInvasion	FAKE_NPC,{
 OnMinute06:
 	for ( .@i = 0; .@i < 40; ++.@i ) {
-		if ( getcastledata( .castle$[.@i], CD_GUILD_ID ) ) {
+		if (getcastledata(.castle$[.@i], CD_GUILD_ID)!=0) {
 			if ( rand(25) == 1 ) { // 4% chance per hour for castle to fall to monsters
 				setcastledata .castle$[.@i], CD_GUILD_ID, 0;
 				donpcevent "Agit#"+ .castle$[.@i] +"::OnRecvCastle";
