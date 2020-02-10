@@ -1562,12 +1562,12 @@ IG_GoodWeapon,1480,1
 IG_GoodWeapon,1481,1
 IG_GoodWeapon,1483,1
 IG_Ultimate,1494,1
-IG_GoodWeapon,1422,1
-IG_GoodWeapon,1424,1
-IG_GoodWeapon,1426,1
-IG_GoodWeapon,1427,1
-IG_GoodWeapon,1428,1
-IG_GoodWeapon,1429,1
+IG_GoodWeapon,1522,1
+IG_GoodWeapon,1524,1
+IG_GoodWeapon,1526,1
+IG_GoodWeapon,1527,1
+IG_GoodWeapon,1528,1
+IG_GoodWeapon,1529,1
 IG_GoodWeapon,1531,1
 IG_GoodWeapon,1532,1
 IG_Ultimate,1533,1
@@ -1613,7 +1613,7 @@ IG_GoodWeapon,1722,1
 IG_GoodWeapon,1723,1
 IG_GoodWeapon,1724,1
 IG_GoodWeapon,1725,1
-IG_GoodWeapon,1727,1
+IG_Ultimate,1727,1
 IG_GoodWeapon,1730,1
 IG_GoodWeapon,1731,1
 IG_GoodWeapon,1732,1
@@ -1633,13 +1633,13 @@ IG_Ultimate,1833,1
 IG_Ultimate,1835,1
 IG_Ultimate,1837,1
 IG_Ultimate,1841,1
-IG_Ultimate,1934,1
-IG_Ultimate,1935,1
+// IG_GoodWeapon,1934,1 //add after balancing 3rd job and checking that dungeon/droprate
+// IG_GoodWeapon,1935,1 //add after balancing 3rd job and checking that dungeon/droprate
 IG_Ultimate,1937,1
 IG_GoodWeapon,1926,1
 IG_GoodWeapon,1930,1
-IG_Ultimate,1989,1
-IG_Ultimate,1990,1
+// IG_Ultimate,1989,1 //add after balancing 3rd job and checking that dungeon/droprate
+// IG_Ultimate,1990,1 //add after balancing 3rd job and checking that dungeon/droprate
 IG_Ultimate,1992,1
 IG_GoodWeapon,1979,1
 IG_GoodWeapon,1985,1
@@ -1656,7 +1656,6 @@ IG_Ultimate,2012,1
 IG_Ultimate,2013,1
 IG_Ultimate,2014,1
 IG_GoodShield,2106,1
-IG_GoodShield,2107,1
 IG_GoodShield,2108,1
 IG_GoodShield,2109,1
 IG_GoodShield,2110,1
@@ -1728,7 +1727,7 @@ IG_GoodShoes,2442,1
 IG_GoodShoes,2448,1
 IG_GoodShoes,2450,1
 IG_GoodShoes,2467,1
-IG_GoodShoes,2469,1
+IG_GoodShoes,2468,1
 IG_GoodShoes,2469,1
 IG_GoodShoes,2470,1
 IG_GoodShoes,2475,1
@@ -1742,7 +1741,6 @@ IG_GoodShoes,2488,1
 IG_Ultimate,2489,1
 IG_GoodShoes,2491,1
 IG_Ultimate,2493,1
-IG_GoodShoes,2495,1
 IG_GoodShoes,2499,1
 IG_GoodGarment,2507,1
 IG_GoodGarment,2509,1
@@ -1765,7 +1763,6 @@ IG_GoodGarment,2572,1
 IG_Ultimate,2573,1
 IG_GoodGarment,2574,1
 IG_GoodGarment,2575,1
-IG_GoodGarment,2576,1
 IG_GoodGarment,2577,1
 IG_GoodGarment,2578,1
 IG_GoodGarment,2579,1
@@ -1856,7 +1853,7 @@ IG_Ultimate,2926,1
 IG_Ultimate,2927,1
 IG_Ultimate,2928,1
 IG_GoodAcc,2984,1
-IG_Ultimate,2988,1
+IG_GoodAcc,2988,1
 IG_Ultimate,2992,1
 IG_GoodHeadgear,5002,1
 IG_GoodHeadgear,5003,1
@@ -1908,7 +1905,7 @@ IG_GoodHeadgear,5283,1
 IG_GoodHeadgear,5289,1
 IG_GoodHeadgear,5293,1
 IG_GoodHeadgear,5296,1
-IG_Ultimate,5197,1
+IG_Ultimate,5297,1
 IG_GoodHeadgear,5305,1
 IG_GoodHeadgear,5310,1
 IG_GoodHeadgear,5311,1
@@ -1973,7 +1970,6 @@ IG_GoodHeadgear,5531,1
 IG_GoodHeadgear,5548,1
 IG_GoodHeadgear,5557,1
 IG_GoodHeadgear,5560,1
-IG_GoodHeadgear,5561,1
 IG_Ultimate,5603,1
 IG_Ultimate,5604,1
 IG_Ultimate,5605,1
@@ -2036,7 +2032,7 @@ IG_GoodWeapon,13311,1
 IG_GoodWeapon,13313,1
 IG_GoodWeapon,13314,1
 IG_GoodWeapon,13315,1
-IG_GoodWeapon,13308,1
+IG_GoodWeapon,13303,1
 IG_GoodWeapon,13404,1
 IG_GoodWeapon,13405,1
 IG_GoodWeapon,13414,1
@@ -2049,6 +2045,7 @@ IG_GoodArmor,15000,1
 IG_GoodArmor,15012,1
 IG_GoodArmor,15013,1
 IG_GoodArmor,15014,1
+IG_GoodArmor,15025,1
 IG_GoodArmor,15026,1
 IG_GoodArmor,15027,1
 IG_GoodArmor,15028,1

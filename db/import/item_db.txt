@@ -102,7 +102,7 @@
 31888,Cursed_Lucky_Brooch,Test Ring,4,46000,,100,,0,,0,0xFFFFFFFF,63,2,136,,40,0,0,{ bonus2 bAddEff2,Eff_Curse,5; },{},{}
 31900,C_Horn_Of_Lord_Kaho,Costume Lord Kaho's Horn,4,20,,0,,30,,0,0xFFFFFFFF,63,2,1024,,0,0,99,{},{},{}
 31901,Floating_Ice,Floating Ice,4,0,,0,,0,,0,0xFFFFFFFF,63,2,1,,1,0,1562,{ bonus2 bMagicAtkEle,Ele_Water,10; },{},{}
-31902,AliceFriesinger_Hat_69,Alice Friesinger Hat 69,4,0,,0,,0,,0,0xFFFFFFFF,63,2,256,,1,1,1249,{ bonus3 bAutoSpellWhenHit,"AL_HEAL",3,100; bonus bFlee,-25; bonus2 bSubClass,Class_Boss,5; bonus2 bSubClass,Class_Normal,5; },{},{}
+31902,AliceFriesinger_Hat_69,Personal Maid Hat,4,0,,0,,0,,0,0xFFFFFFFF,63,2,256,,1,1,1249,{ bonus3 bAutoSpellWhenHit,"AL_HEAL",3,100; bonus bFlee,-25; bonus2 bSubClass,Class_Boss,5; bonus2 bSubClass,Class_Normal,5; },{},{}
 31903,C_Spirit_Of_Chung_E,Costume Spirit Of Chung E,4,20,,0,,0,,0,0xFFFFFFFF,63,2,1024,,0,1,882,{ bonus2 bAddEff,Eff_Stun,1000; bonus bDefEle,Ele_Ghost; bonus bDex,3; bonus bStr,3; bonus bVit,3; bonus bAgi,3; },{},{}
 31904,GOD_FAVOR,Favor of Gods,3,750000,,,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
 31905,Angel_Guidance,Angel Guidance,4,0,,0,,0,,0,0xFFFFFFFF,63,2,256,,1,0,1188,{ bonus bAllStats,1; },{},{}

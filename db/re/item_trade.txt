@@ -281,7 +281,6 @@
 2681,507,100	// Republic_Ring
 2686,507,100	// Elven_Ears_C
 2687,507,100	// Steel_Flower_C
-2688,507,100	// Critical_Ring_C
 2689,507,100	// Earring_C
 2690,507,100	// Ring_C
 2691,507,100	// Necklace_C

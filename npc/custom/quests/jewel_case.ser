@@ -47,9 +47,9 @@ lighthalzen,108,229,2	script	La Fenn	766,{
 				mes "Now you're strong.";
 				mes "But... not quite strong for my riddle.";
 				if(rand(2)) {
-					mes "Kill "+((1000000-BaseExp)/3765+1)+" more Seals and return.";
+					mes "Kill "+((1000000-BaseExp)/2520+1)+" more Seals and return.";
 				} else {
-					mes "Kill "+((1000000-BaseExp)/81+1)+" more Poporings and come back.";
+					mes "Kill "+((1000000-BaseExp)/1386+1)+" more Poporings and come back.";
 				}
 			} else {
 				mes "Now you're REALLY strong.";

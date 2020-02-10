@@ -93,7 +93,7 @@
 					mes "This is some high risk territory!";
 					mes "Alright, which weapon would you like me to try adding a Slot?";
 					next;
-					switch(select("Hunter Bow:Survivor's Rod(INT):Zweihander:Flamberge:Infiltrator:Ballista:Stunner:Berserk:Claymore"))
+					switch(select("Hunter Bow:Survivor's Rod(INT):Zweihander:Flamberge:Infiltrator:Ballista:Stunner:Berserk:Claymore:Orc Archer Bow"))
 					{
 						case 1: callfunc "Func_Socket",1718,1726,40,61,500,984,2,999,10;
 						case 2: callfunc "Func_Socket",1619,1620,40,61,500,984,5,999,10;
@@ -104,6 +104,7 @@
 						case 7: callfunc "Func_Socket",1522,1532,40,61,500,984,2,999,10;
 						case 8: callfunc "Func_Socket",1814,1816,40,61,500,984,5,999,10;
 						case 9: callfunc "Func_Socket",1163,1172,40,61,500,984,2,999,10; // NPC says "5 Oridecon" (Aegis) but takes only 2
+						case 10: callfunc "Func_Socket",1734,18115,40,58,500,984,2,999,10; 
 					}
 				case 4:
 					mes "[Seiyablem]";
@@ -112,7 +113,7 @@
 					mes "It'd be a near miracle if I can actually pull this off.";
 					mes "Okay... Which weapon shall we try adding a Slot to?";
 					next;
-					switch(select("Gungnir:Poison Knife:Ice Pick:Sucsamad:Ginnungagap:Cutlas:Crescent Scythe:Survivor's Rod(DEX)"))
+					switch(select("Gungnir:Poison Knife:Ice Pick:Sucsamad:Ginnungagap:Cutlas:Crescent Scythe:Survivor's Rod(DEX):Quadrille"))
 					{
 						case 1: callfunc "Func_Socket", 1413, 1418,40,51,1000,984,5,999,10;
 						case 2: callfunc "Func_Socket", 1239,13016,40,51,1000,984,5,999,10;
@@ -122,6 +123,7 @@
 						case 6: callfunc "Func_Socket", 1135,13400,40,51,1000,984,5,999,10;
 						case 7: callfunc "Func_Socket", 1466, 1476,40,51,1000,984,5,999,10;
 						case 8: callfunc "Func_Socket", 1617, 1618,40,51,2000,984,5,999,10;
+						case 9: callfunc "Func_Socket", 1527, 16024,40,56,2000,984,10,999,10;
 					}
 			}
 		case 2:
@@ -132,7 +134,7 @@
 			mes "C Class is the easiest one, and S Class he hardest one.";
 			mes "Which class would you like to try?";
 			next;
-			switch(select("C Class:B Class:A Class:S Class"))
+			switch(select("C Class:B Class:A Class:S Class:Set Items"))
 			{
 				case 1:
 					mes "[Seiyablem]";
@@ -199,7 +201,7 @@
 					mes "You sure about this?";
 					mes "Alright... Let me know the Armor to which you'd like to add a Slot, and I'll tell what I need to try it.";
 					next;
-					switch(select("Majestic Goat:Spiky Band:Bone Helm:Corsair:Crown:Tiara:Sphinx Hat:Robe of Cast:Earring:Ring:Bow Thimble"))
+					switch(select("Majestic Goat:Spiky Band:Bone Helm:Corsair:Crown:Tiara:Sphinx Hat:Robe of Cast:Earring:Ring:Bow Thimble:Orc Hero Helm"))
 					{
 						case 1:  callfunc "Func_Socket",2256,5160,40,51,2000,985,2;
 						case 2:  callfunc "Func_Socket",2258,5161,40,51,2000,985,2;
@@ -212,6 +214,28 @@
 						case 9:  callfunc "Func_Socket",2602,2622,40,51,1000,985,2;
 						case 10: callfunc "Func_Socket",2601,2621,40,51,1000,985,2;
 						case 11: callfunc "Func_Socket",2619,2671,40,51,1000,985,2;
+						case 12: callfunc "Func_Socket",5094,5095,40,61,1000,985,2;
+					}
+				case 4:
+					mes "[Seiyablem]";
+					mes "Set items... You know those are all S class or better, right?";
+					mes "You sure about this?";
+					mes "Alright... Let me know the Armor to which you'd like to add a Slot, and I'll tell what I need to try it.";
+					next;
+					switch(select("Freyer Shoes:Vidar Boots:Goibne Greaves:Critical Ring:Goibne Spaulders:Morrigane Belt:Morrigane Pendant:Morrigane Helm:Goibne Helm:Morpheus Ring:Morpheus Braclet:Magni Cap"))
+					{
+						case 1: callfunc "Func_Socket",2417,2488,40,51,1000,985,2;
+						case 2: callfunc "Func_Socket",2418,2489,40,47,1000,985,2;
+						case 3: callfunc "Func_Socket",2419,2493,40,47,1000,985,2;
+						case 4: callfunc "Func_Socket",2616,2943,40,45,1000,985,2;
+						case 5: callfunc "Func_Socket",2520,2599,40,47,1000,985,2;
+						case 6: callfunc "Func_Socket",2650,2900,40,51,1000,985,2;
+						case 7: callfunc "Func_Socket",2651,2901,40,51,1000,985,2;
+						case 8: callfunc "Func_Socket",5124,19044,40,51,1000,985,2;
+						case 9: callfunc "Func_Socket",5128,19043,40,51,1000,985,2;
+						case 10: callfunc "Func_Socket",2648,2902,40,51,1000,985,2;
+						case 11: callfunc "Func_Socket",2649,2903,40,51,1000,985,2;
+						case 12: callfunc "Func_Socket",5122,18594,40,51,1000,985,2;
 					}
 			}
 		case 3:
@@ -275,6 +299,7 @@ function	script	Func_Socket	{
 		next;
 		mes "[Seiyablem]";
 		mes "If this attempt to add a Slot to your Armor fails, then the ^FF0000Armor^000000, ^FF0000it's upgrades^000000 ^FF0000and any Cards compounded to it will be destroyed^000000.";
+		mes "The expected success rate is only " +(getarg(3)-getarg(2)-1) +" %";
 	}
 	mes "Do you still want to try to add a Slot?";
 	next;
