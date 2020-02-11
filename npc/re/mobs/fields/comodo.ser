@@ -33,6 +33,7 @@ cmd_fild02,0,0	monster	Shellfish	1074,20,5000
 cmd_fild02,0,0	monster	Crab	1073,20,5000
 cmd_fild02,0,0	monster	Aster	1266,10,5000
 cmd_fild02,0,0	monster	Mobster	1313,1,5000
+cmd_fild02,0,0	monster	Swift Seal	2829,1,300000
 
 //==================================================
 // cmd_fild03 - Zenhai Marsh
@@ -53,6 +54,7 @@ cmd_fild04,0,0	monster	Galapago	1391,30,5000
 cmd_fild04,0,0	monster	Shellfish	1074,20,5000
 cmd_fild04,0,0	monster	Crab	1073,20,5000
 cmd_fild04,0,0	monster	Aster	1266,10,5000
+cmd_fild04,0,0	monster	Sea Otter Ringleader	2668,2,300000
 
 //==================================================
 // cmd_fild05 - Restored
@@ -72,6 +74,7 @@ cmd_fild06,0,0	monster	Golem	1040,150,5000
 cmd_fild06,0,0	monster	Metaller	1058,50,5000
 cmd_fild06,293,235,5,5	monster	Yellow Plant	1081,2,1800000,900000
 cmd_fild06,84,375,10,10	monster	Yellow Plant	1081,3,1800000,900000
+cmd_fild06,0,0	monster	Furious Golem	2812,2,300000
 
 //==================================================
 // cmd_fild07 - Beacon Island, Pharos 
@@ -80,6 +83,7 @@ cmd_fild07,0,0	monster	Raggler	1254,100,5000
 cmd_fild07,0,0	monster	Aster	1266,30,5000
 cmd_fild07,0,0	monster	Shellfish	1074,30,5000
 cmd_fild07,0,0	monster	Crab	1073,30,5000
+cmd_fild07,0,0	monster	Elusive Raggler	2694,2,300000
 
 //==================================================
 // cmd_fild08 - Fortress Saint Darmain (East)
@@ -100,3 +104,4 @@ cmd_fild09,0,0	monster	Deniro	1105,15,5000
 cmd_fild09,0,0	monster	Piere	1160,15,5000
 cmd_fild09,0,0	monster	Andre	1095,15,5000
 cmd_fild09,0,0	monster	Ant Egg	1097,10,5000
+cmd_fild09,0,0	monster	Swift Metaller	2754,2,300000

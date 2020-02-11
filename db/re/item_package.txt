@@ -249,8 +249,6 @@ IG_Elven_Ears_Box,2686,0,1,0,0,10080,1	// 1x Elven_Ears_C
 
 IG_Steel_Flower_Box,2687,0,1,0,0,10080,1	// 1x Steel_Flower_C
 
-IG_Critical_Ring_Box,2688,0,1,0,0,10080,1	// 1x Critical_Ring_C
-
 IG_Earring_Box,2689,0,1,0,0,10080,1	// 1x Earring_C
 
 IG_Ring_Box,2690,0,1,0,0,10080,1	// 1x Ring_C
@@ -1859,7 +1857,6 @@ IG_Lucky_Egg_C6,5859,100,1,1,1,0,0	// 1x Glory_FB_Hat
 
 IG_Libra_Scroll,4365,1,1,1,1,0,0	// 1x B_Katrinn_Card
 IG_Libra_Scroll,2351,3,1,1,1,0,0	// 1x Earth_Sprits_Armor_
-IG_Libra_Scroll,2576,12,1,1,1,0,0	// 1x Bravery_Bag
 IG_Libra_Scroll,5662,17,1,1,1,0,0	// 1x Libra_Crown
 IG_Libra_Scroll,5663,17,1,1,1,0,0	// 1x Libra_Diadem
 IG_Libra_Scroll,5153,30,1,1,1,0,0	// 1x Angeling_Hairpin
@@ -1924,7 +1921,6 @@ IG_Boitata_Scroll,6234,15,1,1,1,0,0	// 1x Guarantee_Armor_7Up
 IG_Boitata_Scroll,6230,15,1,1,1,0,0	// 1x Guarantee_Weapon_7Up
 IG_Boitata_Scroll,5785,100,1,1,1,0,1	// 1x Green_Bunny_Hairband
 IG_Boitata_Scroll,18645,300,1,1,1,0,1	// 1x Sailor_Hat
-IG_Boitata_Scroll,2576,20,1,1,1,0,1	// 1x Bravery_Bag
 IG_Boitata_Scroll,2351,50,1,1,1,0,1	// 1x Earth_Sprits_Armor_
 IG_Boitata_Scroll,18539,50,1,1,1,0,1	// 1x Skull_Cap
 IG_Boitata_Scroll,17071,100,1,1,0,0,0	// 1x Superb_Fish_Box50
@@ -2534,7 +2530,6 @@ IG_Scroll_Of_Life,4493,5,1,1,1,0,0	// 1x Sealed_Tao_Card
 IG_Scroll_Of_Life,4336,15,1,1,1,0,0	// 1x Ungoliant_Card
 IG_Scroll_Of_Life,4482,50,1,1,1,0,0	// 1x Sealed_B_Ygnizem_Card
 IG_Scroll_Of_Life,18591,3,1,1,1,0,0	// 1x Mini_Glasses_
-IG_Scroll_Of_Life,2576,15,1,1,1,0,0	// 1x Bravery_Bag
 IG_Scroll_Of_Life,18534,50,1,1,1,0,0	// 1x Fancy_Phantom_Mask
 IG_Scroll_Of_Life,5395,200,1,1,1,0,0	// 1x Tiraya_Bonnet
 IG_Scroll_Of_Life,5480,265,1,1,1,0,0	// 1x Bizofnil_Wing_Deco

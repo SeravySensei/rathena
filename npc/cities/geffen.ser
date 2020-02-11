@@ -1348,7 +1348,7 @@ geffen_in,109,72,2	script	Monster Scholar	90,{
 		mes "Well, as you may already know, since Wizards and Mages train in Geffen, monsters tend to stay away from the city. So tired adventurers are welcome to rest here.";
 		next;
 		mes "[Estheres]";
-		mes "Still, if you want to seek out strong monsters, you can cross the bridge to the West and fight Kobolds.";
+		mes "Still, if you want to seek out strong monsters, you can cross the bridge to the West, go down South and fight Orcs.";
 		next;
 		mes "[Estheres]";
 		if (BaseLevel > 40)

@@ -946,7 +946,7 @@ einbech,148,246,5	script	Franz#ein	851,{
 			mes "has told me that it drops Ant's";
 			mes "Jaw, Colorful Shell, Very Hard";
 			mes "Shell, Long Leg, Neon Liquid";
-			mes "and Zilcon.";
+			mes "and Zircon.";
 			close;
 		case 2:
 			mes "[Franz]";

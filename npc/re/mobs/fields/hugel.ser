@@ -27,6 +27,7 @@ hu_fild01,0,0	monster	Novus	1715,100,5000
 hu_fild01,0,0	monster	Novus	1718,35,5000
 hu_fild01,0,0	monster	Geographer	1368,10,5000
 hu_fild01,0,0	monster	Dragon Egg	1721,10,5000
+hu_fild01,0,0	monster	Novus Ringleader	2731,2,300000
 
 //==================================================
 // hu_fild02 - Hugel Field
@@ -59,6 +60,7 @@ hu_fild04,206,120,10,10	monster	Blue Plant	1079,2,120000,600000
 hu_fild05,0,0	monster	Novus	1718,130,5000
 hu_fild05,0,0	monster	Novus	1715,35,5000
 hu_fild05,0,0	monster	Dragon Egg	1721,20,5000
+hu_fild05,0,0	monster	Elusive Novus	2728,2,300000
 
 //==================================================
 // hu_fild06 - Hugel Field

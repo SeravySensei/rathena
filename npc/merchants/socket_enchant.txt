@@ -216,7 +216,7 @@
 						case 11: callfunc "Func_Socket",2619,2671,40,51,1000,985,2;
 						case 12: callfunc "Func_Socket",5094,5095,40,61,1000,985,2;
 					}
-				case 4:
+				case 5:
 					mes "[Seiyablem]";
 					mes "Set items... You know those are all S class or better, right?";
 					mes "You sure about this?";

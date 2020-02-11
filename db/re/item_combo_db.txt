@@ -379,10 +379,8 @@
 28513:18849,{ .@r = getequiprefinerycnt(EQI_HEAD_TOP); bonus bAllStats,.@r; bonus2 bMagicAddClass,Class_Boss,10; bonus bFixedCastrate,-50; if (.@r>=7) { bonus2 bMagicAddClass,Class_Boss,20; bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; } if (.@r>=9) { bonus2 bMagicAddClass,Class_Boss,20; bonus2 bSubRace,RC_DemiHuman,2; bonus2 bSubRace,RC_Player,2; } }
 28513:2980,{ bonus bBaseAtk,50; bonus bMatk,50; bonus bAspd,2; bonus3 bAutoSpell,"SO_EARTHGRAVE",1,20; bonus3 bAutoSpell,"SO_VARETYR_SPEAR",1,20; bonus3 bAutoSpell,"WL_RECOGNIZEDSPELL",1,10; bonus3 bAutoSpell,"WZ_QUAGMIRE",3,50; }
 28520:15061,{ .@r = getequiprefinerycnt(EQI_ARMOR); if (.@r >= 7) { .@val = 5000; } else { .@val = 2500; } bonus2 bResEff,Eff_Stun,.@val; bonus2 bResEff,Eff_Silence,.@val; }
-28520:15061:18728:20700:2495,{ bonus bFlee2,30; bonus2 bSubEle,Ele_Water,15; bonus2 bResEff,Eff_Freeze,10000; }
 28520:18728,{ bonus2 bAddClass,Class_All,5; bonus bMatkRate,5; bonus bAllStats,5; if (getequiprefinerycnt(EQI_HEAD_TOP)>=7) { bonus2 bAddClass,Class_All,5; bonus bMatkRate,5; bonus bAllStats,5; } }
 28520:20700,{ if (getequiprefinerycnt(EQI_GARMENT)>=7) .@val = 2; else .@val = 1; bonus2 bSubEle,Ele_Fire,25*.@val; bonus2 bSubEle,Ele_Water,25*.@val; }
-28520:2495,{ if (getequiprefinerycnt(EQI_SHOES)>=7) .@val = 2; else .@val = 1; bonus bMaxHPrate,10*.@val; bonus bMaxSPrate,10*.@val; }
 28520:4525,{ bonus bMdef,15; bonus bFlee,100; bonus bMaxHPrate,15; skill "RG_TUNNELDRIVE",1; bonus bIntravision; }
 28521:1387,{ .@r = getequiprefinerycnt(EQI_HAND_R); bonus2 bSubRace,RC_DemiHuman,3; bonus2 bSubRace,RC_Player,3; if (.@r>=7) { bonus2 bAddClass,Class_Boss,5; bonus2 bSkillAtk,"WS_CARTTERMINATION",5; } if (.@r>=9) { bonus2 bAddClass,Class_Boss,10; bonus2 bSkillAtk,"WS_CARTTERMINATION",10; } }
 28521:1490,{ .@r = getequiprefinerycnt(EQI_HAND_R); bonus2 bSubRace,RC_DemiHuman,3; bonus2 bSubRace,RC_Player,3; if (.@r>=7) { bonus2 bAddClass,Class_Boss,5; bonus2 bSkillAtk,"LK_SPIRALPIERCE",5; bonus2 bSkillAtk,"RK_SONICWAVE",5; } if (.@r>=9) { bonus2 bAddClass,Class_Boss,10; bonus2 bSkillAtk,"LK_SPIRALPIERCE",10; bonus2 bSkillAtk,"RK_SONICWAVE",10; } }

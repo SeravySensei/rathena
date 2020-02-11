@@ -48,6 +48,7 @@ ein_fild03,0,0	monster	Noxious	1620,40,5000
 ein_fild03,0,0	monster	Pitman	1616,40,5000
 ein_fild03,0,0	monster	Yellow Plant	1081,30,60000,30000
 ein_fild03,0,0	monster	Green Plant	1080,30,60000,30000
+ein_fild03,0,0	monster	Swift Teddy Bear	2636,1,300000
 
 //==================================================
 // ein_fild04 - Einbroch Field
@@ -70,6 +71,8 @@ ein_fild05,0,0	monster	Venomous	1621,90,5000
 ein_fild05,0,0	monster	Teddy Bear	1622,60,5000
 ein_fild05,0,0	monster	Demon Pungus	1378,30,5000
 ein_fild05,0,0	monster	Pitman	1616,30,5000
+ein_fild05,0,0	monster	Furious Noxious	2727,2,300000
+ein_fild05,0,0	monster	Venomous Ringleader	2624,2,300000
 
 //==================================================
 // ein_fild06 - Einbroch Field
@@ -92,6 +95,7 @@ ein_fild07,0,0	monster	Ungoliant	1618,1,86400000,86000000
 ein_fild07,0,0	monster	Red Plant	1078,10,120000,60000
 ein_fild07,0,0	monster	Yellow Plant	1081,10,120000,60000
 ein_fild07,0,0	monster	Red Mushroom	1085,10,120000,60000
+ein_fild07,0,0	monster	Solid Metaling	2755,1,300000
 
 //==================================================
 // ein_fild08 - Einbroch Field
@@ -111,6 +115,7 @@ ein_fild09,0,0	monster	Metaling	1613,30,5000
 ein_fild09,0,0	monster	Red Plant	1078,10,120000,60000
 ein_fild09,0,0	monster	Yellow Plant	1081,10,120000,60000
 ein_fild09,0,0	monster	Red Mushroom	1085,10,120000,60000
+ein_fild09,0,0	monster	Solid Porcellio	2700,2,300000
 
 //==================================================
 // ein_fild10 - Readded monsters

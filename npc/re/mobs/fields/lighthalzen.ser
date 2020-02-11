@@ -26,6 +26,7 @@ lhz_fild01,0,0	monster	Metaling	1613,35,5000
 lhz_fild01,0,0	monster	Red Plant	1078,10,60000,30000
 lhz_fild01,0,0	monster	Yellow Plant	1081,10,60000,30000
 lhz_fild01,0,0	monster	Green Plant	1080,10,60000,30000
+lhz_fild01,0,0	monster	Swift Rafflesia	2695,1,300000
 
 //==================================================
 // lhz_fild02 - Lighthalzen Field (Grim Reaper's Valley)

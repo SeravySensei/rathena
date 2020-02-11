@@ -36,6 +36,7 @@ pay_fild01,64,113	monster	Black Mushroom	1084,1,180000,90000
 pay_fild01,64,190	monster	Black Mushroom	1084,1,180000,90000
 pay_fild01,70,246	monster	Black Mushroom	1084,1,180000,90000
 pay_fild01,0,0	monster	Green Plant	1080,5,180000,90000
+pay_fild01,0,0	monster	Willow Ringleader	2615,1,300000
 
 //==================================================
 // pay_fild02 - Payon Forest 
@@ -46,6 +47,7 @@ pay_fild02,0,0	monster	Spore	1014,30,5000
 pay_fild02,105,256,10,10	monster	Green Plant	1080,4,360000,180000
 pay_fild02,105,256,10,10	monster	Red Mushroom	1085,4,360000,180000
 pay_fild02,55,295,3,3	monster	Argos	1100,1,180000
+pay_fild02,0,0	monster	Boa Ringleader	2653,1,300000
 
 //==================================================
 // pay_fild03 - Payon Forest
@@ -70,6 +72,7 @@ pay_fild04,0,0	monster	Mastering	1090,1,3600000,1800000
 pay_fild04,0,0	monster	Deviling	1582,1,7200000,3600000
 pay_fild04,346,335,5,5	monster	Shining Plant	1083,1,1800000,900000
 pay_fild04,254,193,10,10	monster	Green Plant	1080,5,360000,180000
+pay_fild04,0,0	monster	Elusive Poporing	2703,2,300000
 
 //==================================================
 // pay_fild05 - Restored : Aggroco
@@ -94,6 +97,7 @@ pay_fild07,0,0	monster	Caramel	1103,30,5000
 pay_fild07,0,0	monster	Stainer	1174,20,5000
 pay_fild07,0,0	monster	Creamy	1018,20,5000
 pay_fild07,171,331,20,20	monster	Green Plant	1080,8,900000,450000
+pay_fild07,0,0	monster	Bigfoot Ringleader	2884,2,300000
 
 //==================================================
 // pay_fild08 - Payon Forest
