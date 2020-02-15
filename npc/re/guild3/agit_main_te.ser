@@ -18,9 +18,14 @@
 OnAgitInit3:
 OnRecvCastle:
 	.@map$ = strnpcinfo(4);
-	if (.@map$ == "") end;
 	.@npc_name$ = strnpcinfo(0);
 	.@guild_id = getcastledata(.@map$,CD_GUILD_ID);
+	debugmes "Castle onrecv : "+.@map$;
+	debugmes "npcname"+ .@npc_name$;
+	debugmes "strnpcinfo1"+ strnpcinfo(1);
+	debugmes "strnpcinfo2"+ strnpcinfo(2);
+	debugmes "strnpcinfo3"+ strnpcinfo(3);
+	if (.@map$ == "") end;
 	if (.@guild_id == 0) {
 		killmonster .@map$, .@npc_name$ +"::OnMyMobDead";
 		donpcevent strnpcinfo(0)+"::OnEmpSpawn";
@@ -889,7 +894,7 @@ S_Invest:
 		}
 		Zeny = Zeny - .@cost_invest;
 		setcastledata strnpcinfo(4), getarg(0), (.@num_invest_today +1);
-		if (getarg(0)==4) { setcastledata strnpcinfo(4), CD_CURRENT_ECONOMY , CD_CURRENT_ECONOMY+1+(rand(2) && getgdskilllv(getcastledata(strnpcinfo(4),CD_GUILD_ID),10014));
+		if (getarg(0)==4) { setcastledata strnpcinfo(4), CD_CURRENT_ECONOMY , getcastledata(strnpcinfo(4),CD_CURRENT_ECONOMY)+1+(rand(2) && getgdskilllv(getcastledata(strnpcinfo(4),CD_GUILD_ID),10014));
 		} else { setcastledata strnpcinfo(4),CD_CURRENT_DEFENSE,getcastledata(strnpcinfo(4),CD_CURRENT_DEFENSE)+1;
 		}
 		mes "We finished the investment safely. I expect that our "+ getarg(3) +" level will be increased soon.";

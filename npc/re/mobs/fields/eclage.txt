@@ -17,3 +17,4 @@
 //==================================================
 ecl_fild01.gat,0,0	monster	Menblatt	2363,60,5000
 ecl_fild01.gat,0,0	monster	Petal	2364,20,5000
+ecl_fild01,0,0	monster	Elusive Menblatt	2758,2,300000

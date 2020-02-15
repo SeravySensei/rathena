@@ -329,12 +329,6 @@
 2761,507,100	// Satanic_Ring
 2762,507,100	// Dragoon_Ring
 2763,507,100	// Skul_Ring_C
-2766,499,100	// Swordman_Figure
-2767,499,100	// Acolyte_Figure
-2768,499,100	// Mage_Figure
-2769,499,100	// Archer_Figure
-2770,499,100	// Thief_Figure
-2771,499,100	// Merchant_Figure
 2772,499,100	// Krieger_Ring1
 2773,499,100	// Krieger_Ring2
 2774,499,100	// Krieger_Ring3

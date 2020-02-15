@@ -10933,6 +10933,9 @@ void clif_parse_WalkToXY(int fd, struct map_session_data *sd)
 
 	RFIFOPOS(fd, packet_db[RFIFOW(fd,0)].pos[0], &x, &y, NULL);
 
+	//ShowError("Debug : received move package to %d %d\n", x,y);
+	//printf("%02x",a); to display byte as hex
+
 	//A move command one cell west is only valid if the target cell is free
 	if(battle_config.official_cell_stack_limit > 0
 		&& sd->bl.x == x+1 && sd->bl.y == y && map_count_oncell(sd->bl.m, x, y, BL_CHAR|BL_NPC, 1))

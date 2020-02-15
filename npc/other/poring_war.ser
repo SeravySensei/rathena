@@ -1,0 +1,164 @@
+// Poring Vending Machine
+//============================================================
+alberta,69,125,3	script	Poring Vending Machine#w	909,{
+	if (checkweight(714,3) == 0) {
+		mes "- You are carrying too much items in order to use the Vending Machine. -";
+		close;
+	}
+	mes "It's a vending machine. You can use Poring Coints to purchase.";
+	next;
+	if(select("Purchase.:Read the descriptions of goods.") == 1) {
+		mes "You need Poring Coins to purchase items.";
+		mes "You cannot use any zeny.";
+		mes "Item name - Price Poring Coin(P.Co)";
+		next;
+		switch(select("50 Hugel Prize Ticket - 10 P.Co:Union of Tribe - 3 P.Co:Poring Box - 1 P.Co:Next")) {
+		case 1:
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+			callsub S_PoringVending,7515,1;
+		case 2:
+			callsub S_PoringVending,658,3;
+		case 3:
+			callsub S_PoringVending,12109,1;
+		case 4:
+			mes "These are special mercenary contract items.";
+			mes "Item name - Poring Coin(P.Co)";
+			next;
+			switch(select("Wild Rose - 15 P.Co:Doppelganger - 20 P.Co:Egnigem Cenia - 20 P.Co:Collection Item")) {
+			case 1:
+				callsub S_PoringVending,12300,15;
+			case 2:
+				callsub S_PoringVending,12301,20;
+			case 3:
+				callsub S_PoringVending,12302,20;
+			case 4:
+				mes "Figures of 1st Job Class Characters including Novice are finally on sale!";
+				mes "Item name - Poring Coin(P.Co)";
+				next;
+				switch(select("Novice Figure - 50 P.Co:Swordman Figure - 100 P.Co:Thief Figure - 100 P.Co:Merchant Figure - 100 P.Co:Acolyte Figure - 100 P.Co:Mage Figure - 100 P.Co:Archer Figure - 100 P.Co:Random Draw - 50 P.Co:Cancel")) {
+				case 1:
+					callsub S_PoringVending,2765,50;
+				case 2:
+					callsub S_PoringVending,2766,100;
+				case 3:
+					callsub S_PoringVending,2770,100;
+				case 4:
+					callsub S_PoringVending,2771,100;
+				case 5:
+					callsub S_PoringVending,2767,100;
+				case 6:
+					callsub S_PoringVending,2768,100;
+				case 7:
+					callsub S_PoringVending,2769,100;
+				case 8:
+					mes "You have chosen Random Draw.";
+					mes "1 of 6 diffeent kinds of figures will be selected.";
+					mes "Please be aware the Novice figure is not included in the draw!";
+					next;
+					if(select("Draw:Cancel") == 1) {
+						if (countitem(7539) >= 50) {
+							mes "Insert the Poring coin and pull the lever.";
+							mes "Click~ The item came out of the mouth of the Poring with a rumbling sound.";
+							mes "What could it be?";
+							next;
+							switch(rand(1,6)) {
+							case 1: set .@Random_Figure,2766; break; // Swordman_Figure
+							case 2: set .@Random_Figure,2767; break; // Acolyte_Figure
+							case 3: set .@Random_Figure,2770; break; // Thief_Figure
+							case 4: set .@Random_Figure,2771; break; // Merchant_Figure
+							case 5: set .@Random_Figure,2769; break; // Archer_Figure
+							case 6: set .@Random_Figure,2768; break; // Mage_Figure
+							default: set .@Random_Figure,2765; break; // Novice_Figure
+							}
+							mes "A nice " + getitemname(.@Random_Figure) + ".";
+							delitem 7539,50; // Poring_Coin
+							getitem .@Random_Figure,1;
+							close;
+						} else {
+							mes "Not enough coins.";
+							close;
+						}
+					}
+					mes "["+strcharinfo(0)+"]";
+					mes "... Maybe next time...";
+					close;
+				case 9:
+					mes "["+strcharinfo(0)+"]";
+					mes "... Maybe next time...";
+					close;
+				}
+			}
+		}
+	}
+	mes "Selling Item List";
+	mes "====================";
+	mes "[Prize Ticket]";
+	mes " : A medal made of special metal only produced in Hugel.";
+	mes " ";
+	mes "[Union of Tribe]";
+	mes " : A statue with the image of a strong union of Tribes. People believe watching this statue actually helps strengthen the relationships between Tribes.";
+	mes " ";
+	mes "[Poring Box]";
+	mes " : A box wrapped with Poring patterned wrapping paper. Something's inside.";
+	mes " ";
+	mes "[Wild Rose]";
+	mes " : Your friend Wild Rose will come and help you.";
+	mes " ";
+	mes "[Mr. Doppel]";
+	mes " : A young noble, Doppelganger will come and help you.";
+	mes " ";
+	mes "[Egnigem Cenia]";
+	mes " : A beautiful girl, Egnigem Cenia from Somatology Laboratory, is going to come and help you.";
+	mes " ";
+	mes "[Novice Figure]";
+	mes " : A fine figure of a Novice. Can be equiped as an '^4d4dffaccessory^000000'.";
+	mes " HP + 150, extra effect of SP + 250 when equipped by a Novices.";
+	mes " ";
+	mes "[Swordman Figure]";
+	mes " : A nice figure of a Swordman. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " VIT + 3, extra effect of DEF + 40 when equipped by Swordman classes.";
+	mes " ";
+	mes "[Merchant Figure]";
+	mes " : A fine figure of a Merchant. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " STR + 3, extra effect of FLEE +10 when equipped by Merchant classes.";
+	mes " ";
+	mes "[Thief Figure]";
+	mes " : A fine Figure of a Thief. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " AGI + 3, extra ASPD+2 when equipped by Thief classes.";
+	mes " ";
+	mes "[Mage Figure]";
+	mes " : A fine figure of a Mage. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " INT + 3, an extra SP Recovery increase by 20% and variable cast time reduction by 4% when equipped by Mage classes.";
+	mes " ";
+	mes "[Acolyte Figure]";
+	mes " : A fine figure of an Acolyte. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " INT + 3, extra effect of 5% delay reduction when equipped by Acolyte classes.";
+	mes " ";
+	mes "[Archer Figure]";
+	mes " : A fine figure of an Archer. Can be equipped as an '^4d4dffaccessory^000000'.";
+	mes " DEX + 3, extra effct of ATK + 20 when equipped by Archer classes.";
+	close;
+	end;
+
+S_PoringVending:
+	if (countitem(7539) >= getarg(1)) {
+		mes "Click~ The item came out of the mouth of the Poring with a rumbling sound.";
+		delitem 7539,getarg(1); // Poring_Coin
+		getitem getarg(0),1;
+		if (getarg(0)==7515) {
+		getitem getarg(0),4;
+		}
+	} else {
+		mes "Not enough coins.";
+	}
+	close;
+}
+

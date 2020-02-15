@@ -37,6 +37,7 @@ ein_fild02,0,0	monster	Pitman	1616,110,5000
 ein_fild02,0,0	monster	Geographer	1368,80,5000
 ein_fild02,0,0	monster	Demon Pungus	1378,60,5000
 ein_fild02,0,0	monster	Ungoliant	1618,1,86400000,86000000
+ein_fild02,0,0	monster	Solid Geographer	2825,1,300000
 
 //==================================================
 // ein_fild03 - Einbroch Field
@@ -61,6 +62,7 @@ ein_fild04,0,0	monster	Pitman	1616,30,5000
 ein_fild04,0,0	monster	Red Plant	1078,10,60000,30000
 ein_fild04,0,0	monster	Yellow Plant	1081,10,60000,30000
 ein_fild04,0,0	monster	Green Plant	1080,10,60000,30000
+ein_fild04,0,0	monster	Solid Geographer	2825,1,300000
 
 //==================================================
 // ein_fild05 - Einbroch Field

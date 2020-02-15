@@ -178,10 +178,10 @@ valkyrie,48,86,4	script	Valkyrie#	811,{
 				break;
 			case 4009:
 			case 4016:
-				warp "prontera",273,354; break;
+				warp "prontera",156,167; break;
 			case 4010:
 			case 4017:
-				warp "geffen",120,60; break;
+				warp "geffen",119,67; break;
 			case 4011:
 			case 4019:
 				warp "alberta",116,57; break;

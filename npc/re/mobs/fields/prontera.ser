@@ -160,3 +160,5 @@ prt_fild11,0,0	monster	Goblin	1122,10,5000
 prt_fild11,0,0	monster	Panzer Goblin	1308,1,1800000,1200000
 prt_fild11,0,0	monster	Red Mushroom	1085,10,180000,90000
 prt_fild11,0,0	monster	Elusive Goblin	2813,1,300000
+
+new_1-3,0,0	monster	Baby Poring Ringleader	2776,2,300000

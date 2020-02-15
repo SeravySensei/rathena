@@ -22,6 +22,7 @@ bif_fild01,0,0	monster	Miming	2137,58,5000
 bif_fild01,0,0	monster	Little Fatum	2136,34,5000
 bif_fild01,0,0	monster	Angra Mantis	2133,5,5000
 bif_fild01,0,0	monster	Pom Spider	2132,5,5000
+bif_fild01,0,0	monster	Miming Ringleader	2751,2,300000
 
 //==================================================
 // bif_fild02 - Bifrost North
@@ -32,3 +33,4 @@ bif_fild02,0,0	monster	Miming	2137,33,5000
 bif_fild02,0,0	monster	Little Fatum	2136,55,5000
 bif_fild02,0,0	monster	Angra Mantis	2133,5,5000
 bif_fild02,0,0	monster	Pom Spider	2132,5,5000
+bif_fild02,0,0	monster	Furious Little Fatum	2777,2,300000
