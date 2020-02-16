@@ -37,7 +37,7 @@ prontera,165,60,2	script	Apprentice Craftsman	73,{
 		next;
 		switch(select("Non Slotted Armor.:Slotted Armor.:High Grade Armor.:Maybe next time.")) {
 		case 1:
-			setarray .@Items[0],2307,2309,2314,2316,2321,2325,2327,2328,2330,2332,2334,2335,2341,2344,2346,2348,2350,2337,2386,2394,2395,2396;
+			setarray .@Items[0],2307,2309,2314,2316,2321,2325,2327,2328,2330,2332,2334,2335,2341,2344,2346,2348,2350,2337,2386;
 			set .@j,50;
 			break;
 		case 2:
@@ -46,7 +46,7 @@ prontera,165,60,2	script	Apprentice Craftsman	73,{
 			set .@k,1;
 			break;
 		case 3:
-			setarray .@Items[0],2364,2365,2391,2374,2375,2376,2377,2378,2379,2380,2381,2382,2387,2388,2389,2390;
+			setarray .@Items[0],2364,2365,2391,2387,2388,2389,2390;
 			set .@j,60;
 			break;
 		case 4:

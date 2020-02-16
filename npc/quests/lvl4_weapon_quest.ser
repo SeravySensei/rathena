@@ -1821,10 +1821,10 @@ niflheim,240,193,3	script	Kayron#lv4	794,{
 		next;
 		mes "[Kayron]";
 		mes "We're gonna play '^660000Rock, Paper, Scissors^000000.' We can go ahead and";
-		mes "make the item if you win 2 out of 3 matches.";
+		mes "make the item if you win 1 out of 3 matches.";
 		next;
 		mes "[Kayron]";
-		mes "But if you lose 2 out of 3, your luck isn't strong enough for me to even attempt smithing. We'll need to dump a huge amount of one of the materials you brought to repel your bad luck.";
+		mes "But if you lose all 3, your luck isn't strong enough for me to even attempt smithing. We'll need to dump a huge amount of one of the materials you brought to repel your bad luck.";
 		next;
 		mes "[Kayron]";
 		mes "Here's a piece of paper.";
@@ -1857,7 +1857,7 @@ niflheim,240,193,3	script	Kayron#lv4	794,{
 			set .@shobu,.@shobu+1;
 		}
 		set .@aekddam,rand(1,3);
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			if (lv4_weapon == 27) {
 				delitem 7289,30; //Olivine
 				delitem 7294,30; //Turquoise
@@ -1870,29 +1870,29 @@ niflheim,240,193,3	script	Kayron#lv4	794,{
 			}
 			set lv4_weapon,lv4_weapon+2;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			if (.@aekddam == 1) {
 				if (lv4_weapon == 27) {
-					delitem 7289,30; //Olivine
+					delitem 7289,5; //Olivine
 				}
 				else {
-					delitem 7290,30; //Phlogopite
+					delitem 7290,5; //Phlogopite
 				}
 			}
 			else if (.@aekddam == 2) {
 				if (lv4_weapon == 27) {
-					delitem 7294,30; //Turquoise
+					delitem 7294,5; //Turquoise
 				}
 				else {
-					delitem 7296,30; //Pyroxene
+					delitem 7296,5; //Pyroxene
 				}
 			}
 			else if (.@aekddam == 3) {
 				if (lv4_weapon == 27) {
-					delitem 7291,30; //Agate
+					delitem 7291,5; //Agate
 				}
 				else {
-					delitem 7293,30; //Rose_Quartz
+					delitem 7293,5; //Rose_Quartz
 				}
 			}
 		}
@@ -1957,7 +1957,7 @@ niflheim,240,193,3	script	Kayron#lv4	794,{
 			mes "Paper";
 		}
 		next;
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			mes "[Kayron]";
 			mes "Let's see...";
 			mes "You won " + .@shobu + " times.";
@@ -1970,7 +1970,7 @@ niflheim,240,193,3	script	Kayron#lv4	794,{
 			mes "and some time to finish preparing. I'll talk to you later, okay?";
 			close;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			mes "[Kayron]";
 			mes "Well, I'm sorry to say that you lost. We have no choice but to drive away your bad luck with";
 			mes "some of the ore you brought!";
@@ -2272,7 +2272,7 @@ niflheim,99,268,5	script	Reyghema#lv4	794,{
 		mes "or easiest, part. It's time to test your luck. We can't go through with this if your luck is too weak.";
 		next;
 		mes "[Reyghema]";
-		mes "Alright, we're going to play '^660000Rock, Paper, Scissors^000000.' You've gotta win 2 out of 3 for us to go ahead with the forging.";
+		mes "Alright, we're going to play '^660000Rock, Paper, Scissors^000000.' You've gotta win 1 out of 3 for us to go ahead with the forging.";
 		next;
 		mes "[Reyghema]";
 		mes "If your luck is bad and you lose, we'll need to dump a bunch of one of the ores your brought to get rid of your bad luck. That's how it works.";
@@ -2305,7 +2305,7 @@ niflheim,99,268,5	script	Reyghema#lv4	794,{
 			set .@shobu,.@shobu+1;
 		}
 		set .@aekddam,rand(1,3);
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			if (lv4_weapon == 36) {
 				delitem 7292,30; //Muscovite
 				delitem 7293,30; //Rose_Quartz
@@ -2318,29 +2318,29 @@ niflheim,99,268,5	script	Reyghema#lv4	794,{
 			}
 			set lv4_weapon,lv4_weapon+2;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			if (.@aekddam == 1) {
 				if (lv4_weapon == 36) {
-					delitem 7292,30; //Muscovite
+					delitem 7292,5; //Muscovite
 				}
 				else {
-					delitem 7297,30; //Biotite
+					delitem 7297,5; //Biotite
 				}
 			}
 			else if (.@aekddam == 2) {
 				if (lv4_weapon == 36) {
-					delitem 7293,30; //Rose_Quartz
+					delitem 7293,5; //Rose_Quartz
 				}
 				else {
-					delitem 7291,30; //Agate
+					delitem 7291,5; //Agate
 				}
 			}
 			else if (.@aekddam == 3) {
 				if (lv4_weapon == 36) {
-					delitem 7289,30; //Olivine
+					delitem 7289,5; //Olivine
 				}
 				else {
-					delitem 7295,30; //Citrine
+					delitem 7295,5; //Citrine
 				}
 			}
 		}
@@ -2405,7 +2405,7 @@ niflheim,99,268,5	script	Reyghema#lv4	794,{
 			mes "Paper";
 		}
 		next;
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			mes "[Reyghema]";
 			mes "Nice. You won " + .@shobu + " times. Your luck is really good, so now we're finally finished with this nonsense.";
 			next;
@@ -2414,7 +2414,7 @@ niflheim,99,268,5	script	Reyghema#lv4	794,{
 			mes "now, and talk to me a little later, alright?";
 			close;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			mes "[Reyghema]";
 			mes "Damn...";
 			mes "I should be happy I won, but that just means your luck is bad and";
@@ -2732,7 +2732,7 @@ niflheim,187,280,3	script	Hein#lv4	795,{
 		mes "Oh, that's right. Skill alone isn't enough to create this. We'll also need your luck. First of all, we need to test if your luck is good today.";
 		next;
 		mes "[Hein]";
-		mes "We're going to play '^660000Rock, Paper, Scissors^000000.' If you win at least 2 out of 3, we'll go ahead and start crafting this thing!";
+		mes "We're going to play '^660000Rock, Paper, Scissors^000000.' If you win at least 1 out of 3, we'll go ahead and start crafting this thing!";
 		next;
 		mes "[Hein]";
 		mes "But if you fail in this game, I'll have to expel your negative luck by throwing out a lot of one of the ores you've brought along.";
@@ -2767,7 +2767,7 @@ niflheim,187,280,3	script	Hein#lv4	795,{
 		if (((.@myhand3 == 1) && (.@npchand3 == 3)) || ((.@myhand3 == 2) && (.@npchand3 == 1)) || ((.@myhand3 == 3) && (.@npchand3 == 2))) {
 			set .@shobu,.@shobu+1;
 		}
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			if (lv4_weapon == 45) {
 				delitem 7294,30; //Turquoise
 				delitem 7297,30; //Biotite
@@ -2780,29 +2780,29 @@ niflheim,187,280,3	script	Hein#lv4	795,{
 			}
 			set lv4_weapon,lv4_weapon+2;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			if (.@aekddam == 1) {
 				if (lv4_weapon == 45) {
-					delitem 7294,30; //Turquoise
+					delitem 7294,5; //Turquoise
 				}
 				else {
-					delitem 7295,30; //Citrine
+					delitem 7295,5; //Citrine
 				}
 			}
 			else if (.@aekddam == 2) {
 				if (lv4_weapon == 45) {
-					delitem 7297,30; //Biotite
+					delitem 7297,5; //Biotite
 				}
 				else {
-					delitem 7296,30; //Pyroxene
+					delitem 7296,5; //Pyroxene
 				}
 			}
 			else if (.@aekddam == 3) {
 				if (lv4_weapon == 45) {
-					delitem 7293,30; //Rose_Quartz
+					delitem 7293,5; //Rose_Quartz
 				}
 				else {
-					delitem 7290,30; //Phlogopite
+					delitem 7290,5; //Phlogopite
 				}
 			}
 		}
@@ -2869,7 +2869,7 @@ niflheim,187,280,3	script	Hein#lv4	795,{
 			mes "Paper";
 		}
 		next;
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			mes "[Hein]";
 			mes "Let's see...";
 			mes "You won " + shobu + " times.";
@@ -2880,7 +2880,7 @@ niflheim,187,280,3	script	Hein#lv4	795,{
 			mes "As promised, I will craft a weapon for you. Give me the materials now, and come back when I'm finished preparing.";
 			close;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			mes "[Hein]";
 			mes "Well, you lost.";
 			mes "I'm sorry, but we";
@@ -3196,7 +3196,7 @@ niflheim,331,72,3	script	Waltboughst#lv4	795,{
 		mes "Now we need to test your luck. And to do that, we need to play '^660000Rock, Paper, Scissors^000000.' I'm serious about this...";
 		next;
 		mes "[Waltboughst]";
-		mes "If your luck is strong today, there'll be less risk of failing the weapon creation process. You need to win 2 out of 3 times for us to begin.";
+		mes "If your luck is strong today, there'll be less risk of failing the weapon creation process. You need to win 1 out of 3 times for us to begin.";
 		next;
 		mes "[Waltboughst]";
 		mes "But if you lose...";
@@ -3233,7 +3233,7 @@ niflheim,331,72,3	script	Waltboughst#lv4	795,{
 			set .@shobu,.@shobu+1;
 		}
 		set .@aekddam,rand(1,3);
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			if (lv4_weapon == 54) {
 				delitem 7292,30; //Muscovite
 				delitem 7295,30; //Citrine
@@ -3246,29 +3246,29 @@ niflheim,331,72,3	script	Waltboughst#lv4	795,{
 			}
 			set lv4_weapon,lv4_weapon+2;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			if (.@aekddam == 1) {
 				if (lv4_weapon == 54) {
-					delitem 7292,30; //Muscovite
+					delitem 7292,5; //Muscovite
 				}
 				else {
-					delitem 7296,30; //Pyroxene
+					delitem 7296,5; //Pyroxene
 				}
 			}
 			else if (.@aekddam == 2) {
 				if (lv4_weapon == 54) {
-					delitem 7295,30; //Citrine
+					delitem 7295,5; //Citrine
 				}
 				else {
-					delitem 7294,30; //Turquoise
+					delitem 7294,5; //Turquoise
 				}
 			}
 			else if (.@aekddam == 3) {
 				if (lv4_weapon == 54) {
-					delitem 7291,30; //Agate
+					delitem 7291,5; //Agate
 				}
 				else {
-					delitem 7290,30; //Phlogopite
+					delitem 7290,5; //Phlogopite
 				}
 			}
 		}
@@ -3333,7 +3333,7 @@ niflheim,331,72,3	script	Waltboughst#lv4	795,{
 			mes "Paper";
 		}
 		next;
-		if (.@shobu > 1) {
+		if (.@shobu > 0) {
 			mes "[Waltboughst]";
 			mes "Excellent. You won " + shobu + " times,";
 			mes "so your luck must be really high.";
@@ -3344,7 +3344,7 @@ niflheim,331,72,3	script	Waltboughst#lv4	795,{
 			mes "me some time to complete my preparations. Come back later, and I should be finished.";
 			close;
 		}
-		else if (.@shobu < 2) {
+		else if (.@shobu < 1) {
 			mes "[Waltboughst]";
 			mes "You lost...";
 			mes "I'm sorry, but we";

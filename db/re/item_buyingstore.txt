@@ -1110,18 +1110,18 @@
 12001	//Holy_Scroll_1_3
 12002	//Holy_Scroll_1_5
 12003	//Holy_Scroll_2_1
-12004	//Arrow_Container
-12005	//Iron_Arrow_Container
-12006	//Steel_Arrow_Container
-12007	//Ori_Arrow_Container
-12008	//Fire_Arrow_Container
-12009	//Silver_Arrow_Container
-12010	//Wind_Arrow_Container
-12011	//Stone_Arrow_Container
-12012	//Crystal_Arrow_Container
-12013	//Shadow_Arrow_Container
-12014	//Imma_Arrow_Container
-12015	//Rusty_Arrow_Container
+12004  // Arrow_Container
+12005  // Iron_Arrow_Container
+12006  // Steel_Arrow_Container
+12007  // Ori_Arrow_Container
+12008  // Fire_Arrow_Container
+12009  // Silver_Arrow_Container
+12010  // Wind_Arrow_Container
+12011  // Stone_Arrow_Container
+12012  // Crystal_Arrow_Container
+12013  // Shadow_Arrow_Container
+12014  // Imma_Arrow_Container
+12015  // Rusty_Arrow_Container
 12016	//Speed_Up_Potion
 12017	//Slow_Down_Potion
 12018	//Fire_Cracker
@@ -1234,7 +1234,7 @@
 12149	//Bullet_Case
 12150	//Bullet_Case_Blood
 12151	//Bullet_Case_Silver
-12183	//Holy_Arrow_Quiver
+12183  // Holy_Arrow_Quiver
 12184	//Mercenary_Red_Potion
 12185	//Mercenary_Blue_Potion
 12194	//Hometown_Gift

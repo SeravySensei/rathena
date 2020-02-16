@@ -43,7 +43,7 @@ alberta,69,125,3	script	Poring Vending Machine#w	909,{
 				mes "Figures of 1st Job Class Characters including Novice are finally on sale!";
 				mes "Item name - Poring Coin(P.Co)";
 				next;
-				switch(select("Novice Figure - 50 P.Co:Swordman Figure - 100 P.Co:Thief Figure - 100 P.Co:Merchant Figure - 100 P.Co:Acolyte Figure - 100 P.Co:Mage Figure - 100 P.Co:Archer Figure - 100 P.Co:Random Draw - 50 P.Co:Cancel")) {
+				switch(select("Novice Figure - 50 P.Co:Swordman Figure - 100 P.Co:Thief Figure - 100 P.Co:Merchant Figure - 100 P.Co:Acolyte Figure - 100 P.Co:Mage Figure - 100 P.Co:Archer Figure - 100 P.Co:Random Draw - 75 P.Co:Cancel")) {
 				case 1:
 					callsub S_PoringVending,2765,50;
 				case 2:
@@ -64,7 +64,7 @@ alberta,69,125,3	script	Poring Vending Machine#w	909,{
 					mes "Please be aware the Novice figure is not included in the draw!";
 					next;
 					if(select("Draw:Cancel") == 1) {
-						if (countitem(7539) >= 50) {
+						if (countitem(7539) >= 75) {
 							mes "Insert the Poring coin and pull the lever.";
 							mes "Click~ The item came out of the mouth of the Poring with a rumbling sound.";
 							mes "What could it be?";
@@ -79,7 +79,7 @@ alberta,69,125,3	script	Poring Vending Machine#w	909,{
 							default: set .@Random_Figure,2765; break; // Novice_Figure
 							}
 							mes "A nice " + getitemname(.@Random_Figure) + ".";
-							delitem 7539,50; // Poring_Coin
+							delitem 7539,75; // Poring_Coin
 							getitem .@Random_Figure,1;
 							close;
 						} else {
