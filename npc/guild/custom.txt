@@ -2,9 +2,9 @@
 OnMinute06:
 	for ( .@i = 0; .@i < 40; ++.@i ) {
 		if (getcastledata(.castle$[.@i], CD_GUILD_ID)!=0) {
-			if ( rand(25) == 1 ) { // 4% chance per hour for castle to fall to monsters
+			if ( rand(50) == 1 ) { // 4% chance per hour for castle to fall to monsters
 				setcastledata .castle$[.@i], CD_GUILD_ID, 0;
-				donpcevent "Agit#"+ .castleNPC$[.@i] +"::OnRecvCastle";
+				donpcevent .castleNPC$[.@i] +"::OnRecvCastle";
 				Announce "The [" + GetCastleName(.castle$[.@i]) + "] castle has been conquered by the monsters.",bc_all|bc_woe;
 			}
 		}
@@ -30,13 +30,13 @@ OnInit:
 		"te_aldecas1","te_aldecas2","te_aldecas3","te_aldecas4","te_aldecas5",
 		"te_prtcas01","te_prtcas02","te_prtcas03","te_prtcas04","te_prtcas05";
 	setarray .castleNPC$[0],
-		"aldeg_cas01","aldeg_cas02","aldeg_cas03","aldeg_cas04","aldeg_cas05",
-		"gefg_cas01","gefg_cas02","gefg_cas03","gefg_cas04","gefg_cas05",
-		"payg_cas01","payg_cas02","payg_cas03","payg_cas04","payg_cas05",
-		"prtg_cas01","prtg_cas02","prtg_cas03","prtg_cas04","prtg_cas05",
-		"arug_cas01","arug_cas02","arug_cas03","arug_cas04","arug_cas05",
-		"schg_cas01","schg_cas02","schg_cas03","schg_cas04","schg_cas05",
-		"Glaris","Defolty","Sorin","Bennit","W",
-		"Gaebolg","Richard","Wigner","Heine","Nerious";
+		"Agit#aldeg_cas01","Agit#aldeg_cas02","Agit#aldeg_cas03","Agit#aldeg_cas04","Agit#aldeg_cas05",
+		"Agit#gefg_cas01","Agit#gefg_cas02","Agit#gefg_cas03","Agit#gefg_cas04","Agit#gefg_cas05",
+		"Agit#payg_cas01","Agit#payg_cas02","Agit#payg_cas03","Agit#payg_cas04","Agit#payg_cas05",
+		"Agit#prtg_cas01","Agit#prtg_cas02","Agit#prtg_cas03","Agit#prtg_cas04","Agit#prtg_cas05",
+		"Agit#arug_cas01","Agit#arug_cas02","Agit#arug_cas03","Agit#arug_cas04","Agit#arug_cas05",
+		"Agit#schg_cas01","Agit#schg_cas02","Agit#schg_cas03","Agit#schg_cas04","Agit#schg_cas05",
+		"Manager_TE#Glaris","Manager_TE#Defolty","Manager_TE#Sorin","Manager_TE#Bennit","Manager_TE#W",
+		"Manager_TE#Gaebolg","Manager_TE#Richard","Manager_TE#Wigner","Manager_TE#Heine","Manager_TE#Nerious";
 	end;
 }
