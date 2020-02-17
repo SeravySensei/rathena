@@ -4929,13 +4929,13 @@ int provokethis(block_list * bl, va_list ap)
 	// Don't protect if the other player can take at least 5 hits from the mob. (which is likely closer to 10 hits considering reductions)
 	// Wizards are exception because of cast interruption, always protect them. A wizard's spell going off will likely kill the mob by itself.
 	if (!(
-		((sd3->class_ & MAPID_UPPERMASK) != MAPID_WIZARD)
+		((sd3->class_ & MAPID_UPPERMASK) == MAPID_WIZARD)
 		|| (status_get_hp(tgtbl)<5*md->status.rhw.atk))
 		) return 0;
 
 	// want nearest anyway
 	int dist = distance_bl(&sd2->bl, bl);
-	if ((dist < targetdistance) && (path_search(NULL, sd2->bl.m, sd2->bl.x, sd2->bl.y, bl->x, bl->y, 0, CELL_CHKNOPASS,14))) { targetdistance = dist; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
+	if ((dist < targetdistance) && (isreachabletarget(bl->id))) { targetdistance = dist; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
 
 	return 0;
 }
@@ -8325,19 +8325,24 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				// Skills that can be used while tanking only, for supporting others
 				/////////////////////////////////////////////////////////////////////
 				// Provoke
-				if (pc_checkskill(sd, SM_PROVOKE) > 0) {
-					resettargets();
-					map_foreachinrange(provokethis, &sd->bl, 9, BL_MOB, sd);
-					if (foundtargetID > -1) {
-						unit_skilluse_ifable(&sd->bl, foundtargetID, SM_PROVOKE, pc_checkskill(sd, SM_PROVOKE));
-					}
-				}
+				resettargets();
+				map_foreachinrange(provokethis, &sd->bl, 9, BL_MOB, sd);
+				if (foundtargetID > -1) {
+				// Shield Boomerang
+				if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0))
+					if (sd->status.shield > 0) 
+						unit_skilluse_ifable(&sd->bl, foundtargetID, CR_SHIELDBOOMERANG, pc_checkskill(sd, CR_SHIELDBOOMERANG));
+				// Spear Boomerang
+				if (canskill(sd)) if ((pc_checkskill(sd, KN_SPEARBOOMERANG) > 0))
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR)) 
+							unit_skilluse_ifable(&sd->bl, foundtargetID, KN_SPEARBOOMERANG, pc_checkskill(sd, KN_SPEARBOOMERANG));
 				// Throw Stone
 				if (pc_checkskill(sd, TF_THROWSTONE) > 0) {
-					resettargets();
-					map_foreachinrange(provokethis, &sd->bl, 9, BL_MOB, sd);
-					if (foundtargetID > -1) {
-						unit_skilluse_ifable(&sd->bl, foundtargetID, TF_THROWSTONE, pc_checkskill(sd, TF_THROWSTONE));
+					unit_skilluse_ifable(&sd->bl, foundtargetID, TF_THROWSTONE, pc_checkskill(sd, TF_THROWSTONE));
+				}
+				// Provoke is last resort because it raises mob ATK
+				if (pc_checkskill(sd, SM_PROVOKE) > 0) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, SM_PROVOKE, pc_checkskill(sd, SM_PROVOKE));
 					}
 				}
 
