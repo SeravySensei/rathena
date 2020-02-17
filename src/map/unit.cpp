@@ -4926,6 +4926,13 @@ int provokethis(block_list * bl, va_list ap)
 	// ignore if monster is targeting another tanking mode character
 	if (sd3->state.autopilotmode == 1) return 0;
 
+	// Don't protect if the other player can take at least 5 hits from the mob. (which is likely closer to 10 hits considering reductions)
+	// Wizards are exception because of cast interruption, always protect them. A wizard's spell going off will likely kill the mob by itself.
+	if (!(
+		((sd3->class_ & MAPID_UPPERMASK) != MAPID_WIZARD)
+		|| (status_get_hp(tgtbl)<5*md->status.rhw.atk))
+		) return 0;
+
 	// want nearest anyway
 	int dist = distance_bl(&sd2->bl, bl);
 	if ((dist < targetdistance) && (path_search(NULL, sd2->bl.m, sd2->bl.x, sd2->bl.y, bl->x, bl->y, 0, CELL_CHKNOPASS,14))) { targetdistance = dist; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
@@ -8045,8 +8052,8 @@ TIMER_FUNC(unit_autopilot_timer)
 
 			// Flying Kick
 			if ((sd->class_ & MAPID_UPPERMASK)!= MAPID_SOUL_LINKER) if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, TK_JUMPKICK) > 0)) {
-				// only use in tanking mode, if enemy is not already near!
-				if (targetdistance2>2)
+				// only use in tanking mode, if enemy is not already near! Also don't rush in if already wounded, wait to receive heals first...
+				if (targetdistance2>2) if (sd->battle_status.hp > (70 * sd->battle_status.max_hp) / 100)
 				if ((sd->state.autopilotmode == 1)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, TK_JUMPKICK, pc_checkskill(sd, TK_JUMPKICK));
 				}
