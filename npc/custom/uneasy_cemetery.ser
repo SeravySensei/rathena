@@ -50,7 +50,7 @@ OnZombieDead:
 	if (Sex==SEX_MALE) mapannounce "prontera","[Mother Mathana]: Brave "+$UNEASY_H$+" has just killed the last undead in Prontera!",0;
 	else mapannounce "prontera","[Mother Mathana]: Lady "+$UNEASY_H$+" has just killed the last undead in Prontera!",0;
 	set JobExp,JobExp+25000;
-	set BaseExp,BaseExp+1000;
+	set BaseExp,BaseExp+5000;
 	end;
 
 L_Start_Undead:
@@ -109,7 +109,7 @@ L_Undead_Walk:
 	else mapannounce "prontera","[Mother Mathana]: In the name of Odin we declare beautiful "+$UNEASY_H$+" as a Prontera savior!",0;
 	mes "[Mother Mathana]";
 	mes "In the name of Odin we bless you and decently present a modest gift just from Mareusis' wine-cellar.";
-	getitem 505,5; //Blue_Potion
+	getitem 505,20; //Blue_Potion
 	set JobExp,JobExp+25000;
 	set BaseExp,BaseExp+5000;
 	close;
