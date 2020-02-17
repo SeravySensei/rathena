@@ -1341,7 +1341,14 @@ uint8 pc_isequip(struct map_session_data *sd,int n)
 	}
 
 	//Not equipable by class. [Skotlex]
-	if (!(1ULL << (sd->class_&MAPID_BASEMASK)&item->class_base[(sd->class_&JOBL_2_1) ? 1 : ((sd->class_&JOBL_2_2) ? 2 : 0)]))
+	// costumes should ignore class restrictions
+	if ((!(item->equip & (EQP_COSTUME_HEAD_TOP+ EQP_COSTUME_HEAD_LOW+ EQP_COSTUME_HEAD_MID+ EQP_COSTUME_GARMENT))) 
+		&& !(
+		(battle_config.reserved_costume_id &&
+			sd->inventory.u.items_inventory[n].card[0] == CARD0_CREATE &&
+			(MakeDWord(sd->inventory.u.items_inventory[n].card[2], sd->inventory.u.items_inventory[n].card[3])) == battle_config.reserved_costume_id))
+		)
+			if (!(1ULL << (sd->class_&MAPID_BASEMASK)&item->class_base[(sd->class_&JOBL_2_1) ? 1 : ((sd->class_&JOBL_2_2) ? 2 : 0)]))
 		return ITEM_EQUIP_ACK_FAIL;
 
 	if (!pc_isItemClass(sd, item))
