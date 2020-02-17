@@ -8504,6 +8504,7 @@ static const struct _battle_data {
 	{ "homunculus_evo_intimacy_need",       &battle_config.homunculus_evo_intimacy_need,    91100,  0,      INT_MAX,        },
 	{ "homunculus_evo_intimacy_reset",      &battle_config.homunculus_evo_intimacy_reset,   1000,   0,      INT_MAX,        },
 	{ "monster_loot_search_type",           &battle_config.monster_loot_search_type,        1,      0,      1,              },
+	{ "reserved_costume_id", &battle_config.reserved_costume_id, 1, 0, INT_MAX, }, // Costume item edit
 	{ "feature.roulette",                   &battle_config.feature_roulette,                1,      0,      1,              },
 	{ "monster_hp_bars_info",               &battle_config.monster_hp_bars_info,            1,      0,      1,              },
 	{ "min_body_style",                     &battle_config.min_body_style,                  0,      0,      SHRT_MAX,       },

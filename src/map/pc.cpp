@@ -892,7 +892,21 @@ int pc_equippoint_sub(struct map_session_data *sd,struct item_data* id){
 int pc_equippoint(struct map_session_data *sd,int n){
 	nullpo_ret(sd);
 
-	return pc_equippoint_sub(sd,sd->inventory_data[n]);
+	int ep = pc_equippoint_sub(sd, sd->inventory_data[n]);
+	int char_id = 0;
+
+	// Costume item edit
+		if (battle_config.reserved_costume_id &&
+			sd->inventory.u.items_inventory[n].card[0] == CARD0_CREATE &&
+			(char_id = MakeDWord(sd->inventory.u.items_inventory[n].card[2], sd->inventory.u.items_inventory[n].card[3])) == battle_config.reserved_costume_id)
+		 { // Costume Item - Converted
+		if (ep&EQP_HEAD_TOP) { ep &= ~EQP_HEAD_TOP; ep |= EQP_COSTUME_HEAD_TOP; }
+		if (ep&EQP_HEAD_LOW) { ep &= ~EQP_HEAD_LOW; ep |= EQP_COSTUME_HEAD_LOW; }
+		if (ep&EQP_HEAD_MID) { ep &= ~EQP_HEAD_MID; ep |= EQP_COSTUME_HEAD_MID; }
+		if (ep&EQP_GARMENT) { ep &= ~EQP_GARMENT; ep |= EQP_COSTUME_GARMENT; }
+		} // End edit
+	
+	return ep;
 }
 
 /**

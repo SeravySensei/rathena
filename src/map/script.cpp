@@ -23217,6 +23217,51 @@ BUILDIN_FUNC(channel_create) {
 }
 
 /**
+ * Costume item edit
+ **/
+BUILDIN_FUNC(costume) {
+	int i = -1, num, ep;
+	TBL_PC *sd;
+
+	num = script_getnum(st, 2); // Equip Slot
+	sd = map_id2sd(st->rid);
+
+	if (sd == NULL)
+		return 0;
+	i = pc_checkequip(sd, equip_bitmask[num]);
+	if (i < 0)
+		return 0;
+
+	ep = sd->inventory.u.items_inventory[i].equip;
+	if (!(ep&EQP_HEAD_LOW) && !(ep&EQP_HEAD_MID) && !(ep&EQP_HEAD_TOP) && !(ep&EQP_GARMENT))
+		return 0;
+
+	log_pick_pc(sd, LOG_TYPE_SCRIPT, -1, &sd->inventory.u.items_inventory[i]);
+	pc_unequipitem(sd, i, 2);
+	clif_delitem(sd, i, 1, 3);
+	// --------------------------------------------------------------------
+	sd->inventory.u.items_inventory[i].refine = 0;
+	sd->inventory.u.items_inventory[i].attribute = 0;
+	sd->inventory.u.items_inventory[i].card[0] = CARD0_CREATE;
+	sd->inventory.u.items_inventory[i].card[1] = 0;
+	sd->inventory.u.items_inventory[i].card[2] = GetWord(battle_config.reserved_costume_id, 0);
+	sd->inventory.u.items_inventory[i].card[3] = GetWord(battle_config.reserved_costume_id, 1);
+
+	if (ep&EQP_HEAD_TOP) { ep &= ~EQP_HEAD_TOP; ep |= EQP_COSTUME_HEAD_TOP; }
+	if (ep&EQP_HEAD_LOW) { ep &= ~EQP_HEAD_LOW; ep |= EQP_COSTUME_HEAD_LOW; }
+	if (ep&EQP_HEAD_MID) { ep &= ~EQP_HEAD_MID; ep |= EQP_COSTUME_HEAD_MID; }
+	if (ep&EQP_GARMENT) { ep &= ~EQP_GARMENT; ep |= EQP_COSTUME_GARMENT; }
+	// --------------------------------------------------------------------
+	log_pick_pc(sd, LOG_TYPE_SCRIPT, 1, &sd->inventory.u.items_inventory[i]);
+
+	clif_additem(sd, i, 1, 0);
+	pc_equipitem(sd, i, ep);
+	clif_misceffect(&sd->bl, 3);
+
+	return 0;
+}
+
+/**
  * Set channel option
  * channel_setopt "<chname>",<option>,<value>;
  * @author [Cydh]
@@ -25082,6 +25127,7 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(jobcanentermap,"s?"),
 	BUILDIN_DEF(openstorage2,"ii?"),
 	BUILDIN_DEF(unloadnpc, "s"),
+	BUILDIN_DEF(costume, "i"), // Costume item edit
 
 	// WoE TE
 	BUILDIN_DEF(agitstart3,""),
