@@ -1603,7 +1603,7 @@ bool pc_set_hate_mob(struct map_session_data *sd, int pos, struct block_list *bl
 	class_ = status_get_class(bl);
 	if (!pcdb_checkid(class_)) {
 		unsigned int max_hp = status_get_max_hp(bl);
-		if ((pos == 1 && max_hp < 6000) || (pos == 2 && max_hp < 20000))
+		if ((pos == 1 && max_hp < 3000) || (pos == 2 && max_hp < 5000))
 			return false;
 		if (pos != status_get_size(bl))
 			return false; //Wrong size
