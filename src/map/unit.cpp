@@ -4424,7 +4424,7 @@ int targetpneuma(block_list * bl, va_list ap)
 	return 0;
 }
 
-int64 targetsoullink;
+int64 targetsoullink2;
 
 int targetlinks(block_list * bl, va_list ap)
 {
@@ -4437,7 +4437,7 @@ int targetlinks(block_list * bl, va_list ap)
 	if (sd->sc.data[SC_SPIRIT]) return 0; // Already has link
 	if (sd->bl.id == sd2->bl.id) return 0; // Can't link self
 
-	targetsoullink = -1;
+	int targetsoullink = -1;
 	if (pc_checkskill(sd2, SL_ALCHEMIST) > 0) if ((sd->class_ & MAPID_UPPERMASK) == MAPID_ALCHEMIST)
 		targetsoullink = SL_ALCHEMIST;
 	if (pc_checkskill(sd2, SL_MONK) > 0) if ((sd->class_ & MAPID_UPPERMASK) == MAPID_MONK)
@@ -4473,7 +4473,7 @@ int targetlinks(block_list * bl, va_list ap)
 
 
 	if (targetsoullink > 0) {
-		targetbl = bl; foundtargetID = sd->bl.id;
+		targetbl = bl; foundtargetID = sd->bl.id; targetsoullink2 = targetsoullink;
 		return 1;
 	}
 
@@ -6353,6 +6353,19 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+		// Turn Undead, if able, prioritize higher than healing! Instantly killing mob is more useful than trying to tank it!
+		if (canskill(sd)) if (pc_checkskill(sd, PR_TURNUNDEAD) > 0) if (sd->state.autopilotmode == 2)
+		if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
+			// must have at least 35% success rate to prioritize it over healing!
+			if (sd->status.base_level+sd->status.luk+sd->status.int_+20* pc_checkskill(sd, PR_TURNUNDEAD)>=345) {
+			resettargets();
+			map_foreachinrange(targetturnundead, &sd->bl, 9, BL_MOB, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, PR_TURNUNDEAD, pc_checkskill(sd, PR_TURNUNDEAD));
+			}
+		}
+
+
 		/// Coluceo Heal
 		if (canskill(sd)) if ((pc_checkskill(sd, AB_CHEAL) > 0) && ((Dangerdistance > 900) || (sd->special_state.no_castcancel))) {
 			resettargets();
@@ -6624,7 +6637,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			resettargets();
 			map_foreachinrange(targetlinks, &sd->bl, 9, BL_PC, sd);
 			if (foundtargetID > -1) {
-				unit_skilluse_ifable(&sd->bl, foundtargetID, targetsoullink, pc_checkskill(sd, targetsoullink));
+				unit_skilluse_ifable(&sd->bl, foundtargetID, targetsoullink2, pc_checkskill(sd, targetsoullink2));
 			}
 		}
 
