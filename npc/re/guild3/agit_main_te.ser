@@ -19,13 +19,8 @@ OnAgitInit3:
 OnRecvCastle:
 	.@map$ = strnpcinfo(4);
 	.@npc_name$ = strnpcinfo(0);
-	.@guild_id = getcastledata(.@map$,CD_GUILD_ID);
-	debugmes "Castle onrecv : "+.@map$;
-	debugmes "npcname"+ .@npc_name$;
-	debugmes "strnpcinfo1"+ strnpcinfo(1);
-	debugmes "strnpcinfo2"+ strnpcinfo(2);
-	debugmes "strnpcinfo3"+ strnpcinfo(3);
 	if (.@map$ == "") end;
+	.@guild_id = getcastledata(.@map$,CD_GUILD_ID);
 	if (.@guild_id == 0) {
 		killmonster .@map$, .@npc_name$ +"::OnMyMobDead";
 		donpcevent strnpcinfo(0)+"::OnEmpSpawn";
