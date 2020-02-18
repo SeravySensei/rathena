@@ -6358,7 +6358,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
 			// must have at least 35% success rate to prioritize it over healing!
 			if (sd->status.base_level+sd->status.luk+sd->status.int_+20* pc_checkskill(sd, PR_TURNUNDEAD)>=345) {
-			resettargets();
+			resettargets(); targetdistance = 0;
 			map_foreachinrange(targetturnundead, &sd->bl, 9, BL_MOB, sd);
 			if (foundtargetID > -1) {
 				unit_skilluse_ifable(&sd->bl, foundtargetID, PR_TURNUNDEAD, pc_checkskill(sd, PR_TURNUNDEAD));
@@ -7653,7 +7653,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		}
 		// Turn Undead, has special targeting restriction
 		if (canskill(sd)) if (pc_checkskill(sd, PR_TURNUNDEAD) > 0) if (sd->state.autopilotmode == 2) {
-			resettargets();
+			resettargets(); targetdistance = 0;
 			map_foreachinrange(targetturnundead, &sd->bl, 9, BL_MOB, sd);
 			if (foundtargetID > -1){
 				unit_skilluse_ifable(&sd->bl, foundtargetID, PR_TURNUNDEAD, pc_checkskill(sd, PR_TURNUNDEAD));
