@@ -4065,6 +4065,7 @@ bool elemstrong(struct mob_data *md, int ele)
 bool elemallowed(struct mob_data *md, int ele)
 {
 	if (ele == ELE_GHOST) {
+		if (md->sc.data[SC_WHITEIMPRISON]) return 1;
 		if ((md->status.def_ele == ELE_NEUTRAL) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_FIRE) && (md->status.ele_lv >= 3)) return 0;
 		if ((md->status.def_ele == ELE_WATER) && (md->status.ele_lv >= 3)) return 0;
@@ -4080,18 +4081,21 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_FIRE)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 	}
 	if (ele == ELE_WATER) {
 		if ((md->status.def_ele == ELE_WATER)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 	}
 	if (ele == ELE_WIND) {
 		if ((md->status.def_ele == ELE_WIND)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
@@ -4100,11 +4104,13 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
 		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 4)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
 	if (ele == ELE_HOLY) {
 		if ((md->status.def_ele == ELE_HOLY)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
@@ -4112,6 +4118,7 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_POISON)) return 0;
 		if ((md->status.def_ele == ELE_DARK)) return 0;
 		if ((md->status.def_ele == ELE_UNDEAD)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
@@ -4122,6 +4129,7 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_UNDEAD)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
@@ -4133,11 +4141,13 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_POISON) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_UNDEAD)) return 0;
 		if ((md->status.def_ele == ELE_DARK)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
 	if (ele == ELE_NEUTRAL) {
 		if ((md->status.def_ele == ELE_GHOST) && (md->status.ele_lv >= 2)) return 0;
+		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
 		return 1;
 
 	}
@@ -4485,7 +4495,7 @@ int targetincagi(block_list * bl, va_list ap)
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 0;
 	if (!ispartymember(sd)) return 0;
-	if (!sd->sc.data[SC_INCREASEAGI]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+	if (!sd->sc.data[SC_QUAGMIRE]) if (!sd->sc.data[SC_INCREASEAGI]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 
 	return 0;
 }
@@ -6187,14 +6197,18 @@ TIMER_FUNC(unit_autopilot_timer)
 		}
 
 		bool havepriest = false;
+		bool havehealer = false;
 		int64 partymagicratio = 0;
 		if (p) for (i = 0; i < MAX_PARTY; i++) if (p->data[i].sd) if (!status_isdead(&p->data[i].sd->bl)) {
 			if (pc_checkskill(p->data[i].sd, ALL_RESURRECTION) >= 4) havepriest = true;
+			if (pc_checkskill(p->data[i].sd, AL_HEAL) >= 1) havehealer = true;
 			if (p->data[i].sd->state.autopilotmode != 3) { // add matk, subtract atk. Might not be exact but should give a rough impression on which type of damage the party relies on most. 
 				partymagicratio += p->data[i].sd->battle_status.matk_min
 					- p->data[i].sd->battle_status.rhw.atk - p->data[i].sd->battle_status.batk;
 			}
 		}
+		if (map_getmapflag(sd->bl.m, MF_GVG_CASTLE)) havepriest = false;
+		if (map_getmapflag(sd->bl.m, MF_GVG_TE_CASTLE)) havepriest = false;
 		// Final Strike
 		// base damage = currenthp + ((atk * currenthp * skill level) / maxhp)
 		// final damage = base damage + ((mirror image count + 1) / 5 * base damage) - (edef + sdef)
@@ -6337,22 +6351,23 @@ TIMER_FUNC(unit_autopilot_timer)
 						}
 				if (epictargetid>0)	unit_skilluse_ifablexy(&sd->bl, epictargetid, AB_EPICLESIS, pc_checkskill(sd, AB_EPICLESIS));
 				}
-
-		/// If Resurrection known, warn when low on gems!
-		if ((pc_checkskill(sd, ALL_RESURRECTION)>0)) if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) < 8)
-			saythis(sd, "I'm low on Blue Gemstones!", 600); // Once per minute
-		/// Resurrection
-		if (canskill(sd)) if ((pc_checkskill(sd, ALL_RESURRECTION)>0)) {
-			resettargets();
-			map_foreachinrange(targetresu, &sd->bl, 9, BL_PC, sd);
-			if (foundtargetID > -1) {
-				if (pc_search_inventory(sd, ITEMID_BLUE_GEMSTONE) >= 0) {
-					unit_skilluse_ifable(&sd->bl, foundtargetID, ALL_RESURRECTION, pc_checkskill(sd, ALL_RESURRECTION));
+		// Can't resurrect on WOE maps
+		if (!map_getmapflag(sd->bl.m, MF_GVG_CASTLE)) if (!map_getmapflag(sd->bl.m, MF_GVG_TE_CASTLE)) {
+			/// If Resurrection known, warn when low on gems!
+			if ((pc_checkskill(sd, ALL_RESURRECTION) > 0)) if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) < 8)
+				saythis(sd, "I'm low on Blue Gemstones!", 600); // Once per minute
+			/// Resurrection
+			if (canskill(sd)) if ((pc_checkskill(sd, ALL_RESURRECTION) > 0)) {
+				resettargets();
+				map_foreachinrange(targetresu, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					if (pc_search_inventory(sd, ITEMID_BLUE_GEMSTONE) >= 0) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, ALL_RESURRECTION, pc_checkskill(sd, ALL_RESURRECTION));
+					}
+					else saythis(sd, "I'm out of Blue Gemstones!", 5); // Twice per second
 				}
-				else saythis(sd, "I'm out of Blue Gemstones!",5); // Twice per second
 			}
 		}
-
 		// Turn Undead, if able, prioritize higher than healing! Instantly killing mob is more useful than trying to tank it!
 		if (canskill(sd)) if (pc_checkskill(sd, PR_TURNUNDEAD) > 0) if (sd->state.autopilotmode == 2)
 		if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
@@ -7169,6 +7184,15 @@ TIMER_FUNC(unit_autopilot_timer)
 
 		// Don't bother with these suboptimal spells if casting is uninterruptable (note, they can be still cast as a damage spell, but not as an emergency reaction when fast cast time is needed)
 		if (!(sd->special_state.no_castcancel)) {
+			/// White Imprison
+			// The ultimate solution to threats, instant cast, 90% chance to disable any mob with no cast delay!
+			if (canskill(sd)) if (pc_checkskill(sd, WL_WHITEIMPRISON) > 1) {
+				if ((Dangerdistance <= 4)) {
+					if (!((status_get_class_(dangerbl) == CLASS_BOSS))) {
+						unit_skilluse_ifable(&sd->bl, founddangerID, WL_WHITEIMPRISON, pc_checkskill(sd, WL_WHITEIMPRISON));
+					}
+				}
+			}
 			/// Napalm Beat
 			// **Note** : This has been modded to be uninterruptable and faster to use. Unmodded the AI probably shouldn't ever cast it, it's that bad.
 			// It is the spell to use in the worst emergencies only, when enemy is at most 2 steps from hitting us.
@@ -7427,6 +7451,35 @@ TIMER_FUNC(unit_autopilot_timer)
 									}
 								}
 							}
+							// Crimson Rock
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							// higher priority than 2nd job skills because it's faster to cast and damage is almost as good but more reliable and is applied quicker too.
+							if (canskill(sd)) if ((pc_checkskill(sd, WL_CRIMSONROCK) > 0)) {
+								foundtargetID = -1; targetdistance = 999;
+								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = 2;
+									priority = 4*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK)));
+									if (((priority >= 24) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+										spelltocast = WL_CRIMSONROCK; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+
+							// Soul Expansion
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							// AT level 4+ the radius is large enough to consider this AOE. Priority is decent because it's very spammable so DPS is high
+							if (canskill(sd)) if ((pc_checkskill(sd, WL_SOULEXPANSION) > 3)) {
+								foundtargetID = -1; targetdistance = 999;
+								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = 2;
+									priority = 3*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION)));
+									if (((priority >= 18) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+										spelltocast = WL_SOULEXPANSION; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
 
 							// Judex
 							// This is special - it targets a monster despite having AOE, not a ground skill
@@ -7634,6 +7687,8 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == GS_SPREADATTACK)
 							|| (spelltocast == HT_BLITZBEAT)
 							|| (spelltocast == SN_SHARPSHOOTING)
+							|| (spelltocast == WL_CRIMSONROCK)
+							|| (spelltocast == WL_SOULEXPANSION)
 							) unit_skilluse_ifable(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 							unit_skilluse_ifablexy(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
@@ -7836,6 +7891,9 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 			}
 
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		/// Skills to exploit elemental weakness
+		///////////////////////////////////////////////////////////////////////////////////////////////
 		// Estin, Estun, Esma on vulnerable enemy
 		int windelem = 0;
 		if (sd->sc.data[SC_SEVENWIND]) windelem= skill_get_ele(TK_SEVENWIND, sd->sc.data[SC_SEVENWIND]->val1);
@@ -7859,6 +7917,32 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+		// Life Drain counts as exploiting weakness and is top priority if we need health!
+		if (!havehealer)
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_DRAINLIFE) > 0) {
+			if (sd->battle_status.hp < (70 * sd->battle_status.max_hp) / 100)
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemallowed(targetmd, skill_get_ele(WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE)))) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE));
+				}
+			}
+		}
+		// Crimson Rock on vulnerable enemy - this deals enough damage to be used as a single target even though it has AOE
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CRIMSONROCK) > 0) {
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemstrong(targetmd, skill_get_ele(WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK)))) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK));
+				}
+			}
+		}
+		// Hell Inferno on vulnerable enemy - treat as shadow element
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_HELLINFERNO) > 0) {
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemstrong(targetmd, ELE_DARK)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_HELLINFERNO, pc_checkskill(sd, WL_HELLINFERNO));
+				}
+			}
+		}
 		// Jupitel Thunder on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_JUPITEL) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
@@ -7867,7 +7951,15 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 				}
 			}
-			// Napalm Vulcan on vulnerable enemy
+		// Soul Expansion on vulnerable enemy
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_SOULEXPANSION) > 0) {
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemstrong(targetmd, skill_get_ele(WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION)))) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION));
+				}
+			}
+		}
+		// Napalm Vulcan on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, HW_NAPALMVULCAN) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 					if (elemstrong(targetmd, skill_get_ele(HW_NAPALMVULCAN, pc_checkskill(sd, HW_NAPALMVULCAN)))) {
@@ -8139,11 +8231,47 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 				}
 
+			// Crimson Rock
+			// Damage is good enough to use this as single target even before any 1st or 2nd skill
+			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CRIMSONROCK) > 0) {
+				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+					if (elemallowed(targetmd, skill_get_ele(WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK)))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK));
+					}
+				}
+			}
+
+			// Hell Inferno - treat as shadow element
+			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_HELLINFERNO) > 0) {
+				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+					if (elemallowed(targetmd, ELE_DARK)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_HELLINFERNO, pc_checkskill(sd, WL_HELLINFERNO));
+					}
+				}
+			}
+
 			// Jupitel Thunder
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WZ_JUPITEL) > 0)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
 					if (elemallowed(targetmd, skill_get_ele(WZ_JUPITEL, pc_checkskill(sd, WZ_JUPITEL)))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_JUPITEL, pc_checkskill(sd, WZ_JUPITEL));
+					}
+				}
+			}
+			// Soul Expansion
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_SOULEXPANSION) > 0)) {
+				if ((sd->state.autopilotmode == 2)) {
+					if (elemallowed(targetmd, skill_get_ele(WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION)))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION));
+					}
+				}
+			}
+			// Life Drain
+			// prefer soul expansion, more spammable for almost same damage, this is only really worth it for healing or when neutral element is necessary
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_DRAINLIFE) > 3)) {
+				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
+					if (elemallowed(targetmd, skill_get_ele(WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE)))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE));
 					}
 				}
 			}
