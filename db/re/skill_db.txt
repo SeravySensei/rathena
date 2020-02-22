@@ -957,7 +957,7 @@
 2204,0,8,4,1,0x2,5:6:7:8:9,5,-5,yes,0,0,0,magic,0,0x0,	WL_JACKFROST,Jack Frost
 2205,11,6,1,0,0x1,0,5,1,yes,0,0,0,magic,0,0x400,	WL_MARSHOFABYSS,Marsh of Abyss
 2206,0,6,4,0,0x1,0,5,1,yes,0,0,0,magic,0,0x0,	WL_RECOGNIZEDSPELL,Recognized Spell
-2207,7,6,1,2,0x3,1:2:2:3:3,5,1,yes,0,0,0,magic,0,0x400,	WL_SIENNAEXECRATE,Sienna Execrate
+2207,8,6,1,2,0x3,1:2:2:3:3,5,1,yes,0,0,0,magic,0,0x400,	WL_SIENNAEXECRATE,Sienna Execrate
 2208,0,0,0,0,0,0,3,0,no,0,0,0,none,0,0x0,		WL_RADIUS,Radius
 2209,0,6,4,0,0x3,9:10:11:12:13,5,1,yes,0,0,0,magic,0,0x0,	WL_STASIS,Stasis
 2210,11,6,1,0,0,0,5,1,yes,0,0,0,magic,0,0x400,	WL_DRAINLIFE,Drain Life

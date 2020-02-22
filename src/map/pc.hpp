@@ -303,6 +303,7 @@ struct map_session_data {
 		unsigned int banking : 1; //1 when we using the banking system 0 when closed
 		unsigned int hpmeter_visible : 1;
 		unsigned int autopilotmode;
+		unsigned int autoreadingbook;
 		bool specialtanking;
 		bool enableconc;
 		bool asurapreparation;

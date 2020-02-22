@@ -6067,10 +6067,10 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						}
 						break;
 					case WL_CHAINLIGHTNING_ATK:
-						skillratio += 400 + 100 * skill_lv;
+						skillratio += 330;
 						RE_LVL_DMOD(100);
 						if (mflag > 0)
-							skillratio += 100 * mflag;
+							skillratio += 30 * mflag;
 						break;
 					case WL_EARTHSTRAIN:
 						skillratio += 1900 + 100 * skill_lv;
@@ -6086,7 +6086,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					case WL_SUMMON_ATK_WATER:
 					case WL_SUMMON_ATK_WIND:
 					case WL_SUMMON_ATK_GROUND:
-						skillratio += -100 + (1 + skill_lv) / 2 * (status_get_lv(src) + (sd ? sd->status.job_level : 0));
+						skillratio += -100 + 50 * (1 + skill_lv);
 						RE_LVL_DMOD(100);
 						break;
 					case LG_RAYOFGENESIS:

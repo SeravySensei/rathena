@@ -2369,7 +2369,7 @@
 4177,Dryad_Card,Dryad Card,6,20,,10,,,,,,,,769,,,,,{ bonus2 bAddMonsterDropItem,997,1000; bonus2 bSubEle,Ele_Earth,10; },{},{}
 4178,Dragon_Tail_Card,Dragon Tail Card,6,20,,10,,,,,,,,4,,,,,{ bonus bAgi,1; bonus bFlee,10; bonus2 bSkillAtk,"AC_DOUBLE",20; bonus2 bSkillAtk,"AC_SHOWER",20; },{},{}
 4179,Dragon_Fly_Card,Dragon Fly Card,6,20,,10,,,,,,,,4,,,,,{ bonus bAgi,5; },{},{}
-4180,Driller_Card,Driller Card,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddMonsterDropItem,984,300; },{},{ heal 0,-5; }
+4180,Driller_Card,Driller Card,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddMonsterDropItem,984,300; },{},{}
 4181,Disguise_Card,Disguise Card,6,20,,10,,,,,,,,16,,,,,{ bonus2 bAddEffWhenHit,Eff_Silence,1500+3500*(readparam(bVit)>=77); },{},{}
 4182,Diabolic_Card,Diabolic Card,6,20,,10,,,,,,,,136,,,,,{ bonus bVariableCastrate,-6; },{},{}
 4183,Vagabond_Wolf_Card,Vagabond Wolf Card,6,20,,10,,,,,,,,4,,,,,{ bonus bStr,6; },{},{}
@@ -2394,8 +2394,8 @@
 4202,Civil_Servant_Card,Mao Guai Card,6,20,,10,,,,,,,,2,,,,,{ bonus2 bAddEle,Ele_Ghost,20; },{},{}
 4203,Mutant_Dragon_Card,Mutant Dragonoid Card,6,20,,10,,,,,,,,2,,,,,{ bonus Matk,15;  bonus4 bAutoSpellWhenHit,"MG_FIREBALL",3+7*(getskilllv("MG_FIREBALL")==10),100,1; },{},{}
 4204,Mini_Demon_Card,Mini Demon Card,6,20,,10,,,,,,,,64,,,,,{ bonus2 bSubRace,RC_Brute,-20; bonus2 bExpAddRace,RC_Brute,30; },{},{}
-4205,Mimic_Card,Mimic Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,603,10; },{},{}
-4206,Mystcase_Card,Myst Case Card,6,20,,10,,,,,,,,769,,,,,{ bonus2 bAddMonsterDropItem,644,30; },{},{}
+4205,Mimic_Card,Mimic Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,603,100; },{},{}
+4206,Mystcase_Card,Myst Case Card,6,20,,10,,,,,,,,769,,,,,{ bonus2 bAddMonsterDropItem,644,300; },{},{}
 4207,Mysteltainn_Card,Mysteltainn Card,6,20,,10,,,,,,,,32,,,,,{ bonus2 bSubSize,Size_Small,35; bonus bDef,25; },{},{}
 4208,Miyabi_Ningyo_Card,Miyabi Doll Card,6,20,,10,,,,,,,,64,,,,,{ bonus bMaxSPrate,10; bonus2 bSkillAtk,"MG_FROSTDIVER",50; bonus Matk,10; },{},{}
 4209,Violy_Card,Violy Card,6,20,,10,,,,,,,,136,,,,,{ bonus3 bAutoSpell,"BA_FROSTJOKER",1+4*(getskilllv("BA_FROSTJOKER")==5),50; },{},{}
@@ -2408,7 +2408,7 @@
 4216,Sasquatch_Card,Sasquatch Card,6,20,,10,,,,,,,,16,,,,,{ bonus2 bAddEffWhenHit,Eff_Freeze,900; },{},{}
 4217,Live_Peach_Tree_Card,Enchanted Peach Tree Card,6,20,,10,,,,,,,,32,,,,,{ bonus3 bAutoSpell,"AL_HEAL",1+9*(getskilllv("AL_HEAL")==10),50; },{},{}
 4218,Succubus_Card,Succubus Card,6,20,,10,,,,,,,,16,,,,,{ bonus bVit,-5; bonus bHPrecovRate,-30; bonus bMaxHP,1000;bonus bMaxHPrate,10; },{},{}
-4219,Sageworm_Card,Sage Worm Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,715,100; bonus2 bAddMonsterDropItem,716,100; bonus2 bAddMonsterDropItem,717,100; },{},{}
+4219,Sageworm_Card,Sage Worm Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,715,500; bonus2 bAddMonsterDropItem,716,500; bonus2 bAddMonsterDropItem,717,500; },{},{}
 4220,Solider_Card,Solider Card,6,20,,10,,,,,,,,16,,,,,{ bonus bDef,30; bonus bMdef,10; },{},{}
 4221,Skeleton_General_Card,Skeleton General Card,6,20,,10,,,,,,,,64,,,,,{ bonus2 bSubRace,RC_Insect,-20; bonus2 bExpAddRace,RC_Insect,30; },{},{}
 4222,Skel_Prisoner_Card,Skeleton Prisoner Card,6,20,,10,,,,,,,,16,,,,,{ bonus2 bAddEffWhenHit,Eff_Sleep,900; },{},{}
@@ -2533,7 +2533,7 @@
 4341,Metaling_Card,Metaling Card,6,20,,10,,,,,,,,2,,,,,{ bonus3 bAutoSpell,"RG_STRIPWEAPON",1,50; },{},{}
 4342,Rsx_0806_Card,RSX-0806 Card,6,20,,10,,,,,,,,16,,,,,{ bonus bVit,20; bonus bUnbreakableArmor; bonus bNoKnockback; },{},{}
 4343,Mole_Card,Holden Card,6,20,,10,,,,,,,,769,,,,,{ bonus bBaseAtk,15; bonus bBaseLuk,3; },{},{}
-4344,Anopheles_Card,Anopheles Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItemGroup,IG_Food,50; },{},{}
+4344,Anopheles_Card,Anopheles Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItemGroup,IG_Taming,50; },{},{}
 4345,Hill_Wind_Card,Hill Wind Card,6,20,,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,"MG_THUNDERSTORM",5; bonus2 bSkillAtk,"WZ_JUPITEL",5; bonus2 bSkillAtk,"WZ_VERMILION",15; },{},{ heal 0,-50; }
 4346,Ygnizem_Card,Egnigem Cenia Card,6,20,,10,,,,,,,,136,,,,,{ bonus bStr,readparam(bInt)/18; },{},{}
 4347,Armaia_Card,Armeyer Dinze Card,6,20,,10,,,,,,,,32,,,,,{ bonus3 bAddMonsterDropItem,7620,Class_Boss,5; },{},{}
@@ -2578,7 +2578,7 @@
 4386,Detale_Card,Detardeurus Card,6,20,,10,,,,,,,,16,,,,,{ bonus2 bResEff,Eff_Freeze,10000; bonus5 bAutoSpellWhenHit,"SA_LANDPROTECTOR",1,70,BF_MAGIC,0; },{},{}
 4387,Ancient_Mimic_Card,Ancient Mimic Card,6,20,,10,,,,,,,,136,,,,,{ bonus bAgi,readparam(bLuk)/18; },{},{}
 4388,Deathword_Card,Death Word Card,6,20,,10,,,,,,,,4,,,,,{ bonus bFlee,10; bonus2 bAddEle,Ele_Holy,20; },{},{ heal 0,-50; }
-4389,Plasma_Card,Plasma Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,12118,50; bonus2 bAddMonsterDropItem,12119,50; bonus2 bAddMonsterDropItem,12120,50; bonus2 bAddMonsterDropItem,12121,50; },{},{}
+4389,Plasma_Card,Plasma Card,6,20,,10,,,,,,,,136,,,,,{ bonus2 bAddMonsterDropItem,12118,100; bonus2 bAddMonsterDropItem,12119,100; bonus2 bAddMonsterDropItem,12120,100; bonus2 bAddMonsterDropItem,12121,100; },{},{}
 4390,Breeze_Card,Breeze Card,6,20,,10,,,,,,,,64,,,,,{ bonus bSpeedRate,20; },{},{}
 4391,Retribution_Card,Baroness of Retribution Card,6,20,,10,,,,,,,,136,,,,,{ bonus bDelayRate,-10; },{},{}
 4392,Observation_Card,Dame of Sentinel Card,6,20,,10,,,,,,,,136,,,,,{ bonus bDex,readparam(bVit)/15; },{},{}

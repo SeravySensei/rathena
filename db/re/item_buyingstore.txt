@@ -323,8 +323,8 @@
 4202	//Civil_Servant_Card
 4203  // Mutant_Dragon_Card
 4204  // Mini_Demon_Card
-4205	//Mimic_Card
-4206	//Mystcase_Card
+4205  // Mimic_Card
+4206  // Mystcase_Card
 4207  // Mysteltainn_Card
 4208  // Miyabi_Ningyo_Card
 4209  // Violy_Card
@@ -507,7 +507,7 @@
 4386  // Detale_Card
 4387  // Ancient_Mimic_Card
 4388  // Deathword_Card
-4389	//Plasma_Card
+4389  // Plasma_Card
 4390  // Breeze_Card
 4391  // Retribution_Card
 4392  // Observation_Card
