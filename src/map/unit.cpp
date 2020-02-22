@@ -3869,6 +3869,41 @@ int asuratarget(block_list * bl, va_list ap)
 	return 1;
 }
 
+int nofballs(block_list * bl) {
+	struct status_change *sc = status_get_sc(bl);
+
+	if (!sc)
+		return 0;
+
+	int j = 0;
+
+	for (int i = SC_SPHERE_1; i <= SC_SPHERE_5; i++)
+		if (sc->data[i]) {
+			j++;
+		}
+	return j;
+}
+
+
+int vortextarget(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+
+	if (md->status.def_ele == ELE_HOLY) return 0;  // Holy/dark reduces all 4 magic elements
+	if (md->status.def_ele == ELE_DARK) return 0;  
+	if (md->status.hp < 300 * sd2->status.base_level) return 0; // Must be strong enough monster
+	if (targetdistance > md->status.hp) return 0; // target strongest first
+	if (isreachabletarget(bl->id)) { targetdistance = md->status.hp; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
+
+	return 1;
+}
 // base damage = currenthp + ((atk * currenthp * skill level) / maxhp)
 // final damage = base damage + ((mirror image count + 1) / 5 * base damage) - (edef + sdef)
 int finaltarget(block_list * bl, va_list ap)
@@ -4308,6 +4343,36 @@ int AOEPriorityIP(block_list * bl, va_list ap)
 	return 2; // Default
 }
 
+int AOEPriorityFrostMist(block_list * bl, va_list ap)
+{
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	uint16 elem = ELE_WATER;
+
+	if (!elemallowed(md, elem)) return 0; // This target won't be hurt by this element enough to care
+	if (elemstrong(md, elem)) return 3;
+	if ((status_get_class_(bl) == CLASS_BOSS)) return 0; //Does this work on bosses?
+	return 2; 
+}
+
+int AOEPriorityJackFrost(block_list * bl, va_list ap)
+{
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	uint16 elem = ELE_WATER;
+
+	if (!elemallowed(md, elem)) return 0; // This target won't be hurt by this element enough to care
+	if (md->sc.data[SC_FREEZING]) return 1; // targets without freezing are worth less
+	if (elemstrong(md, elem)) return 3;
+	return 2; // Default
+}
+
 
 int targetthischar(block_list * bl, va_list ap)
 {
@@ -4671,13 +4736,15 @@ int targetlauda1(block_list * bl, va_list ap)
 	if (pc_isdead(sd)) return 0;
 	if (!ispartymember(sd)) return 0;
 	if (!sd->sc.data[SC_LAUDAAGNUS]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
-	if (sd->sc.data[SC_LAUDAAGNUS]) if (sd->sc.data[SC_LAUDAAGNUS]->timer<=2000) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+	// not sure how to check for remaning time of status effect
+	// should recast before it expires...
+	//if (sd->sc.data[SC_LAUDAAGNUS]) if (sd->sc.data[SC_LAUDAAGNUS]->timer>=400) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 	if (sd->sc.data[SC_FREEZE]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1;	};
 	if (sd->sc.data[SC_FREEZING]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
 	if (sd->sc.data[SC_STONE]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1;	};
 	if (sd->sc.data[SC_BURNING]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
 	if (sd->sc.data[SC_CRYSTALIZE]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
-
+	
 	return 0;
 }
 
@@ -5077,6 +5144,79 @@ void unit_skilluse_ifablexy(struct block_list *src, int target_id, uint16 skill_
 	tgtbl = map_id2bl(target_id);
 	int tgtx, tgty; tgtx = tgtbl->x; tgty = tgtbl->y;
 
+	// Pneuma is special. Always put it on tiles with coordinates divisible by 3 to avoid unintended overlap, target is still in range.
+	if (skill_id == AL_PNEUMA) {
+		tgtx = 3 * trunc((tgtx + 1) / 3);
+		tgty = 3 * trunc((tgty + 1) / 3);
+	}
+
+	if (sd->skillitem == skill_id) {
+		if (skill_lv != sd->skillitemlv)
+			skill_lv = sd->skillitemlv;
+		unit_skilluse_pos(&sd->bl, tgtx, tgty, skill_id, skill_lv, false);
+	}
+	else {
+		int lv;
+		sd->skillitem = sd->skillitemlv = 0;
+		if ((lv = pc_checkskill(sd, skill_id)) > 0) {
+			if (skill_lv > lv)
+				skill_lv = lv;
+			unit_skilluse_pos(&sd->bl, tgtx, tgty, skill_id, skill_lv, false);
+		}
+	}
+
+}
+
+void unit_skilluse_ifablexy2(struct block_list *src, int tgtx, int tgty , uint16 skill_id, uint16 skill_lv)
+{
+	unsigned int tick = gettick();
+	struct map_session_data *sd = (struct map_session_data*)src;
+
+	if (!(skill_get_inf(skill_id)&INF_GROUND_SKILL))
+		return; //Using a target skill on the ground? WRONG.
+
+#ifdef RENEWAL
+	if (pc_hasprogress(sd, WIP_DISABLE_SKILLITEM)) {
+		clif_msg(sd, WORK_IN_PROGRESS);
+		return;
+	}
+#endif
+
+	//Whether skill fails or not is irrelevant, the char ain't idle. [Skotlex]
+	if (battle_config.idletime_option&IDLE_USESKILLTOPOS)
+		sd->idletime = last_tick;
+
+	if (skill_isNotOk(skill_id, sd))
+		return;
+	if (pc_issit(sd)) {
+		//clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
+		return;
+	}
+
+	if (sd->ud.skilltimer != INVALID_TIMER)
+		return;
+
+	if (DIFF_TICK(tick, sd->ud.canact_tick) < 0) {
+		if (sd->skillitem != skill_id) {
+			//clif_skill_fail(sd, skill_id, USESKILL_FAIL_SKILLINTERVAL, 0);
+			return;
+		}
+	}
+
+	if (sd->sc.option&OPTION_COSTUME)
+		return;
+
+	if (sd->menuskill_id) {
+		if (sd->menuskill_id != SA_AUTOSPELL)
+			return; //Can't use skills while a menu is open.
+	}
+
+	pc_delinvincibletimer(sd);
+
+
+	//	unit_stop_walking(src, 1); // Important! If trying to skill while walking and out of range, skill gets queued 
+	struct block_list *tgtbl;
+	
 	// Pneuma is special. Always put it on tiles with coordinates divisible by 3 to avoid unintended overlap, target is still in range.
 	if (skill_id == AL_PNEUMA) {
 		tgtx = 3 * trunc((tgtx + 1) / 3);
@@ -5548,6 +5688,12 @@ void skillwhenidle(struct map_session_data *sd) {
 			unit_skilluse_ifable(&sd->bl, SELF, MG_ENERGYCOAT, pc_checkskill(sd, MG_ENERGYCOAT));
 		}
 	}
+	// Recognized Spell
+	if (pc_checkskill(sd, WL_RECOGNIZEDSPELL) > 0) {
+		if (!(sd->sc.data[SC_RECOGNIZEDSPELL])) {
+			unit_skilluse_ifable(&sd->bl, SELF, WL_RECOGNIZEDSPELL, pc_checkskill(sd, WL_RECOGNIZEDSPELL));
+		}
+	}
 
 	// Double Casting
 	if (pc_checkskill(sd, PF_DOUBLECASTING) > 0) {
@@ -5595,6 +5741,50 @@ void skillwhenidle(struct map_session_data *sd) {
 
 		}
 	}
+
+	// Reading spellbook or summon balls to prepare for Release
+	bool b = false;
+	if (pc_checkskill(sd, WL_READING_SB) > 0) {
+		// freeze spell if none frozen
+		if (!(sd->sc.data[SC_SPELLBOOK1])
+			&& !(sd->sc.data[SC_SPELLBOOK2])
+			&& !(sd->sc.data[SC_SPELLBOOK3])
+			&& !(sd->sc.data[SC_SPELLBOOK4])
+			&& !(sd->sc.data[SC_SPELLBOOK5])
+			&& !(sd->sc.data[SC_SPELLBOOK6])
+			&& !(sd->sc.data[SC_MAXSPELLBOOK])) {
+			// COMET
+			if ((pc_inventory_count(sd, 6195) >= 1)
+				&& (pc_checkskill(sd, WL_COMET) == 5)) { b = true; sd->state.autoreadingbook = WL_COMET; }
+			/*	else
+			// LIFE DRAIN
+			if ((pc_inventory_count(sd, 6205) >= 1)
+					&& (pc_checkskill(sd, WL_DRAINLIFE) == 5)) { b = true; sd->state.autoreadingbook = WL_DRAINLIFE; };*/
+
+			// Kinda pointless to freeze anything else? Comet is just better for damage on everything. I guess this gives the AI nothing to store until Comet is learned tho.
+			// Still, elemental spells are not a good idea as the AI will release them without checking target compatibility so in worst case, might even heal the mob
+
+		if (b) unit_skilluse_ifable(&sd->bl, SELF, WL_READING_SB, pc_checkskill(sd, WL_READING_SB));
+		}
+		else b = true;
+	}
+	// Summon balls if no spell was frozen only
+	if (!b)  {
+		if (((map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_FIRE) > 0)) && (pc_checkskill(sd, WL_SUMMONFB) >= 4))
+			unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONFB, pc_checkskill(sd, WL_SUMMONFB));
+		else
+			if (((map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_WATER) > 0)) && (pc_checkskill(sd, WL_SUMMONWB) >= 4))
+				unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONWB, pc_checkskill(sd, WL_SUMMONWB));
+			else
+				if (((map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_WIND) > 0)) && (pc_checkskill(sd, WL_SUMMONBL) >= 4))
+					unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONBL, pc_checkskill(sd, WL_SUMMONBL));
+				else
+					if (((map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_EARTH) > 0)) && (pc_checkskill(sd, WL_SUMMONSTONE) >= 4))
+						unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONSTONE, pc_checkskill(sd, WL_SUMMONSTONE));
+	// If none of the elements are clearly good for the map, better avoid summoning balls in advance.
+	}
+
+
 
 	// Amplify Magic Power
 	if (pc_checkskill(sd, HW_MAGICPOWER) > 0) {
@@ -6127,6 +6317,41 @@ TIMER_FUNC(unit_autopilot_timer)
 					unit_skilluse_ifable(&sd->bl, foundtargetID, CR_ACIDDEMONSTRATION, pc_checkskill(sd, CR_ACIDDEMONSTRATION));
 				}
 		}
+		// Tetra Vortex
+		if (canskill(sd)) if (pc_checkskill(sd, WL_TETRAVORTEX) >= 4) if (sd->state.autopilotmode == 2) {
+			resettargets2();
+			map_foreachinrange(vortextarget, &sd->bl, 12, BL_MOB, sd);
+				if (foundtargetID > -1) {
+					// Need more balls?
+					if (nofballs(&sd->bl) < 4) {
+						if ((elemstrong(targetmd, ELE_FIRE)) && (pc_checkskill(sd, WL_SUMMONFB) >= 4))
+							unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONFB, pc_checkskill(sd, WL_SUMMONFB));
+						else
+							if ((elemstrong(targetmd, ELE_WATER)) && (pc_checkskill(sd, WL_SUMMONWB) >= 4))
+								unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONWB, pc_checkskill(sd, WL_SUMMONWB));
+							else
+								if ((elemstrong(targetmd, ELE_WIND)) && (pc_checkskill(sd, WL_SUMMONBL) >= 4))
+									unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONBL, pc_checkskill(sd, WL_SUMMONBL));
+								else
+									if ((elemstrong(targetmd, ELE_EARTH)) && (pc_checkskill(sd, WL_SUMMONSTONE) >= 4))
+										unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONSTONE, pc_checkskill(sd, WL_SUMMONSTONE));
+									else
+										if ((elemallowed(targetmd, ELE_FIRE)) && (pc_checkskill(sd, WL_SUMMONFB) >= 4))
+											unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONFB, pc_checkskill(sd, WL_SUMMONFB));
+										else
+											if ((elemallowed(targetmd, ELE_WATER)) && (pc_checkskill(sd, WL_SUMMONWB) >= 4))
+												unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONWB, pc_checkskill(sd, WL_SUMMONWB));
+											else
+												if ((elemallowed(targetmd, ELE_WIND)) && (pc_checkskill(sd, WL_SUMMONBL) >= 4))
+													unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONBL, pc_checkskill(sd, WL_SUMMONBL));
+												else
+													if ((elemallowed(targetmd, ELE_EARTH)) && (pc_checkskill(sd, WL_SUMMONSTONE) >= 4))
+														unit_skilluse_ifable(&sd->bl, SELF, WL_SUMMONSTONE, pc_checkskill(sd, WL_SUMMONSTONE));
+					} else unit_skilluse_ifable(&sd->bl, foundtargetID, WL_TETRAVORTEX, pc_checkskill(sd, WL_TETRAVORTEX));
+				}
+		}
+
+
 		/// Asura Strike
 		if (canskill(sd)) if (pc_checkskill(sd, MO_EXTREMITYFIST)>0) if (sd->state.autopilotmode == 2) {
 			resettargets2();
@@ -6187,6 +6412,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					{
 						if (lud->skill_id == MO_EXTREMITYFIST) lextarget = lud->skilltarget; 
 						if (lud->skill_id == CR_ACIDDEMONSTRATION) lextarget = lud->skilltarget;
+						if (lud->skill_id == NJ_ISSEN) lextarget = lud->skilltarget;
 					}
 				}
 			}
@@ -6218,7 +6444,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (sd->state.autopilotmode == 2) {
 
 			resettargets2();
-			targetdistance = 99999999;
+			targetdistance = 99999999; 
 			map_foreachinrange(finaltarget, &sd->bl, 12, BL_MOB, sd);
 			if (foundtargetID > -1) 
 			{
@@ -7184,6 +7410,14 @@ TIMER_FUNC(unit_autopilot_timer)
 
 		// Don't bother with these suboptimal spells if casting is uninterruptable (note, they can be still cast as a damage spell, but not as an emergency reaction when fast cast time is needed)
 		if (!(sd->special_state.no_castcancel)) {
+			// Release
+			// Do this if there is a stored spell and there are multiple enemies or we don't know white imprison
+			if ((Dangerdistance <= 4))
+				if (canskill(sd)) if (pc_checkskill(sd, WL_RELEASE) > 1) if ((pc_checkskill(sd, WL_WHITEIMPRISON) == 0) || (dangercount>=2))
+				if ((sd->sc.data[SC_SPELLBOOK1]) || (nofballs(&sd->bl))) {
+					unit_skilluse_ifable(&sd->bl, founddangerID, WL_RELEASE, pc_checkskill(sd, WL_RELEASE));
+				}
+
 			/// White Imprison
 			// The ultimate solution to threats, instant cast, 90% chance to disable any mob with no cast delay!
 			if (canskill(sd)) if (pc_checkskill(sd, WL_WHITEIMPRISON) > 1) {
@@ -7193,6 +7427,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 				}
 			}
+
 			/// Napalm Beat
 			// **Note** : This has been modded to be uninterruptable and faster to use. Unmodded the AI probably shouldn't ever cast it, it's that bad.
 			// It is the spell to use in the worst emergencies only, when enemy is at most 2 steps from hitting us.
@@ -7368,6 +7603,17 @@ TIMER_FUNC(unit_autopilot_timer)
 									spelltocast = WZ_STORMGUST; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
+							// Comet
+							// ***Note*** I removed the gemstone requirement from this, if you did not, uncomment
+							if (canskill(sd)) if ((pc_checkskill(sd, WL_COMET) > 0) && (Dangerdistance > 900) /*&& (pc_inventory_count(sd, ITEMID_RED_GEMSTONE) >= 2)*/)
+								// Requires 800 SP but we don't want to end up having none left
+								if (sd->battle_status.sp >=950) {
+								int area = 9;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skill_get_ele(WL_COMET, pc_checkskill(sd, WL_COMET)));
+								if ((priority >= 24) && (priority > bestpriority)) {
+									spelltocast = WL_COMET; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
 							// Quagmire
 							if (canskill(sd)) if (pc_checkskill(sd, WZ_QUAGMIRE) > 0) {
 								struct map_session_data *sd2 = (struct map_session_data*)targetbl2;
@@ -7428,7 +7674,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									   // the targets will stay in that line plus the moving target moves the line itself.
 									   // However all monsters on the same time are likely to still be together so pretend
 									   // it's a 1x1 AOE. Priority is higher than Jolt. 
-										foundtargetID = -1; targetdistance = 999;
+										resettargets;
 										map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
 										if (foundtargetID > -1) {
 											int area = 1;
@@ -7441,7 +7687,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Fireball
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, MG_FIREBALL) > 0)) {
-								foundtargetID = -1; targetdistance = 999;
+								resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7454,8 +7700,8 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Crimson Rock
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							// higher priority than 2nd job skills because it's faster to cast and damage is almost as good but more reliable and is applied quicker too.
-							if (canskill(sd)) if ((pc_checkskill(sd, WL_CRIMSONROCK) > 0)) {
-								foundtargetID = -1; targetdistance = 999;
+							if (canskill(sd)) if ((pc_checkskill(sd, WL_CRIMSONROCK) > 0) && (Dangerdistance > 900)) {
+								resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7470,7 +7716,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							// AT level 4+ the radius is large enough to consider this AOE. Priority is decent because it's very spammable so DPS is high
 							if (canskill(sd)) if ((pc_checkskill(sd, WL_SOULEXPANSION) > 3)) {
-								foundtargetID = -1; targetdistance = 999;
+								resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7484,7 +7730,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Judex
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, AB_JUDEX) > 0) && (Dangerdistance > 900)) {
-								foundtargetID = -1; targetdistance = 999;
+								resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1;
@@ -7499,8 +7745,9 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, AB_ADORAMUS) > 0) && (Dangerdistance > 900))
 								// save some gems for resurrection and whatever
-								if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) > 10) {
-								foundtargetID = -1; targetdistance = 999;
+								// ***NOTE*** Uncomment this if Adoramus consumes gemstones on your server
+/*								if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) > 10) {*/
+									resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1; if (pc_checkskill(sd, AB_ADORAMUS) >= 7) area++;
@@ -7508,7 +7755,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									if (((priority >= 6) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
 										spelltocast = AB_ADORAMUS; bestpriority = priority; IDtarget = foundtargetID;
 									}
-								}
+								/*}*/
 							}
 
 
@@ -7516,7 +7763,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, GS_SPREADATTACK) > 0))
 								if ((sd->status.weapon == W_SHOTGUN) || (sd->status.weapon == W_GRENADE)) {
-								foundtargetID = -1; targetdistance = 999;
+									resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, GS_SNAKEEYE), BL_MOB, sd);
 								if (foundtargetID > -1) {
 								int area = 1;
@@ -7534,7 +7781,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Prefer this over Blitz Beat if available, does more damage
 							if (canskill(sd)) if ((pc_checkskill(sd, SN_SHARPSHOOTING) > 0))
 								if (sd->status.weapon == W_BOW) {
-									foundtargetID = -1; targetdistance = 999;
+									resettargets;
 									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 									if (foundtargetID > -1) {
 										int area = 1; // This skill hits more area than this but see First Wind comments.
@@ -7553,7 +7800,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// I kept this skill to use INT, if you did apply the update that changed to AGI, replace that here too.
 							if (canskill(sd)) if ((pc_checkskill(sd, HT_BLITZBEAT) > 0)) if (sd->status.int_>=30)
 								if (pc_isfalcon(sd)) {
-								foundtargetID = -1; targetdistance = 999;
+									resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 3 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1;
@@ -7567,7 +7814,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Arrow Shower
 							if (canskill(sd)) if ((pc_checkskill(sd, AC_SHOWER) > 0)) if (sd->status.weapon == W_BOW)
 							{
-								foundtargetID = -1; targetdistance = 999;
+								resettargets;
 								map_foreachinrange(targetnearest, targetbl2,9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
 								// knockback might hit monster outside range if further than this
 								if (foundtargetID > -1) if (distance_bl(targetbl, &sd->bl) <= 10 ) {
@@ -7585,7 +7832,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_BAKUENRYU) > 0)) if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
 							if (pc_search_inventory(sd, 7521) >= 0) {
 								if (pc_rightside_atk(sd) < sd->battle_status.matk_min) { 
-									foundtargetID = -1; targetdistance = 999;
+									resettargets;
 									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 									if (foundtargetID > -1) {
 										int area = 2;
@@ -7600,7 +7847,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Throw Huuma
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_HUUMA) >= 4))
 								if (sd->status.weapon == W_HUUMA) {
-								foundtargetID = -1; targetdistance = 999;
+									resettargets;
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 								int area = 2;
@@ -7631,6 +7878,33 @@ TIMER_FUNC(unit_autopilot_timer)
 						}
 					}
 
+					// Earth Strain 4 directions
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_EARTHSTRAIN) > 0) && (Dangerdistance > 900)) {
+						priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x-10, sd->bl.y-5, sd->bl.x, sd->bl.y+5, BL_MOB, skill_get_ele(WL_EARTHSTRAIN, pc_checkskill(sd, WL_EARTHSTRAIN)));
+						if ((priority >= 24) && (priority > bestpriority)) {
+							spelltocast = WL_EARTHSTRAIN; bestpriority = priority; IDtarget = 1;
+						}
+					}
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_EARTHSTRAIN) > 0) && (Dangerdistance > 900)) {
+						priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x, sd->bl.y-5, sd->bl.x + 10, sd->bl.y+5, BL_MOB, skill_get_ele(WL_EARTHSTRAIN, pc_checkskill(sd, WL_EARTHSTRAIN)));
+						if ((priority >= 24) && (priority > bestpriority)) {
+							spelltocast = WL_EARTHSTRAIN; bestpriority = priority; IDtarget = 2;
+						}
+					}
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_EARTHSTRAIN) > 0) && (Dangerdistance > 900)) {
+						priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x-5, sd->bl.y-10, sd->bl.x+5, sd->bl.y, BL_MOB, skill_get_ele(WL_EARTHSTRAIN, pc_checkskill(sd, WL_EARTHSTRAIN)));
+						if ((priority >= 24) && (priority > bestpriority)) {
+							spelltocast = WL_EARTHSTRAIN; bestpriority = priority; IDtarget = 3;
+						}
+					}
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_EARTHSTRAIN) > 0) && (Dangerdistance > 900)) {
+						priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x-5, sd->bl.y, sd->bl.x + 5, sd->bl.y+10, BL_MOB, skill_get_ele(WL_EARTHSTRAIN, pc_checkskill(sd, WL_EARTHSTRAIN)));
+						if ((priority >= 24) && (priority > bestpriority)) {
+							spelltocast = WL_EARTHSTRAIN; bestpriority = priority; IDtarget = 4;
+						}
+					}
+
+
 					// Meteor Assault - always centered on user
 					// **Note** uncomment below if you didn't make this skill uninterruptable like I did.
 					if (canskill(sd)) if ((pc_checkskill(sd, ASC_METEORASSAULT) > 0)
@@ -7656,6 +7930,23 @@ TIMER_FUNC(unit_autopilot_timer)
 							}
 						}
 					}
+					// Frost Misty
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_FROSTMISTY) == 5)
+											 &&	((Dangerdistance > 900) || (sd->special_state.no_castcancel)) 
+						) {int area = 10;
+							priority = 2 * map_foreachinrange(AOEPriorityFrostMist, &sd->bl, area, BL_MOB);
+							if ((priority >= 18) && (priority > bestpriority)) {
+								spelltocast = WL_FROSTMISTY; bestpriority = priority; IDtarget = sd->bl.id;
+							}
+						}
+					// Jack Frost
+					if (canskill(sd)) if ((pc_checkskill(sd, WL_JACKFROST) >= 4)) {
+						int area = 10;
+						priority = 2 * map_foreachinrange(AOEPriorityJackFrost, &sd->bl, area, BL_MOB);
+						if ((priority >= 18) && (priority > bestpriority)) {
+							spelltocast = WL_JACKFROST; bestpriority = priority; IDtarget = sd->bl.id;
+						}
+					}
 
 					// Desperado - always centered on user
 					if (canskill(sd)) if (pc_checkskill(sd, GS_DESPERADO) > 0) if (sd->status.weapon == W_REVOLVER) {
@@ -7672,7 +7963,19 @@ TIMER_FUNC(unit_autopilot_timer)
 
 					// Cast the chosen spell
 					if (spelltocast > -1) {
+						if (spelltocast == WL_EARTHSTRAIN) {
+							switch (IDtarget) {
+							case 1: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x-3,sd->bl.y, spelltocast, pc_checkskill(sd, spelltocast));
+							case 2: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x+3, sd->bl.y, spelltocast, pc_checkskill(sd, spelltocast));
+							case 3: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y-3, spelltocast, pc_checkskill(sd, spelltocast));
+							case 4: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y+4, spelltocast, pc_checkskill(sd, spelltocast));
+						}
+
+						}
+						else
 						if ((spelltocast == NJ_HYOUSYOURAKU) // Skills that target SELF, not the ground 
+							|| (spelltocast == WL_FROSTMISTY)
+							|| (spelltocast == WL_JACKFROST)
 							|| (spelltocast == ASC_METEORASSAULT)
 							|| (spelltocast == GS_DESPERADO)
 							) unit_skilluse_ifable(&sd->bl, SELF, spelltocast, pc_checkskill(sd, spelltocast));
@@ -7943,6 +8246,16 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 		}
+		// Chain Lightning on vulnerable enemy
+		// For simplicity this is treated as a single target, assuming it'll chain on the same or similar enemies.
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CHAINLIGHTNING) > 0) {
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemstrong(targetmd, ELE_WIND)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CHAINLIGHTNING, pc_checkskill(sd, WL_CHAINLIGHTNING));
+				}
+			}
+		}
+
 		// Jupitel Thunder on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_JUPITEL) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
@@ -8250,6 +8563,14 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+			// Chain Lightning
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_CHAINLIGHTNING) > 0)) {
+				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
+					if (elemallowed(targetmd, ELE_WIND)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CHAINLIGHTNING, pc_checkskill(sd, WL_CHAINLIGHTNING));
+					}
+				}
+			}
 			// Jupitel Thunder
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WZ_JUPITEL) > 0)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
