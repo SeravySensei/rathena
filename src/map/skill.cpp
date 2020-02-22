@@ -4275,20 +4275,19 @@ static TIMER_FUNC(skill_timerskill){
 					}
 					break;
 				case WL_CHAINLIGHTNING_ATK: {
-						skill_toggle_magicpower(src, skl->skill_id); // Only the first hit will be amplified
-						skill_attack(BF_MAGIC,src,src,target,skl->skill_id,skl->skill_lv,tick,9 - skl->type); // Hit a Lightning on the current Target
 						if( skl->type < (4 + skl->skill_lv - 1) && skl->x < 3  )
 						{ // Remaining Chains Hit
 							struct block_list *nbl = NULL; // Next Target of Chain
-							nbl = battle_getenemyarea(src, target->x, target->y, (skl->type>2)?2:3, // After 2 bounces, it will bounce to other targets in 7x7 range.
+							nbl = battle_getenemyarea(src, target->x, target->y, 8, // After 2 bounces, it will bounce to other targets in 7x7 range.
 									splash_target(src), target->id); // Search for a new Target around current one...
-							if( nbl == NULL )
-								skl->x++;
-							else
-								skl->x = 0;
-							skill_addtimerskill(src, tick + 650, (nbl?nbl:target)->id, skl->x, 0, WL_CHAINLIGHTNING_ATK, skl->skill_lv, skl->type + 1, 0);
+							if (nbl == NULL)
+								nbl = target;
+							skl->x = 0;
+							skill_addtimerskill(src, tick + 300, (nbl?nbl:target)->id, skl->x, 0, WL_CHAINLIGHTNING_ATK, skl->skill_lv, skl->type + 1, 0);
 						}
-					}
+						skill_toggle_magicpower(src, skl->skill_id); // Only the first hit will be amplified
+						skill_attack(BF_MAGIC, src, src, target, skl->skill_id, skl->skill_lv, tick, 9 - skl->type); // Hit a Lightning on the current Target
+				}
 					break;
 				case WL_TETRAVORTEX_FIRE:
 				case WL_TETRAVORTEX_WATER:
@@ -9757,17 +9756,25 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		if( sd ) {
 			struct status_change *sc = status_get_sc(bl);
 
-			for( i = SC_SPELLBOOK1; i <= SC_MAXSPELLBOOK; i++)
-				if( sc && !sc->data[i] )
-					break;
-			if( i == SC_MAXSPELLBOOK ) {
-				clif_skill_fail(sd, WL_READING_SB, USESKILL_FAIL_SPELLBOOK_READING, 0);
-				break;
-			}
+			if (sd->state.autopilotmode == 0) {
 
-			sc_start(src,bl, SC_STOP, 100, skill_lv, INFINITE_TICK); //Can't move while selecting a spellbook.
-			clif_spellbook_list(sd);
-			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
+				for (i = SC_SPELLBOOK1; i <= SC_MAXSPELLBOOK; i++)
+					if (sc && !sc->data[i])
+						break;
+				if (i == SC_MAXSPELLBOOK) {
+					clif_skill_fail(sd, WL_READING_SB, USESKILL_FAIL_SPELLBOOK_READING, 0);
+					break;
+				}
+
+				sc_start(src, bl, SC_STOP, 100, skill_lv, INFINITE_TICK); //Can't move while selecting a spellbook.
+				clif_spellbook_list(sd);
+				clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
+			}
+			else {
+				if (pc_inventory_count(sd, 6195) >= 1)
+					skill_spellbook(sd, 6195);
+			};
+
 		}
 		break;
 
