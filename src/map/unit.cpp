@@ -5793,6 +5793,13 @@ void skillwhenidle(struct map_session_data *sd) {
 		}
 	}
 
+	// Enchant Blade
+	if (pc_checkskill(sd, RK_ENCHANTBLADE) > 0) if (sd->state.autopilotmode == 1) {
+		if (!(sd->sc.data[SC_ENCHANTBLADE])) {
+			unit_skilluse_ifable(&sd->bl, SELF, RK_ENCHANTBLADE, pc_checkskill(sd, RK_ENCHANTBLADE));
+		}
+	}
+
 	// Guns - Increase Accuracy
 	if (pc_checkskill(sd, GS_INCREASING) > 0) if (sd->spiritball >= 4) {
 		if (!(sd->sc.data[SC_INCREASING])) {
@@ -7645,6 +7652,24 @@ TIMER_FUNC(unit_autopilot_timer)
 								}
 							}
 
+							// Dragon Breath
+							if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH) > 6)) if (pc_isridingdragon(sd)) {
+								int area = 4; if (pc_checkskill(sd, RK_DRAGONBREATH) > 8) area++;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skill_get_ele(RK_DRAGONBREATH, pc_checkskill(sd, RK_DRAGONBREATH)));
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = RK_DRAGONBREATH; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+
+							// Dragon Breath - Water
+							if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH_WATER) > 6)) if (pc_isridingdragon(sd)) {
+								int area = 4; if (pc_checkskill(sd, RK_DRAGONBREATH_WATER) > 8) area++;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skill_get_ele(RK_DRAGONBREATH_WATER, pc_checkskill(sd, RK_DRAGONBREATH_WATER)));
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = RK_DRAGONBREATH_WATER; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+
 							// Thunderstorm
 							if (canskill(sd)) if ((pc_checkskill(sd, MG_THUNDERSTORM) > 0) && (Dangerdistance > 900)) {
 								// modded : 5x5 but 7x7 at level 6 or higher.
@@ -8485,6 +8510,12 @@ TIMER_FUNC(unit_autopilot_timer)
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, CR_SHIELDBOOMERANG, pc_checkskill(sd, CR_SHIELDBOOMERANG));
 				}
 			}
+			// Sonic Wave
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_SONICWAVE) > 0))
+					// not really strong enough to use if aleady engaged in melee in tanking mode
+					if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_SONICWAVE, pc_checkskill(sd, RK_SONICWAVE));
+				}
 			// Spear Boomerang
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, KN_SPEARBOOMERANG) > 0))
 				if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR)) {
@@ -8510,7 +8541,14 @@ TIMER_FUNC(unit_autopilot_timer)
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, PA_SHIELDCHAIN, pc_checkskill(sd, PA_SHIELDCHAIN));
 				}
 			}
-
+			// Hundred Spear
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_HUNDREDSPEAR) > 0)) {
+				if (rangeddist <= 9) if (elemallowed(targetRAmd, skill_get_ele(RK_HUNDREDSPEAR, pc_checkskill(sd, RK_HUNDREDSPEAR))))
+					if (sd->state.autopilotmode != 3)
+					{
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_HUNDREDSPEAR, pc_checkskill(sd, RK_HUNDREDSPEAR));
+					}
+			}
 			// Spiral Pierce
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, LK_SPIRALPIERCE) > 0))  {
 				// Unlike Paladin, this class can't heal so ok to use up SP even if in tanking mode, but skill is interruptable so be careful of that
@@ -8790,6 +8828,14 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				resettargets();
 				map_foreachinrange(provokethis, &sd->bl, 9, BL_MOB, sd);
 				if (foundtargetID > -1) {
+				// Phantom Thrust
+				// by far the best option as it pulls the mob to the tank.
+				if (canskill(sd)) if ((pc_checkskill(sd, RK_PHANTOMTHRUST) > 0))
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, RK_PHANTOMTHRUST, pc_checkskill(sd, RK_PHANTOMTHRUST));
+				// Sonic Wave
+				if (canskill(sd)) if ((pc_checkskill(sd, RK_SONICWAVE) > 0))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, RK_SONICWAVE, pc_checkskill(sd, RK_SONICWAVE));
 				// Shield Boomerang
 				if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0))
 					if (sd->status.shield > 0) 
@@ -8916,11 +8962,43 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skill_get_ele(CR_GRANDCROSS, pc_checkskill(sd, CR_GRANDCROSS))) >= 8)
 					unit_skilluse_ifable(&sd->bl, SELF, CR_GRANDCROSS, pc_checkskill(sd, CR_GRANDCROSS));
 			}
+			// Dragon Breath
+			// Assumes center is self because we're tanking.
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH) > 0))if (pc_isridingdragon(sd))
+			// Must be in dragon breath build otherwise we want to use ignition break/Wind Cutter instead
+			if (sd->battle_status.vit+ sd->battle_status.int_*0.4> sd->battle_status.str) {
+				// At least 3 enemies in range (or 2 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(RK_DRAGONBREATH, pc_checkskill(sd, RK_DRAGONBREATH))) >= 6)
+					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, RK_DRAGONBREATH, pc_checkskill(sd, RK_DRAGONBREATH));
+			}
+			// Dragon Breath Water
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH_WATER) > 0))if (pc_isridingdragon(sd))
+				// Must be in dragon breath build otherwise we want to use ignition break/Wind Cutter instead
+				if (sd->battle_status.vit + sd->battle_status.int_*0.4 > sd->battle_status.str) {
+					// At least 3 enemies in range (or 2 if weak to element)
+					if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(RK_DRAGONBREATH_WATER, pc_checkskill(sd, RK_DRAGONBREATH_WATER))) >= 6)
+						unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, RK_DRAGONBREATH_WATER, pc_checkskill(sd, RK_DRAGONBREATH_WATER));
+				}
+
+			// Ignition Break
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_IGNITIONBREAK) > 0)) {
+				// At least 3 enemies in range (or 2 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK))) >= 6)
+					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK));
+			}
 			// Magnum Break
 			if (canskill(sd)) if ((pc_checkskill(sd, SM_MAGNUM) > 0)) {
 					// At least 3 enemies in range (or 2 if weak to element)
 					if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skill_get_ele(SM_MAGNUM, pc_checkskill(sd, SM_MAGNUM))) >= 6)
 						unit_skilluse_ifable(&sd->bl, SELF, SM_MAGNUM, pc_checkskill(sd, SM_MAGNUM));
+			}
+			// Wind Cutter
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_WINDCUTTER) > 0)) {
+				// At least 3 enemies in range (or 2 if weak to element)
+				// ***NOTE*** I changed the range of this to 4, if you did not, revert to 2
+				// ***Note*** I also increased the damage ratio to 675% at max level. If you did not, bowling bash does more damage below lv ~150 unless the targets are weak to wind. You might want to restrict using this skill based on levels.
+				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(RK_WINDCUTTER, pc_checkskill(sd, RK_WINDCUTTER))) >= 6)
+					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x,sd->bl.y, RK_WINDCUTTER, pc_checkskill(sd, RK_WINDCUTTER));
 			}
 
 			// Steal skill
@@ -8945,6 +9023,36 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					}
 				}
 			}
+
+			// Dragon Breath
+			// DB builds will want to use this even for single target!
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH) > 0)) if (pc_isridingdragon(sd))
+				// Must be in dragon breath build!
+				if (sd->battle_status.vit + sd->battle_status.int_*0.4 > sd->battle_status.str) {
+					// At least 3 enemies in range (or 2 if weak to element)
+					if (elemallowed(targetmd,ELE_FIRE))
+						unit_skilluse_ifablexy(&sd->bl, foundtargetID, RK_DRAGONBREATH, pc_checkskill(sd, RK_DRAGONBREATH));
+				}
+			// Dragon Breath Water
+			// DB builds will want to use this even for single target!
+			if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH_WATER) > 0)) if (pc_isridingdragon(sd))
+				// Must be in dragon breath build!
+				if (sd->battle_status.vit + sd->battle_status.int_*0.4 > sd->battle_status.str) {
+					// At least 3 enemies in range (or 2 if weak to element)
+					if (elemallowed(targetmd, ELE_WATER))
+						unit_skilluse_ifablexy(&sd->bl, foundtargetID, RK_DRAGONBREATH_WATER, pc_checkskill(sd, RK_DRAGONBREATH_WATER));
+				}
+
+			// Dragon Howling
+			// Reduce enemy flee and hit before attempting to use melee skills/tank. 2 sec stopped movement also helps delaying taking damage from other monsters while killing first
+			// Note : skill cooldown ensures the AI won't waste SP spamming this.
+			if (canskill(sd)) if (pc_checkskill(sd, RK_DRAGONHOWLING) > 0)  {
+				if (targetmd->level > sd->status.base_level-20) // don't bother on weaker enemies
+					if (pc_isridingdragon(sd)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, RK_DRAGONHOWLING, pc_checkskill(sd, RK_DRAGONHOWLING));
+				}
+			}
+
 
 			// Sonic Blow skill
 			// Note the AI ignores the +50% damage dealt on low health targets. It can't judge when it's worth waiting for other players to deal damage first and save SP.
@@ -9137,7 +9245,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					}
 			}
 
-			// Correct code
+			// attack the enemy or walk to them
 			if ((sd->battle_status.rhw.range >= targetdistance) && (targetdistance<3)) {
 				aspdpotion(sd);
 				unit_attack(&sd->bl, foundtargetID, 1);
