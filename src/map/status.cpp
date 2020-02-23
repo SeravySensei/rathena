@@ -10661,7 +10661,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			if (!status_charge(bl, status->hp / 5, 0)) // 20% of HP
 				return 0;
 			if (sd)
-				val1 = sd->status.job_level * pc_checkskill(sd, RK_RUNEMASTERY) / 4; // DEF/MDEF Increase
+				val1 = (sd->status.job_level+sd->battle_status.int_) * pc_checkskill(sd, RK_RUNEMASTERY) / 10; // DEF/MDEF Increase
 			break;
 		case SC_REFRESH:
 			status_heal(bl, status_get_max_hp(bl) * 25 / 100, 0, 1);

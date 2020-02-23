@@ -9314,17 +9314,13 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				int recent = 0, result = -1;
 
 				for (i = 0; i < ARRAYLENGTH(runes); i++) {
-					if (sd->sc.data[runes[i]] && ((sd->sc.data[runes[i]]->timer * (runes[i] == SC_REFRESH? 3 : 1)) > recent || recent == 0)) {
-						recent = sd->sc.data[runes[i]]->timer;
+					if (sd->sc.data[runes[i]]) {
 						result = i;
+						skill_area_temp[5] = result;
+						status_change_end(src, runes[result], INVALID_TIMER);
+						party_foreachsamemap(skill_area_sub, sd, skill_get_splash(skill_id, skill_lv), src, skill_id, skill_lv, tick, flag | BCT_PARTY | 1, skill_castend_nodamage_id);
+						clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
 					}
-				}
-
-				if (result != -1) {
-					skill_area_temp[5] = result;
-					status_change_end(src, runes[result], INVALID_TIMER);
-					party_foreachsamemap(skill_area_sub, sd, skill_get_splash(skill_id, skill_lv), src, skill_id, skill_lv, tick, flag|BCT_PARTY|1, skill_castend_nodamage_id);
-					clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
 				}
 			}
 		}

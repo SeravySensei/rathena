@@ -1433,15 +1433,6 @@
 12705,475,100	// Noble_Nameplate
 12714,467,100	// Easter_Scroll
 12715,507,100	// Black_Treasure_Box
-12725,475,100	// Runstone_Nosiege
-12726,475,100	// Runstone_Rhydo
-12727,475,100	// Runstone_Verkana
-12728,475,100	// Runstone_Isia
-12729,475,100	// Runstone_Asir
-12730,475,100	// Runstone_Urj
-12731,475,100	// Runstone_Turisus
-12732,475,100	// Runstone_Pertz
-12733,475,100	// Runstone_Hagalas
 12740,507,100	// Inc_Str_Scroll
 12741,507,100	// Inc_Int_Scroll
 12745,507,100	// Skull_Scroll
@@ -3733,7 +3724,6 @@
 22535,499,100	// Scroll_Summoning_Workers(Male)
 22536,499,100	// Scroll_Summoning_Workers(Female)
 //22539,467,100	//
-22540,475,100	// Runstone_Luxanima
 22541,475,100	// PC_Room_Coupon_Box_VI
 22542,475,100	// Concentration_Potion
 22543,475,100	// Berserk_Potion

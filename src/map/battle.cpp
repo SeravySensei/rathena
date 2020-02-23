@@ -3818,7 +3818,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio = skillratio * (100 + (status_get_lv(src) - 100) / 2) / 100;
 			break;
 		case RK_WINDCUTTER:
-			skillratio += -100 + (skill_lv + 2) * 50;
+			skillratio += 200 + (skill_lv) * 75;
 			RE_LVL_DMOD(100);
 			break;
 		case RK_IGNITIONBREAK:
@@ -3838,7 +3838,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 				skillratio += 100 * skill_lv;
 			break;
 		case RK_STORMBLAST:
-			skillratio += -100 + (((sd) ? pc_checkskill(sd,RK_RUNEMASTERY) : 0) + status_get_str(src) / 8) * 100; // ATK = [{Rune Mastery Skill Level + (Caster's STR / 8)} x 100] %
+			skillratio += -100 + (((sd) ? pc_checkskill(sd,RK_RUNEMASTERY) : 0) + status_get_int(src) / 4) * 100; // ATK = [{Rune Mastery Skill Level + (Caster's STR / 8)} x 100] %
 			break;
 		case RK_PHANTOMTHRUST: // ATK = [{(Skill Level x 50) + (Spear Master Level x 10)} x Caster's Base Level / 150] %
 			skillratio += -100 + 50 * skill_lv + 10 * (sd ? pc_checkskill(sd,KN_SPEARMASTERY) : 5);
@@ -6949,7 +6949,7 @@ int64 battle_calc_return_damage(struct block_list* bl, struct block_list *src, i
 				}
 
 				if (sc->data[SC_DEATHBOUND] && skill_id != WS_CARTTERMINATION && skill_id != GN_HELLS_PLANT_ATK && !status_bl_has_mode(src,MD_STATUS_IMMUNE)) {
-					if (distance_bl(src,bl) <= 0 || !map_check_dir(map_calc_dir(bl,src->x,src->y), unit_getdir(bl))) {
+					if (distance_bl(src,bl) <= 1+status_get_range(src)) {
 						int64 rd1 = 0;
 
 						rd1 = min(damage,status_get_max_hp(bl)) * sc->data[SC_DEATHBOUND]->val2 / 100; // Amplify damage.
@@ -7219,7 +7219,7 @@ enum damage_lv battle_weapon_attack(struct block_list* src, struct block_list* t
 		int t_dir = unit_getdir(target);
 		int dist = distance_bl(src, target);
 
-		if (dist <= 0 || (!map_check_dir(dir,t_dir) && dist <= tstatus->rhw.range+1)) {
+		if (dist <= tstatus->rhw.range+1) {
 			uint16 skill_lv = tsc->data[SC_AUTOCOUNTER]->val1;
 
 			clif_skillcastcancel(target); //Remove the casting bar. [Skotlex]
