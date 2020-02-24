@@ -5688,6 +5688,15 @@ void skillwhenidle(struct map_session_data *sd) {
 			unit_skilluse_ifable(&sd->bl, SELF, MG_ENERGYCOAT, pc_checkskill(sd, MG_ENERGYCOAT));
 		}
 	}
+	// Prestige
+	if (pc_checkskill(sd, LG_PRESTIGE) > 0) {
+		if (!(sd->sc.data[SC_PRESTIGE]))
+			if (!(sd->sc.data[SC_INSPIRATION]))
+				if (!(sd->sc.data[SC_BANDING])) {
+			unit_skilluse_ifable(&sd->bl, SELF, LG_PRESTIGE, pc_checkskill(sd, LG_PRESTIGE));
+		}
+	}
+	
 	// Recognized Spell
 	if (pc_checkskill(sd, WL_RECOGNIZEDSPELL) > 0) {
 		if (!(sd->sc.data[SC_RECOGNIZEDSPELL])) {
@@ -5714,6 +5723,13 @@ void skillwhenidle(struct map_session_data *sd) {
 	if (pc_checkskill(sd, PF_MEMORIZE) > 0) {
 		if (!(sd->sc.data[SC_MEMORIZE])) {
 			unit_skilluse_ifable(&sd->bl, SELF, PF_MEMORIZE, pc_checkskill(sd, PF_MEMORIZE));
+		}
+	}
+
+	// Vanguard Force
+	if (pc_checkskill(sd, LG_FORCEOFVANGUARD) > 0) {
+		if (!(sd->sc.data[SC_FORCEOFVANGUARD])) {
+			unit_skilluse_ifable(&sd->bl, SELF, LG_FORCEOFVANGUARD, pc_checkskill(sd, LG_FORCEOFVANGUARD));
 		}
 	}
 
@@ -5797,6 +5813,13 @@ void skillwhenidle(struct map_session_data *sd) {
 	if (pc_checkskill(sd, RK_ENCHANTBLADE) > 0) if (sd->state.autopilotmode == 1) {
 		if (!(sd->sc.data[SC_ENCHANTBLADE])) {
 			unit_skilluse_ifable(&sd->bl, SELF, RK_ENCHANTBLADE, pc_checkskill(sd, RK_ENCHANTBLADE));
+		}
+	}
+
+	// Exceed Break
+	if (pc_checkskill(sd, LG_EXEEDBREAK) > 0) if (sd->state.autopilotmode == 1) {
+		if (!(sd->sc.data[SC_EXEEDBREAK])) {
+			unit_skilluse_ifable(&sd->bl, SELF, LG_EXEEDBREAK, pc_checkskill(sd, LG_EXEEDBREAK));
 		}
 	}
 
@@ -6483,6 +6506,20 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+		}
+
+		// Reflect Damage
+		// is top priority when mobbed!
+		if (Dangerdistance < 900) if (dangercount>=7) if (canskill(sd)) if ((pc_checkskill(sd, LG_REFLECTDAMAGE) > 0) &&
+			!(sd->sc.data[LG_REFLECTDAMAGE])) if (sd->status.shield > 0)
+		{
+			unit_skilluse_ifable(&sd->bl, SELF, LG_REFLECTDAMAGE, pc_checkskill(sd, LG_REFLECTDAMAGE));
+		}
+		// turn off if mob is dead to avoid wasting SP
+		if (dangercount < 3) if (canskill(sd)) if ((pc_checkskill(sd, LG_REFLECTDAMAGE) > 0) &&
+			(sd->sc.data[LG_REFLECTDAMAGE]))
+		{
+			unit_skilluse_ifable(&sd->bl, SELF, LG_REFLECTDAMAGE, pc_checkskill(sd, LG_REFLECTDAMAGE));
 		}
 
 		/// Dispell
@@ -7289,7 +7326,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Defending Aura
 		// Activate if being targeted by a ranged enemy	
 		if (Dangerdistance<900)	if (canskill(sd)) if ((pc_checkskill(sd, CR_DEFENDER)>0) && (dangermd->status.rhw.range > 3) &&
-				!(sd->sc.data[SC_DEFENDER]))
+				!(sd->sc.data[SC_DEFENDER])) if (sd->status.shield > 0)
 			{			
 					unit_skilluse_ifable(&sd->bl, SELF, CR_DEFENDER, pc_checkskill(sd, CR_DEFENDER));
 			}
@@ -7530,6 +7567,16 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 		}
+		// Earth Drive
+		// yes this is an attack skill but is the only thing RG can do to detect hidden enemies
+		if (canskill(sd)) if ((pc_checkskill(sd, LG_EARTHDRIVE) > 0))
+			if ((Dangerdistance > 900) || (sd->special_state.no_castcancel)) {
+				resettargets();
+				map_foreachinrange(targetnearest, &sd->bl, 11, BL_MOB, sd);
+				if ((targetdistance <= 3) && (targetdistance > -1) && (targetmd->sc.data[SC_HIDING] || targetmd->sc.data[SC_CLOAKING])) {
+					unit_skilluse_ifable(&sd->bl, SELF, LG_EARTHDRIVE, pc_checkskill(sd, LG_EARTHDRIVE));
+					}
+		}
 		// Signum Cruxis
 		if (canskill(sd)) if ((pc_checkskill(sd, AL_CRUCIS) > 0)){
 			if (map_foreachinrange(signumcount, &sd->bl, 15, BL_MOB, sd) >= 3) if (!duplicateskill(p, AL_CRUCIS)) {
@@ -7706,6 +7753,21 @@ TIMER_FUNC(unit_autopilot_timer)
 											priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(NJ_KAMAITACHI, pc_checkskill(sd, NJ_KAMAITACHI)));
 											if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
 												spelltocast = NJ_KAMAITACHI; bestpriority = priority; IDtarget = foundtargetID;
+											}
+										}
+									}
+							// Royal Guard : Cannon Spear
+							// Class has no other ranged AOE so even if damage is poor to low STR, this is the only thing to use in "skill" mode.
+							if (canskill(sd)) if ((pc_checkskill(sd, LG_CANNONSPEAR) > 2))
+								if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+									{  // Note : Like sharp shooting, ignoring the Line effect, only considering targets next to the main target.
+										resettargets;
+										map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
+										if (foundtargetID > -1) {
+											int area = 1;
+											priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(LG_CANNONSPEAR, pc_checkskill(sd, LG_CANNONSPEAR)));
+											if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+												spelltocast = LG_CANNONSPEAR; bestpriority = priority; IDtarget = foundtargetID;
 											}
 										}
 									}
@@ -8017,6 +8079,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == SN_SHARPSHOOTING)
 							|| (spelltocast == WL_CRIMSONROCK)
 							|| (spelltocast == WL_SOULEXPANSION)
+							|| (spelltocast == LG_CANNONSPEAR)
 							) unit_skilluse_ifable(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 							unit_skilluse_ifablexy(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
@@ -8502,7 +8565,39 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+			// Pinpoint Attack
+			// this is not as great as Flying Kick but still can let the tank reach the mob a bit earlier AND has a chance to break weapon
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, LG_PINPOINTATTACK) > 0)) {
+				// only use in tanking mode, if enemy is not already near! Also don't rush in if already wounded, wait to receive heals first...
+				if (targetdistance2 > 2) if (targetdistance2 <= 5) if (sd->battle_status.hp > (70 * sd->battle_status.max_hp) / 100)
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+					// it's kinda expensive so only use if we have good AGI to deal decent damage or have lots of SP to spare
+					if ((sd->battle_status.sp > (80 * sd->battle_status.max_sp) / 100)
+						|| ((sd->battle_status.agi>=60) && (sd->battle_status.sp > (30 * sd->battle_status.max_sp) / 100))
+						)
+					if ((sd->state.autopilotmode == 1)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, LG_PINPOINTATTACK, pc_checkskill(sd, LG_PINPOINTATTACK));
+					}
+			}
 
+			// Shield Boomerang
+			// This is better than Banishing Point if soul linked probably?
+			if (sd->sc.data[SC_SPIRIT]) if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0)) if (sd->status.shield > 0) {
+				// not really strong enough to use if aleady engaged in melee in tanking mode
+				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, CR_SHIELDBOOMERANG, pc_checkskill(sd, CR_SHIELDBOOMERANG));
+				}
+			}
+
+			// Banishing Point
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, LG_BANISHINGPOINT) > 0))
+				if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR)) {
+				// While this is good enough to use in melee range, only after AOEs
+				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
+				}
+			}
+			
 			// Shield Boomerang
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0)) if (sd->status.shield > 0) {
 				// not really strong enough to use if aleady engaged in melee in tanking mode
@@ -8836,6 +8931,14 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				// Sonic Wave
 				if (canskill(sd)) if ((pc_checkskill(sd, RK_SONICWAVE) > 0))
 						unit_skilluse_ifable(&sd->bl, foundtargetID, RK_SONICWAVE, pc_checkskill(sd, RK_SONICWAVE));
+				// Cannon Spear - this is AOE so prioritize it, if lucky might pull multiple mob
+				if (canskill(sd)) if ((pc_checkskill(sd, LG_CANNONSPEAR) > 0))
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_CANNONSPEAR, pc_checkskill(sd, LG_CANNONSPEAR));
+				// Banishing Point
+				if (canskill(sd)) if ((pc_checkskill(sd, LG_BANISHINGPOINT) > 0))
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
 				// Shield Boomerang
 				if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0))
 					if (sd->status.shield > 0) 
@@ -8934,6 +9037,18 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					unit_skilluse_ifable(&sd->bl, SELF, LK_BERSERK, pc_checkskill(sd, LK_BERSERK));
 				}
 			}
+			// Prestige
+			// Despite being an interruptable self buff, we should try to recast this in battle whenever we're not being directly targeted because
+			// It's super important for tanking.
+			if (pc_checkskill(sd, LG_PRESTIGE) > 0)
+			if ((sd->special_state.no_castcancel) || (Dangerdistance > 900)) {
+				if (!(sd->sc.data[SC_PRESTIGE]))
+					if (!(sd->sc.data[SC_INSPIRATION]))
+						if (!(sd->sc.data[SC_BANDING])) {
+							unit_skilluse_ifable(&sd->bl, SELF, LG_PRESTIGE, pc_checkskill(sd, LG_PRESTIGE));
+						}
+			}
+
 
 			// Hammerfall
 			// If 4 or more things are attacking us and the nearest is in range and can be stunned
@@ -8986,6 +9101,23 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK))) >= 6)
 					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK));
 			}
+			// Moon Slasher
+			if (canskill(sd)) if ((pc_checkskill(sd, LG_MOONSLASHER) > 0))
+				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR))
+					{
+				// At least 3 enemies in range (or 2 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skill_get_ele(LG_MOONSLASHER, pc_checkskill(sd, LG_MOONSLASHER))) >= 6)
+					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, LG_MOONSLASHER, pc_checkskill(sd, LG_MOONSLASHER));
+			}
+			// Earth Drive, this is interrutpable so need uninterruptable cast effect to use safely
+			// prioritized lower than Moon Slasher because it's less spammable and also less reliable (light shield or enemies resistant to earth make it do less dmg)
+			if (sd->special_state.no_castcancel)
+				if (canskill(sd)) if ((pc_checkskill(sd, LG_EARTHDRIVE) > 0))
+					if (sd->status.shield > 0) {
+					// At least 3 enemies in range (or 2 if weak to element)
+					if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skill_get_ele(LG_EARTHDRIVE, pc_checkskill(sd, LG_EARTHDRIVE))) >= 6)
+						unit_skilluse_ifable(&sd->bl, SELF, LG_EARTHDRIVE, pc_checkskill(sd, LG_EARTHDRIVE));
+				}
 			// Magnum Break
 			if (canskill(sd)) if ((pc_checkskill(sd, SM_MAGNUM) > 0)) {
 					// At least 3 enemies in range (or 2 if weak to element)
@@ -9216,6 +9348,35 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					unit_skilluse_ifable(&sd->bl, foundtargetID, KN_BRANDISHSPEAR, pc_checkskill(sd, KN_BRANDISHSPEAR));
 				}
 			}
+			// Over Brand skill
+			// Use only on bosses where knockback isn't an issue and high DPS is useful. Knocking away the minions might even help with tanking.
+			if (canskill(sd)) if (status_get_class_(bl) == CLASS_BOSS) if (pc_checkskill(sd, LG_OVERBRAND) > 0)
+				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR)) 
+					{
+						unit_skilluse_ifablexy(&sd->bl, foundtargetID, LG_OVERBRAND, pc_checkskill(sd, LG_OVERBRAND));
+				}
+			// Shield Press
+			// Usually does more dmg than Banishing Point and stuns but has cooldown so need to spam BP afterwards anyway
+			if (canskill(sd)) if (pc_checkskill(sd, LG_SHIELDPRESS) >= 4)
+				if (sd->status.shield > 0) {
+					// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
+					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_SHIELDPRESS, pc_checkskill(sd, LG_SHIELDPRESS));
+					}
+				}
+			// Banishing Point skill
+			// yes this is a ranged skill but deals good damage and is instant so suitable for melee
+			// Note Cannon Spear does more damage with high enough STR but is slower to use so it's only worth it a ranged an AOE
+			if (canskill(sd)) if (pc_checkskill(sd, LG_BANISHINGPOINT) > 4)
+				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR)) {
+				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
+				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
+				}
+			}
+
 			// Bowling Bash skill
 			if (canskill(sd)) if (pc_checkskill(sd, KN_BOWLINGBASH)>0) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
