@@ -703,20 +703,20 @@
 1361,Two_Handed_Axe_,Two-Handed Axe,5,55000,,2500,185,,1,2,0x000444A2,63,2,34,3,30,1,7,{},{},{}
 1362,Two_Handed_Axe__,Two-Handed Axe,5,55000,,2500,185,,1,0,0x000444A2,63,2,34,3,30,1,7,{},{},{}
 1363,Brood_Axe,Bloody Axe,5,80000,,4000,170,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus bStr,10; bonus bSpeedRate,25; },{},{}
-1364,Great_Axe,Great Axe,5,100000,,1800,187,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus2 bAddSkillBlow,"MC_MAMMONITE",5; bonus2 bAddEff,Eff_Stun,1500; },{},{}
-1365,Sabbath,Sabbath,5,85000,,2300,140,,1,2,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Dark; bonus2 bComaRace,RC_Demon,50; bonus2 bCriticalAddRace,RC_Undead,50; },{},{}
+1364,Great_Axe,Great Axe,5,100000,,1800,255,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus2 bAddSkillBlow,"MC_MAMMONITE",5; bonus2 bAddEff,Eff_Stun,1500; },{},{}
+1365,Sabbath,Sabbath,5,85000,,2300,200,,1,2,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Dark; bonus2 bComaRace,RC_Demon,50; bonus2 bCriticalAddRace,RC_Undead,50; },{},{}
 1366,Right_Epsilon,Light Epsilon,5,90000,,2300,180,,1,1,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Holy; skill "AL_HEAL",3; bonus2 bAddRace,RC_Demon,3; },{},{}
 1367,Slaughter,Slaughter,5,20,,2500,190,,1,2,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Earth; bonus bIgnoreDefRace,RC_Brute; bonus2 bComaRace,RC_Brute,40; },{},{}
-1368,Tomahawk,Tomahawk,5,100000,,2500,165,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Wind; skill "ITM_TOMAHAWK",1; },{},{}
+1368,Tomahawk,Tomahawk,5,100000,,2500,215,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Wind; skill "ITM_TOMAHAWK",1; },{},{}
 1369,Guillotine,Guillotine,5,200000,,3000,350,,1,0,0x000444A2,63,2,34,4,44,1,7,{ bonus2 bComaRace,RC_DemiHuman,30; bonus2 bComaRace,RC_Player,30; bonus2 bSPDrainValueRace,RC_DemiHuman,2; bonus2 bSPDrainValueRace,RC_Player,2; bonus2 bSPGainRace,RC_DemiHuman,20; bonus2 bSPGainRace,RC_Player,20; },{},{}
-1370,Doom_Slayer,Doom Slayer,5,75000,,6000,10,,1,0,0x000444A2,63,2,34,4,80,1,7,{ bonus bAspdRate,-40; bonus bUseSPrate,100; if(readparam(bStr)>=95){ bonus bBaseAtk,340; bonus2 bAddEff,Eff_Stun,3000; bonus bBreakArmorRate,500; } },{},{}
-1371,Doom_Slayer_,Doom Slayer,5,75000,,6000,10,,1,1,0x000444A2,63,2,34,4,80,1,7,{ bonus bAspdRate,-40; bonus bUseSPrate,100; if(readparam(bStr)>=95){ bonus bBaseAtk,340; bonus2 bAddEff,Eff_Stun,3000; bonus bBreakArmorRate,500; } },{},{}
+1370,Doom_Slayer,Doom Slayer,5,75000,,6000,10,,1,0,0x000444A2,63,2,34,4,80,1,7,{ bonus bAspdRate,-40; bonus bUseSPrate,100; if(readparam(bStr)>=95){ bonus bBaseAtk,290; bonus2 bAddEff,Eff_Stun,3000; bonus bBreakArmorRate,500; } },{},{}
+1371,Doom_Slayer_,Doom Slayer,5,75000,,6000,10,,1,1,0x000444A2,63,2,34,4,80,1,7,{ bonus bAspdRate,-40; bonus bUseSPrate,100; if(readparam(bStr)>=95){ bonus bBaseAtk,290; bonus2 bAddEff,Eff_Stun,3000; bonus bBreakArmorRate,500; } },{},{}
 1372,Right_Epsilon_C,Light Epsilon,5,1,,0,229,,1,0,0x000444A2,63,2,34,4,1,0,7,{ bonus bAtkEle,Ele_Holy; skill "AL_HEAL",3; bonus2 bAddRace,RC_Demon,3; bonus bStr,10; bonus bSpeedRate,25; /*Gold PC Room: bonus bBaseAtk,10; bonus bMatk,10; */},{},{}
 1373,Brood_Axe_C,Refined Bloody Axe,5,2,,0,205,,1,0,0x000444A2,63,2,34,4,0,0,7,{ bonus bStr,20; bonus bMatkRate,20; bonus bAspdRate,5; },{},{}
 1374,Tomahawk_C,Tomahawk,5,2,,0,200,,1,0,0x000444A2,63,2,34,4,0,0,7,{ bonus bAtkEle,Ele_Wind; skill "ITM_TOMAHAWK",1; },{},{}
 1375,Berdysz,Berdysz,5,11000,,2500,200,,1,2,0x000444A2,18,2,34,3,70,1,7,{ bonus2 bSubSize,Size_Medium,13; bonus2 bSubSize,Size_Large,15; },{},{}
-1376,Heart_Breaker,Heart Breaker,5,60000,,2000,175,,1,1,0x000444A2,18,2,34,4,70,1,7,{ bonus bCritical,20+getrefine(); bonus bAspdRate,5; if((Class==Job_Whitesmith)||(Class==Job_Creator)||(Class==Job_Mechanic)||(Class==Job_Mechanic_T)||(Class==Job_Genetic)||(Class==Job_Genetic_T)) bonus3 bAutoSpell,"BS_HAMMERFALL",3,30; },{},{}
-1377,Hurricane_Fury,Hurricane's Fury,5,180000,,3500,332,,1,1,0x000444A2,18,2,34,4,90,1,7,{ .@r = getrefine(); bonus2 bSubSize,Size_Medium,10+.@r; bonus bAspdRate,.@r; bonus3 bAutoSpell,"NPC_PULSESTRIKE",5,20; },{},{}
+1376,Heart_Breaker,Heart Breaker,5,60000,,2000,185,,1,1,0x000444A2,18,2,34,4,70,1,7,{ bonus bCritical,20+getrefine(); bonus bAspdRate,5; if((Class==Job_Whitesmith)||(Class==Job_Creator)||(Class==Job_Mechanic)||(Class==Job_Mechanic_T)||(Class==Job_Genetic)||(Class==Job_Genetic_T)) bonus3 bAutoSpell,"BS_HAMMERFALL",3,30; },{},{}
+1377,Hurricane_Fury,Hurricane's Fury,5,180000,,3500,300,,1,1,0x000444A2,18,2,34,4,90,1,7,{ .@r = getrefine(); bonus2 bSubSize,Size_Medium,10+.@r; bonus bAspdRate,.@r; bonus3 bAutoSpell,"NPC_PULSESTRIKE",5,20; },{},{}
 1378,Great_Axe_C,Refined Great Axe,5,1,,0,215,,1,0,0x000444A2,63,2,34,4,0,0,7,{ bonus bStr,5; bonus bHit,20; bonus2 bAddSkillBlow,"MC_MAMMONITE",5; bonus2 bAddEff,Eff_Stun,2000; },{},{}
 1379,BF_Two_Handed_Axe1,Valorous Insane Battle Axe,5,20,,0,200,,1,0,0x000444A2,63,2,34,3,80,1,7,{ bonus bStr,3; bonus2 bAddRace,RC_DemiHuman,55; bonus2 bAddRace,RC_Player,55; bonus2 bIgnoreDefRaceRate,RC_DemiHuman,20; bonus2 bIgnoreDefRaceRate,RC_Player,20; bonus bUnbreakableWeapon; },{},{}
 1380,BF_Two_Handed_Axe2,Brave Insane Battle Axe,5,20,,0,200,,1,0,0x000444A2,63,2,34,3,80,1,7,{ bonus bStr,3; bonus2 bAddRace,RC_DemiHuman,55; bonus2 bAddRace,RC_Player,55; autobonus "{ bonus bBreakArmorRate,10000; }",20,3000,BF_WEAPON,"{ specialeffect2 EF_POTION_BERSERK; }"; bonus bUnbreakableWeapon; },{},{}
@@ -726,7 +726,7 @@
 1384,Veteran_Axe,Veteran Axe,5,10000,,3000,250,,1,2,0x000444A2,63,2,34,3,80,1,7,{ if(getskilllv("BS_DAGGER")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_SWORD")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_TWOHANDSWORD")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_KNUCKLE")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_SPEAR")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_AXE")==3) { bonus bBaseAtk,10; } if(getskilllv("BS_MACE")==3) { bonus bBaseAtk,10; } bonus bVit,2; },{},{}
 1385,Bradium_Stonehammer,Bradium Stone Hammer,5,20,,2700,210,,1,0,0x000444A2,18,2,34,4,75,1,7,{ bonus3 bAddEffOnSkill,"BS_HAMMERFALL",Eff_Stun,500+(200*getrefine()); },{},{}
 1386,Doom_Slayer_I,Doom Slayer,5,0,,0,20,,1,0,0x000444A2,63,2,34,4,0,0,7,{ if(readparam(bStr)>=95){ bonus bBaseAtk,400; bonus2 bAddEff,Eff_Stun,3000; bonus bAspdRate,-25; bonus bUseSPrate,100; bonus bBreakArmorRate,500; } },{},{}
-1387,Giant_Axe,Giant Axe,5,20,,4000,330,,1,1,0x000444A2,18,2,34,3,50,1,7,{ bonus2 bSkillAtk,"WS_CARTTERMINATION",15; if(readparam(bStr)>=95) { bonus bHit,10; bonus bAspdRate,3; } },{},{}
+1387,Giant_Axe,Giant Axe,5,20,,4000,280,,1,1,0x000444A2,18,2,34,3,50,1,7,{ bonus2 bSkillAtk,"WS_CARTTERMINATION",15; if(readparam(bStr)>=95) { bonus bHit,10; bonus bAspdRate,3; } },{},{}
 1388,Two_Handed_Axe_C,Two-Handed Axe,5,0,,0,220,,1,0,0x000444A2,63,2,34,3,1,0,7,{ bonus2 bAddSize,Size_All,40; },{},{}
 1389,E_Tomahawk_C,Tomahawk,5,2,,0,200,,1,0,0x000444A2,63,2,34,4,0,0,7,{ bonus bAtkEle,Ele_Wind; },{},{}
 1390,E_Right_Epsilon_C,Light Epsilon,5,1,,0,229,,1,0,0x000444A2,63,2,34,4,1,0,7,{ bonus bAtkEle,Ele_Holy; bonus bStr,10; },{},{}

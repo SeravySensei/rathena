@@ -4002,19 +4002,19 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 				skillratio = 0; // Prevent damage since level 2 is MATK. [Aleos]
 			break;
 		case LG_MOONSLASHER:
-			skillratio += -100 + 120 * skill_lv + ((sd) ? pc_checkskill(sd,LG_OVERBRAND) * 80 : 0);
+			skillratio += -100 + 120 * skill_lv + ((sd) ? pc_checkskill(sd,LG_OVERBRAND) * 60 : 0);
 			RE_LVL_DMOD(100);
 			break;
 		case LG_OVERBRAND:
-			skillratio += -100 + 400 * skill_lv + ((sd) ? pc_checkskill(sd,CR_SPEARQUICKEN) * 50 : 0);
+			skillratio += -100 + 250 * skill_lv + ((sd) ? pc_checkskill(sd,CR_SPEARQUICKEN) * 50 : 0);
 			RE_LVL_DMOD(100);
 			break;
 		case LG_OVERBRAND_BRANDISH:
-			skillratio += -100 + 300 * skill_lv + status_get_str(src) + status_get_dex(src);
+			skillratio += -100 + 100 * skill_lv + status_get_str(src) + status_get_dex(src);
 			RE_LVL_DMOD(100);
 			break;
 		case LG_OVERBRAND_PLUSATK: // Only Piercing and Swing damage get RE_LVL_DMOD bonus damage
-			skillratio += -100 + 200 * skill_lv + rnd()%90 + 10;
+			skillratio += -100 + 100 * skill_lv + rnd()%90 + 10;
 			break;
 		case LG_RAYOFGENESIS:
 			skillratio += 200 + 300 * skill_lv;
