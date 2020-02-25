@@ -5373,6 +5373,12 @@ int shurikenchange(map_session_data * sd, mob_data *targetmd)
 }
 
 
+bool checksprate(map_session_data * sd, mob_data *targetmd, int rat)
+{ 
+	if ((targetmd->status.hp > (1.2*rat - (sd->battle_status.sp * rat / sd->battle_status.max_sp)) * pc_rightside_atk(sd) * 1000 / sd->battle_status.amotion))
+		return true; else return false;
+}
+
 int arrowchange(map_session_data * sd, mob_data *targetmd)
 {
 	unsigned short arrows[] = {
@@ -6285,6 +6291,34 @@ TIMER_FUNC(unit_autopilot_timer)
 		}
 
 	}
+
+	// Get on the mount if leader is on a mount
+	if ((leadersd->sc.data[SC_ALL_RIDING]) &&
+		((!sd->sc.data[SC_ALL_RIDING]) && !pc_isridingwug(sd) && !pc_isriding(sd) &&
+			!pc_isridingdragon(sd)))
+	{
+		// Warg Rider skill is better than reins because you can also attack if necesary
+		if (canskill(sd)) if (pc_checkskill(sd, RA_WUGRIDER) >= 3)
+			unit_skilluse_ifable(&sd->bl, SELF, RA_WUGRIDER, pc_checkskill(sd, RA_WUGRIDER));
+		else {
+			int index;
+			if ((index = pc_search_inventory(sd, 12622)) >= 0)
+				pc_useitem(sd, index);
+		}
+
+	}
+	// Dismount if leader is off
+	if (!leadersd->sc.data[SC_ALL_RIDING])
+	{
+	if (canskill(sd)) if (pc_checkskill(sd, RA_WUGRIDER) >= 3)
+		if (pc_isridingwug(sd)) unit_skilluse_ifable(&sd->bl, SELF, RA_WUGRIDER, pc_checkskill(sd, RA_WUGRIDER));
+	if (sd->sc.data[SC_ALL_RIDING]) {
+	int index;
+	if ((index = pc_search_inventory(sd, 12622)) >= 0)
+		pc_useitem(sd, index);
+		}
+	}
+
 
 	getreachabletargets(sd);
 
@@ -7356,11 +7390,16 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (canskill(sd)) if ((pc_checkskill(sd, AS_POISONREACT)>0) && (dangermd->status.rhw.range <= 3))
 				if (!sd->sc.data[SC_POISONREACT]) unit_skilluse_ifable(&sd->bl, SELF, AS_POISONREACT, pc_checkskill(sd, AS_POISONREACT));
 		// Not tanking? Cloak!
-		if ((Dangerdistance <= 3) && (sd->state.autopilotmode > 1))
-			if (canskill(sd)) if ((pc_checkskill(sd, AS_CLOAKING)>=10) && (dangermd->status.rhw.range <= 3))
+		if ((Dangerdistance <= 3) && (sd->state.autopilotmode > 1)) {
+			// Cloaking
+			if (canskill(sd)) if ((pc_checkskill(sd, AS_CLOAKING) >= 10) && (dangermd->status.rhw.range <= 3))
 				if ((dangermd->status.race != RC_DEMON) && (dangermd->status.race != RC_INSECT) && (!((status_get_class_(dangerbl) == CLASS_BOSS))))
-				if (!sd->sc.data[SC_CLOAKING]) unit_skilluse_ifable(&sd->bl, SELF, AS_CLOAKING, pc_checkskill(sd, AS_CLOAKING));
-
+					if (!sd->sc.data[SC_CLOAKING]) unit_skilluse_ifable(&sd->bl, SELF, AS_CLOAKING, pc_checkskill(sd, AS_CLOAKING));
+			// Camouflage
+			if (canskill(sd)) if ((pc_checkskill(sd, RA_CAMOUFLAGE) >= 5) && (dangermd->status.rhw.range <= 3))
+				if ((dangermd->status.race != RC_DEMON) && (dangermd->status.race != RC_INSECT) && (!((status_get_class_(dangerbl) == CLASS_BOSS))))
+					if (!sd->sc.data[SC_CAMOUFLAGE]) unit_skilluse_ifable(&sd->bl, SELF, RA_CAMOUFLAGE, pc_checkskill(sd, RA_CAMOUFLAGE));
+		}
 
 		// Safety Wall
 		// At most 3 mobs, nearest must be close and melee.
@@ -7914,6 +7953,22 @@ TIMER_FUNC(unit_autopilot_timer)
 								}
 							}
 
+							// Arrow Storm
+							if (canskill(sd)) if ((pc_checkskill(sd, RA_ARROWSTORM) > 0)) if (sd->status.weapon == W_BOW)
+							{
+								resettargets;
+								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
+								if (foundtargetID > -1)  {
+									int area = 1; if (pc_checkskill(sd, RA_ARROWSTORM) >= 6) area++;
+									arrowchange(sd, targetmd);
+									// *** NOTE *** I nerfed the damage of this skill, if you did not, probably better to change priority to 3* and >=18 below
+									priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(AC_SHOWER, pc_checkskill(sd, AC_SHOWER)));
+									if (((priority >= 12) && (priority > bestpriority))) {
+										spelltocast = RA_ARROWSTORM; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+
 							// NIN- Exploding Dragon
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_BAKUENRYU) > 0)) if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
@@ -8077,6 +8132,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == GS_SPREADATTACK)
 							|| (spelltocast == HT_BLITZBEAT)
 							|| (spelltocast == SN_SHARPSHOOTING)
+							|| (spelltocast == RA_ARROWSTORM)
 							|| (spelltocast == WL_CRIMSONROCK)
 							|| (spelltocast == WL_SOULEXPANSION)
 							|| (spelltocast == LG_CANNONSPEAR)
@@ -8136,7 +8192,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Use ranged skill instead if enemy isn't near enough
 		if (foundtargetID2 > -1) if (sd->state.autopilotmode < 3)
 		if (canskill(sd))
-		if (pc_search_inventory(sd, ITEMID_TRAP) >= 0) {
+		{
 
 			// Use Sandman for crowd control if mobbed
 			// ...or not, I think placing a trap that kills the mob is better in most cases.
@@ -8155,43 +8211,70 @@ TIMER_FUNC(unit_autopilot_timer)
 			int bestpriority = -1;
 			int priority;
 			int IDtarget = -1;
+			if (pc_search_inventory(sd, 7940) >= 0) {
+				if ((pc_checkskill(sd, RA_CLUSTERBOMB) > 4))
+				{
+					int area = 2;
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(RA_CLUSTERBOMB, pc_checkskill(sd, RA_CLUSTERBOMB)));
+					if ((priority >= 6) && (priority > bestpriority)) {
+						spelltocast = RA_CLUSTERBOMB; bestpriority = priority; IDtarget = sd->bl.id;
+					}
+				}
 
-			if ((pc_checkskill(sd, HT_CLAYMORETRAP) > 4))
-				{	int area = 2;
-				// At least one weak or multiple other targets to use
-				priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_CLAYMORETRAP, pc_checkskill(sd, HT_CLAYMORETRAP)));
-				if ((priority >= 3) && (priority > bestpriority)) {
+				if ((pc_checkskill(sd, RA_FIRINGTRAP) > 4))
+				{
+					int area = 2;
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(RA_FIRINGTRAP, pc_checkskill(sd, RA_FIRINGTRAP)));
+					if ((priority >= 6) && (priority > bestpriority)) {
+						spelltocast = RA_FIRINGTRAP; bestpriority = priority; IDtarget = sd->bl.id;
+					}
+				}
+
+				if ((pc_checkskill(sd, RA_ICEBOUNDTRAP) > 4))
+				{
+					int area = 2;
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(RA_ICEBOUNDTRAP, pc_checkskill(sd, RA_ICEBOUNDTRAP)));
+					if ((priority >= 6) && (priority > bestpriority)) {
+						spelltocast = RA_ICEBOUNDTRAP; bestpriority = priority; IDtarget = sd->bl.id;
+					}
+				}
+			}
+			if (pc_search_inventory(sd, ITEMID_TRAP) >= 0) {
+				if ((pc_checkskill(sd, HT_CLAYMORETRAP) > 4))
+				{
+					int area = 2;
+					priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_CLAYMORETRAP, pc_checkskill(sd, HT_CLAYMORETRAP)));
+					if ((priority >= 3) && (priority > bestpriority)) {
 						spelltocast = HT_CLAYMORETRAP; bestpriority = priority; IDtarget = sd->bl.id;
 					}
-			}
+				}
 
+				if ((pc_checkskill(sd, HT_BLASTMINE) > 4))
+				{
+					int area = 1;
+					priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_BLASTMINE, pc_checkskill(sd, HT_BLASTMINE)));
+					if ((priority >= 3) && (priority > bestpriority)) {
+						spelltocast = HT_BLASTMINE; bestpriority = priority; IDtarget = sd->bl.id;
+					}
+				}
+
+			// These two are single target!!
 			if ((pc_checkskill(sd, HT_LANDMINE) > 4))
 			{
-				int area = 1;
-				priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_LANDMINE, pc_checkskill(sd, HT_LANDMINE)));
-				if ((priority >= 3) && (priority > bestpriority)) {
+				if (elemstrong(targetmd, skill_get_ele(HT_LANDMINE, pc_checkskill(sd, HT_LANDMINE)))) priority = 2; else priority = 1;
+				if (priority > bestpriority) {
 					spelltocast = HT_LANDMINE; bestpriority = priority; IDtarget = sd->bl.id;
 				}
 			}
-
-			if ((pc_checkskill(sd, HT_BLASTMINE) > 4))
-			{
-				int area = 1;
-				priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_BLASTMINE, pc_checkskill(sd, HT_BLASTMINE)));
-				if ((priority >= 3) && (priority > bestpriority)) {
-					spelltocast = HT_BLASTMINE; bestpriority = priority; IDtarget = sd->bl.id;
-				}
-			}
-
 			// **Note** I changed this skill to deal 70% of the damage the other 3 element traps do
 			// If yours still does the default, super low damage, remove this block.
 			if ((pc_checkskill(sd, HT_FREEZINGTRAP) > 4))
 			{
-				int area = 1;
-				priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(HT_FREEZINGTRAP, pc_checkskill(sd, HT_FREEZINGTRAP)));
-				if ((priority >= 3) && (priority > bestpriority)) {
+				if (elemstrong(targetmd, skill_get_ele(HT_FREEZINGTRAP, pc_checkskill(sd, HT_FREEZINGTRAP)))) priority = 2; else priority = 1;
+				if (priority > bestpriority) {
 					spelltocast = HT_FREEZINGTRAP; bestpriority = priority; IDtarget = sd->bl.id;
 				}
+			}
 			}
 
 			if (spelltocast>-1) unit_skilluse_ifablexy(&sd->bl, foundtargetID2, spelltocast, pc_checkskill(sd, spelltocast));
@@ -8439,6 +8522,39 @@ TIMER_FUNC(unit_autopilot_timer)
 			/// Skills for general use
 			///////////////////////////////////////////////////////////////////////////////////////////////
 
+			// Warg Bite
+			// Use this when an approaching melee enemy is the target and it's still far enough to be unable to attack you.
+			// Not worth it except for the immobilization effect  -the skill delay makes it useless for DPS.
+			if pc_iswug(sd)
+				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGBITE) > 0)) if (sd->state.autopilotmode != 3)
+					if (rangeddist <= 9)
+					if ((founddangerID=foundtargetRA) && (dangermd->status.rhw.range <= 3)
+					&& (rangeddist >=4) && (!(status_get_class_(bl) == CLASS_BOSS))) {
+						if ((checksprate(sd, targetRAmd, 10))
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGBITE, pc_checkskill(sd, RA_WUGBITE));
+						}
+					}
+			// Aimed Bolt
+			// Use on immobile target
+			if pc_iswug(sd)
+				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_AIMEDBOLT) > 0)) if (sd->state.autopilotmode != 3)
+					if ((sd->sc.data[SC_BITE] || sd->sc.data[SC_ANKLE] || sd->sc.data[SC_ELECTRICSHOCKER]))
+						if (rangeddist <= 9 + pc_checkskill(sd, AC_VULTURE)) {
+							arrowchange(sd, targetRAmd);
+							unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_AIMEDBOLT, pc_checkskill(sd, RA_AIMEDBOLT));
+					}
+			// Warg Strike
+			// Prefer this, it deals more damage than Double Strafe usually.
+			// Although it ignores elemental weaknesses, costs more SP and some cards don't work on it so idk.
+			if pc_iswug(sd)
+				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGSTRIKE) > 0)) if (sd->state.autopilotmode != 3)
+					if (rangeddist <= 9) {
+						if ((checksprate(sd, targetRAmd, 10))
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGSTRIKE, pc_checkskill(sd, RA_WUGSTRIKE));
+						}
+					}
 			// Falcon Assault
 			// Double Strafe does more damage in less time for less SP no thanks to the high delay
 			// making this skill useless, even with higher INT, unless you are not wearing a bow.
@@ -8449,7 +8565,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				// If you did not, you should disable the skill when a bow with any half decent (read 100 will do) atk is equipped.
 				if ((sd->battle_status.rhw.atk>=sd->battle_status.int_*1.5) || (sd->status.weapon != W_BOW))
 					if (rangeddist <= 3 + pc_checkskill(sd, AC_VULTURE)) {
-						if ((targetRAmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+						if (checksprate(sd, targetRAmd, 10)
 							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetRA, SN_FALCONASSAULT, pc_checkskill(sd, SN_FALCONASSAULT));
 						}
@@ -8470,13 +8586,13 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 
 			// Double Strafe
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, AC_DOUBLE) > 0)) if (sd->state.autopilotmode != 3)
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGSTRIKE) > 0)) if (sd->state.autopilotmode != 3)
 			if (rangeddist<= 9 + pc_checkskill(sd, AC_VULTURE)) {
 				if (sd->status.weapon == W_BOW)
-					if ((targetRAmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if (checksprate(sd, targetRAmd,10)
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 						arrowchange(sd, targetRAmd);
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, AC_DOUBLE, pc_checkskill(sd, AC_DOUBLE));
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGSTRIKE, pc_checkskill(sd, RA_WUGSTRIKE));
 					}
 			}
 
@@ -9191,7 +9307,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// If you really want to take advantage of that on bosses, the best bet is to simply refill the SinX's SP after the boss drops below 50%.
 			if (canskill(sd)) if (pc_checkskill(sd, AS_SONICBLOW)>0) if (sd->status.weapon == W_KATAR) {
 				// Use like other skills, but also always use if EDP enabled, that's not the time to conserve SP
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (sd->sc.data[SC_EDP])) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, AS_SONICBLOW, pc_checkskill(sd, AS_SONICBLOW));
 				}
@@ -9202,7 +9318,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				// Not if already poisoned
 				if (!(targetmd->sc.data[SC_POISON]))
 				{ // Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 						if (!((status_get_class_(targetbl) == CLASS_BOSS))) {
 							if (!(targetmd->status.def_ele==ELE_UNDEAD)) {
@@ -9270,7 +9386,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// Avoid if combo skill requiring sphere is available, combo is better.
 			if (canskill(sd)) if (pc_checkskill(sd, MO_INVESTIGATE)>0) if ((sd->spiritball>0) && (pc_checkskill(sd, MO_COMBOFINISH) < 3)) {
 				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 					unit_skilluse_ifable(&sd->bl, foundtargetID, MO_INVESTIGATE, pc_checkskill(sd, MO_INVESTIGATE));
 				}
@@ -9288,7 +9404,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// Cart Revolution skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_CARTREVOLUTION)>0) if (pc_iscarton(sd)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount>3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, MC_CARTREVOLUTION, pc_checkskill(sd, MC_CARTREVOLUTION));
 				}
@@ -9297,7 +9413,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, WS_CARTTERMINATION)>0) if (sd->state.specialtanking)
 				if (sd->sc.data[SC_CARTBOOST]) {
 					// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 						unit_skilluse_ifable(&sd->bl, foundtargetID, WS_CARTTERMINATION, pc_checkskill(sd, WS_CARTTERMINATION));
 					}
@@ -9305,7 +9421,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// Mammonite skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_MAMMONITE)>0) if (sd->state.specialtanking) {
 				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 					unit_skilluse_ifable(&sd->bl, foundtargetID, MC_MAMMONITE, pc_checkskill(sd, MC_MAMMONITE));
 				}
@@ -9315,7 +9431,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, CR_HOLYCROSS)>0) {
 				// Use like bash but ONLY if enemy is weak to holy, otherwise damage isn't that much better and Stun is superior to Blind
 				if (elemstrong(targetmd, skill_get_ele(CR_HOLYCROSS, pc_checkskill(sd, CR_HOLYCROSS))))
-					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 					unit_skilluse_ifable(&sd->bl, foundtargetID, CR_HOLYCROSS, pc_checkskill(sd, CR_HOLYCROSS));
 				}
@@ -9327,7 +9443,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				// Use on LARGE enemies only, otherwise bash/bowling bash is more cost effective.
 					if (targetmd->status.size==SZ_BIG) {
 				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 					unit_skilluse_ifable(&sd->bl, foundtargetID, KN_PIERCE, pc_checkskill(sd, KN_PIERCE));
 				}
@@ -9343,7 +9459,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, KN_BRANDISHSPEAR) > 0) if (pc_isriding(sd))
 				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, KN_BRANDISHSPEAR, pc_checkskill(sd, KN_BRANDISHSPEAR));
 				}
@@ -9360,7 +9476,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, LG_SHIELDPRESS) >= 4)
 				if (sd->status.shield > 0) {
 					// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_SHIELDPRESS, pc_checkskill(sd, LG_SHIELDPRESS));
 					}
@@ -9371,7 +9487,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, LG_BANISHINGPOINT) > 4)
 				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
 				}
@@ -9380,7 +9496,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// Bowling Bash skill
 			if (canskill(sd)) if (pc_checkskill(sd, KN_BOWLINGBASH)>0) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount>=3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, KN_BOWLINGBASH, pc_checkskill(sd, KN_BOWLINGBASH));
 				}
@@ -9389,7 +9505,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			// Backstab skill
 			if (canskill(sd)) if (pc_checkskill(sd, RG_BACKSTAP) > 0) {
 				// Assumes the update to allow using this from the front is already included
-				if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, RG_BACKSTAP, pc_checkskill(sd, RG_BACKSTAP));
 				}
@@ -9400,7 +9516,7 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 			if (canskill(sd)) if (pc_checkskill(sd, SM_BASH)>0) if (pc_checkskill(sd, KN_BOWLINGBASH)<pc_checkskill(sd, SM_BASH)) {
 			// Do not use if Bowling Bash is known at equal or higher level, as it's strictly better
 			// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-					if ((targetmd->status.hp > (12 - (sd->battle_status.sp * 10 / sd->battle_status.max_sp)) * pc_rightside_atk(sd))
+					if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 								unit_skilluse_ifable(&sd->bl, foundtargetID, SM_BASH, pc_checkskill(sd, SM_BASH));
 					}
