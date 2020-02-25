@@ -3368,7 +3368,7 @@ static void battle_calc_multi_attack(struct Damage* wd, struct block_list *src,s
 	switch (skill_id) {
 		case RA_AIMEDBOLT:
 			if( tsc && (tsc->data[SC_BITE] || tsc->data[SC_ANKLE] || tsc->data[SC_ELECTRICSHOCKER]) )
-				wd->div_ = tstatus->size + 2 + ( (rnd()%100 < 50-tstatus->size*10) ? 1 : 0 );
+				wd->div_ = tstatus->size + 2 + ( (rnd()%100 < 80-tstatus->size*30) ? 1 : 0 );
 			break;
 		case RL_QD_SHOT:
 			wd->div_ = 1 + (sd ? sd->status.job_level : 1) / 20 + (tsc && tsc->data[SC_C_MARKER] ? 2 : 0);
@@ -3876,17 +3876,18 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 50 + 15 * skill_lv;
 			break;
 		case RA_ARROWSTORM:
+			skillratio += 300 + 50 * skill_lv;
+			break;
 		case NPC_ARROWSTORM:
 			skillratio += 900 + 80 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RA_AIMEDBOLT:
 			skillratio += 400 + 50 * skill_lv;
-			RE_LVL_DMOD(100);
 			break;
-		case RA_CLUSTERBOMB:
+/*		case RA_CLUSTERBOMB:
 			skillratio += 100 + 100 * skill_lv;
-			break;
+			break;*/
 		case RA_WUGDASH:// ATK 300%
 			skillratio += 200;
 			break;
@@ -6476,6 +6477,9 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 		case HT_BLASTMINE:
 		case HT_CLAYMORETRAP:
 		case HT_FREEZINGTRAP:
+		case RA_CLUSTERBOMB:
+		case RA_FIRINGTRAP:
+		case RA_ICEBOUNDTRAP:
 			md.damage = (int64)(skill_lv * sstatus->dex * (3.0 + (float)status_get_lv(src) / 100.0) * (1.0 + (float)sstatus->int_ / 35.0));
 			md.damage += md.damage * (rnd()%20 - 10) / 100;
 			if (skill_id == HT_FREEZINGTRAP) md.damage *= 0.7;
@@ -6649,7 +6653,7 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 		case HVAN_EXPLOSION: //[orn]
 			md.damage = (int64)sstatus->max_hp * (50 + 50 * skill_lv) / 100;
 			break;
-		case RA_CLUSTERBOMB:
+/*		case RA_CLUSTERBOMB:
 		case RA_FIRINGTRAP:
 		case RA_ICEBOUNDTRAP:
 			md.damage = skill_lv * status_get_dex(src) + status_get_int(src) * 5 ;
@@ -6663,7 +6667,7 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			} else
 				md.damage = md.damage * 200 / (skill_id == RA_CLUSTERBOMB ? 50 : 100);
 			nk |= NK_NO_ELEFIX|NK_IGNORE_FLEE|NK_NO_CARDFIX_DEF;
-			break;
+			break;*/
 		case NC_MAGMA_ERUPTION_DOTDAMAGE: // 'Eruption' damage
 			md.damage = 800 + 200 * skill_lv;
 			break;
@@ -6771,17 +6775,6 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 	battle_apply_div_fix(&md, skill_id);
 
 	switch(skill_id) {
-		case RA_FIRINGTRAP:
- 		case RA_ICEBOUNDTRAP:
-			if (md.damage == 1)
-				break;
-		case RA_CLUSTERBOMB:
-			{
-				struct Damage wd = battle_calc_weapon_attack(src,target,skill_id,skill_lv,mflag);
-
-				md.damage += wd.damage;
-			}
-			break;
 		case NJ_ZENYNAGE:
 			if (sd) {
 				if (md.damage > sd->status.zeny)

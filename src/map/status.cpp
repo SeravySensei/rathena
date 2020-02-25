@@ -3296,7 +3296,7 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 			if ((i = pc_checkskill(sd,SL_KAINA)) > 0)
 				bonus += 30 * i;
 			if ((i = pc_checkskill(sd,RA_RESEARCHTRAP)) > 0)
-				bonus += 200 + 20 * i;
+				bonus += 50 + 50 * i;
 			if ((i = pc_checkskill(sd,WM_LESSON)) > 0)
 				bonus += 30 * i;
 			if (pc_checkskill(sd,SU_SPRITEMABLE) > 0)
