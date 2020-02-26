@@ -8359,7 +8359,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					if (rangeddist <= 9 + pc_checkskill(sd, AC_VULTURE)) {
 						if (sd->status.weapon == W_BOW)
 							if (!((status_get_class_(dangerbl) == CLASS_BOSS))) {
-								arrowchange(sd, targetRAmd);
+								arrowchange(sd, dangermd);
 								unit_skilluse_ifable(&sd->bl, founddangerID, AC_CHARGEARROW, pc_checkskill(sd, AC_CHARGEARROW));
 							}
 					}
@@ -8527,9 +8527,10 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Not worth it except for the immobilization effect  -the skill delay makes it useless for DPS.
 			if pc_iswug(sd)
 				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGBITE) > 0)) if (sd->state.autopilotmode != 3)
-					if (rangeddist <= 9)
+					if (rangeddist <= 9) 
 					if ((founddangerID=foundtargetRA) && (dangermd->status.rhw.range <= 3)
-					&& (rangeddist >=4) && (!(status_get_class_(bl) == CLASS_BOSS))) {
+					&& (rangeddist >=4) && (!(status_get_class_(bl) == CLASS_BOSS))) if (!isdisabled(dangermd))
+					{
 						if ((checksprate(sd, targetRAmd, 10))
 							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGBITE, pc_checkskill(sd, RA_WUGBITE));
@@ -8926,7 +8927,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, CG_ARROWVULCAN) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
 					if (elemallowed(targetRAmd, skill_get_ele(CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN)))) {
-						arrowchange(sd, targetmd);
+						arrowchange(sd, targetRAmd);
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN));
 					}
 				}
@@ -8935,7 +8936,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, BA_MUSICALSTRIKE) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
 					if (elemallowed(targetRAmd, skill_get_ele(BA_MUSICALSTRIKE, pc_checkskill(sd, BA_MUSICALSTRIKE)))) {
-						arrowchange(sd, targetmd);
+						arrowchange(sd, targetRAmd);
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, BA_MUSICALSTRIKE, pc_checkskill(sd, BA_MUSICALSTRIKE));
 					}
 				}
@@ -8944,7 +8945,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, DC_THROWARROW) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
 					if (elemallowed(targetRAmd, skill_get_ele(DC_THROWARROW, pc_checkskill(sd, DC_THROWARROW)))) {
-						arrowchange(sd, targetmd);
+						arrowchange(sd, targetRAmd);
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, DC_THROWARROW, pc_checkskill(sd, DC_THROWARROW));
 					}
 				}
