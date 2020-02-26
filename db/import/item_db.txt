@@ -99,7 +99,6 @@
 31830,Unimplemented_Disguise,? Clothes,4,500000,,0,,0,,0,0xFFFFFFFF,63,2,8192,,50,0,0,{ changebase Class; },{},{ changebase Class; }
 31843,Poster_Girl_Hat,Poster Girl Hat,4,0,,0,,,,0,0xFFFFFFFF,63,2,256,,1,0,1446,{ skill "TF_DOUBLE",7; bonus bDoubleRate,35;bonus bHit,-20; bonus bDex,-5; },{},{}
 31849,Boxed_Steel,Box of Steel,2,3000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 999,3; },{},{}
-31888,Cursed_Lucky_Brooch,Test Ring,4,46000,,100,,0,,0,0xFFFFFFFF,63,2,136,,40,0,0,{ bonus2 bAddEff2,Eff_Curse,5; },{},{}
 31900,C_Horn_Of_Lord_Kaho,Costume Lord Kaho's Horn,4,20,,0,,30,,0,0xFFFFFFFF,63,2,1024,,0,0,99,{},{},{}
 31901,Floating_Ice,Floating Ice,4,0,,0,,0,,0,0xFFFFFFFF,63,2,1,,1,0,1562,{ bonus2 bMagicAtkEle,Ele_Water,10; },{},{}
 31902,AliceFriesinger_Hat_69,Personal Maid Hat,4,0,,0,,0,,0,0xFFFFFFFF,63,2,256,,1,1,1249,{ bonus3 bAutoSpellWhenHit,"AL_HEAL",3,100; bonus bFlee,-25; bonus2 bSubClass,Class_Boss,5; bonus2 bSubClass,Class_Normal,5; },{},{}

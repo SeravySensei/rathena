@@ -67,7 +67,7 @@ yuno,118,192,5	script	Rmimi Ravies#gq_fes01	891,{
 			mes "Me and my sister Rhehe...";
 			next;
 			mes "[Rmimi Ravies]";
-			mes "We are totllly different, but we can...";
+			mes "We are totally different, but we can...";
 			next;
 			mes "[Rmimi Ravies]";
 			mes "...................................";

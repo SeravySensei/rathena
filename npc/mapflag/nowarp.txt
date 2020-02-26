@@ -66,18 +66,3 @@ poring_w02	mapflag	nowarp
 2012rwc_06	mapflag	nowarp
 2012rwc_07	mapflag	nowarp
 2012rwc_08	mapflag	nowarp
-
-// Thanatos
-tha_t01	mapflag	nowarp
-tha_t02	mapflag	nowarp
-tha_t03	mapflag	nowarp
-tha_t04	mapflag	nowarp
-tha_t05	mapflag	nowarp
-tha_t06	mapflag	nowarp
-tha_t07	mapflag	nowarp
-tha_t08	mapflag	nowarp
-tha_t09	mapflag	nowarp
-tha_t10	mapflag	nowarp
-tha_t11	mapflag	nowarp
-tha_t12	mapflag	nowarp
-thana_step	mapflag	nowarp

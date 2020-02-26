@@ -146,57 +146,57 @@ payon,162,176,4	script	Halloween Magician#iRO08	704,{
 			mes "Lemme tell you what items you can exchange for.";
 			next;
 			mes "[Halloween Magician]";
-			mes "5 tickets for Pumpkin Pie.";
-			mes "20 tickets for Pumpkin-Head.";
-			mes "50 tickets for Old Blue Box.";
-			mes "70 tickets for Old Purple Box.";
-			mes "200 tickets for Old Card Album.";
+			mes "1 tickets for Pumpkin Pie.";
+			mes "10 tickets for Pumpkin-Head.";
+			mes "5 tickets for Old Blue Box.";
+			mes "12 tickets for Old Purple Box.";
+			mes "30 tickets for Old Card Album.";
 			next;
 			mes "[Halloween Magician]";
 			mes "What would you like to exchange for?";
 			next;
 			switch(select("Pumpkin Pie:Pumpkin-Head:Old Blue Box:Old Purple Box:Old Card Album")) {
 			case 1:
-				if (countitem(7941) < 5) {
+				if (countitem(7941) < 1) {
 					goto NotEnough;
 				} else {
-					delitem 7941,5;
+					delitem 7941,1;
 					getitem 12192,1;
 					goto Enough;
 				}
 				break;
 			case 2:
-				if (countitem(7941) < 20) {
+				if (countitem(7941) < 10) {
 					goto NotEnough;
 				} else {
-					delitem 7941,20;
+					delitem 7941,10;
 					getitem 5134,1;
 					goto Enough;
 				}
 				break;
 			case 3:
-				if (countitem(7941) < 50) {
+				if (countitem(7941) < 5) {
 					goto NotEnough;
 				} else {
-					delitem 7941,50;
+					delitem 7941,5;
 					getitem 603,1;
 					goto Enough;
 				}
 				break;
 			case 4:
-				if (countitem(7941) < 70) {
+				if (countitem(7941) < 12) {
 					goto NotEnough;
 				} else {
-					delitem 7941,70;
+					delitem 7941,12;
 					getitem 617,1;
 					goto Enough;
 				}
 				break;
 			case 5:
-				if (countitem(7941) < 200) {
+				if (countitem(7941) < 30) {
 					goto NotEnough;
 				} else {
-					delitem 7941,200;
+					delitem 7941,30;
 					getitem 616,1;
 					goto Enough;
 				}

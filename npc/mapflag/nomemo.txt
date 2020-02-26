@@ -420,3 +420,22 @@ bossnia_04	mapflag	nomemo
 2012rwc_06	mapflag	nomemo
 2012rwc_07	mapflag	nomemo
 2012rwc_08	mapflag	nomemo
+
+// Thanatos
+tha_t01	mapflag	nomemo
+tha_t02	mapflag	nomemo
+tha_t03	mapflag	nomemo
+tha_t04	mapflag	nomemo
+tha_t05	mapflag	nomemo
+tha_t06	mapflag	nomemo
+tha_t07	mapflag	nomemo
+tha_t08	mapflag	nomemo
+tha_t09	mapflag	nomemo
+tha_t10	mapflag	nomemo
+tha_t11	mapflag	nomemo
+tha_t12	mapflag	nomemo
+thana_step	mapflag	nomemo
+
+// Glast Heim
+gl_dun01	mapflag	nomemo
+gl_dun02	mapflag	nomemo

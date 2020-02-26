@@ -13469,7 +13469,7 @@
 31856,Red_Box_Garment,Just Some Garments Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GoodGarment,1); },{},{}
 31857,Red_Box_Costume,Look Better Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GoodCostume,1); },{},{}
 31858,Red_Box_Ultimate,Ultimate Items Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_Ultimate,1); },{},{}
-31901,Floating_Ice,Floating Ice,4,20,,0,,0,,0,0xFFFFFFFF,63,2,1,,0,0,1562,{ bonus2 bMagicAtkEle,Ele_Water,10; },{},{}
+31901,Floating_Ice_,Floating Ice,4,20,,0,,0,,0,0xFFFFFFFF,63,2,1,,0,0,1562,{ bonus2 bMagicAtkEle,Ele_Water,10; },{},{}
 32005,Illusion_Pole_Axe,Illusion Pole Axe,5,0,,1500,190,,3,2,0x00004082,63,2,2,4,120,1,4,{ .@r = getrefine(); bonus bStr,3; bonus bInt,2; bonus bDex,2; if (.@r >= 13) { .@val = -2000; } else if (.@r >= 9) { .@val = -1000; } bonus2 bSkillCooldown,"RK_HUNDREDSPEAR",.@val; },{},{}
 32013,Metal_Stick,Metal Stick,5,0,0,2000,180,,3,3,0x00004080,56,2,2,4,150,1,4,{ .@r = getrefine(); bonus2 bSkillAtk,"LG_CANNONSPEAR",10; if(.@r > 6){ bonus2 bSkillAtk,"LG_OVERBRAND",10 + (.@r > 8 ? 15 : 0); } if(.@r > 11){ bonus bDelayrate,-15; } },{},{}
 32014,Brute_Spear,Brute Spear,5,0,0,,150,,3,0,0x00004080,56,2,2,4,100,1,4,{ .@r = getrefine(); bonus bUnbreakableWeapon; bonus2 bIgnoreDefRaceRate,RC_All,5*.@r; bonus2 bAddRace,RC_Player,80 + (.@r > 8 ? 20 : 0) + (.@r > 7 ? 35 : 0); if(.@r > 9){ bonus bMaxHPrate,15; bonus bMaxSPrate,15; } },{},{}
