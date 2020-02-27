@@ -4455,6 +4455,7 @@ int targethealing(block_list * bl, va_list ap)
 
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 0;
+	if (pc_ismadogear(sd)) return 0;
 	// Always heal below 55% hp
 	// or if we have a lot of sp
 	// or if target is a ninja with Final Strike then go above 95% hp
@@ -4492,10 +4493,12 @@ int targetpneuma(block_list * bl, va_list ap)
 	if (!md->target_id) { return 0; }
 	tgtbl = map_id2bl(md->target_id);
 	if (tgtbl->type != BL_PC) return 0;
-	//ShowError("Pneuma target found");
-	// monster has to be far enough???
-	foundtargetID = md -> target_id;
-	targetbl = tgtbl;
+	// prioritize nearest target to us
+	if ((foundtargetID < 0) ||
+		distance_bl(&sd2->bl, targetbl) > distance_bl(&sd2->bl, tgtbl)) {
+		foundtargetID = md->target_id;
+		targetbl = tgtbl;
+	}
 	return 0;
 }
 
@@ -4560,6 +4563,7 @@ int targetincagi(block_list * bl, va_list ap)
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 0;
 	if (!ispartymember(sd)) return 0;
+	if (pc_ismadogear(sd)) return 0;
 	if (!sd->sc.data[SC_QUAGMIRE]) if (!sd->sc.data[SC_INCREASEAGI]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 
 	return 0;
@@ -4652,6 +4656,7 @@ int targetadrenaline(block_list * bl, va_list ap)
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 0;
 	if (!ispartymember(sd)) return 0;
+	if (pc_ismadogear(sd)) return 0;
 	if (!(((sd->status.weapon == W_MACE) || (sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE)))) return 0;
 	if ((!sd->sc.data[SC_ADRENALINE]) && (!sd->sc.data[SC_ADRENALINE2])) { targetbl = bl; foundtargetID = sd->bl.id; };
 
@@ -4704,6 +4709,7 @@ int targetrenovatio(block_list * bl, va_list ap)
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 0;
 	if (!ispartymember(sd)) return 0;
+	if (pc_ismadogear(sd)) return 0;
 	if (!sd->sc.data[SC_RENOVATIO]) { targetbl = bl; foundtargetID = sd->bl.id; };
 
 	return 0;
@@ -5554,6 +5560,47 @@ int kunaichange(map_session_data * sd, mob_data *targetmd)
 
 }
 
+int cannonballchange(map_session_data * sd, mob_data *targetmd)
+{
+	unsigned short arrows[] = {
+		18000,18001,18002,18003,18004
+	};
+	unsigned short arrowelem[] = {
+		ELE_NEUTRAL,ELE_HOLY,ELE_DARK,ELE_GHOST,ELE_NEUTRAL
+	};
+	unsigned short arrowatk[] = {
+		100,120,120,120,250
+	};
+
+	if (DIFF_TICK(sd->canequip_tick, gettick()) > 0) return 0;
+
+	int16 index = -1;
+	int i, j;
+	int best = -1; int bestprio = -1;
+	bool eqp = false;
+
+	for (i = 0; i < ARRAYLENGTH(arrows); i++) {
+		if ((index = pc_search_inventory(sd, arrows[i])) >= 0) {
+			j = arrowatk[i];
+			if (elemstrong(targetmd, arrowelem[i])) j += 500;
+			if (elemallowed(targetmd, arrowelem[i])) if (j > bestprio)
+		 {
+					bestprio = j; best = index; eqp = pc_checkequip2(sd, arrows[i], EQI_AMMO, EQI_AMMO + 1);
+				}
+		}
+	}
+	if (best > -1) {
+		if (!eqp) pc_equipitem(sd, best, EQP_AMMO);
+		return 1;
+	}
+	else {
+		char* msg = "I have no cannonball to fire!";
+		saythis(sd, msg, 50);
+		return 0;
+	}
+
+}
+
 
 void recoversp(map_session_data *sd, int goal)
 {
@@ -5741,12 +5788,35 @@ void skillwhenidle(struct map_session_data *sd) {
 
 	// Cart Boost
 	if (pc_checkskill(sd, WS_CARTBOOST) > 0) {
-		if (!(sd->sc.data[SC_CARTBOOST])) 
+		if (!(sd->sc.data[SC_CARTBOOST]))
+			if (!pc_ismadogear(sd))
 			if  (pc_iscarton(sd)) {
 			unit_skilluse_ifable(&sd->bl, SELF, WS_CARTBOOST, pc_checkskill(sd, WS_CARTBOOST));
 		}
 	}
-	
+
+
+	// Acceleration
+	if (pc_checkskill(sd, NC_ACCELERATION) > 0) {
+		if (!(sd->sc.data[SC_ACCELERATION]))
+			if (pc_ismadogear(sd))
+				if (pc_search_inventory(sd, 2800) >= 0)
+					if (pc_search_inventory(sd, 6146) >= 0) {
+					unit_skilluse_ifable(&sd->bl, SELF, NC_ACCELERATION, pc_checkskill(sd, NC_ACCELERATION));
+				}
+	}
+	// Hovering
+	// check if equipped by item 2801
+			if (pc_checkskill(sd, NC_HOVERING) > 0) {
+			if (!(sd->sc.data[SC_HOVERING]))
+				if (pc_ismadogear(sd))
+					pc_checkequip2(sd,2801, EQI_ACC_L, EQI_MAX);
+						if (pc_search_inventory(sd, 6146) >= 0) {
+							unit_skilluse_ifable(&sd->bl, SELF, NC_HOVERING, pc_checkskill(sd, NC_HOVERING));
+						}
+		}
+
+
 	// Weapon Repair
 	if (pc_checkskill(sd, BS_REPAIRWEAPON) > 0) {
 		if ((pc_search_inventory(sd, 998) >= 0) && (pc_search_inventory(sd, 1002) >= 0) && (pc_search_inventory(sd, 999) >= 0)
@@ -6599,6 +6669,19 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+		// Neutral Barrier
+		if (pc_ismadogear(sd)) if (canskill(sd)) if (pc_checkskill(sd, NC_NEUTRALBARRIER) > 0)
+			if (pc_search_inventory(sd, 2806) >= 0)
+				if (pc_search_inventory(sd, 6146) >= 0) {
+			resettargets();
+			map_foreachinrange(targetpneuma, &sd->bl, 12, BL_MOB, sd);
+			if (foundtargetID > -1) if (!sd->sc.data[SC_NEUTRALBARRIER_MASTER])
+			if (distance_bl(targetbl,&sd->bl)<3){
+					unit_skilluse_ifablexy(&sd->bl, foundtargetID, NC_NEUTRALBARRIER, pc_checkskill(sd, NC_NEUTRALBARRIER));
+			}
+		}
+		
+
 		/// Pneuma
 		if (canskill(sd)) if  (pc_checkskill(sd, AL_PNEUMA)>0) {
 			resettargets();
@@ -6684,6 +6767,23 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+
+		if (pc_ismadogear(sd)) if (canskill(sd)) if (pc_checkskill(sd, NC_EMERGENCYCOOL) >= 5)
+			if (sd->sc.data[SC_OVERHEAT_LIMITPOINT])
+				if (sd->sc.data[SC_OVERHEAT_LIMITPOINT]->val1 > 100)
+					if ((pc_inventory_count(sd, 4164) >= 2) &&
+						((pc_search_inventory(sd, 2804) >= 0)
+							|| (pc_search_inventory(sd, 2809) >= 0)
+							|| (pc_search_inventory(sd, 2810 >= 0))))
+						unit_skilluse_ifable(&sd->bl, SELF, NC_EMERGENCYCOOL, pc_checkskill(sd, NC_EMERGENCYCOOL));
+					else saythis(sd, "I need a cooling device or fuel!", 50);
+		// Repair (mado)
+		if (pc_ismadogear(sd))
+			if (canskill(sd)) if (pc_checkskill(sd, NC_REPAIR) >= 5)
+				if (sd->battle_status.hp < sd->battle_status.max_hp*0.70)
+				if (pc_search_inventory(sd, 12394) >= 0)
+					if (pc_search_inventory(sd, 6146) >= 0)
+						unit_skilluse_ifable(&sd->bl, SELF, NC_REPAIR, pc_checkskill(sd, NC_REPAIR));
 
 		/// Coluceo Heal
 		if (canskill(sd)) if ((pc_checkskill(sd, AB_CHEAL) > 0) && ((Dangerdistance > 900) || (sd->special_state.no_castcancel))) {
@@ -7596,11 +7696,12 @@ TIMER_FUNC(unit_autopilot_timer)
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		// Skills to use before attacking
 		// Ruwach, Sight
-		if (canskill(sd)) if ((pc_checkskill(sd, AL_RUWACH) > 0) || (pc_checkskill(sd, MG_SIGHT) > 0)){
+		if (canskill(sd)) if ((pc_checkskill(sd, AL_RUWACH) > 0) || (pc_checkskill(sd, MG_SIGHT) > 0) || (pc_checkskill(sd, NC_INFRAREDSCAN) > 0)){
 			if (!((sd->sc.data[SC_RUWACH]) || (sd->sc.data[SC_SIGHT]))) {
 				resettargets();
 				map_foreachinrange(targetnearest, &sd->bl, 11, BL_MOB, sd);
 				if ((targetdistance <= 3) && (targetdistance > -1) && (targetmd->sc.data[SC_HIDING] || targetmd->sc.data[SC_CLOAKING])) {
+					if (pc_checkskill(sd, NC_INFRAREDSCAN) > 0) if (pc_ismadogear(sd)) unit_skilluse_ifable(&sd->bl, SELF, NC_INFRAREDSCAN, pc_checkskill(sd, NC_INFRAREDSCAN));
 					if (pc_checkskill(sd, AL_RUWACH) > 0) unit_skilluse_ifable(&sd->bl, SELF, AL_RUWACH, pc_checkskill(sd, AL_RUWACH));
 					if (pc_checkskill(sd, MG_SIGHT) > 0) unit_skilluse_ifable(&sd->bl, SELF, MG_SIGHT, pc_checkskill(sd, MG_SIGHT));
 				}
@@ -7738,6 +7839,19 @@ TIMER_FUNC(unit_autopilot_timer)
 								}
 							}
 
+							// Cold Slower
+							if (canskill(sd)) if ((pc_checkskill(sd, NC_COLDSLOWER) > 2))
+								if (pc_ismadogear(sd))
+									if (pc_search_inventory(sd, 6147) >= 0)
+										if (pc_search_inventory(sd, 6146) >= 0) {
+								int area = 4;
+								priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skill_get_ele(NC_COLDSLOWER, pc_checkskill(sd, NC_COLDSLOWER)));
+								if ((priority >= 12) && (priority > bestpriority)) {
+									spelltocast = NC_COLDSLOWER; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+							
+
 							// Dragon Breath
 							if (canskill(sd)) if ((pc_checkskill(sd, RK_DRAGONBREATH) > 6)) if (pc_isridingdragon(sd)) {
 								int area = 4; if (pc_checkskill(sd, RK_DRAGONBREATH) > 8) area++;
@@ -7810,6 +7924,22 @@ TIMER_FUNC(unit_autopilot_timer)
 											}
 										}
 									}
+							// Flame Launcher (Mado)
+							if (canskill(sd)) if ((pc_checkskill(sd, NC_FLAMELAUNCHER) > 2))
+								if (pc_ismadogear(sd))
+									if (pc_search_inventory(sd, 2139) >= 0)
+										if (pc_search_inventory(sd, 6146) >= 0)
+										{  // Note : Like sharp shooting, ignoring the Line effect, only considering targets next to the main target.
+									resettargets;
+									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
+									if (foundtargetID > -1) {
+										int area = 1;
+										priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(NC_FLAMELAUNCHER, pc_checkskill(sd, NC_FLAMELAUNCHER)));
+										if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 5)) {
+											spelltocast = NC_FLAMELAUNCHER; bestpriority = priority; IDtarget = foundtargetID;
+										}
+									}
+								}
 							// Fireball
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, MG_FIREBALL) > 0)) {
@@ -8136,6 +8266,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == WL_CRIMSONROCK)
 							|| (spelltocast == WL_SOULEXPANSION)
 							|| (spelltocast == LG_CANNONSPEAR)
+							|| (spelltocast == NC_FLAMELAUNCHER)
 							) unit_skilluse_ifable(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 							unit_skilluse_ifablexy(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
@@ -8585,6 +8716,14 @@ TIMER_FUNC(unit_autopilot_timer)
 							unit_skilluse_ifable(&sd->bl, foundtargetRA, HT_POWER, pc_checkskill(sd, HT_POWER));
 						}
 				}
+			// Axe Boomerang
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_AXEBOOMERANG) > 0))
+				if ((sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE)) {
+					// Knockback can be a problem but at least this is instant cast and ranged, pretty much the only skill of this kind on the class without a mado
+					if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_AXEBOOMERANG, pc_checkskill(sd, NC_AXEBOOMERANG));
+					}
+				}
 
 			// Double Strafe
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGSTRIKE) > 0)) if (sd->state.autopilotmode != 3)
@@ -8596,6 +8735,16 @@ TIMER_FUNC(unit_autopilot_timer)
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGSTRIKE, pc_checkskill(sd, RA_WUGSTRIKE));
 					}
 			}
+			// Knuckle Boost
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_BOOSTKNUCKLE) > 0)) if (sd->state.autopilotmode != 3)
+				if (pc_ismadogear(sd))
+				if (rangeddist <= 11) {
+						if (checksprate(sd, targetRAmd, 10)
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_BOOSTKNUCKLE, pc_checkskill(sd, NC_BOOSTKNUCKLE));
+						}
+				}
+
 
 			// Bull's Eye
 			// Note : I removed the casting time and reduced the delay on this, without those modifications it's better if the AI doesn't use this skill.
@@ -8672,6 +8821,22 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (rangeddist <= 9) if (targetRAmd->status.hp>2* pc_rightside_atk(sd)) {
 				if (kunaichange(sd, targetRAmd)==1) unit_skilluse_ifable(&sd->bl, foundtargetRA, NJ_KUNAI, pc_checkskill(sd, NJ_KUNAI));
 			}
+
+			// Arm Cannon
+// ignoring the AOE because it's not reliable anyway only range of 1 and mobs will move during cast time.
+// Yes, lower levels have better AOE but that really isn't the mechanic's job and those levels deal much worse damage.
+// Delay might be an issue on the highest level but then the player can deal with it (bragi/kiel etc)
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_ARMSCANNON) >= 3))
+				if (rangeddist <= 13) {
+					if (elemallowed(targetRAmd, ELE_NEUTRAL)) // Counts as neutral even if it is not
+						if (pc_ismadogear(sd))
+							if (pc_search_inventory(sd, 6146) >= 0)
+								if ((checksprate(sd, targetRAmd, 10))
+									|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
+									if (cannonballchange(sd, targetRAmd) == 1) unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_ARMSCANNON, pc_checkskill(sd, NC_ARMSCANNON));
+								}
+				}
+
 
 			// Flying Kick
 			if ((sd->class_ & MAPID_UPPERMASK)!= MAPID_SOUL_LINKER) if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, TK_JUMPKICK) > 0)) {
@@ -9056,6 +9221,15 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				if (canskill(sd)) if ((pc_checkskill(sd, LG_BANISHINGPOINT) > 0))
 					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
 						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
+				// Vulcan Arm - prefer to axe boomerang if able, this hits aoe and no knockback so better to pull mob.
+				if (pc_ismadogear(sd))
+					if (canskill(sd)) if ((pc_checkskill(sd, NC_VULCANARM) > 0))
+					if (pc_search_inventory(sd, 6145) >= 0)
+						unit_skilluse_ifable(&sd->bl, foundtargetID, NC_VULCANARM, pc_checkskill(sd, NC_VULCANARM));
+				// Axe Boomerang - knockback is not ideal for pulling the mob but the damage might be enough to kill the threat and it'll likely get knocked away from its target.
+				if (canskill(sd)) if ((pc_checkskill(sd, NC_AXEBOOMERANG) > 0))
+					if ((sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, NC_AXEBOOMERANG, pc_checkskill(sd, NC_AXEBOOMERANG));
 				// Shield Boomerang
 				if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0))
 					if (sd->status.shield > 0) 
@@ -9401,7 +9575,15 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 				}
 			}
 
-
+			// Axe Tornado
+			if (canskill(sd)) if (pc_checkskill(sd, NC_AXETORNADO) > 0) if (pc_iscarton(sd)) {
+					// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
+					if ((sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE)) 
+						if ((checksprate(sd, targetmd, 10))
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, NC_AXETORNADO, pc_checkskill(sd, NC_AXETORNADO));
+					}
+				}
 			// Cart Revolution skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_CARTREVOLUTION)>0) if (pc_iscarton(sd)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
@@ -9418,6 +9600,13 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
 						unit_skilluse_ifable(&sd->bl, foundtargetID, WS_CARTTERMINATION, pc_checkskill(sd, WS_CARTTERMINATION));
 					}
+				}
+			// Power Swing skill
+			// lower priority than CT, if we are willing to spend the zeny CT is much higher DPS.
+			if (canskill(sd)) if (pc_checkskill(sd, NC_POWERSWING) > 0)
+				if ((checksprate(sd, targetmd, 10))
+					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, NC_POWERSWING, pc_checkskill(sd, NC_POWERSWING));
 				}
 			// Mammonite skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_MAMMONITE)>0) if (sd->state.specialtanking) {
