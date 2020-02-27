@@ -3947,7 +3947,6 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			break;
 		case NC_AXETORNADO:
 			skillratio += 100 + 100 * skill_lv + status_get_vit(src);
-			RE_LVL_DMOD(100);
 			if (distance_bl(src, target) > 2) // Will deal 75% damage outside of 5x5 area.
 				skillratio = skillratio * 75 / 100;
 			break;

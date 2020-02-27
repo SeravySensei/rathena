@@ -3038,8 +3038,8 @@ int status_calc_mob_(struct mob_data* md, enum e_status_calc_opt opt)
 					struct status_data *mstatus = status_get_status_data(mbl);
 					if(!mstatus)
 						break;
-					status->max_hp = (1000 * ud->skill_lv) + (mstatus->hp / 3) + (status_get_lv(mbl) * 12);
-					status->batk = 200 * ud->skill_lv;
+					status->max_hp = (1000 * ud->skill_lv) + (mstatus->hp / 3) + (status_get_lv(mbl) * 24);
+					status->batk = (200 * ud->skill_lv+6*mstatus->dex)*status_get_lv(mbl)/100;
 					break;
 				}
 				case NC_MAGICDECOY:
@@ -3047,8 +3047,8 @@ int status_calc_mob_(struct mob_data* md, enum e_status_calc_opt opt)
 					struct status_data *mstatus = status_get_status_data(mbl);
 					if(!mstatus)
 						break;
-					status->max_hp = (1000 * ((TBL_PC*)mbl)->menuskill_val) + (mstatus->sp * 4) + (status_get_lv(mbl) * 12);
-					status->matk_min = status->matk_max = 250 + 50*((TBL_PC*)mbl)->menuskill_val;
+					status->max_hp = (1000 * ((TBL_PC*)mbl)->menuskill_val) + (mstatus->sp * 4) + (status_get_lv(mbl) * 24);
+					status->matk_min = status->matk_max = (250 + 50*((TBL_PC*)mbl)->menuskill_val+ 3 * mstatus->dex + 3 * mstatus->int_)*status_get_lv(mbl) / 100;
 					break;
 				}
 			}
@@ -6633,7 +6633,7 @@ static signed short status_calc_flee(struct block_list *bl, struct status_change
 	if(sc->data[SC_PARALYSE])
 		flee -= flee * 10 / 100;
 	if(sc->data[SC_INFRAREDSCAN])
-		flee -= flee * 30 / 100;
+		flee -= 33;
 	if( sc->data[SC__LAZINESS] )
 		flee -= flee * sc->data[SC__LAZINESS]->val3 / 100;
 	if( sc->data[SC_GLOOMYDAY] )
@@ -6842,8 +6842,6 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 			  + def2 * ( sc->data[SC_JOINTBEAT]->val2&BREAK_WAIST ? 25 : 0 ) / 100;
 	if(sc->data[SC_FLING])
 		def2 -= def2 * (sc->data[SC_FLING]->val3)/100;
-	if(sc->data[SC_ANALYZE])
-		def2 -= def2 * (14 * sc->data[SC_ANALYZE]->val1) / 100;
 	if(sc->data[SC_ASH])
 		def2 -= def2 * sc->data[SC_ASH]->val3/100;
 	if (sc->data[SC_PARALYSIS])
@@ -6952,8 +6950,6 @@ static signed short status_calc_mdef2(struct block_list *bl, struct status_chang
 		mdef2 -= mdef2 * sc->data[SC_MINDBREAKER]->val3/100;
 	if(sc->data[SC_BURNING])
 		mdef2 -= mdef2 * 25 / 100;
-	if(sc->data[SC_ANALYZE])
-		mdef2 -= mdef2 * (14 * sc->data[SC_ANALYZE]->val1) / 100;
 
 #ifdef RENEWAL
 	return (short)cap_value(mdef2,SHRT_MIN,SHRT_MAX);

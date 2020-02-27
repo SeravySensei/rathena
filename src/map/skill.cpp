@@ -1730,7 +1730,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 	case NC_POWERSWING:
 		sc_start(src,bl, SC_STUN, 10, skill_lv, skill_get_time(skill_id, skill_lv));
-		if( rnd()%100 < 5*skill_lv )
+		if( rnd()%100 < 5*skill_lv+sd->battle_status.luk/4 )
 			skill_castend_damage_id(src, bl, NC_AXEBOOMERANG, ((sd) ? pc_checkskill(sd, NC_AXEBOOMERANG) : skill_get_max(NC_AXEBOOMERANG)), tick, 1);
 		break;
 	case GC_WEAPONCRUSH:
@@ -11221,8 +11221,8 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			for (i = 0; i < MAX_PARTY; ++i) {
 				map_session_data *pl_sd = p->data[i].sd;
 
-				if (pl_sd == nullptr || pl_sd == sd || pl_sd->status.party_id != p->party.party_id || pc_isdead(pl_sd) ||
-					sd->bl.m != pl_sd->bl.m)
+				if (pl_sd == nullptr || pl_sd == sd || pl_sd->status.party_id != p->party.party_id || pc_isdead(pl_sd) /*||
+					sd->bl.m != pl_sd->bl.m*/)
 					continue;
 				if (!(map_getmapflag(sd->bl.m, MF_NOTELEPORT) || map_getmapflag(sd->bl.m, MF_PVP) || map_getmapflag(sd->bl.m, MF_BATTLEGROUND) || map_flag_gvg2(sd->bl.m))) {
 					pc_setpos(pl_sd, map_id2index(sd->bl.m), sd->bl.x, sd->bl.y, CLR_TELEPORT);
