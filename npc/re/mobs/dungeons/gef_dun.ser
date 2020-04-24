@@ -46,11 +46,11 @@ gef_dun01,150,237,10,10	monster	White Plant	1082,2,180000,90000
 //==================================================
 // gef_dun02 - Geffenia
 //==================================================
-gef_dun02,0,0	monster	Deviruchi	1109,45,5000
-gef_dun02,0,0	monster	Marionette	1143,30,5000
-gef_dun02,0,0	monster	Nightmare	1061,20,5000
-gef_dun02,0,0	monster	Whisper	1179,20,5000
-gef_dun02,0,0	monster	Ghoul	1036,10,5000
+gef_dun02,0,0	monster	Deviruchi	1109,90,5000
+gef_dun02,0,0	monster	Marionette	1143,50,5000
+gef_dun02,0,0	monster	Nightmare	1061,40,5000
+gef_dun02,0,0	monster	Whisper	1179,35,5000
+gef_dun02,0,0	monster	Ghoul	1036,20,5000
 gef_dun02,0,0	monster	Hunter Fly	1035,10,5000
 gef_dun02,0,0,0,0	boss_monster	Doppelganger	1046,1,7200000,600000,1
 gef_dun02,214,212,10,10	monster	White Plant	1082,3,180000,90000
@@ -59,8 +59,6 @@ gef_dun02,72,210,20,20	monster	White Plant	1082,3,180000,90000
 gef_dun02,106,151,20,7	monster	White Plant	1082,3,180000,90000
 gef_dun02,58,167,10,10	monster	Shining Plant	1083,1,1800000,900000
 gef_dun02,185,83,3,3	monster	Shining Plant	1083,1,1800000,900000
-gef_dun02,0,0	monster	Mini Demon	1292,45,5000
-
 
 //==================================================
 // gef_dun03 - Geffenia

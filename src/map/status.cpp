@@ -3764,12 +3764,15 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 				wa->matk += wa->matk * sd->bonus.weapon_matk_rate / 100;
 #endif
 			if(sd->inventory.u.items_inventory[index].card[0] == CARD0_FORGE) { // Forged weapon
-				wd->star += (sd->inventory.u.items_inventory[index].card[1]>>8);
-				if(wd->star >= 15) wd->star = 40; // 3 Star Crumbs now give +40 dmg
+				wd->star += 3*(sd->inventory.u.items_inventory[index].card[1]>>8);
+				//if(wd->star >= 15) wd->star = 40; // 3 Star Crumbs now give +40 dmg
 				if(pc_famerank(MakeDWord(sd->inventory.u.items_inventory[index].card[2],sd->inventory.u.items_inventory[index].card[3]) ,MAPID_BLACKSMITH))
 					wd->star += 10;
 				if (!wa->ele) // Do not overwrite element from previous bonuses.
 					wa->ele = (sd->inventory.u.items_inventory[index].card[1]&0x0f);
+				wa->atk += wd->star;
+				wa->matk += wd->star;
+				wd->star = 0;
 			}
 		} else if(sd->inventory_data[index]->type == IT_ARMOR) {
 			int r;

@@ -1976,12 +1976,12 @@
 2763,Skul_Ring_C,Neo Skull Ring,4,0,,0,,0,,0,0xFFFFFFFE,18,2,136,,95,0,0,{ bonus2 bAddClass,Class_All,5; bonus bMatkrate,5; bonus bMaxHPrate,5; skill "MG_SIGHT",1; },{},{}
 2764,Small_Fishing_Rod,Small Fishing Rod,4,10,,250,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{},{},{}
 2765,Novice_Figure,Novice Figure,4,0,,100,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bMaxHP,150; if(BaseJob==Job_Novice||BaseJob==Job_SuperNovice) bonus bMaxSP,250; },{},{}
-2766,Swordman_Figure,Swordman Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bVit,3; if(Class==Job_Swordman) bonus bDef,40; },{},{}
-2767,Acolyte_Figure,Acolyte Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bInt,3; if(Class==Job_Acolyte) bonus bDelayRate,-5; },{},{}
-2768,Mage_Figure,Mage Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bInt,3; if(Class==Job_Mage)  { bonus bSPrecovRate,20;bonus bVariableCastrate,-4; } },{},{}
-2769,Archer_Figure,Archer Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bDex,3; if(Class==Job_Archer) bonus bBaseAtk,20; },{},{}
-2770,Thief_Figure,Thief Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bAgi,3; if(Class==Job_Thief) bonus bAspd,2; },{},{}
-2771,Merchant_Figure,Merchant Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bStr,3; if(Class==Job_Merchant) bonus bFlee,10; },{},{}
+2766,Swordman_Figure,Swordman Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bVit,3; if(BaseClass==Job_Swordman) bonus bDef,40; },{},{}
+2767,Acolyte_Figure,Acolyte Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bInt,3; if(BaseClass==Job_Acolyte) bonus bDelayRate,-5; },{},{}
+2768,Mage_Figure,Mage Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bInt,3; if(BaseClass==Job_Mage)  { bonus bSPrecovRate,20;bonus bVariableCastrate,-4; } },{},{}
+2769,Archer_Figure,Archer Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bDex,3; if(BaseClass==Job_Archer) bonus bBaseAtk,20; },{},{}
+2770,Thief_Figure,Thief Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bAgi,3; if(BaseClass==Job_Thief) bonus bAspd,2; },{},{}
+2771,Merchant_Figure,Merchant Figure,4,0,,0,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bStr,3; if(BaseClass==Job_Merchant) bonus bFlee,10; },{},{}
 2772,Krieger_Ring1,Glorious Ring,4,20,,0,,0,,0,0xFFFFFFFE,63,2,136,,81,0,0,{ bonus bMaxHP,300; bonus2 bSubEle,Ele_Water,10; bonus2 bSubEle,Ele_Wind,10; bonus2 bSubEle,Ele_Earth,10; bonus2 bSubEle,Ele_Fire,10; bonus bAspdRate,5; bonus bVariableCastrate,-3; bonus bHealPower,5; },{},{}
 2773,Krieger_Ring2,Glorious Mass-Production Ring,4,20,,0,,0,,0,0xFFFFFFFE,63,2,136,,61,0,0,{ bonus bAllStats,2; },{},{}
 2774,Krieger_Ring3,Glorious Popularized Ring,4,20,,0,,0,,0,0xFFFFFFFE,63,2,136,,0,0,0,{ bonus bAllStats,1; },{},{}
