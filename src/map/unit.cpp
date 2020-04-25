@@ -6360,7 +6360,6 @@ TIMER_FUNC(unit_autopilot_timer)
 			clif_standing(&sd->bl);
 		}
 
-	}
 
 	// Get on the mount if leader is on a mount
 	if ((leadersd->sc.data[SC_ALL_RIDING]) &&
@@ -6387,6 +6386,7 @@ TIMER_FUNC(unit_autopilot_timer)
 	if ((index = pc_search_inventory(sd, 12622)) >= 0)
 		pc_useitem(sd, index);
 		}
+	}
 	}
 
 
@@ -7899,7 +7899,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									   // the targets will stay in that line plus the moving target moves the line itself.
 									   // However all monsters on the same time are likely to still be together so pretend
 									   // it's a 1x1 AOE. Priority is higher than Jolt. 
-										resettargets;
+										resettargets();
 										map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
 										if (foundtargetID > -1) {
 											int area = 1;
@@ -7914,7 +7914,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							if (canskill(sd)) if ((pc_checkskill(sd, LG_CANNONSPEAR) > 2))
 								if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
 									{  // Note : Like sharp shooting, ignoring the Line effect, only considering targets next to the main target.
-										resettargets;
+										resettargets();
 										map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
 										if (foundtargetID > -1) {
 											int area = 1;
@@ -7930,7 +7930,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									if (pc_search_inventory(sd, 2139) >= 0)
 										if (pc_search_inventory(sd, 6146) >= 0)
 										{  // Note : Like sharp shooting, ignoring the Line effect, only considering targets next to the main target.
-									resettargets;
+									resettargets();
 									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd); // Nearest to the tank, not us!
 									if (foundtargetID > -1) {
 										int area = 1;
@@ -7943,7 +7943,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Fireball
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, MG_FIREBALL) > 0)) {
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7957,7 +7957,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							// higher priority than 2nd job skills because it's faster to cast and damage is almost as good but more reliable and is applied quicker too.
 							if (canskill(sd)) if ((pc_checkskill(sd, WL_CRIMSONROCK) > 0) && (Dangerdistance > 900)) {
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7972,7 +7972,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							// AT level 4+ the radius is large enough to consider this AOE. Priority is decent because it's very spammable so DPS is high
 							if (canskill(sd)) if ((pc_checkskill(sd, WL_SOULEXPANSION) > 3)) {
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 2;
@@ -7986,7 +7986,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Judex
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, AB_JUDEX) > 0) && (Dangerdistance > 900)) {
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1;
@@ -7999,18 +7999,19 @@ TIMER_FUNC(unit_autopilot_timer)
 
 							// Adoramus
 							// This is special - it targets a monster despite having AOE, not a ground skill
-							if (canskill(sd)) if ((pc_checkskill(sd, AB_ADORAMUS) > 0) && (Dangerdistance > 900))
+							if (canskill(sd)) if ((pc_checkskill(sd, AB_ADORAMUS) > 0) && (Dangerdistance > 900)) {
 								// save some gems for resurrection and whatever
 								// ***NOTE*** Uncomment this if Adoramus consumes gemstones on your server
 /*								if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) > 10) {*/
-									resettargets;
+									resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1; if (pc_checkskill(sd, AB_ADORAMUS) >= 7) area++;
-									priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(AB_ADORAMUS, pc_checkskill(sd, AB_ADORAMUS)));
+									priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(AB_ADORAMUS, pc_checkskill(sd, AB_ADORAMUS)));
 									if (((priority >= 6) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
 										spelltocast = AB_ADORAMUS; bestpriority = priority; IDtarget = foundtargetID;
 									}
+								}
 								/*}*/
 							}
 
@@ -8019,7 +8020,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							if (canskill(sd)) if ((pc_checkskill(sd, GS_SPREADATTACK) > 0))
 								if ((sd->status.weapon == W_SHOTGUN) || (sd->status.weapon == W_GRENADE)) {
-									resettargets;
+									resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, GS_SNAKEEYE), BL_MOB, sd);
 								if (foundtargetID > -1) {
 								int area = 1;
@@ -8037,7 +8038,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Prefer this over Blitz Beat if available, does more damage
 							if (canskill(sd)) if ((pc_checkskill(sd, SN_SHARPSHOOTING) > 0))
 								if (sd->status.weapon == W_BOW) {
-									resettargets;
+									resettargets();
 									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 									if (foundtargetID > -1) {
 										int area = 1; // This skill hits more area than this but see First Wind comments.
@@ -8056,7 +8057,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// I kept this skill to use INT, if you did apply the update that changed to AGI, replace that here too.
 							if (canskill(sd)) if ((pc_checkskill(sd, HT_BLITZBEAT) > 0)) if (sd->status.int_>=30)
 								if (pc_isfalcon(sd)) {
-									resettargets;
+									resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 3 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
 								if (foundtargetID > -1) {
 									int area = 1;
@@ -8070,7 +8071,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Arrow Shower
 							if (canskill(sd)) if ((pc_checkskill(sd, AC_SHOWER) > 0)) if (sd->status.weapon == W_BOW)
 							{
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2,9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
 								// knockback might hit monster outside range if further than this
 								if (foundtargetID > -1) if (distance_bl(targetbl, &sd->bl) <= 10 ) {
@@ -8086,7 +8087,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Arrow Storm
 							if (canskill(sd)) if ((pc_checkskill(sd, RA_ARROWSTORM) > 0)) if (sd->status.weapon == W_BOW)
 							{
-								resettargets;
+								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
 								if (foundtargetID > -1)  {
 									int area = 1; if (pc_checkskill(sd, RA_ARROWSTORM) >= 6) area++;
@@ -8104,7 +8105,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_BAKUENRYU) > 0)) if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
 							if (pc_search_inventory(sd, 7521) >= 0) {
 								if (pc_rightside_atk(sd) < sd->battle_status.matk_min) { 
-									resettargets;
+									resettargets();
 									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 									if (foundtargetID > -1) {
 										int area = 2;
@@ -8119,7 +8120,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// Throw Huuma
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_HUUMA) >= 4))
 								if (sd->status.weapon == W_HUUMA) {
-									resettargets;
+									resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
 								int area = 2;
