@@ -17125,7 +17125,7 @@ void skill_weaponrefine(struct map_session_data *sd, int idx)
 		if(item->nameid > 0) {
 			int i = 0, per;
 			unsigned short material[8] = { 0, ITEMID_PHRACON, ITEMID_EMVERETARCON, ITEMID_ORIDECON, ITEMID_ORIDECON, 985, 6223, 6224 };
-			unsigned short difficulty[8] = { 0, 0, 2000, 400, 500, 1000, 1500, 1200 };
+			unsigned short difficulty[8] = { 0, 0, 400, 700, 1000, 900, 1500, 1200 };
 			if (ditem->flag.no_refine) { 	// if the item isn't refinable
 				clif_skill_fail(sd,sd->menuskill_id,USESKILL_FAIL_LEVEL,0);
 				return;
@@ -17163,8 +17163,7 @@ void skill_weaponrefine(struct map_session_data *sd, int idx)
 			// Custom success rates, remove if necessary
 			if (per < 10000) {
 				per -= difficulty[refreq];
-				per += 10 * sd->battle_status.luk + 6 * sd->battle_status.dex;
-				if (sd->sc.data[SC_GLORIA]) per -= 300;
+				per += 7 * sd->base_status.luk + 5 * sd->base_status.dex;
 			}
 			// Custom success rates end
 

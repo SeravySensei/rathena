@@ -54,21 +54,21 @@ Armor:
     - Level: 4
       Bonus: 100
     - Level: 5
-      NormalChance: 90
-      EnrichedChance: 100
-      EventNormalChance: 90
-      EventEnrichedChance: 100
-      Bonus: 200
-    - Level: 6
       NormalChance: 80
       EnrichedChance: 100
       EventNormalChance: 80
       EventEnrichedChance: 100
       Bonus: 200
-    - Level: 7
+    - Level: 6
       NormalChance: 70
       EnrichedChance: 100
       EventNormalChance: 70
+      EventEnrichedChance: 100
+      Bonus: 200
+    - Level: 7
+      NormalChance: 60
+      EnrichedChance: 100
+      EventNormalChance: 60
       EventEnrichedChance: 100
       Bonus: 300
     - Level: 8
@@ -78,9 +78,9 @@ Armor:
       EventEnrichedChance: 100
       Bonus: 300
     - Level: 9
-      NormalChance: 50
+      NormalChance: 40
       EnrichedChance: 100
-      EventNormalChance: 50
+      EventNormalChance: 40
       EventEnrichedChance: 100
       Bonus: 300
     - Level: 10
@@ -107,15 +107,15 @@ Armor:
       EventEnrichedChance: 75
       Bonus: 300
     - Level: 14
-      NormalChance: 50
+      NormalChance: 48
       EnrichedChance: 75
-      EventNormalChance: 50
+      EventNormalChance: 48
       EventEnrichedChance: 75
       Bonus: 300
     - Level: 15
-      NormalChance: 50
+      NormalChance: 45
       EnrichedChance: 75
-      EventNormalChance: 50
+      EventNormalChance: 45
       EventEnrichedChance: 75
       Bonus: 300
     - Level: 16
@@ -284,14 +284,14 @@ WeaponLv2:
       EventNormalChance: 60
       EventEnrichedChance: 100
     - Level: 9
-      NormalChance: 50
+      NormalChance: 40
       EnrichedChance: 100
-      EventNormalChance: 50
+      EventNormalChance: 40
       EventEnrichedChance: 100
     - Level: 10
-      NormalChance: 30
+      NormalChance: 20
       EnrichedChance: 100
-      EventNormalChance: 30
+      EventNormalChance: 20
       EventEnrichedChance: 100
     - Level: 11
       NormalChance: 50
@@ -396,15 +396,15 @@ WeaponLv3:
       EventEnrichedChance: 100
       Bonus: 200
     - Level: 9
-      NormalChance: 50
-      EnrichedChance: 100
-      EventNormalChance: 50
-      EventEnrichedChance: 100
-      Bonus: 200
-    - Level: 10
       NormalChance: 40
       EnrichedChance: 100
       EventNormalChance: 40
+      EventEnrichedChance: 100
+      Bonus: 200
+    - Level: 10
+      NormalChance: 30
+      EnrichedChance: 100
+      EventNormalChance: 30
       EventEnrichedChance: 100
       Bonus: 200
     - Level: 11
@@ -419,46 +419,46 @@ WeaponLv3:
       EventEnrichedChance: 75
       Bonus: 200
     - Level: 13
-      NormalChance: 50
+      NormalChance: 45
       EnrichedChance: 75
-      EventNormalChance: 50
+      EventNormalChance: 45
       EventEnrichedChance: 75
       Bonus: 200
     - Level: 14
-      NormalChance: 50
+      NormalChance: 45
       EnrichedChance: 75
-      EventNormalChance: 50
+      EventNormalChance: 45
       EventEnrichedChance: 75
       Bonus: 300
     - Level: 15
-      NormalChance: 50
+      NormalChance: 45
       EnrichedChance: 75
-      EventNormalChance: 50
+      EventNormalChance: 45
       EventEnrichedChance: 75
       Bonus: 300
     - Level: 16
       NormalChance: 40
-      EnrichedChance: 60
+      EnrichedChance: 65
       EventNormalChance: 40
-      EventEnrichedChance: 60
+      EventEnrichedChance: 65
       Bonus: 300
     - Level: 17
       NormalChance: 40
-      EnrichedChance: 60
+      EnrichedChance: 65
       EventNormalChance: 40
-      EventEnrichedChance: 60
+      EventEnrichedChance: 65
       Bonus: 300
     - Level: 18
       NormalChance: 40
-      EnrichedChance: 60
+      EnrichedChance: 65
       EventNormalChance: 40
-      EventEnrichedChance: 60
+      EventEnrichedChance: 65
       Bonus: 400
     - Level: 19
       NormalChance: 40
-      EnrichedChance: 60
+      EnrichedChance: 65
       EventNormalChance: 40
-      EventEnrichedChance: 60
+      EventEnrichedChance: 65
       Bonus: 400
     - Level: 20
       NormalChance: 30
@@ -494,19 +494,19 @@ WeaponLv4:
       Material: 984
   Rates:
     - Level: 5
-      NormalChance: 90
-      EnrichedChance: 100
-      EventNormalChance: 90
-      EventEnrichedChance: 100
-    - Level: 6
       NormalChance: 80
       EnrichedChance: 100
       EventNormalChance: 80
       EventEnrichedChance: 100
-    - Level: 7
-      NormalChance: 70
+    - Level: 6
+      NormalChance: 60
       EnrichedChance: 100
-      EventNormalChance: 70
+      EventNormalChance: 60
+      EventEnrichedChance: 100
+    - Level: 7
+      NormalChance: 50
+      EnrichedChance: 100
+      EventNormalChance: 50
       EventEnrichedChance: 100
       Bonus: 100
     - Level: 8
@@ -516,9 +516,9 @@ WeaponLv4:
       EventEnrichedChance: 100
       Bonus: 100
     - Level: 9
-      NormalChance: 50
+      NormalChance: 40
       EnrichedChance: 100
-      EventNormalChance: 50
+      EventNormalChance: 40
       EventEnrichedChance: 100
       Bonus: 200
     - Level: 10

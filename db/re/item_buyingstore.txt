@@ -354,7 +354,7 @@
 4233  // Baby_Leopard_Card
 4234  // Anolian_Card
 4235  // Cookie_XMAS_Card
-4236	//Amon_Ra_Card
+4236  // Amon_Ra_Card
 4237  // Owl_Duke_Card
 4238  // Owl_Baron_Card
 4239  // Iron_Fist_Card
@@ -366,7 +366,7 @@
 4245  // Am_Mut_Card
 4246  // Assulter_Card
 4247  // Aster_Card
-4248	//Ancient_Mummy_Card
+4248  // Ancient_Mummy_Card
 4249  // Ancient_Worm_Card
 4250  // Executioner_Card
 4251  // Elder_Card
@@ -392,7 +392,7 @@
 4271  // Giant_Honet_Card
 4272  // Dancing_Dragon_Card
 4273  // Shellfish_Card
-4274	//Zombie_Master_Card
+4274  // Zombie_Master_Card
 4275  // Zombie_Prisoner_Card
 4276  // Lord_Of_Death_Card
 4277  // Zherlthsh_Card
@@ -554,7 +554,7 @@
 4433	//Imp_Card
 4434  // Knocker_Card
 4435  // Zombie_Slaughter_Card
-4436	//Ragged_Zombie_Card
+4436  // Ragged_Zombie_Card
 4437  // Hell_Poodle_Card
 4438  // Banshee_Card
 4439	//Flame_Skull_Card
