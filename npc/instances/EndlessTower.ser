@@ -269,7 +269,7 @@ e_tower,81,105,0	script	Tower Protection Stone	406,{
 				close;
 			}
 		} else {
-			set .@dun_lim_time,etower_timer+604800; // 1 week
+			set .@dun_lim_time,etower_timer+64800; // 1 week
 			// set .@dun_lim_time2,etower_timer+14400; // 4 hours
 			set .@dun_cur_time,gettimetick(2);
 			set .@dun_ent_t,(.@dun_lim_time - .@dun_cur_time);

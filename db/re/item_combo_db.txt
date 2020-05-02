@@ -49,10 +49,10 @@
 1558:27085,{ bonus bBaseAtk,100; bonus bMatk,100; }
 1559:5467,{ bonus bAspd,1; bonus bFlee2,3; }
 1564:2186,{ bonus bAspdRate,getequiprefinerycnt(EQI_HAND_R); }
-1572:2716:2717,{ bonus bInt,5; bonus bMaxHP,700; bonus bAspdRate,5; }
+1572:2716:2717,{ bonus bInt,5; bonus bMaxHP,700; bonus bAspdRate,12; }
 1573:2334,{ bonus bMdef,15; bonus bMaxSPRate,10; bonus bInt,4; }
 1573:2372,{ bonus bMdef,15; bonus bMaxSPRate,10; bonus bInt,4; }
-1573:2716:2717,{ bonus bInt,5; bonus bMaxHP,700; bonus bAspdRate,5; }
+1573:2716:2717,{ bonus bInt,5; bonus bMaxHP,700; bonus bAspdRate,12; }
 1580:2186,{ bonus bAspdRate,15; }
 1615:18539,{ bonus bMatk,10*getequiprefinerycnt(EQI_HAND_R); bonus bVariableCastrate,-10; }
 1616:2515,{ bonus bSpeedRate,25; }
