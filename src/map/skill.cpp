@@ -16842,6 +16842,7 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 		fixed = (int)time * battle_config.default_fixed_castrate / 100; // fixed time
 		time = time * (100 - battle_config.default_fixed_castrate) / 100; // variable time
 	}
+	// Else, use fixed cast time from database (when default_fixed_castrate is set to 0)
 
 	// Additive Variable Cast bonus adjustments by items
 	if (sd && !(flag&4)) {
