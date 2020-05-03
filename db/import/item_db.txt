@@ -108,3 +108,9 @@
 31906,JOB_TICKET,Proof of Membership Certificate,3,200000,,10,,,,,,,,,,,,,{},{},{}
 31907,Aggroco_Card,Aggroco Card,6,20,,10,,,,,,,,769,,,,,{ bonus bStr,4; bonus bInt,-5; },{},{}
 31908,Zeny100_Coin,100.000 Zeny Coin,3,5000,,0,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
+31920,Solace_Egg,Lady Solace Egg,7,120000,,0,,,,,,,,,,,,,{},{},{}
+31921,Shelter_Egg,Shelter Egg,7,100000,,0,,,,,,,,,,,,,{},{},{}
+31922,Phylla_Egg,Phylla Egg,7,90000,,0,,,,,,,,,,,,,{},{},{}
+31923,Holi_Ruri_Egg,Holy Ruri Egg,7,125000,,0,,,,,,,,,,,,,{},{},{}
+31924,Sedora_Egg,Sedora Egg,7,90000,,0,,,,,,,,,,,,,{},{},{}
+31925,Mavka_Egg,Mavka Egg,7,8000,,0,,,,,,,,,,,,,{},{},{}

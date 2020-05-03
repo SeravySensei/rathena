@@ -1607,10 +1607,10 @@
 6090	//Purified_Bradium
 6091	//Dark_Red_Scale
 6095	//Flavored_Alcohol
-6096	//Fish_With_Blue_Back
+6096  // Fish_With_Blue_Back
 6097	//Pumpkin_Pie_
 6098	//Small_Snow_Flower
-6099	//Grilled_Rice_Cake
+6099  // Grilled_Rice_Cake
 6100	//Damp_Darkness
 6104	//Big_Cell
 6105	//Morning_Dew
