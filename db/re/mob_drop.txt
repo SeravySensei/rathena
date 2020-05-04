@@ -46,7 +46,7 @@
 1045,1123,10,RDMOPTG_Minor_Enchant2
 1112,5759,50,RDMOPTG_Minor_Enchant // Noah's Hat
 1688,5759,50,RDMOPTG_Minor_Enchant // Noah's Hat
-// Nightmare biolab added drops, check what are these for?
+// Nightmare biolab added drops
 1634,25129,1000
 1635,25129,1000
 1636,25129,1000
