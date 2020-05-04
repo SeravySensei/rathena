@@ -665,6 +665,8 @@ struct Battle_Config
 	int blacksmith_fame_refine_threshold;
 	int persistent_favorites;
 	int persistent_favorites_equipment;
+	int mob_nopc_idleskill_rate;
+	int mob_nopc_move_rate;
 
 #include "../custom/battle_config_struct.inc"
 };
