@@ -3584,7 +3584,7 @@ int targetnearestwarp(block_list * bl, va_list ap)
 
 
 	// looks like a warp then it's a warp even if it's not type warp. Some warps are NPCTYPE_SCRIPT instead!
-	if ((nd->subtype != NPCTYPE_WARP) && ((!nd->vd) || (nd->vd->class_ != 45)))
+	if ((nd->subtype != NPCTYPE_WARP) && ((nd->vd.class_ != 45)))
 		return 0; //Not a warp
 //	ShowError("WarpDetected");
 	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
