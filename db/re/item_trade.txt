@@ -1088,7 +1088,7 @@
 7801,499,100	// Girl_Fan_Letter
 7802,499,100	// Autograph_Book
 7803,475,100	// Battle_Manual_TW
-7820,507,100	// Morroc_Skin
+7820,507,100	// Morocc_Skin
 7821,475,100	// Green_Apple
 7822,475,100	// Whole_Barbecue
 7823,475,100	// Meat_Veg_Skewer

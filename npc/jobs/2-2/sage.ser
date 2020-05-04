@@ -717,7 +717,7 @@ L_AskQuestions:
 				set .@sage_t,.@sage_t+5;
 			mes "2. Choose a city where you find a Pyramid.";
 			next;
-			if (select("Prontera:Morroc:Geffen:Lutie") == 2)
+			if (select("Prontera:Morocc:Geffen:Lutie") == 2)
 				set .@sage_t,.@sage_t+5;
 			mes "3. Choose the closest city to Turtle Island.";
 			next;
@@ -1368,7 +1368,7 @@ yuno_in03,62,176,2	script	History Professor#sa	109,{
 				mes "Lutie, the winter land,";
 				break;
 			}
-			switch(select("Midgard, where humans live,:Rune-Midgarts where humans live,:Tritonia, where mermaids live,:Morroc, the desert city,")) {
+			switch(select("Midgard, where humans live,:Rune-Midgarts where humans live,:Tritonia, where mermaids live,:Morocc, the desert city,")) {
 			case 1:
 				mes "Midgard, where humans live in,";
 				break;
@@ -1382,7 +1382,7 @@ yuno_in03,62,176,2	script	History Professor#sa	109,{
 				break;
 			case 4:
 				set .@w_point,.@w_point+1;
-				mes "Morroc, the desert city,";
+				mes "Morocc, the desert city,";
 				break;
 			}
 			switch(select("Abguard, where gods live.:Asgard, where gods live.:Schwarzwald, where citizens live.:Prontera, the capital of Rune-Midgarts.")) {
@@ -2264,9 +2264,9 @@ yuno_in03,244,31,3	script	Physics Professor#sa	120,{
 				mes "You never know the limits of magic";
 				break;
 			}
-			switch(select("Merchant Lady in Morroc is also as cute as YuPi.:Nobody knows why Red Potion tastes like strawberries.:It is not suggested to be too addicted to magic spells.")) {
+			switch(select("Merchant Lady in Morocc is also as cute as YuPi.:Nobody knows why Red Potion tastes like strawberries.:It is not suggested to be too addicted to magic spells.")) {
 			case 1:
-				mes "Merchant Lady in Morroc is also as cute as YuPi.";
+				mes "Merchant Lady in Morocc is also as cute as YuPi.";
 				break;
 			case 2:
 				mes "Nobody knows why Red Potion tastes like strawberries.";
