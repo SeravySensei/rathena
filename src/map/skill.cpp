@@ -6803,7 +6803,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case NJ_NEN:
 	case NPC_DEFENDER:
 	case NPC_MAGICMIRROR:
-	case ST_PRESERVE:
 	case NPC_KEEPING:
 	case NPC_BARRIER:
 	case NPC_INVINCIBLE:
