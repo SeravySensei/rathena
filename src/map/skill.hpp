@@ -28,7 +28,6 @@ struct status_change_entry;
 #define MAX_PRODUCE_RESOURCE	12 /// Max Produce requirements
 #define MAX_SKILL_ARROW_DB		150 /// Max Arrow Creation DB
 #define MAX_ARROW_RESULT		5 /// Max Arrow results/created
-#define MAX_SKILL_IMPROVISE_DB 30 /// Max Skill for Improvise
 #define MAX_SKILL_LEVEL 13 /// Max Skill Level (for skill_db storage)
 #define MAX_MOBSKILL_LEVEL 100	/// Max monster skill level (on skill usage)
 #define MAX_SKILL_CRIMSON_MARKER 3 /// Max Crimson Marker targets (RL_C_MARKER)
@@ -393,6 +392,20 @@ struct s_skill_abra_db {
 class AbraDatabase : public TypesafeYamlDatabase<uint16, s_skill_abra_db> {
 public:
 	AbraDatabase() : TypesafeYamlDatabase("ABRA_DB", 1) {
+
+	}
+
+	const std::string getDefaultLocation();
+	uint64 parseBodyNode(const YAML::Node& node);
+};
+
+struct s_skill_improvise_db {
+	uint16 skill_id, per;
+};
+
+class ImprovisedSongDatabase : public TypesafeYamlDatabase<uint16, s_skill_improvise_db> {
+public:
+	ImprovisedSongDatabase() : TypesafeYamlDatabase("IMPROVISED_SONG_DB", 1) {
 
 	}
 
@@ -2183,20 +2196,30 @@ void skill_usave_trigger(struct map_session_data *sd);
 /**
  * Warlock
  **/
-#define MAX_SKILL_SPELLBOOK_DB	17
 enum wl_spheres {
 	WLS_FIRE = 0x44,
 	WLS_WIND,
 	WLS_WATER,
 	WLS_STONE,
 };
+
 struct s_skill_spellbook_db {
-	unsigned short nameid;
-	unsigned short skill_id;
-	unsigned short point;
+	uint16 skill_id, nameid, points;
 };
-extern struct s_skill_spellbook_db skill_spellbook_db[MAX_SKILL_SPELLBOOK_DB];
-extern unsigned short skill_spellbook_count;
+
+class ReadingSpellbookDatabase : public TypesafeYamlDatabase<uint16, s_skill_spellbook_db> {
+public:
+	ReadingSpellbookDatabase() : TypesafeYamlDatabase("READING_SPELLBOOK_DB", 1) {
+
+	}
+
+	const std::string getDefaultLocation();
+	uint64 parseBodyNode(const YAML::Node& node);
+	std::shared_ptr<s_skill_spellbook_db> findBook(int32 nameid);
+};
+
+extern ReadingSpellbookDatabase reading_spellbook_db;
+
 void skill_spellbook(struct map_session_data *sd, unsigned short nameid);
 int skill_block_check(struct block_list *bl, enum sc_type type, uint16 skill_id);
 

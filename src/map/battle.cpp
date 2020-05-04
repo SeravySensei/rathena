@@ -8565,6 +8565,7 @@ static const struct _battle_data {
 	{ "pet_walk_speed",                     &battle_config.pet_walk_speed,                  1,      1,      3,              },
 	{ "persistent_favorites",               &battle_config.persistent_favorites,            1,      0,      1, },
 	{ "persistent_favorites_equipment",     &battle_config.persistent_favorites_equipment,  1,      0,      1, },
+	{ "blacksmith_fame_refine_threshold",   &battle_config.blacksmith_fame_refine_threshold,10,     1,      MAX_REFINE,     },
 
 #include "../custom/battle_config_init.inc"
 };
