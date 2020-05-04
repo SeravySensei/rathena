@@ -613,11 +613,11 @@ void initChangeTables(void)
 #ifdef RENEWAL
 	set_sc( GS_MAGICALBULLET	, SC_MAGICALBULLET	, EFST_GS_MAGICAL_BULLET	, SCB_NONE );
 #endif
-	set_sc( GS_GATLINGFEVER		, SC_GATLINGFEVER	, EFST_GS_GATLINGFEVER,
+	set_sc( GS_GATLINGFEVER		, SC_GATLINGFEVER	, EFST_GS_GATLINGFEVER, SCB_FLEE|SCB_SPEED|SCB_ASPD
 #ifndef RENEWAL
-		SCB_BATK|SCB_FLEE|SCB_SPEED|SCB_ASPD );
+		|SCB_BATK );
 #else
-		SCB_FLEE|SCB_SPEED|SCB_ASPD );
+		 );
 #endif
 	add_sc( NJ_TATAMIGAESHI		, SC_TATAMIGAESHI	);
 	set_sc( NJ_SUITON		, SC_SUITON		, EFST_BLANK		, SCB_AGI|SCB_SPEED );
@@ -8007,7 +8007,7 @@ struct view_data* status_get_viewdata(struct block_list *bl)
 		case BL_PC:  return &((TBL_PC*)bl)->vd;
 		case BL_MOB: return ((TBL_MOB*)bl)->vd;
 		case BL_PET: return &((TBL_PET*)bl)->vd;
-		case BL_NPC: return ((TBL_NPC*)bl)->vd;
+		case BL_NPC: return &((TBL_NPC*)bl)->vd;
 		case BL_HOM: return ((TBL_HOM*)bl)->vd;
 		case BL_MER: return ((TBL_MER*)bl)->vd;
 		case BL_ELEM: return ((TBL_ELEM*)bl)->vd;
@@ -8071,10 +8071,10 @@ void status_set_viewdata(struct block_list *bl, int class_)
 				sd->vd.head_top = sd->status.head_top;
 				sd->vd.head_mid = sd->status.head_mid;
 				sd->vd.head_bottom = sd->status.head_bottom;
-				sd->vd.hair_style = cap_value(sd->status.hair,0,battle_config.max_hair_style);
-				sd->vd.hair_color = cap_value(sd->status.hair_color,0,battle_config.max_hair_color);
-				sd->vd.cloth_color = cap_value(sd->status.clothes_color,0,battle_config.max_cloth_color);
-				sd->vd.body_style = cap_value(sd->status.body,0,battle_config.max_body_style);
+				sd->vd.hair_style = cap_value(sd->status.hair, MIN_HAIR_STYLE, MAX_HAIR_STYLE);
+				sd->vd.hair_color = cap_value(sd->status.hair_color, MIN_HAIR_COLOR, MAX_HAIR_COLOR);
+				sd->vd.cloth_color = cap_value(sd->status.clothes_color, MIN_CLOTH_COLOR, MAX_CLOTH_COLOR);
+				sd->vd.body_style = cap_value(sd->status.body, MIN_BODY_STYLE, MAX_BODY_STYLE);
 				sd->vd.sex = sd->status.sex;
 
 				if (sd->vd.cloth_color) {
@@ -8108,6 +8108,8 @@ void status_set_viewdata(struct block_list *bl, int class_)
 				mob_set_dynamic_viewdata( md );
 
 				md->vd->class_ = class_;
+				md->vd->hair_style = cap_value(md->vd->hair_style, MIN_HAIR_STYLE, MAX_HAIR_STYLE);
+				md->vd->hair_color = cap_value(md->vd->hair_color, MIN_HAIR_COLOR, MAX_HAIR_COLOR);
 			}else
 				ShowError("status_set_viewdata (MOB): No view data for class %d\n", class_);
 		}
@@ -8133,15 +8135,18 @@ void status_set_viewdata(struct block_list *bl, int class_)
 		{
 			TBL_NPC* nd = (TBL_NPC*)bl;
 			if (vd)
-				nd->vd = vd;
-			else {
-				ShowError("status_set_viewdata (NPC): No view data for class %d\n", class_);
+				memcpy(&nd->vd, vd, sizeof(struct view_data));
+			else if (pcdb_checkid(class_)) {
+				memset(&nd->vd, 0, sizeof(struct view_data));
+				nd->vd.class_ = class_;
+				nd->vd.hair_style = cap_value(nd->vd.hair_style, MIN_HAIR_STYLE, MAX_HAIR_STYLE);
+			} else {
 				if (bl->m >= 0)
 					ShowDebug("Source (NPC): %s at %s (%d,%d)\n", nd->name, map_mapid2mapname(bl->m), bl->x, bl->y);
 				else
 					ShowDebug("Source (NPC): %s (invisible/not on a map)\n", nd->name);
-				break;
 			}
+			break;
 		}
 	break;
 	case BL_HOM:
@@ -10470,9 +10475,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		// gs_something1 [Vicious]
 		case SC_GATLINGFEVER:
 			val2 = 20*val1; // Aspd increase
-#ifndef RENEWAL
 			val3 = 20+10*val1; // Atk increase
-#endif
 			val4 = 5*val1; // Flee decrease
 			break;
 
@@ -11331,12 +11334,11 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_VACUUM_EXTREME:
 			// Suck target at n second, only if the n second is lower than the duration
-			// Doesn't apply to BL_PC
-			if (bl->type != BL_PC && val4 < tick && !unit_blown_immune(bl,0x1) && status_has_mode(status,MD_CANMOVE)) {
+			// Does not suck targets on no-knockback maps
+			if (val4 < tick && unit_blown_immune(bl, 0x9) == UB_KNOCKABLE) {
 				tick_time = val4;
 				val4 = tick - tick_time;
-			}
-			else
+			} else
 				val4 = 0;
 			break;
 		case SC_FIRE_INSIGNIA:
@@ -11721,7 +11723,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			unit_stop_attack(bl);
 			break;
 		case SC_VACUUM_EXTREME:
-			if (bl->type != BL_PC && !unit_blown_immune(bl,0x1)) {
+			if (bl->type != BL_PC && unit_blown_immune(bl, 0x1) == UB_KNOCKABLE) {
 				unit_stop_walking(bl,1);
 				unit_stop_attack(bl);
 			}

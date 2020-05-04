@@ -478,6 +478,8 @@ enum unitdata_mobtypes {
 	UMOB_DMOTION,
 	UMOB_TARGETID,
 	UMOB_MATK,
+	UMOB_ROBE,
+	UMOB_BODY2,
 };
 
 enum unitdata_homuntypes {
@@ -646,8 +648,7 @@ enum unitdata_elemtypes {
 };
 
 enum unitdata_npctypes {
-	UNPC_DISPLAY = 0,
-	UNPC_LEVEL,
+	UNPC_LEVEL = 0,
 	UNPC_HP,
 	UNPC_MAXHP,
 	UNPC_MAPID,
@@ -679,6 +680,19 @@ enum unitdata_npctypes {
 	UNPC_AMOTION,
 	UNPC_ADELAY,
 	UNPC_DMOTION,
+	UNPC_SEX,
+	UNPC_CLASS,
+	UNPC_HAIRSTYLE,
+	UNPC_HAIRCOLOR,
+	UNPC_HEADBOTTOM,
+	UNPC_HEADMIDDLE,
+	UNPC_HEADTOP,
+	UNPC_CLOTHCOLOR,
+	UNPC_SHIELD,
+	UNPC_WEAPON,
+	UNPC_ROBE,
+	UNPC_BODY2,
+	UNPC_DEADSIT,
 };
 
 enum navigation_service {
