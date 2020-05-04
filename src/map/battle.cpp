@@ -8561,8 +8561,10 @@ static const struct _battle_data {
 	{ "persistent_favorites",               &battle_config.persistent_favorites,            1,      0,      1, },
 	{ "persistent_favorites_equipment",     &battle_config.persistent_favorites_equipment,  1,      0,      1, },
 	{ "blacksmith_fame_refine_threshold",   &battle_config.blacksmith_fame_refine_threshold,10,     1,      MAX_REFINE,     },
-	{ "mob_nopc_idleskill_rate",            &battle_config.mob_nopc_idleskill_rate,       100,      0,    100,              },
-	{ "mob_nopc_move_rate",                 &battle_config.mob_nopc_move_rate,            100,      0,    100,              },
+	{ "mob_nopc_idleskill_rate",            &battle_config.mob_nopc_idleskill_rate,         100,    0,    100,              },
+	{ "mob_nopc_move_rate",                 &battle_config.mob_nopc_move_rate,              100,    0,    100,              },
+	{ "boss_nopc_idleskill_rate",           &battle_config.boss_nopc_idleskill_rate,        100,    0,    100,              },
+	{ "boss_nopc_move_rate",                &battle_config.boss_nopc_move_rate,             100,    0,    100,              },
 
 #include "../custom/battle_config_init.inc"
 };
