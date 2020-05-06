@@ -160,10 +160,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
@@ -279,13 +275,9 @@ Body:
       - Level: 11
         Area: 4
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    AfterCastActDelay: 2000
+    AfterCastActDelay: 500
+    Duration1: 2000
     Duration2: 10000
-    Cooldown: 2000
     Requires:
       HpCost:
         - Level: 1
@@ -373,7 +365,6 @@ Body:
     TargetType: Attack
     DamageFlags:
       Splash: true
-      SplashSplit: true
     Flags:
       IsAutoShadowSpell: true
       TargetTrap: true
@@ -381,34 +372,49 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Ghost
-    SplashArea: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    CastCancel: true
-    CastTime: 400
+    SplashArea:
+      - Level: 1
+        Area: 1
+      - Level: 2
+        Area: 1
+      - Level: 3
+        Area: 1
+      - Level: 4
+        Area: 1
+      - Level: 5
+        Area: 1
+      - Level: 6
+        Area: 1
+      - Level: 7
+        Area: 1
+      - Level: 8
+        Area: 1
+      - Level: 9
+        Area: 1
+      - Level: 10
+        Area: 2
+    CastTime: 200
     AfterCastActDelay:
       - Level: 1
-        Time: 1000
-      - Level: 2
-        Time: 1000
-      - Level: 3
-        Time: 1000
-      - Level: 4
-        Time: 900
-      - Level: 5
-        Time: 900
-      - Level: 6
-        Time: 800
-      - Level: 7
-        Time: 800
-      - Level: 8
-        Time: 700
-      - Level: 9
-        Time: 600
-      - Level: 10
         Time: 500
+      - Level: 2
+        Time: 500
+      - Level: 3
+        Time: 500
+      - Level: 4
+        Time: 400
+      - Level: 5
+        Time: 400
+      - Level: 6
+        Time: 300
+      - Level: 7
+        Time: 300
+      - Level: 8
+        Time: 300
+      - Level: 9
+        Time: 350
+      - Level: 10
+        Time: 200
     FixedCastTime: 100
     Requires:
       SpCost:
@@ -571,33 +577,28 @@ Body:
       - Level: 10
         Count: 5
     Element: Ghost
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    CastCancel: true
     CastTime: 400
     AfterCastActDelay:
       - Level: 1
         Time: 1200
       - Level: 2
-        Time: 1200
+        Time: 800
       - Level: 3
         Time: 1600
       - Level: 4
-        Time: 1600
+        Time: 1200
       - Level: 5
         Time: 2000
       - Level: 6
-        Time: 2000
+        Time: 1500
       - Level: 7
         Time: 2400
       - Level: 8
-        Time: 2400
+        Time: 1800
       - Level: 9
         Time: 2800
       - Level: 10
-        Time: 2500
+        Time: 2100
     FixedCastTime: 100
     Requires:
       SpCost:
@@ -653,10 +654,6 @@ Body:
       - Level: 10
         Count: 10
     Element: Water
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -681,25 +678,25 @@ Body:
         Time: 3520
     AfterCastActDelay:
       - Level: 1
-        Time: 1000
+        Time: 200
       - Level: 2
-        Time: 1200
+        Time: 400
       - Level: 3
-        Time: 1400
+        Time: 600
       - Level: 4
-        Time: 1600
+        Time: 800
       - Level: 5
-        Time: 1800
+        Time: 1000
       - Level: 6
-        Time: 2000
+        Time: 1200
       - Level: 7
-        Time: 2200
+        Time: 1400
       - Level: 8
-        Time: 2400
+        Time: 1600
       - Level: 9
-        Time: 2600
+        Time: 1800
       - Level: 10
-        Time: 2800
+        Time: 2000
     FixedCastTime:
       - Level: 1
         Time: 160
@@ -755,10 +752,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 640
     AfterCastActDelay: 1500
@@ -816,15 +809,14 @@ Body:
     TargetType: Attack
     DamageFlags:
       NoDamage: true
-    Range: 2
+    Range: 6
     Hit: Single
     HitCount: 1
     Element: Earth
     CastCancel: true
-    CastTime: 800
+    CastTime: 640
     Duration1: 5000
     Duration2: 20000
-    FixedCastTime: 200
     Requires:
       SpCost:
         - Level: 1
@@ -866,10 +858,6 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -950,10 +938,6 @@ Body:
     Element: Fire
     ActiveInstance: 3
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -1060,10 +1044,6 @@ Body:
       - Level: 10
         Count: 10
     Element: Fire
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -1088,25 +1068,25 @@ Body:
         Time: 3520
     AfterCastActDelay:
       - Level: 1
-        Time: 1000
+        Time: 200
       - Level: 2
-        Time: 1200
+        Time: 400
       - Level: 3
-        Time: 1400
+        Time: 600
       - Level: 4
-        Time: 1600
+        Time: 800
       - Level: 5
-        Time: 1800
+        Time: 1000
       - Level: 6
-        Time: 2000
+        Time: 1200
       - Level: 7
-        Time: 2200
+        Time: 1400
       - Level: 8
-        Time: 2400
+        Time: 1600
       - Level: 9
-        Time: 2600
+        Time: 1800
       - Level: 10
-        Time: 2800
+        Time: 2000
     FixedCastTime:
       - Level: 1
         Time: 160
@@ -1182,10 +1162,6 @@ Body:
       - Level: 10
         Count: 10
     Element: Wind
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -1210,25 +1186,25 @@ Body:
         Time: 3520
     AfterCastActDelay:
       - Level: 1
-        Time: 1000
+        Time: 200
       - Level: 2
-        Time: 1200
+        Time: 400
       - Level: 3
-        Time: 1400
+        Time: 600
       - Level: 4
-        Time: 1600
+        Time: 800
       - Level: 5
-        Time: 1800
+        Time: 1000
       - Level: 6
-        Time: 2000
+        Time: 1200
       - Level: 7
-        Time: 2200
+        Time: 1400
       - Level: 8
-        Time: 2400
+        Time: 1600
       - Level: 9
-        Time: 2600
+        Time: 1800
       - Level: 10
-        Time: 2800
+        Time: 2000
     FixedCastTime:
       - Level: 1
         Time: 160
@@ -1304,55 +1280,51 @@ Body:
       - Level: 10
         Count: 10
     Element: Wind
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
         Time: 640
       - Level: 2
-        Time: 1280
+        Time: 1300
       - Level: 3
-        Time: 1920
+        Time: 1700
       - Level: 4
-        Time: 2560
+        Time: 2100
       - Level: 5
-        Time: 3200
+        Time: 2500
       - Level: 6
-        Time: 3840
+        Time: 2900
       - Level: 7
-        Time: 4480
+        Time: 3300
       - Level: 8
-        Time: 5120
+        Time: 3700
       - Level: 9
-        Time: 5760
+        Time: 4100
       - Level: 10
-        Time: 6400
+        Time: 4500
     AfterCastActDelay: 2000
     Duration1: 100
     FixedCastTime:
       - Level: 1
-        Time: 160
+        Time: 100
       - Level: 2
-        Time: 320
+        Time: 200
       - Level: 3
-        Time: 480
+        Time: 300
       - Level: 4
-        Time: 640
+        Time: 400
       - Level: 5
-        Time: 800
+        Time: 500
       - Level: 6
-        Time: 960
+        Time: 600
       - Level: 7
-        Time: 1120
+        Time: 700
       - Level: 8
-        Time: 1280
+        Time: 800
       - Level: 9
-        Time: 1440
+        Time: 900
       - Level: 10
-        Time: 1600
+        Time: 1000
     Requires:
       SpCost:
         - Level: 1
@@ -1389,15 +1361,15 @@ Body:
         - Level: 5
           Size: 2
         - Level: 6
-          Size: 2
+          Size: 3
         - Level: 7
-          Size: 2
+          Size: 3
         - Level: 8
-          Size: 2
+          Size: 3
         - Level: 9
-          Size: 2
+          Size: 3
         - Level: 10
-          Size: 2
+          Size: 3
         - Level: 11
           Size: 3
         - Level: 12
@@ -1431,10 +1403,6 @@ Body:
     HitCount: 1
     Element: Holy
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     Duration1: 10000
     Requires:
@@ -1452,6 +1420,7 @@ Body:
     HitCount: 1
     CastCancel: true
     Duration1: 10000
+    Cooldown: 3000
     Requires:
       SpCost: 10
     Unit:
@@ -1542,10 +1511,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     AfterCastActDelay: 1000
     Requires:
@@ -1583,7 +1548,7 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 800
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 200
     Duration1:
       - Level: 1
         Time: 60000
@@ -1912,10 +1877,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost: 5
       ZenyCost:
@@ -2014,10 +1975,6 @@ Body:
     Hit: Multi_Hit
     HitCount: 2
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 100
     Duration1: 100
     Requires:
@@ -2065,10 +2022,6 @@ Body:
       - Level: 10
         Area: 2
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 500
     Duration1: 100
     Requires:
@@ -2154,10 +2107,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Poison
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Duration2: 20000
     Requires:
       SpCost: 12
@@ -2189,10 +2138,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -2431,12 +2376,8 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    SplashArea: 1
-    Knockback: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
+    SplashArea: 2
+    Knockback: 3
     CastTime: 350
     FixedCastTime: 350
     Requires:
@@ -2481,15 +2422,26 @@ Body:
     Description: Impositio Manus
     MaxLevel: 5
     Type: Magic
-    TargetType: Support
+    TargetType: Self
     DamageFlags:
       NoDamage: true
-    Range: 9
     Hit: Single
     HitCount: 1
+    SplashArea:
+      - Level: 1
+        Area: 9
+      - Level: 2
+        Area: 9
+      - Level: 3
+        Area: 11
+      - Level: 4
+        Area: 13
+      - Level: 5
+        Area: 15
     CastCancel: true
-    AfterCastActDelay: 3000
-    Duration1: 60000
+    CastTime: 4000
+    AfterCastActDelay: 300
+    Duration1: 30000
     Requires:
       SpCost:
         - Level: 1
@@ -2505,25 +2457,28 @@ Body:
   - Id: 67
     Name: PR_SUFFRAGIUM
     Description: Suffragium
-    MaxLevel: 3
+    MaxLevel: 5
     Type: Magic
-    TargetType: Support
+    TargetType: Self
     DamageFlags:
       NoDamage: true
-    Flags:
-      NoTargetSelf: true
-    Range: 9
     Hit: Single
     HitCount: 1
-    CastCancel: true
-    AfterCastActDelay: 2000
-    Duration1:
+    SplashArea:
       - Level: 1
-        Time: 30000
+        Area: 9
       - Level: 2
-        Time: 20000
+        Area: 9
       - Level: 3
-        Time: 10000
+        Area: 11
+      - Level: 4
+        Area: 13
+      - Level: 5
+        Area: 15
+    CastCancel: true
+    CastTime: 4000
+    AfterCastActDelay: 300
+    Duration1: 30000
     Requires:
       SpCost: 8
   - Id: 68
@@ -2540,10 +2495,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     AfterCastActDelay: 2000
     Duration1:
@@ -2588,24 +2539,23 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     Duration1:
       - Level: 1
-        Time: 40000
+        Time: 1800000
       - Level: 2
-        Time: 80000
+        Time: 3600000
       - Level: 3
-        Time: 120000
+        Time: 5400000
       - Level: 4
-        Time: 160000
+        Time: 7200000
       - Level: 5
-        Time: 200000
+        Time: 9000000
     Requires:
       SpCost: 20
+      ItemCost:
+        - Item: Sacred_Marks
+          Amount: 1
   - Id: 70
     Name: PR_SANCTUARY
     Description: Sanctuary
@@ -2620,10 +2570,6 @@ Body:
     HitCount: 1
     Element: Holy
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 4000
     Duration1:
@@ -2892,10 +2838,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 800
     AfterCastActDelay: 3000
@@ -2947,13 +2889,9 @@ Body:
       - Level: 10
         Count: 10
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
-    CastTime: 12000
-    AfterCastActDelay: 4000
+    CastTime: 4000
+    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
         Time: 5000
@@ -2975,7 +2913,8 @@ Body:
         Time: 13000
       - Level: 10
         Time: 14000
-    FixedCastTime: 3000
+    Cooldown: 6000
+    FixedCastTime: 1000
     Requires:
       SpCost:
         - Level: 1
@@ -3069,10 +3008,6 @@ Body:
       - Level: 11
         Area: 2
     ActiveInstance: 5
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3166,13 +3101,8 @@ Body:
     Element: Fire
     SplashArea: 7
     Knockback: 5
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 320
-    AfterCastActDelay: 2000
     Duration1: 500
     FixedCastTime: 80
     Requires:
@@ -3256,10 +3186,6 @@ Body:
         Area: 3
       - Level: 11
         Area: 14
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 9600
     AfterCastActDelay:
@@ -3388,10 +3314,6 @@ Body:
         Amount: 6
       - Level: 10
         Amount: 7
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3416,25 +3338,25 @@ Body:
         Time: 4480
     FixedCastTime:
       - Level: 1
-        Time: 400
+        Time: 50
       - Level: 2
-        Time: 480
+        Time: 100
       - Level: 3
-        Time: 560
+        Time: 150
       - Level: 4
-        Time: 640
+        Time: 200
       - Level: 5
-        Time: 720
+        Time: 250
       - Level: 6
-        Time: 800
+        Time: 300
       - Level: 7
-        Time: 880
+        Time: 350
       - Level: 8
-        Time: 960
+        Time: 400
       - Level: 9
-        Time: 1040
+        Time: 450
       - Level: 10
-        Time: 1120
+        Time: 500
     Requires:
       SpCost:
         - Level: 1
@@ -3469,10 +3391,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -10
     Element: Wind
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3500,25 +3418,25 @@ Body:
     Duration2: 20000
     FixedCastTime:
       - Level: 1
-        Time: 2400
+        Time: 1900
       - Level: 2
-        Time: 2320
+        Time: 1800
       - Level: 3
-        Time: 2240
+        Time: 1700
       - Level: 4
-        Time: 2160
+        Time: 1600
       - Level: 5
-        Time: 2080
+        Time: 1500
       - Level: 6
-        Time: 2000
+        Time: 1400
       - Level: 7
-        Time: 1920
+        Time: 1300
       - Level: 8
-        Time: 1840
+        Time: 1200
       - Level: 9
-        Time: 1760
+        Time: 1100
       - Level: 10
-        Time: 1680
+        Time: 1000
     Requires:
       SpCost:
         - Level: 1
@@ -3588,34 +3506,19 @@ Body:
     Hit: Multi_Hit
     HitCount: 1
     Element: Water
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 640
+        Time: 400
       - Level: 2
-        Time: 1280
-      - Level: 3
-        Time: 1920
-      - Level: 4
-        Time: 2560
-      - Level: 5
-        Time: 3200
-    Duration1: 10000
-    FixedCastTime:
-      - Level: 1
-        Time: 160
-      - Level: 2
-        Time: 320
-      - Level: 3
-        Time: 480
-      - Level: 4
-        Time: 640
-      - Level: 5
         Time: 800
+      - Level: 3
+        Time: 1200
+      - Level: 4
+        Time: 1600
+      - Level: 5
+        Time: 2000
+    Duration1: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -3708,10 +3611,6 @@ Body:
     HitCount: 1
     Element: Water
     SplashArea: 3
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3812,10 +3711,6 @@ Body:
     HitCount: 1
     Element: Water
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3895,10 +3790,6 @@ Body:
       - Level: 5
         Count: 5
     Element: Earth
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -3910,7 +3801,7 @@ Body:
       - Level: 4
         Time: 1792
       - Level: 5
-        Time: 2240
+        Time: 3200
     AfterCastActDelay:
       - Level: 1
         Time: 1000
@@ -3921,7 +3812,7 @@ Body:
       - Level: 4
         Time: 1600
       - Level: 5
-        Time: 1800
+        Time: 1400
       - Level: 6
         Time: 2000
       - Level: 7
@@ -3942,19 +3833,19 @@ Body:
       - Level: 4
         Time: 448
       - Level: 5
-        Time: 560
+        Time: 1200
     Requires:
       SpCost:
         - Level: 1
-          Amount: 12
-        - Level: 2
           Amount: 14
-        - Level: 3
-          Amount: 16
-        - Level: 4
+        - Level: 2
           Amount: 18
+        - Level: 3
+          Amount: 22
+        - Level: 4
+          Amount: 26
         - Level: 5
-          Amount: 20
+          Amount: 30
   - Id: 91
     Name: WZ_HEAVENDRIVE
     Description: Heaven's Drive
@@ -3968,45 +3859,41 @@ Body:
     Hit: Multi_Hit
     HitCount:
       - Level: 1
-        Count: 1
+        Count: -1
       - Level: 2
-        Count: 2
+        Count: -2
       - Level: 3
-        Count: 3
+        Count: -3
       - Level: 4
-        Count: 4
+        Count: -4
       - Level: 5
-        Count: 5
+        Count: -5
     Element: Earth
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 640
+        Time: 500
       - Level: 2
-        Time: 1280
+        Time: 100
       - Level: 3
-        Time: 1920
+        Time: 1500
       - Level: 4
-        Time: 2560
+        Time: 2000
       - Level: 5
-        Time: 3200
-    AfterCastActDelay: 1000
+        Time: 2500
+    AfterCastActDelay: 500
     Duration1: 100
     FixedCastTime:
       - Level: 1
-        Time: 160
+        Time: 100
       - Level: 2
-        Time: 320
+        Time: 200
       - Level: 3
-        Time: 480
+        Time: 300
       - Level: 4
-        Time: 640
+        Time: 400
       - Level: 5
-        Time: 800
+        Time: 500
     Requires:
       SpCost:
         - Level: 1
@@ -4043,7 +3930,7 @@ Body:
     Element: Earth
     ActiveInstance: 3
     CastCancel: true
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 300
     Duration1:
       - Level: 1
         Time: 5000
@@ -4419,17 +4306,7 @@ Body:
         Amount: 9
       - Level: 5
         Amount: 10
-    Duration1:
-      - Level: 1
-        Time: 300000
-      - Level: 2
-        Time: 240000
-      - Level: 3
-        Time: 180000
-      - Level: 4
-        Time: 120000
-      - Level: 5
-        Time: 60000
+    Duration1: 300000
     Duration2: 3000
     Requires:
       SpCost: 10
@@ -4443,7 +4320,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 116
@@ -4464,22 +4340,8 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Earth
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 1000
-    Duration1:
-      - Level: 1
-        Time: 200000
-      - Level: 2
-        Time: 160000
-      - Level: 3
-        Time: 120000
-      - Level: 4
-        Time: 80000
-      - Level: 5
-        Time: 40000
+    Duration1: 200000
     Duration2: 5000
     FixedCastTime: 1000
     Requires:
@@ -4494,7 +4356,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 117
@@ -4512,17 +4373,7 @@ Body:
     Range: 3
     Hit: Single
     HitCount: 1
-    Duration1:
-      - Level: 1
-        Time: 250000
-      - Level: 2
-        Time: 200000
-      - Level: 3
-        Time: 150000
-      - Level: 4
-        Time: 100000
-      - Level: 5
-        Time: 50000
+    Duration1: 250000
     Duration2:
       - Level: 1
         Time: 4000
@@ -4546,7 +4397,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         NoKnockback: true
         RemovedByFireRain: true
         HiddenTrap: true
@@ -4567,22 +4417,13 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 1
-    Duration1:
-      - Level: 1
-        Time: 200000
-      - Level: 2
-        Time: 160000
-      - Level: 3
-        Time: 120000
-      - Level: 4
-        Time: 80000
-      - Level: 5
-        Time: 40000
+    Duration1: 200000
+    Duration2: 20000
     Requires:
       SpCost: 45
       ItemCost:
         - Item: Booby_Trap
-          Amount: 2
+          Amount: 1
     Unit:
       Id: Shockwave
       Range: 1
@@ -4590,7 +4431,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 119
@@ -4610,17 +4450,7 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 2
-    Duration1:
-      - Level: 1
-        Time: 150000
-      - Level: 2
-        Time: 120000
-      - Level: 3
-        Time: 90000
-      - Level: 4
-        Time: 60000
-      - Level: 5
-        Time: 30000
+    Duration1: 150000
     Duration2: 20000
     Requires:
       SpCost: 12
@@ -4634,7 +4464,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 120
@@ -4654,23 +4483,13 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 1
-    Duration1:
-      - Level: 1
-        Time: 150000
-      - Level: 2
-        Time: 120000
-      - Level: 3
-        Time: 90000
-      - Level: 4
-        Time: 60000
-      - Level: 5
-        Time: 30000
+    Duration1: 150000
     Duration2: 20000
     Requires:
       SpCost: 12
       ItemCost:
         - Item: Booby_Trap
-          Amount: 2
+          Amount: 1
     Unit:
       Id: Flasher
       Range: 1
@@ -4678,14 +4497,13 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 121
     Name: HT_FREEZINGTRAP
     Description: Freezing Trap
     MaxLevel: 5
-    Type: Weapon
+    Type: Misc
     TargetType: Ground
     DamageFlags:
       Splash: true
@@ -4700,21 +4518,8 @@ Body:
     HitCount: 1
     Element: Water
     SplashArea: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    Duration1:
-      - Level: 1
-        Time: 150000
-      - Level: 2
-        Time: 120000
-      - Level: 3
-        Time: 90000
-      - Level: 4
-        Time: 60000
-      - Level: 5
-        Time: 30000
+    AfterCastActDelay: 1000
+    Duration1: 150000
     Duration2:
       - Level: 1
         Time: 5500
@@ -4726,11 +4531,12 @@ Body:
         Time: 14500
       - Level: 5
         Time: 17500
+    FixedCastTime: 1000
     Requires:
       SpCost: 10
       ItemCost:
         - Item: Booby_Trap
-          Amount: 2
+          Amount: 1
     Unit:
       Id: Freezingtrap
       Range: 1
@@ -4738,7 +4544,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
         HiddenTrap: true
   - Id: 122
@@ -4762,22 +4567,8 @@ Body:
     HitCount: 1
     Element: Wind
     SplashArea: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 1000
-    Duration1:
-      - Level: 1
-        Time: 25000
-      - Level: 2
-        Time: 20000
-      - Level: 3
-        Time: 15000
-      - Level: 4
-        Time: 10000
-      - Level: 5
-        Time: 5000
+    Duration1: 200000
     FixedCastTime: 1000
     Requires:
       SpCost: 10
@@ -4791,7 +4582,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
   - Id: 123
     Name: HT_CLAYMORETRAP
@@ -4815,10 +4605,6 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
@@ -4836,7 +4622,7 @@ Body:
       SpCost: 15
       ItemCost:
         - Item: Booby_Trap
-          Amount: 2
+          Amount: 1
     Unit:
       Id: Claymoretrap
       Range: 1
@@ -4844,7 +4630,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
   - Id: 124
     Name: HT_REMOVETRAP
@@ -4931,9 +4716,9 @@ Body:
         Count: 5
     SplashArea: 1
     CastCancel: true
-    CastTime: 800
+    CastTime: 200
     AfterCastActDelay: 1000
-    FixedCastTime: 200
+    FixedCastTime: 100
     Requires:
       SpCost:
         - Level: 1
@@ -5056,8 +4841,8 @@ Body:
     Hit: Multi_Hit
     HitCount: -8
     Element: Weapon
-    AfterCastWalkDelay: 2000
     Duration2: 5000
+    Cooldown: 1000
     CastDelayFlags:
       IgnoreStatus: true
     Requires:
@@ -5287,10 +5072,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 500
     Duration1:
@@ -5315,27 +5096,7 @@ Body:
       - Level: 10
         Time: 9500
     Duration2: 20000
-    Cooldown:
-      - Level: 1
-        Time: 7500
-      - Level: 2
-        Time: 8000
-      - Level: 3
-        Time: 8500
-      - Level: 4
-        Time: 9000
-      - Level: 5
-        Time: 9500
-      - Level: 6
-        Time: 10000
-      - Level: 7
-        Time: 10500
-      - Level: 8
-        Time: 11000
-      - Level: 9
-        Time: 11500
-      - Level: 10
-        Time: 12000
+    Cooldown: 5000
     FixedCastTime: 500
     Requires:
       SpCost:
@@ -5359,9 +5120,6 @@ Body:
           Amount: 28
         - Level: 10
           Amount: 30
-      ItemCost:
-        - Item: Red_Gemstone
-          Amount: 1
   - Id: 142
     Name: NV_FIRSTAID
     Description: First Aid
@@ -5446,11 +5204,7 @@ Body:
     HitCount: 1
     Element: Weapon
     Knockback: 6
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    FixedCastTime: 1500
+    AfterCastActDelay: 5000
     Requires:
       SpCost: 15
       Weapon:
@@ -5517,10 +5271,6 @@ Body:
     Range: 7
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 100
     Duration1: 5000
     Duration2: 20000
@@ -5573,12 +5323,17 @@ Body:
     TargetType: Self
     DamageFlags:
       NoDamage: true
+      Splash: true
     Flags:
       IsQuest: true
       AllowOnMado: true
     Hit: Single
     HitCount: 1
+    SplashArea: -1
+    CastTime: 1000
     Duration1: 300000
+    Cooldown: 30000
+    FixedCastTime: 300
     Requires:
       SpCost: 8
   - Id: 156
@@ -5593,13 +5348,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
-    CastTime: 1600
-    FixedCastTime: 400
+    CastTime: 800
+    FixedCastTime: 200
     Requires:
       SpCost: 15
   - Id: 157
@@ -5615,8 +5366,9 @@ Body:
     Hit: Single
     HitCount: 1
     CastCancel: true
+    CastTime: 4000
     Duration1: 300000
-    FixedCastTime: 5000
+    FixedCastTime: 1000
     Requires:
       SpCost: 30
   - Id: 158
@@ -6395,12 +6147,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 500
     Duration1: 5000
+    Cooldown: 500
     Requires:
       SpCost: 16
   - Id: 213
@@ -6425,7 +6174,7 @@ Body:
     Duration1: 5000
     Duration2: 20000
     Requires:
-      SpCost: 20
+      SpCost: 15
       Status:
         Hiding: true
   - Id: 215
@@ -6776,10 +6525,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 800
     AfterCastActDelay: 500
@@ -6807,7 +6552,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
   - Id: 230
     Name: AM_ACIDTERROR
     Description: Acid Terror
@@ -6823,10 +6567,6 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 500
     AfterCastActDelay: 500
@@ -7095,6 +6835,7 @@ Body:
     Hit: Single
     SplashArea: 1
     CastTime: 2000
+    Cooldown: 20000
     FixedCastTime: 1000
     Requires:
       SpCost:
@@ -7166,10 +6907,6 @@ Body:
         Amount: 8
       - Level: 5
         Amount: 9
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Duration2: 5000
     Requires:
       SpCost: 10
@@ -7195,10 +6932,6 @@ Body:
         Size: 11
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 700
     Requires:
       SpCost: 12
@@ -7249,10 +6982,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -2
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Duration2: 20000
     Requires:
       SpCost:
@@ -7291,10 +7020,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastDefenseReduction: 33
     CastTime: 1500
     AfterCastActDelay: 1500
@@ -7511,10 +7236,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastDelayFlags:
       IgnoreStatus: true
   - Id: 264
@@ -7549,10 +7270,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastTime: 500
     AfterCastActDelay: 500
     FixedCastTime: 500
@@ -7591,10 +7308,6 @@ Body:
       - Level: 5
         Count: 5
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastTime: 500
     AfterCastActDelay: 500
     AfterCastWalkDelay:
@@ -7732,10 +7445,6 @@ Body:
     Range: -2
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -7759,7 +7468,7 @@ Body:
         Time: 1500
       - Level: 5
         Time: 1000
-    Duration1: 10000
+    Duration1: 5000
     Duration2: 300000
     FixedCastTime:
       - Level: 1
@@ -7812,24 +7521,20 @@ Body:
     Hit: Multi_Hit
     HitCount: -4
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastDelayFlags:
       IgnoreStatus: true
     Requires:
       SpCost:
         - Level: 1
-          Amount: 11
+          Amount: 5
         - Level: 2
-          Amount: 12
+          Amount: 6
         - Level: 3
-          Amount: 13
+          Amount: 7
         - Level: 4
-          Amount: 14
+          Amount: 8
         - Level: 5
-          Amount: 15
+          Amount: 9
       Weapon:
         Fist: true
         Dagger: true
@@ -7874,15 +7579,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 11
+          Amount: 3
         - Level: 2
-          Amount: 12
+          Amount: 4
         - Level: 3
-          Amount: 13
+          Amount: 5
         - Level: 4
-          Amount: 14
+          Amount: 6
         - Level: 5
-          Amount: 15
+          Amount: 7
       Weapon:
         Fist: true
         Dagger: true
@@ -8183,7 +7888,7 @@ Body:
         - Level: 5
           Amount: 40
       ItemCost:
-        - Item: Yellow_Gemstone
+        - Item: Red_Gemstone
           Amount: 1
     Unit:
       Id: Volcano
@@ -8283,7 +7988,7 @@ Body:
         - Level: 5
           Amount: 40
       ItemCost:
-        - Item: Yellow_Gemstone
+        - Item: Blue_Gemstone
           Amount: 1
     Unit:
       Id: Violentgale
@@ -8407,7 +8112,7 @@ Body:
       SpCost: 50
       ItemCost:
         - Item: Yellow_Gemstone
-          Amount: 2
+          Amount: 1
   - Id: 291
     Name: SA_MONOCELL
     Description: Monocell
@@ -8661,7 +8366,7 @@ Body:
         Whip: true
     Unit:
       Id: Lullaby
-      Layout: 4
+      Layout: 5
       Interval: 6000
       Target: Enemy
       Flag:
@@ -8679,7 +8384,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost: 20
       Weapon:
@@ -8687,7 +8392,7 @@ Body:
         Whip: true
     Unit:
       Id: Richmankim
-      Layout: 4
+      Layout: 7
       Interval: -1
       Target: Enemy
       Flag:
@@ -8696,7 +8401,7 @@ Body:
   - Id: 308
     Name: BD_ETERNALCHAOS
     Description: Down Tempo
-    MaxLevel: 1
+    MaxLevel: 5
     Type: Misc
     TargetType: Self
     DamageFlags:
@@ -8714,12 +8419,11 @@ Body:
         Whip: true
     Unit:
       Id: Eternalchaos
-      Layout: 4
+      Layout: 5
       Interval: -1
-      Target: Enemy
+      Target: Party
       Flag:
         Ensemble: true
-        RemovedByFireRain: true
   - Id: 309
     Name: BD_DRUMBATTLEFIELD
     Description: Battle Theme
@@ -8733,7 +8437,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -8751,7 +8455,7 @@ Body:
         Whip: true
     Unit:
       Id: Drumbattlefield
-      Layout: 4
+      Layout: 5
       Interval: -1
       Target: Party
       Flag:
@@ -8769,7 +8473,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -8787,15 +8491,15 @@ Body:
         Whip: true
     Unit:
       Id: Ringnibelungen
-      Layout: 4
-      Interval: -1
+      Layout: 5
+      Interval: 10000
       Target: Party
       Flag:
         Ensemble: true
   - Id: 311
     Name: BD_ROKISWEIL
     Description: Classical Pluck
-    MaxLevel: 1
+    MaxLevel: 5
     Type: Misc
     TargetType: Self
     DamageFlags:
@@ -8805,7 +8509,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost: 15
       Weapon:
@@ -8813,11 +8517,11 @@ Body:
         Whip: true
     Unit:
       Id: Rokisweil
-      Layout: 4
+      Layout: 5
       Interval: -1
+      Target: Party
       Flag:
         Ensemble: true
-        RemovedByFireRain: true
   - Id: 312
     Name: BD_INTOABYSS
     Description: Power Chord
@@ -8831,7 +8535,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost: 10
       Weapon:
@@ -8839,7 +8543,7 @@ Body:
         Whip: true
     Unit:
       Id: Intoabyss
-      Layout: 4
+      Layout: 5
       Interval: -1
       Target: Party
       Flag:
@@ -8858,7 +8562,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 60000
+    Duration2: 10000
     Requires:
       SpCost: 20
       Weapon:
@@ -8866,7 +8570,7 @@ Body:
         Whip: true
     Unit:
       Id: Siegfried
-      Layout: 4
+      Layout: 5
       Interval: -1
       Target: Party
       Flag:
@@ -8937,9 +8641,10 @@ Body:
           Amount: 30
       Weapon:
         Musical: true
+        Whip: true
     Unit:
       Id: Dissonance
-      Layout: 3
+      Layout: 5
       Interval: 3000
       Target: Enemy
       Flag:
@@ -8957,8 +8662,9 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: -1
-    AfterCastActDelay: 4000
+    AfterCastActDelay: 1000
     Duration2: 30000
+    Cooldown: 4000
     Requires:
       SpCost:
         - Level: 1
@@ -8985,7 +8691,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9013,7 +8719,7 @@ Body:
         Whip: true
     Unit:
       Id: Whistle
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9032,7 +8738,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 120000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9060,7 +8766,7 @@ Body:
         Whip: true
     Unit:
       Id: Assassincross
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9079,7 +8785,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 180000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9107,7 +8813,7 @@ Body:
         Whip: true
     Unit:
       Id: Poembragi
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9126,7 +8832,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 180000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9154,7 +8860,7 @@ Body:
         Whip: true
     Unit:
       Id: Appleidun
-      Layout: 3
+      Layout: 5
       Interval: 6000
       Flag:
         NoMob: true
@@ -9204,6 +8910,7 @@ Body:
     TargetType: Self
     DamageFlags:
       NoDamage: true
+      IgnoreFlee: true
     Flags:
       IsSong: true
       IgnoreLandProtector: true
@@ -9224,14 +8931,16 @@ Body:
         - Level: 5
           Amount: 35
       Weapon:
+        Musical: true
         Whip: true
     Unit:
       Id: Uglydance
-      Layout: 3
+      Layout: 5
       Interval: 3000
       Target: Enemy
       Flag:
-        Dance: true
+        Song: true
+        RemovedByFireRain: true
   - Id: 326
     Name: DC_SCREAM
     Description: Dazzler
@@ -9244,8 +8953,9 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: -1
-    AfterCastActDelay: 4000
+    AfterCastActDelay: 1000
     Duration2: 5000
+    Cooldown: 4000
     Requires:
       SpCost:
         - Level: 1
@@ -9272,7 +8982,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 60000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9300,7 +9010,7 @@ Body:
         Whip: true
     Unit:
       Id: Humming
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9347,7 +9057,7 @@ Body:
         Whip: true
     Unit:
       Id: Dontforgetme
-      Layout: 3
+      Layout: 5
       Interval: -1
       Target: Enemy
       Flag:
@@ -9366,7 +9076,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 120000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9394,7 +9104,7 @@ Body:
         Whip: true
     Unit:
       Id: Fortunekiss
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9413,7 +9123,7 @@ Body:
     Hit: Single
     HitCount: 1
     Duration1: 180000
-    Duration2: 20000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -9441,7 +9151,7 @@ Body:
         Whip: true
     Unit:
       Id: Serviceforyou
-      Layout: 3
+      Layout: 5
       Interval: -1
       Flag:
         NoMob: true
@@ -9548,10 +9258,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 338
@@ -9837,7 +9543,7 @@ Body:
   - Id: 354
     Name: NPC_RUN
     Description: Run
-    MaxLevel: 10
+    MaxLevel: 20
     Type: Misc
     TargetType: Self
     DamageFlags:
@@ -10032,17 +9738,7 @@ Body:
         Time: 2000
       - Level: 5
         Time: 2400
-    AfterCastActDelay:
-      - Level: 1
-        Time: 1100
-      - Level: 2
-        Time: 1200
-      - Level: 3
-        Time: 1300
-      - Level: 4
-        Time: 1400
-      - Level: 5
-        Time: 1500
+    AfterCastActDelay: 500
     Duration1:
       - Level: 1
         Time: 20000
@@ -10085,11 +9781,8 @@ Body:
     TargetType: Self
     DamageFlags:
       NoDamage: true
-    Range: 4
     Hit: Single
     HitCount: 1
-    ActiveInstance: 1
-    Knockback: 2
     CastCancel: true
     AfterCastActDelay:
       - Level: 1
@@ -10104,26 +9797,26 @@ Body:
         Time: 6000
     Duration1:
       - Level: 1
-        Time: 20000
+        Time: 50000
       - Level: 2
-        Time: 25000
+        Time: 60000
       - Level: 3
-        Time: 30000
+        Time: 70000
       - Level: 4
-        Time: 35000
+        Time: 80000
       - Level: 5
-        Time: 40000
+        Time: 90000
     Duration2:
       - Level: 1
-        Time: 20000
+        Time: 50000
       - Level: 2
-        Time: 25000
+        Time: 60000
       - Level: 3
-        Time: 30000
+        Time: 70000
       - Level: 4
-        Time: 35000
+        Time: 80000
       - Level: 5
-        Time: 40000
+        Time: 90000
     FixedCastTime:
       - Level: 1
         Time: 5000
@@ -10138,15 +9831,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 80
+          Amount: 200
         - Level: 2
-          Amount: 90
+          Amount: 225
         - Level: 3
-          Amount: 100
+          Amount: 250
         - Level: 4
-          Amount: 110
+          Amount: 275
         - Level: 5
-          Amount: 120
+          Amount: 300
       ItemCost:
         - Item: Yellow_Gemstone
           Amount: 1
@@ -10245,15 +9938,15 @@ Body:
     CastTime: 1600
     AfterCastActDelay:
       - Level: 1
-        Time: 2000
+        Time: 5000
       - Level: 2
-        Time: 2500
+        Time: 6000
       - Level: 3
-        Time: 3000
+        Time: 7000
       - Level: 4
-        Time: 3500
+        Time: 8000
       - Level: 5
-        Time: 4000
+        Time: 9000
     Duration2:
       - Level: 1
         Time: 2000
@@ -10473,17 +10166,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
-    AfterCastActDelay:
-      - Level: 1
-        Time: 1000
-      - Level: 2
-        Time: 1200
-      - Level: 3
-        Time: 1400
-      - Level: 4
-        Time: 1600
-      - Level: 5
-        Time: 1800
+    AfterCastActDelay: 800
     Requires:
       SpCost:
         - Level: 1
@@ -10570,7 +10253,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Poison
-    AfterCastActDelay: 2000
     Duration1:
       - Level: 1
         Time: 40000
@@ -10714,9 +10396,8 @@ Body:
     Hit: Multi_Hit
     HitCount: 1
     CastCancel: true
-    CastTime: 500
-    AfterCastActDelay: 3000
-    FixedCastTime: 500
+    CastTime: 1000
+    AfterCastActDelay: 1800
     Requires:
       SpCost:
         - Level: 1
@@ -10747,9 +10428,9 @@ Body:
     SplashArea: 1
     ActiveInstance: 14
     CastCancel: true
-    CastTime: 1000
-    AfterCastActDelay: 1500
-    FixedCastTime: 1000
+    CastTime: 500
+    AfterCastActDelay: 500
+    FixedCastTime: 500
     Requires:
       SpCost:
         - Level: 1
@@ -11098,8 +10779,8 @@ Body:
         Time: 2880
       - Level: 10
         Time: 3040
-    AfterCastActDelay: 2000
     AfterCastWalkDelay: 2000
+    Cooldown: 2000
     FixedCastTime:
       - Level: 1
         Time: 400
@@ -11193,7 +10874,7 @@ Body:
         Whip: true
     Unit:
       Id: Moonlit
-      Layout: 4
+      Layout: 5
       Interval: -1
       Flag:
         Ensemble: true
@@ -11348,7 +11029,6 @@ Body:
     TargetType: Attack
     DamageFlags:
       Splash: true
-      SplashSplit: true
     Flags:
       TargetTrap: true
     Range: 9
@@ -11368,8 +11048,9 @@ Body:
     SplashArea: 1
     CastCancel: true
     CastTime: 800
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 500
     Duration2: 20000
+    Cooldown: 1000
     FixedCastTime: 200
     Requires:
       SpCost:
@@ -11394,7 +11075,7 @@ Body:
     HitCount: 1
     CastCancel: true
     Duration1: 600000
-    FixedCastTime: 2000
+    FixedCastTime: 1000
     Requires:
       SpCost: 20
   - Id: 402
@@ -11517,7 +11198,6 @@ Body:
     Element: Weapon
     SplashArea: 2
     CastTime: 250
-    AfterCastActDelay: 500
     Duration2:
       - Level: 1
         Time: 20000
@@ -11525,6 +11205,7 @@ Body:
         Time: 5000
       - Level: 3
         Time: 120000
+    Cooldown: 500
     FixedCastTime: 250
     Requires:
       SpCost:
@@ -11895,10 +11576,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
@@ -13329,7 +13006,7 @@ Body:
       NoDamage: true
     HitCount: 1
     CastCancel: true
-    Duration1: 600000
+    Duration1: 600000000
     FixedCastTime: 1000
     Requires:
       SpCost: 30
@@ -13371,8 +13048,8 @@ Body:
           Amount: 30
   - Id: 477
     Name: WS_WEAPONREFINE
-    Description: Upgrade Weapon
-    MaxLevel: 10
+    Description: Refining
+    MaxLevel: 20
     Type: Weapon
     TargetType: Self
     DamageFlags:
@@ -13544,11 +13221,12 @@ Body:
     Name: HW_GRAVITATION
     Description: Gravitation Field
     MaxLevel: 5
-    Type: Misc
+    Type: Magic
     TargetType: Ground
     DamageFlags:
       NoDamage: true
       IgnoreElement: true
+      IgnoreDefense: true
       IgnoreFlee: true
       IgnoreDefCard: true
     Flags:
@@ -13558,11 +13236,11 @@ Body:
       IgnoreHovering: true
       TargetHidden: true
     Range: 18
-    Hit: Single
+    Hit: Multi_Hit
     HitCount: 1
-    Element: Earth
     CastCancel: true
-    AfterCastActDelay: 2000
+    CastTime: 5000
+    AfterCastActDelay: 3000
     Duration1:
       - Level: 1
         Time: 5000
@@ -13574,17 +13252,18 @@ Body:
         Time: 8000
       - Level: 5
         Time: 9000
-    FixedCastTime: 5000
+    Cooldown: 5000
+    FixedCastTime: 1000
     Requires:
       SpCost:
         - Level: 1
-          Amount: 20
-        - Level: 2
-          Amount: 40
-        - Level: 3
           Amount: 60
-        - Level: 4
+        - Level: 2
+          Amount: 70
+        - Level: 3
           Amount: 80
+        - Level: 4
+          Amount: 90
         - Level: 5
           Amount: 100
       ItemCost:
@@ -13596,9 +13275,7 @@ Body:
       Interval: 500
       Target: Enemy
       Flag:
-        NoOverlap: true
         PathCheck: true
-        DualMode: true
         RemovedByFireRain: true
   - Id: 485
     Name: WS_CARTTERMINATION
@@ -13733,33 +13410,13 @@ Body:
     DamageFlags:
       NoDamage: true
     Flags:
-      IsSong: true
+      IsEnsemble: true
       IgnoreLandProtector: true
     Hit: Single
     HitCount: 1
     SplashArea: 1
-    Duration1:
-      - Level: 1
-        Time: 10000
-      - Level: 2
-        Time: 15000
-      - Level: 3
-        Time: 20000
-      - Level: 4
-        Time: 25000
-      - Level: 5
-        Time: 30000
-    Duration2:
-      - Level: 1
-        Time: 10000
-      - Level: 2
-        Time: 15000
-      - Level: 3
-        Time: 20000
-      - Level: 4
-        Time: 25000
-      - Level: 5
-        Time: 30000
+    Duration1: 60000
+    Duration2: 10000
     Requires:
       SpCost:
         - Level: 1
@@ -13777,8 +13434,9 @@ Body:
         Whip: true
     Unit:
       Id: Hermode
-      Layout: 3
+      Layout: 5
       Interval: -1
+      Target: Party
       Flag:
         Ensemble: true
   - Id: 489
@@ -13794,8 +13452,8 @@ Body:
     Hit: Single
     HitCount: 1
     CastTime: 500
-    AfterCastActDelay: 3000
     Duration2: 30000
+    Cooldown: 3000
     FixedCastTime: 500
     Requires:
       SpCost: 40
@@ -14087,9 +13745,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CastTime: 800
-    AfterCastActDelay: 1000
-    FixedCastTime: 200
+    AfterCastActDelay: 300
     Requires:
       SpCost: 30
       Ammo:
@@ -14289,10 +13945,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CastTime: 1600
-    AfterCastActDelay: 1000
+    CastTime: 700
     Duration1: 30000
-    FixedCastTime: 400
+    FixedCastTime: 100
     Requires:
       SpCost:
         - Level: 1
@@ -14764,7 +14419,7 @@ Body:
     HitCount: 1
     Element: Weapon
     Requires:
-      SpCost: 5
+      SpCost: 2
       Ammo:
         Shuriken: true
       AmmoAmount: 1
@@ -14778,11 +14433,20 @@ Body:
       IgnoreFlee: true
     Range: 9
     Hit: Multi_Hit
-    HitCount: 3
+    HitCount: -3
     Element: Weapon
-    Cooldown: 200
     Requires:
-      SpCost: 10
+      SpCost:
+        - Level: 1
+          Amount: 30
+        - Level: 2
+          Amount: 25
+        - Level: 3
+          Amount: 20
+        - Level: 4
+          Amount: 15
+        - Level: 5
+          Amount: 10
       Ammo:
         Kunai: true
       AmmoAmount: 1
@@ -14816,29 +14480,36 @@ Body:
       - Level: 2
         Area: 1
       - Level: 3
-        Area: 1
+        Area: 2
       - Level: 4
         Area: 2
       - Level: 5
         Area: 2
     CastTime: 1000
-    AfterCastActDelay: 500
     Duration1: 100
     FixedCastTime: 500
     Requires:
       SpCost:
         - Level: 1
-          Amount: 15
+          Amount: 10
         - Level: 2
-          Amount: 20
+          Amount: 15
         - Level: 3
-          Amount: 25
+          Amount: 20
         - Level: 4
-          Amount: 30
+          Amount: 25
         - Level: 5
-          Amount: 35
+          Amount: 30
       Weapon:
         Huuma: true
+    Unit:
+      Id: Dummyskill
+      Range: 2
+      Interval: 1000
+      Target: Enemy
+      Flag:
+        NoOverlap: true
+        PathCheck: true
   - Id: 526
     Name: NJ_ZENYNAGE
     Description: Throw Zeny
@@ -14854,13 +14525,9 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    AfterCastActDelay: 5000
+    AfterCastActDelay: 250
     Requires:
-      SpCost: 50
+      SpCost: 30
       ZenyCost:
         - Level: 1
           Amount: 500
@@ -14892,13 +14559,9 @@ Body:
     HitCount: 1
     Element: Weapon
     Knockback: 4
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    AfterCastActDelay: 3000
     Duration1: 3000
     Duration2: 3000
+    Cooldown: 3000
     Requires:
       SpCost: 15
     Unit:
@@ -14917,12 +14580,9 @@ Body:
     TargetType: Attack
     Range: -1
     Hit: Single
-    HitCount: -2
+    HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
+    AfterCastWalkDelay: 500
     Duration1:
       - Level: 1
         Time: 30000
@@ -14944,9 +14604,8 @@ Body:
         Time: 270000
       - Level: 10
         Time: 300000
-    Cooldown: 500
     Requires:
-      SpCost: 8
+      SpCost: 15
   - Id: 529
     Name: NJ_SHADOWJUMP
     Description: Shadow Leap
@@ -14969,10 +14628,6 @@ Body:
         Size: 15
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 1000
     Requires:
       SpCost: 10
@@ -15001,24 +14656,20 @@ Body:
       - Level: 5
         Size: 15
     Hit: Single
-    HitCount: -3
+    HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
-          Amount: 10
-        - Level: 2
-          Amount: 11
-        - Level: 3
-          Amount: 12
-        - Level: 4
-          Amount: 13
-        - Level: 5
           Amount: 14
+        - Level: 2
+          Amount: 16
+        - Level: 3
+          Amount: 18
+        - Level: 4
+          Amount: 20
+        - Level: 5
+          Amount: 22
       Status:
         Hiding: true
   - Id: 531
@@ -15031,10 +14682,6 @@ Body:
     Hit: Single
     HitCount: 1
     Knockback: 7
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
@@ -15193,75 +14840,71 @@ Body:
       - Level: 10
         Count: 10
     Element: Fire
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 560
+        Time: 220
       - Level: 2
-        Time: 1120
+        Time: 440
       - Level: 3
-        Time: 1680
+        Time: 660
       - Level: 4
-        Time: 2240
+        Time: 880
       - Level: 5
-        Time: 2800
+        Time: 1100
       - Level: 6
-        Time: 3360
+        Time: 1320
       - Level: 7
-        Time: 3840
+        Time: 1540
       - Level: 8
-        Time: 4480
+        Time: 1760
       - Level: 9
-        Time: 5040
+        Time: 1980
       - Level: 10
-        Time: 5600
+        Time: 2200
     FixedCastTime:
       - Level: 1
-        Time: 140
+        Time: 160
       - Level: 2
-        Time: 280
+        Time: 240
       - Level: 3
-        Time: 420
+        Time: 320
       - Level: 4
-        Time: 560
+        Time: 400
       - Level: 5
-        Time: 700
+        Time: 480
       - Level: 6
-        Time: 840
+        Time: 700
       - Level: 7
-        Time: 960
+        Time: 640
       - Level: 8
-        Time: 1120
+        Time: 720
       - Level: 9
-        Time: 1260
+        Time: 800
       - Level: 10
-        Time: 1400
+        Time: 880
     Requires:
       SpCost:
         - Level: 1
-          Amount: 18
+          Amount: 10
         - Level: 2
-          Amount: 20
+          Amount: 12
         - Level: 3
-          Amount: 22
+          Amount: 14
         - Level: 4
-          Amount: 24
+          Amount: 16
         - Level: 5
-          Amount: 26
+          Amount: 18
         - Level: 6
-          Amount: 28
+          Amount: 20
         - Level: 7
-          Amount: 30
+          Amount: 22
         - Level: 8
-          Amount: 32
+          Amount: 24
         - Level: 9
-          Amount: 34
+          Amount: 26
         - Level: 10
-          Amount: 36
+          Amount: 28
   - Id: 535
     Name: NJ_KAENSIN
     Description: Crimson Fire Formation
@@ -15271,10 +14914,6 @@ Body:
     Hit: Multi_Hit
     HitCount: 1
     Element: Fire
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -15343,16 +14982,11 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Fire
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
-    CastTime: 2000
-    AfterCastActDelay: 500
+    CastTime: 2400
+    AfterCastActDelay: 2000
     Duration1: 100
-    Cooldown: 300
-    FixedCastTime: 800
+    FixedCastTime: 600
     Requires:
       SpCost:
         - Level: 1
@@ -15405,75 +15039,71 @@ Body:
       - Level: 10
         Count: 12
     Element: Water
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 560
+        Time: 220
       - Level: 2
-        Time: 1120
+        Time: 440
       - Level: 3
-        Time: 1680
+        Time: 660
       - Level: 4
-        Time: 2240
+        Time: 880
       - Level: 5
-        Time: 2800
+        Time: 1100
       - Level: 6
-        Time: 3360
+        Time: 1320
       - Level: 7
-        Time: 3840
+        Time: 1540
       - Level: 8
-        Time: 4480
+        Time: 1760
       - Level: 9
-        Time: 5040
+        Time: 1980
       - Level: 10
-        Time: 5600
+        Time: 2200
     FixedCastTime:
       - Level: 1
-        Time: 140
+        Time: 160
       - Level: 2
-        Time: 280
+        Time: 240
       - Level: 3
-        Time: 420
+        Time: 320
       - Level: 4
-        Time: 560
+        Time: 400
       - Level: 5
-        Time: 700
+        Time: 480
       - Level: 6
-        Time: 840
+        Time: 700
       - Level: 7
-        Time: 960
+        Time: 640
       - Level: 8
-        Time: 1120
+        Time: 720
       - Level: 9
-        Time: 1260
+        Time: 800
       - Level: 10
-        Time: 1400
+        Time: 880
     Requires:
       SpCost:
         - Level: 1
-          Amount: 15
+          Amount: 10
         - Level: 2
-          Amount: 18
+          Amount: 12
         - Level: 3
-          Amount: 21
+          Amount: 14
         - Level: 4
-          Amount: 24
+          Amount: 16
         - Level: 5
-          Amount: 27
+          Amount: 18
         - Level: 6
-          Amount: 30
+          Amount: 20
         - Level: 7
-          Amount: 33
+          Amount: 22
         - Level: 8
-          Amount: 36
+          Amount: 24
         - Level: 9
-          Amount: 39
+          Amount: 26
         - Level: 10
-          Amount: 42
+          Amount: 28
   - Id: 538
     Name: NJ_SUITON
     Description: Hidden Water
@@ -15488,9 +15118,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
-    CastCancel: true
-    CastTime: 2400
-    AfterCastActDelay: 2000
+    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
         Time: 15000
@@ -15601,23 +15229,18 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
-    CastCancel: true
     CastTime:
       - Level: 1
-        Time: 1700
+        Time: 1600
       - Level: 2
-        Time: 1900
+        Time: 2000
       - Level: 3
-        Time: 2100
+        Time: 2400
       - Level: 4
-        Time: 2300
+        Time: 2800
       - Level: 5
-        Time: 2500
-    AfterCastActDelay: 500
+        Time: 3200
+    AfterCastActDelay: 2000
     Duration1: 100
     Duration2:
       - Level: 1
@@ -15630,8 +15253,17 @@ Body:
         Time: 22500
       - Level: 5
         Time: 27500
-    Cooldown: 300
-    FixedCastTime: 800
+    FixedCastTime:
+      - Level: 1
+        Time: 400
+      - Level: 2
+        Time: 500
+      - Level: 3
+        Time: 600
+      - Level: 4
+        Time: 700
+      - Level: 5
+        Time: 800
     Requires:
       SpCost:
         - Level: 1
@@ -15684,76 +15316,50 @@ Body:
       - Level: 10
         Count: 6
     Element: Wind
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 800
+        Time: 220
       - Level: 2
-        Time: 1200
+        Time: 440
       - Level: 3
-        Time: 1600
+        Time: 660
       - Level: 4
-        Time: 2000
+        Time: 880
       - Level: 5
-        Time: 2400
-      - Level: 6
-        Time: 2800
-      - Level: 7
-        Time: 3200
-      - Level: 8
-        Time: 3600
-      - Level: 9
-        Time: 4000
-      - Level: 10
-        Time: 4400
-    AfterCastActDelay: 1000
-    FixedCastTime:
-      - Level: 1
-        Time: 200
-      - Level: 2
-        Time: 300
-      - Level: 3
-        Time: 400
-      - Level: 4
-        Time: 500
-      - Level: 5
-        Time: 600
-      - Level: 6
-        Time: 700
-      - Level: 7
-        Time: 800
-      - Level: 8
-        Time: 900
-      - Level: 9
-        Time: 1000
-      - Level: 10
         Time: 1100
+      - Level: 6
+        Time: 1320
+      - Level: 7
+        Time: 1540
+      - Level: 8
+        Time: 1760
+      - Level: 9
+        Time: 1980
+      - Level: 10
+        Time: 2200
     Requires:
       SpCost:
         - Level: 1
-          Amount: 12
+          Amount: 10
         - Level: 2
-          Amount: 14
+          Amount: 12
         - Level: 3
-          Amount: 16
+          Amount: 14
         - Level: 4
-          Amount: 18
+          Amount: 16
         - Level: 5
-          Amount: 20
+          Amount: 18
         - Level: 6
-          Amount: 22
+          Amount: 20
         - Level: 7
-          Amount: 24
+          Amount: 22
         - Level: 8
-          Amount: 26
+          Amount: 24
         - Level: 9
-          Amount: 28
+          Amount: 26
         - Level: 10
-          Amount: 30
+          Amount: 28
   - Id: 541
     Name: NJ_RAIGEKISAI
     Description: Lightning Strike of Destruction
@@ -15764,14 +15370,9 @@ Body:
     Hit: Single
     HitCount: -3
     Element: Wind
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
-    CastTime: 1700
+    CastTime: 2000
     Duration1: 100
-    FixedCastTime: 300
     Requires:
       SpCost:
         - Level: 1
@@ -15840,7 +15441,7 @@ Body:
       - Level: 5
         Size: 9
     Hit: Multi_Hit
-    HitCount: -5
+    HitCount: 1
     Element: Wind
     SplashArea: 1
     ActiveInstance:
@@ -15854,13 +15455,8 @@ Body:
         Max: 8
       - Level: 5
         Max: 9
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
-    CastTime: 1200
-    FixedCastTime: 300
+    CastTime: 1500
     Requires:
       SpCost:
         - Level: 1
@@ -15922,16 +15518,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 20
+          Amount: 6
         - Level: 2
-          Amount: 30
+          Amount: 12
         - Level: 3
-          Amount: 40
+          Amount: 18
         - Level: 4
-          Amount: 50
+          Amount: 24
         - Level: 5
-          Amount: 60
-      HpRateCost: -5
+          Amount: 30
   - Id: 544
     Name: NJ_ISSEN
     Description: Final Strike
@@ -17299,10 +16894,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastTime: 250
     FixedCastTime: 250
     Requires:
@@ -17346,10 +16937,6 @@ Body:
     Range: 9
     Hit: Multi_Hit
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Duration2:
       - Level: 1
         Time: 15000
@@ -17408,10 +16995,6 @@ Body:
     Element: Fire
     SplashArea: 1
     Knockback: 3
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastCancel: true
     CastTime: 1280
     Duration1: 120000
@@ -17466,10 +17049,6 @@ Body:
     HitCount: 1
     Element: Weapon
     Knockback: 3
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     Requires:
       SpCost: 10
       Weapon:
@@ -17570,10 +17149,6 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastTime: 1000
     AfterCastActDelay: 1000
     Duration1: 600000
@@ -17717,9 +17292,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 1000
     Cooldown: 2000
     FixedCastTime: -1
@@ -17826,11 +17398,8 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Wind
-    SplashArea: 2
+    SplashArea: 4
     Knockback: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 15000
     Cooldown: 2000
     FixedCastTime: -1
@@ -17864,9 +17433,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 5
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastTime: 1000
     Cooldown: 2000
     FixedCastTime: -1
@@ -18255,11 +17821,8 @@ Body:
         Area: 2
       - Level: 5
         Area: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
-    CastTime: 2000
+    CastTime: 1250
     AfterCastActDelay: 500
     FixedCastTime: -1
     Requires:
@@ -18298,9 +17861,6 @@ Body:
         Count: -7
     Element: Water
     SplashArea: 9
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18351,9 +17911,6 @@ Body:
         Area: 8
       - Level: 5
         Area: 9
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18366,7 +17923,7 @@ Body:
         Time: 3500
       - Level: 5
         Time: 4000
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 500
     Duration1:
       - Level: 1
         Time: 12500
@@ -18405,10 +17962,10 @@ Body:
     Hit: Single
     HitCount: 1
     CastCancel: true
-    CastTime: 2500
-    AfterCastActDelay: 1000
+    CastTime: 1200
+    AfterCastActDelay: 300
     Duration1: 30000
-    FixedCastTime: 500
+    FixedCastTime: 200
     Requires:
       SpCost:
         - Level: 1
@@ -18480,7 +18037,7 @@ Body:
       Splash: true
     Flags:
       AlterRangeRadius: true
-    Range: 7
+    Range: 8
     Hit: Single
     HitCount: 1
     Element: Earth
@@ -18496,7 +18053,7 @@ Body:
       - Level: 5
         Area: 3
     CastCancel: true
-    CastTime: 2000
+    CastTime: 640
     AfterCastActDelay: 2000
     Duration1:
       - Level: 1
@@ -18600,9 +18157,6 @@ Body:
     Range: 11
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 4000
     Cooldown: 2000
@@ -18635,9 +18189,6 @@ Body:
     Element: Fire
     SplashArea: 3
     Knockback: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 5000
     AfterCastActDelay: 2000
@@ -18668,14 +18219,11 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 3000
     AfterCastActDelay: 1000
     Duration1: 15000
-    FixedCastTime: 1000
+    FixedCastTime: 500
     Requires:
       SpCost:
         - Level: 1
@@ -18703,9 +18251,6 @@ Body:
     HitCount: -20
     SplashArea: 9
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18745,9 +18290,6 @@ Body:
           Amount: 720
         - Level: 5
           Amount: 800
-      ItemCost:
-        - Item: Red_Gemstone
-          Amount: 2
     Unit:
       Id: Dummyskill
       Range: 9
@@ -18769,24 +18311,11 @@ Body:
     Range: 11
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
-    CastTime:
-      - Level: 1
-        Time: 3500
-      - Level: 2
-        Time: 4000
-      - Level: 3
-        Time: 4500
-      - Level: 4
-        Time: 5000
-      - Level: 5
-        Time: 5500
-    AfterCastActDelay: 3000
+    CastTime: 6000
+    AfterCastActDelay: 350
     Duration1: 100
-    FixedCastTime: 1000
+    FixedCastTime: 500
     Requires:
       SpCost:
         - Level: 1
@@ -18809,9 +18338,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Wind
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2216
@@ -18836,9 +18362,6 @@ Body:
       - Level: 5
         Count: -10
     Element: Earth
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18898,9 +18421,6 @@ Body:
     Range: 11
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18914,8 +18434,8 @@ Body:
       - Level: 5
         Time: 9000
     AfterCastActDelay: 2000
-    Cooldown: 15000
-    FixedCastTime: 2000
+    Cooldown: 1000
+    FixedCastTime: 3000
     Requires:
       SpCost:
         - Level: 1
@@ -18938,9 +18458,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2219
@@ -18953,9 +18470,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2220
@@ -18968,9 +18482,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Wind
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2221
@@ -18983,9 +18494,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Earth
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2222
@@ -18999,9 +18507,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     Duration1:
@@ -19039,9 +18544,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Wind
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     Duration1:
@@ -19079,9 +18581,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     Duration1:
@@ -19119,9 +18618,6 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2226
@@ -19135,9 +18631,6 @@ Body:
     HitCount: 1
     Element: Wind
     ActiveInstance: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2227
@@ -19151,9 +18644,6 @@ Body:
     HitCount: 1
     Element: Water
     ActiveInstance: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2228
@@ -19167,9 +18657,6 @@ Body:
     HitCount: 1
     Element: Earth
     ActiveInstance: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2229
@@ -19183,9 +18670,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Earth
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     Duration1:
@@ -19241,10 +18725,10 @@ Body:
     Hit: Single
     HitCount: 1
     CastCancel: true
-    CastTime: 5000
+    CastTime: 10000
     AfterCastActDelay: 500
     Duration1: 30000
-    FixedCastTime: 1000
+    FixedCastTime: 10000
     Requires:
       SpCost: 40
   - Id: 2232
@@ -19306,9 +18790,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -7
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay:
       - Level: 1
         Time: 2500
@@ -19346,9 +18827,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 1500
     FixedCastTime: -1
     Requires:
@@ -19590,9 +19068,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 1000
     FixedCastTime: -1
     Requires:
@@ -19703,9 +19178,6 @@ Body:
     HitCount: -3
     Element: Holy
     SplashArea: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 500
@@ -19775,9 +19247,6 @@ Body:
         Area: 2
       - Level: 10
         Area: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 500
@@ -20168,10 +19637,10 @@ Body:
           Amount: 70
         - Level: 4
           Amount: 80
-#  - Id: 2049 # Removed on kRO
-#    Name: AB_EUCHARISTICA
-#    Description: Eucharistica
-#    MaxLevel: 10
+  - Id: 2049
+    Name: AB_EUCHARISTICA
+    Description: Eucharistica
+    MaxLevel: 0
   - Id: 2050
     Name: AB_RENOVATIO
     Description: Renovatio
@@ -20185,9 +19654,6 @@ Body:
     HitCount: 1
     Element: Holy
     SplashArea: 15
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 3000
     Duration1: 90000
@@ -20207,9 +19673,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -20305,9 +19768,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 1000
@@ -20365,9 +19825,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2056
@@ -20379,9 +19836,6 @@ Body:
     Range: -1
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2057
@@ -20507,9 +19961,6 @@ Body:
         Area: 4
       - Level: 10
         Area: 5
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -20637,9 +20088,6 @@ Body:
     Hit: Multi_Hit
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 4000
     AfterCastActDelay: 1000
@@ -20732,7 +20180,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
   - Id: 2239
     Name: RA_CLUSTERBOMB
@@ -20752,9 +20199,6 @@ Body:
     HitCount: 1
     SplashArea: 3
     ActiveInstance: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 15000
     FixedCastTime: -1
     Requires:
@@ -20769,7 +20213,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
         RemovedByFireRain: true
   - Id: 2240
     Name: RA_WUGMASTERY
@@ -21126,9 +20569,6 @@ Body:
     Element: Fire
     SplashArea: 2
     ActiveInstance: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 15000
     Duration2: 15000
     FixedCastTime: -1
@@ -21165,9 +20605,6 @@ Body:
     Element: Water
     SplashArea: 2
     ActiveInstance: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 15000
     Duration2: 20000
     FixedCastTime: -1
@@ -21292,7 +20729,7 @@ Body:
     TargetType: Attack
     Flags:
       AllowOnMado: true
-    Range: 5
+    Range: 7
     Hit: Single
     HitCount: 1
     Element: Fire
@@ -21675,7 +21112,7 @@ Body:
     CastCancel: true
     AfterCastActDelay: 1000
     Duration1: 20000
-    FixedCastTime: 1000
+    FixedCastTime: 1500
     CastTimeFlags:
       IgnoreDex: true
       IgnoreStatus: true
@@ -22192,9 +21629,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 500
     FixedCastTime: -1
     Requires:
@@ -22387,9 +21821,6 @@ Body:
     HitCount: -3
     Element: Weapon
     Knockback: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 500
@@ -22879,9 +22310,6 @@ Body:
     Range: 7
     Hit: Single
     HitCount: 1
-    NoNearNPC:
-      Type:
-        WarpPortal: true
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 2000
@@ -22937,9 +22365,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    NoNearNPC:
-      Type:
-        WarpPortal: true
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 2000
@@ -23035,9 +22460,6 @@ Body:
         Amount: 6
       - Level: 3
         Amount: 9
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastTime: 1000
     Duration1: 1500
     Cooldown: 5000
@@ -23159,9 +22581,6 @@ Body:
     Range: 1
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1:
       - Level: 1
         Time: 5500
@@ -23282,9 +22701,6 @@ Body:
         Amount: 0
       - Level: 3
         Amount: 0
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -23309,9 +22725,6 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -23460,9 +22873,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -23609,9 +23019,6 @@ Body:
         Area: 2
       - Level: 5
         Area: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -23693,17 +23100,7 @@ Body:
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 2000
-    Duration1:
-      - Level: 1
-        Time: 30000
-      - Level: 2
-        Time: 45000
-      - Level: 3
-        Time: 60000
-      - Level: 4
-        Time: 75000
-      - Level: 5
-        Time: 90000
+    Duration1: 300000
     Cooldown:
       - Level: 1
         Time: 540000
@@ -23751,9 +23148,6 @@ Body:
         Amount: 6
       - Level: 5
         Amount: 7
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
   - Id: 2520
     Name: LG_OVERBRAND_PLUSATK
@@ -23767,9 +23161,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
   - Id: 2326
     Name: SR_DRAGONCOMBO
     Description: Dragon Combo
@@ -23780,9 +23171,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -2
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 5000
     FixedCastTime: -1
     Requires:
@@ -23822,9 +23210,6 @@ Body:
     HitCount: -3
     Element: Weapon
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 500
     FixedCastTime: -1
     Requires:
@@ -23864,9 +23249,6 @@ Body:
         Area: 4
       - Level: 5
         Area: 5
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1:
       - Level: 1
         Time: 1000
@@ -23966,9 +23348,6 @@ Body:
         Area: 2
       - Level: 10
         Area: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -24062,9 +23441,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 1000
     Cooldown: 10000
     FixedCastTime: -1
@@ -24235,9 +23611,6 @@ Body:
         Amount: 5
       - Level: 5
         Amount: 6
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 1000
     FixedCastTime: -1
     Requires:
@@ -24268,9 +23641,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 500
@@ -24381,9 +23751,6 @@ Body:
     Hit: Multi_Hit
     HitCount: -7
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -24441,9 +23808,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1:
       - Level: 1
         Time: 5000
@@ -24656,9 +24020,6 @@ Body:
         Area: 6
       - Level: 5
         Area: 7
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastTime: 1000
     Duration1:
       - Level: 1
@@ -24719,9 +24080,6 @@ Body:
         Area: 2
       - Level: 5
         Area: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastTime:
       - Level: 1
         Time: 1000
@@ -25020,9 +24378,6 @@ Body:
       - Level: 5
         Count: -4
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -25074,9 +24429,6 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -25133,9 +24485,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2416
@@ -25150,9 +24499,6 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Requires:
       SpCost: 1
   - Id: 2417
@@ -25181,9 +24527,6 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26119,9 +25462,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 5
-    CopyFlags:
-      Skill:
-        Reproduce: true
   - Id: 2443
     Name: SO_FIREWALK
     Description: Fire Walk
@@ -26144,9 +25484,6 @@ Body:
         Max: 14
       - Level: 5
         Max: 16
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -26194,9 +25531,6 @@ Body:
         Max: 14
       - Level: 5
         Max: 16
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
@@ -26267,9 +25601,6 @@ Body:
     Hit: Single
     HitCount: -3
     Element: Earth
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26363,9 +25694,6 @@ Body:
     Hit: Single
     HitCount: -5
     Element: Water
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26472,9 +25800,6 @@ Body:
         Area: 1
       - Level: 5
         Area: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26521,9 +25846,6 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26616,9 +25938,6 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Poison
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26904,9 +26223,6 @@ Body:
         Area: 2
       - Level: 5
         Area: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -27586,9 +26902,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1500
     AfterCastActDelay: 500
@@ -27641,9 +26954,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1500
     AfterCastActDelay: 500
@@ -27697,9 +27007,6 @@ Body:
         Area: 4
       - Level: 5
         Area: 5
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1500
     AfterCastActDelay: 500
@@ -27747,9 +27054,6 @@ Body:
     HitCount: 1
     ActiveInstance: 1
     Knockback: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime: 1500
     AfterCastActDelay: 500
@@ -27805,9 +27109,6 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 4
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -27873,9 +27174,6 @@ Body:
     HitCount: 1
     Element: Earth
     SplashArea: 2
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 100
     FixedCastTime: -1
     Requires:
@@ -28094,9 +27392,6 @@ Body:
         Max: 5
       - Level: 5
         Max: 6
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -28156,9 +27451,6 @@ Body:
       IgnoreDefCard: true
     Hit: Single
     HitCount: 1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 20000
     FixedCastTime: -1
     Requires:
@@ -29996,10 +29288,6 @@ Body:
         Area: 1
       - Level: 10
         Area: 2
-    CopyFlags:
-      Skill:
-        Plagiarism: true
-        Reproduce: true
     CastTime: 1000
     Cooldown: 10000
     FixedCastTime: -1
@@ -30875,9 +30163,6 @@ Body:
     Hit: Multi_Hit
     HitCount: 3
     Element: Weapon
-    CopyFlags:
-      Skill:
-        Reproduce: true
     Duration1: 5000
     Cooldown: 60000
     FixedCastTime: -1
@@ -30893,31 +30178,6 @@ Body:
           Amount: 58
         - Level: 5
           Amount: 70
-  - Id: 5002
-    Name: RA_UNLIMIT
-    Description: Unlimited
-    MaxLevel: 5
-    TargetType: Self
-    DamageFlags:
-      NoDamage: true
-    Hit: Single
-    HitCount: 1
-    AfterCastActDelay: 500
-    Duration1: 60000
-    Cooldown: 300000
-    FixedCastTime: 1000
-    Requires:
-      SpCost:
-        - Level: 1
-          Amount: 100
-        - Level: 2
-          Amount: 120
-        - Level: 3
-          Amount: 140
-        - Level: 4
-          Amount: 160
-        - Level: 5
-          Amount: 180
   - Id: 5003
     Name: GN_ILLUSIONDOPING
     Description: Illusion Doping
@@ -30941,9 +30201,6 @@ Body:
         Area: 7
       - Level: 5
         Area: -1
-    CopyFlags:
-      Skill:
-        Reproduce: true
     AfterCastActDelay: 500
     Duration1: 10000
     Cooldown:
@@ -31070,7 +30327,7 @@ Body:
       Splash: true
     Hit: Single
     HitCount: 1
-    SplashArea: 3
+    SplashArea: 9
     Duration1: 60000
     FixedCastTime: -1
     Requires:
@@ -31091,9 +30348,6 @@ Body:
     Element: Weapon
     SplashArea: 3
     ActiveInstance: 3
-    CopyFlags:
-      Skill:
-        Reproduce: true
     CastTime: 1000
     AfterCastActDelay: 500
     Duration1: 5000
@@ -31333,18 +30587,6 @@ Body:
     Duration1: 60000
     Cooldown: 300000
     FixedCastTime: -1
-    Requires:
-      SpCost:
-        - Level: 1
-          Amount: 100
-        - Level: 2
-          Amount: 150
-        - Level: 3
-          Amount: 200
-        - Level: 4
-          Amount: 250
-        - Level: 5
-          Amount: 300
   - Id: 5013
     Name: LG_KINGS_GRACE
     Description: King's Grace
@@ -31359,15 +30601,15 @@ Body:
     Duration1: 5000
     Cooldown:
       - Level: 1
-        Time: 100000
+        Time: 300000
       - Level: 2
-        Time: 90000
+        Time: 270000
       - Level: 3
-        Time: 80000
+        Time: 240000
       - Level: 4
-        Time: 70000
+        Time: 210000
       - Level: 5
-        Time: 60000
+        Time: 180000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -31388,34 +30630,6 @@ Body:
       Flag:
         NoReiteration: true
         RangedSingleUnit: true
-  - Id: 5014
-    Name: ALL_FULL_THROTTLE
-    Description: Full Throttle
-    MaxLevel: 5
-    TargetType: Self
-    DamageFlags:
-      NoDamage: true
-    Flags:
-      AllowOnMado: true
-    Hit: Single
-    HitCount: 1
-    AfterCastActDelay: 500
-    Duration1:
-      - Level: 1
-        Time: 10000
-      - Level: 2
-        Time: 15000
-      - Level: 3
-        Time: 20000
-      - Level: 4
-        Time: 25000
-      - Level: 5
-        Time: 30000
-    Duration2: 10000
-    Cooldown: 1800000
-    FixedCastTime: -1
-    Requires:
-      SpCost: 1
   - Id: 5015
     Name: NC_MAGMA_ERUPTION_DOTDAMAGE
     Description: Magma Eruption Dot Damage
@@ -32655,6 +31869,8 @@ Body:
       IgnoreDex: true
       IgnoreStatus: true
       IgnoreItemBonus: true
+    Requires:
+      {}
   - Id: 5072
     Name: AB_VITUPERATUM
     Description: Vituperatum
@@ -32763,17 +31979,7 @@ Body:
     HitCount: 1
     SplashArea: -1
     AfterCastActDelay: 35000
-    Duration1:
-      - Level: 1
-        Time: 40000
-      - Level: 2
-        Time: 35000
-      - Level: 3
-        Time: 30000
-      - Level: 4
-        Time: 25000
-      - Level: 5
-        Time: 20000
+    Duration1: 40000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -34462,8 +33668,8 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    SplashArea: 1
-    Knockback: 1
+    SplashArea: 2
+    Knockback: 3
     CastTime: 400
     AfterCastActDelay: 2500
     FixedCastTime: 100
@@ -34883,9 +34089,9 @@ Body:
     SplashArea: 1
     ActiveInstance: 14
     CastCancel: true
-    CastTime: 1000
-    AfterCastActDelay: 2500
-    FixedCastTime: 1000
+    CastTime: 500
+    AfterCastActDelay: 500
+    FixedCastTime: 500
     CastTimeFlags:
       IgnoreDex: true
       IgnoreStatus: true
@@ -36290,10 +35496,10 @@ Body:
     Duration1: 300000
     FixedCastTime: -1
     Unit:
-      Id: Gd_Leadership
+      Id: Grounddrift_Water
       Layout: 2
       Interval: -1
-      Target: SameGuild
+      Target: Guild
       Flag:
         NoMob: true
   - Id: 10007
@@ -36306,10 +35512,10 @@ Body:
     Duration1: 300000
     FixedCastTime: -1
     Unit:
-      Id: Gd_Glorywounds
+      Id: Grounddrift_Fire
       Layout: 2
       Interval: -1
-      Target: SameGuild
+      Target: Guild
       Flag:
         NoMob: true
   - Id: 10008
@@ -36325,7 +35531,7 @@ Body:
       Id: Gd_Soulcold
       Layout: 2
       Interval: -1
-      Target: SameGuild
+      Target: Guild
       Flag:
         NoMob: true
   - Id: 10009
@@ -36341,7 +35547,7 @@ Body:
       Id: Gd_Hawkeyes
       Layout: 2
       Interval: -1
-      Target: SameGuild
+      Target: Guild
       Flag:
         NoMob: true
   - Id: 10010
