@@ -13538,6 +13538,8 @@ static int skill_unit_onplace(struct skill_unit *unit, struct block_list *bl, t_
 		map_getcell(bl->m, bl->x, bl->y, CELL_CHKMAELSTROM) )
 		return 0; //AoE skills are ineffective. [Skotlex]
 
+	std::shared_ptr<s_skill_db> skill = skill_db.find(sg->skill_id);
+
 	sc = status_get_sc(bl);
 
 	if (sc && sc->option&OPTION_HIDE && !skill->inf2[INF2_TARGETHIDDEN])
@@ -14999,7 +15001,8 @@ int skill_check_pc_partner(struct map_session_data *sd, uint16 skill_id, uint16 
 			default:
 				if( is_chorus )
 					break;//Chorus skills are not to be parsed as ensambles
-				if (skill_get_inf2(skill_id)&INF2_ENSEMBLE_SKILL) {
+				std::shared_ptr<s_skill_db> skill = skill_db.find(skill_id);
+				if (skill->inf2[INF2_ISENSEMBLE]) {
 					if (c > 0 && sd->sc.data[SC_DANCING] && (tsd = map_id2sd(p_sd[0])) != NULL) {
 						sd->sc.data[SC_DANCING]->val4 = tsd->bl.id;
 						sc_start4(&sd->bl, &tsd->bl, SC_DANCING, 100, skill_id, sd->sc.data[SC_DANCING]->val2, *skill_lv, sd->bl.id, skill_get_time(skill_id, *skill_lv) + 1000);
@@ -17251,6 +17254,7 @@ int skill_autospell(struct map_session_data *sd, uint16 skill_id)
 
 	uint16 idx = skill_get_index(skill_id);
 	uint16 lv = (sd->status.skill[idx].id == skill_id) ? sd->status.skill[idx].lv : 0;
+	uint16 maxlv = 1;
 
 	if(!skill_lv || !lv) return 0; // Player must learn the skill before doing auto-spell [Lance]
 

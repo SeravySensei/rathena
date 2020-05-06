@@ -2296,7 +2296,7 @@ bool status_check_skilluse(struct block_list *src, struct block_list *target, ui
 			// During Longing, anything goes
 			if (sc->data[SC_LONGING]) { // Allow everything except dancing/re-dancing. [Skotlex]
 				if (skill_id == BD_ENCORE ||
-					skill_get_inf2(skill_id)&(INF2_SONG_DANCE | INF2_ENSEMBLE_SKILL)
+					(skill->inf2[INF2_ISSONG] || skill->inf2[INF2_ISENSEMBLE])
 					)
 					return false;
 			} else	if (src->type == BL_PC && ((skill_id >= WA_SWING_DANCE && skill_id <= WM_UNLIMITED_HUMMING_VOICE ) ||
