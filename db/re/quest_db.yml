@@ -8864,6 +8864,22 @@ Body:
       - Mob: G_PORING
         Item: Wood
         Rate: 10000
+  - Id: 30180
+    Title: Proof of Aventurer 1
+    Targets:
+      - Mob: SOLDIER_SKELETON
+        Count: 1
+      - Mob: POISON_SPORE
+        Count: 7
+      - Mob: MYSTCASE
+        Count: 1
+  - Id: 30181
+    Title: Proof of Aventurer 2
+    Targets:
+      - Mob: BIGFOOT
+        Count: 1
+      - Mob: DRAGON_FLY
+        Count: 1
   - Id: 50000
     Title: Pirate Dagger materials
   - Id: 50001
@@ -9498,7 +9514,7 @@ Body:
         Count: 150
   - Id: 60200
     Title: Endless Tower Effect
-    TimeLimit: +7d
+    TimeLimit: +18h
   - Id: 60201
     Title: Endless Tower Time Limit
     TimeLimit: +4h
