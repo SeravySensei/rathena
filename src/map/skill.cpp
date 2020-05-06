@@ -3712,7 +3712,7 @@ int64 skill_attack (int attack_type, struct block_list* src, struct block_list *
 			|| skill_id == HW_GRAVITATION
 			#endif
 			|| skill_id == NPC_EVILLAND) && !shadow_flag)
-			status_fix_damage(src,bl,damage,dmg.dmotion); //Deal damage before knockback to allow stuff like firewall+storm gust combo.
+			status_fix_damage(src, bl, damage, dmg.dmotion, skill_id); //Deal damage before knockback to allow stuff like firewall+storm gust combo.
 		if( !status_isdead(bl) && additional_effects )
 			skill_additional_effect(src,bl,skill_id,skill_lv,dmg.flag,dmg.dmg_lv,tick);
 		if( damage > 0 ) //Counter status effects [Skotlex]
