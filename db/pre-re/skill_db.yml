@@ -13277,6 +13277,27 @@ Body:
       IsNpc: true
     Hit: Single
     HitCount: 1
+    Element:
+      - Level: 1
+        Element: Neutral
+      - Level: 2
+        Element: Water
+      - Level: 3
+        Element: Earth
+      - Level: 4
+        Element: Fire
+      - Level: 5
+        Element: Wind
+      - Level: 6
+        Element: Poison
+      - Level: 7
+        Element: Holy
+      - Level: 8
+        Element: Dark
+      - Level: 9
+        Element: Ghost
+      - Level: 10
+        Element: Undead
     Duration1: 180000
     Requires:
       SpCost: 1
@@ -16067,6 +16088,7 @@ Body:
     Flags:
       IsNpc: true
     HitCount: 1
+    Duration1: -1
   - Id: 686
     Name: NPC_INVINCIBLEOFF
     Description: Invincible off
@@ -22168,6 +22190,13 @@ Body:
       Splash: true
     Hit: Single
     HitCount: 1
+    Element:
+      - Level: 1
+        Element: Neutral
+      - Level: 2
+        Element: Holy
+      - Level: 3
+        Element: Neutral
     Knockback:
       - Level: 1
         Amount: 2
@@ -22307,6 +22336,7 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 3
+    Duration1: -1
     Duration2:
       - Level: 1
         Time: 2000
@@ -32444,6 +32474,7 @@ Body:
     HitCount: 1
     Element: Fire
     Knockback: 2
+    Duration1: -1
     Requires:
       SpCost: 40
   - Id: 8402
@@ -32455,6 +32486,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 60
   - Id: 8403
@@ -32489,6 +32521,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 40
   - Id: 8405
@@ -32500,6 +32533,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 60
   - Id: 8406
@@ -32534,6 +32568,7 @@ Body:
     Hit: Single
     HitCount: 1
     Knockback: 5
+    Duration1: -1
     Requires:
       SpCost: 40
   - Id: 8408
@@ -32545,6 +32580,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 60
   - Id: 8409
@@ -32577,6 +32613,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 40
   - Id: 8411
@@ -32588,6 +32625,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 60
   - Id: 8412
@@ -32620,6 +32658,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8414
@@ -32631,6 +32670,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8415
@@ -32642,6 +32682,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8416
@@ -32653,6 +32694,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8417
@@ -32664,6 +32706,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8418
@@ -32675,6 +32718,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8419
@@ -32686,6 +32730,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8420
@@ -32697,6 +32742,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8421
@@ -32708,6 +32754,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8422
@@ -32719,6 +32766,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8423
@@ -32730,6 +32778,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8424
@@ -32741,6 +32790,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     Requires:
       SpCost: 1
   - Id: 8425
@@ -32856,6 +32906,7 @@ Body:
     HitCount: 1
     Element: Water
     SplashArea: 1
+    Duration1: -1
     Requires:
       SpCost: 80
   - Id: 8434

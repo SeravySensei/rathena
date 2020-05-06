@@ -13529,6 +13529,27 @@ Body:
       IsNpc: true
     Hit: Single
     HitCount: 1
+    Element:
+      - Level: 1
+        Element: Neutral
+      - Level: 2
+        Element: Water
+      - Level: 3
+        Element: Earth
+      - Level: 4
+        Element: Fire
+      - Level: 5
+        Element: Wind
+      - Level: 6
+        Element: Poison
+      - Level: 7
+        Element: Holy
+      - Level: 8
+        Element: Dark
+      - Level: 9
+        Element: Ghost
+      - Level: 10
+        Element: Undead
     Duration1: 180000
     Requires:
       SpCost: 1
@@ -16375,6 +16396,7 @@ Body:
     Flags:
       IsNpc: true
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
   - Id: 686
     Name: NPC_INVINCIBLEOFF
@@ -22694,6 +22716,13 @@ Body:
       Splash: true
     Hit: Single
     HitCount: 1
+    Element:
+      - Level: 1
+        Element: Neutral
+      - Level: 2
+        Element: Holy
+      - Level: 3
+        Element: Neutral
     Knockback:
       - Level: 1
         Amount: 2
@@ -22831,6 +22860,7 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 3
+    Duration1: -1
     Duration2:
       - Level: 1
         Time: 2000
@@ -30675,6 +30705,7 @@ Body:
     HitCount: 1
     CastCancel: true
     AfterCastActDelay: 1000
+    Duration1: -1
     Cooldown: 15000
     Requires:
       SpCost: 10
@@ -34885,6 +34916,7 @@ Body:
     HitCount: 1
     Element: Fire
     Knockback: 2
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 40
@@ -34897,6 +34929,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 60
@@ -34933,6 +34966,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 40
@@ -34945,6 +34979,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 60
@@ -34980,6 +35015,7 @@ Body:
     Hit: Single
     HitCount: 1
     Knockback: 5
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 40
@@ -34992,6 +35028,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 60
@@ -35026,6 +35063,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 40
@@ -35038,6 +35076,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 60
@@ -35072,6 +35111,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35084,6 +35124,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35096,6 +35137,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35108,6 +35150,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35120,6 +35163,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35132,6 +35176,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35144,6 +35189,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35156,6 +35202,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35168,6 +35215,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35180,6 +35228,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35192,6 +35241,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35204,6 +35254,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 1
@@ -35320,6 +35371,7 @@ Body:
     HitCount: 1
     Element: Water
     SplashArea: 1
+    Duration1: -1
     FixedCastTime: -1
     Requires:
       SpCost: 80

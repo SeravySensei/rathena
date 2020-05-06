@@ -369,3 +369,9 @@ Body:
         Probability: 300
       - Level: 10
         Probability: 500
+
+Footer:
+  Imports:
+  - Path: db/pre-re/abra_db.yml
+    Mode: Prerenewal
+  - Path: db/import/abra_db.yml
