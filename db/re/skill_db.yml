@@ -8089,6 +8089,19 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
+    SplashArea:
+      - Level: 1
+        Area: 0
+      - Level: 2
+        Area: 0
+      - Level: 3
+        Area: 0
+      - Level: 4
+        Area: 0
+      - Level: 5
+        Area: 0
+      - Level: 6
+        Area: -1
     CastCancel: true
     CastTime: 1600
     FixedCastTime: 400
@@ -35564,7 +35577,7 @@ Body:
     Duration1: 300000
     FixedCastTime: -1
     Unit:
-      Id: Grounddrift_Fire
+      Id: Gd_Glorywounds
       Layout: 2
       Interval: -1
       Target: Guild
