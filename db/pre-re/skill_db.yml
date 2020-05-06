@@ -279,6 +279,7 @@ Body:
         Area: 2
       - Level: 11
         Area: 4
+    Knockback: 2
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -881,7 +882,7 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 3
-    Knockback: 3
+    Knockback: 2
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -938,6 +939,7 @@ Body:
       Target: Enemy
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 19
     Name: MG_FIREBOLT
     Description: Fire Bolt
@@ -1308,6 +1310,7 @@ Body:
       Flag:
         NoEnemy: true
         NoReiteration: true
+        RangedSingleUnit: true
   - Id: 26
     Name: AL_TELEPORT
     Description: Teleport
@@ -1340,7 +1343,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CastCancel: true
     CastTime: 1000
     Duration1:
@@ -1881,12 +1883,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 47
     Name: AC_SHOWER
@@ -1905,6 +1902,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
+    Knockback: 2
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -1915,12 +1913,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 48
     Name: TF_DOUBLE
@@ -2090,7 +2083,7 @@ Body:
     Element: Weapon
     SplashArea: 2
     ActiveInstance: 5
-    Knockback: 5
+    Knockback: 2
     CastTime: 700
     Requires:
       SpCost: 12
@@ -2112,6 +2105,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 6
     Requires:
       SpCost: 9
       Weapon:
@@ -2263,6 +2257,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 1
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -2448,6 +2443,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
+    Knockback: 2
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -2833,6 +2829,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 80
     Name: WZ_FIREPILLAR
     Description: Fire Pillar
@@ -2892,7 +2889,6 @@ Body:
       - Level: 11
         Area: 2
     ActiveInstance: 5
-    Knockback: 5
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -2968,6 +2964,7 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 7
+    Knockback: 5
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -3167,6 +3164,27 @@ Body:
       - Level: 10
         Count: 12
     Element: Wind
+    Knockback:
+      - Level: 1
+        Amount: 2
+      - Level: 2
+        Amount: 3
+      - Level: 3
+        Amount: 3
+      - Level: 4
+        Amount: 4
+      - Level: 5
+        Amount: 4
+      - Level: 6
+        Amount: 5
+      - Level: 7
+        Amount: 5
+      - Level: 8
+        Amount: 6
+      - Level: 9
+        Amount: 6
+      - Level: 10
+        Amount: 7
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -3428,6 +3446,8 @@ Body:
       Interval: 1000
       Flag:
         PathCheck: true
+        NoKnockback: true
+        RemovedByFireRain: true
   - Id: 88
     Name: WZ_FROSTNOVA
     Description: Frost Nova
@@ -3524,6 +3544,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Water
+    Knockback: 2
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -3691,7 +3712,6 @@ Body:
     HitCount: 1
     Element: Earth
     ActiveInstance: 3
-    Knockback: 3
     CastCancel: true
     AfterCastActDelay: 1000
     Duration1:
@@ -3735,6 +3755,7 @@ Body:
       Target: Enemy
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 93
     Name: WZ_ESTIMATION
     Description: Sense
@@ -4056,6 +4077,17 @@ Body:
     Range: 3
     Hit: Single
     HitCount: 1
+    Knockback:
+      - Level: 1
+        Amount: 6
+      - Level: 2
+        Amount: 7
+      - Level: 3
+        Amount: 8
+      - Level: 4
+        Amount: 9
+      - Level: 5
+        Amount: 10
     Duration1:
       - Level: 1
         Time: 300000
@@ -4081,6 +4113,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 116
     Name: HT_LANDMINE
     Description: Land Mine
@@ -4128,6 +4161,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 117
     Name: HT_ANKLESNARE
     Description: Ankle Snare
@@ -4178,6 +4212,8 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        NoKnockback: true
+        RemovedByFireRain: true
   - Id: 118
     Name: HT_SHOCKWAVE
     Description: Shockwave Trap
@@ -4219,6 +4255,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 119
     Name: HT_SANDMAN
     Description: Sandman
@@ -4261,6 +4298,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 120
     Name: HT_FLASHER
     Description: Flasher
@@ -4303,6 +4341,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 121
     Name: HT_FREEZINGTRAP
     Description: Freezing Trap
@@ -4361,6 +4400,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 122
     Name: HT_BLASTMINE
     Description: Blast Mine
@@ -4409,6 +4449,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 123
     Name: HT_CLAYMORETRAP
     Description: Claymore Trap
@@ -4458,6 +4499,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 124
     Name: HT_REMOVETRAP
     Description: Remove Trap
@@ -4499,6 +4541,7 @@ Body:
       Interval: 1000
       Flag:
         NoMob: true
+        RemovedByFireRain: true
   - Id: 126
     Name: HT_BEASTBANE
     Description: Beast Bane
@@ -4880,6 +4923,8 @@ Body:
       Range: 1
       Interval: 1000
       Target: Enemy
+      Flag:
+        RemovedByFireRain: true
   - Id: 141
     Name: AS_SPLASHER
     Description: Venom Splasher
@@ -5031,6 +5076,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 6
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -5041,12 +5087,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 149
     Name: TF_SPRINKLESAND
@@ -5076,6 +5117,7 @@ Body:
       IgnoreKagehumi: true
     Hit: Single
     HitCount: 1
+    Knockback: 5
     Requires:
       SpCost: 7
   - Id: 151
@@ -5134,6 +5176,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 2
     Requires:
       SpCost: 12
       State: Cart
@@ -5439,6 +5482,7 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 5
+    Knockback: 3
     Duration1: 3500
   - Id: 174
     Name: NPC_SPLASHATTACK
@@ -6199,6 +6243,7 @@ Body:
       Interval: -1
       Flag:
         NoReiteration: true
+        RemovedByFireRain: true
   - Id: 221
     Name: RG_FLAGGRAFFITI
     Description: Piece
@@ -6392,7 +6437,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 5
-    Knockback: 5
     CastTime: 2000
     AfterCastActDelay: 500
     Duration1:
@@ -6422,7 +6466,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CastTime: 2000
     AfterCastActDelay: 500
     Duration1: 30000
@@ -6645,6 +6688,17 @@ Body:
     Range: 3
     Hit: Single
     HitCount: 1
+    Knockback:
+      - Level: 1
+        Amount: 5
+      - Level: 2
+        Amount: 6
+      - Level: 3
+        Amount: 7
+      - Level: 4
+        Amount: 8
+      - Level: 5
+        Amount: 9
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -7645,6 +7699,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 286
     Name: SA_DELUGE
     Description: Deluge
@@ -7693,6 +7748,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 287
     Name: SA_VIOLENTGALE
     Description: Whirlwind
@@ -7741,6 +7797,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 288
     Name: SA_LANDPROTECTOR
     Description: Magnetic Earth
@@ -7814,6 +7871,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 289
     Name: SA_DISPELL
     Description: Dispell
@@ -8110,6 +8168,8 @@ Body:
       Layout: 4
       Interval: 6000
       Target: Enemy
+      Flag:
+        Ensemble: true
   - Id: 307
     Name: BD_RICHMANKIM
     Description: Mental Sensing
@@ -8136,6 +8196,7 @@ Body:
       Target: Enemy
       Flag:
         NoPc: true
+        Ensemble: true
   - Id: 308
     Name: BD_ETERNALCHAOS
     Description: Down Tempo
@@ -8160,6 +8221,8 @@ Body:
       Layout: 4
       Interval: -1
       Target: Enemy
+      Flag:
+        Ensemble: true
   - Id: 309
     Name: BD_DRUMBATTLEFIELD
     Description: Battle Theme
@@ -8194,6 +8257,8 @@ Body:
       Layout: 4
       Interval: -1
       Target: Party
+      Flag:
+        Ensemble: true
   - Id: 310
     Name: BD_RINGNIBELUNGEN
     Description: Harmonic Lick
@@ -8228,6 +8293,8 @@ Body:
       Layout: 4
       Interval: -1
       Target: Party
+      Flag:
+        Ensemble: true
   - Id: 311
     Name: BD_ROKISWEIL
     Description: Classical Pluck
@@ -8251,6 +8318,8 @@ Body:
       Id: Rokisweil
       Layout: 4
       Interval: -1
+      Flag:
+        Ensemble: true
   - Id: 312
     Name: BD_INTOABYSS
     Description: Power Chord
@@ -8277,6 +8346,7 @@ Body:
       Target: Party
       Flag:
         NoMob: true
+        Ensemble: true
   - Id: 313
     Name: BD_SIEGFRIED
     Description: Acoustic Rhythm
@@ -8301,6 +8371,8 @@ Body:
       Layout: 4
       Interval: -1
       Target: Party
+      Flag:
+        Ensemble: true
   - Id: 315
     Name: BA_MUSICALLESSON
     Description: Music Lessons
@@ -8334,12 +8406,7 @@ Body:
       Weapon:
         Musical: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 317
     Name: BA_DISSONANCE
@@ -8376,6 +8443,8 @@ Body:
       Layout: 3
       Interval: 3000
       Target: Enemy
+      Flag:
+        Song: true
   - Id: 318
     Name: BA_FROSTJOKER
     Description: Unbarring Octave
@@ -8448,6 +8517,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Song: true
   - Id: 320
     Name: BA_ASSASSINCROSS
     Description: Impressive Riff
@@ -8494,6 +8564,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Song: true
   - Id: 321
     Name: BA_POEMBRAGI
     Description: Magic Strings
@@ -8540,6 +8611,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Song: true
   - Id: 322
     Name: BA_APPLEIDUN
     Description: Song of Lutie
@@ -8586,6 +8658,8 @@ Body:
       Interval: 6000
       Flag:
         NoMob: true
+        Song: true
+        DualMode: true
   - Id: 323
     Name: DC_DANCINGLESSON
     Description: Dance Lessons
@@ -8619,12 +8693,7 @@ Body:
       Weapon:
         Whip: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 325
     Name: DC_UGLYDANCE
@@ -8660,6 +8729,8 @@ Body:
       Layout: 3
       Interval: 3000
       Target: Enemy
+      Flag:
+        Dance: true
   - Id: 326
     Name: DC_SCREAM
     Description: Dazzler
@@ -8732,6 +8803,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Dance: true
   - Id: 328
     Name: DC_DONTFORGETME
     Description: Slow Grace
@@ -8777,6 +8849,8 @@ Body:
       Layout: 3
       Interval: -1
       Target: Enemy
+      Flag:
+        Dance: true
   - Id: 329
     Name: DC_FORTUNEKISS
     Description: Lady Luck
@@ -8823,6 +8897,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Dance: true
   - Id: 330
     Name: DC_SERVICEFORYOU
     Description: Gypsy's Kiss
@@ -8869,6 +8944,7 @@ Body:
       Interval: -1
       Flag:
         NoMob: true
+        Dance: true
   - Id: 331
     Name: NPC_RANDOMMOVE
     Description: Random Move
@@ -8947,7 +9023,6 @@ Body:
     HitCount: 1
     SplashArea: 3
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     Duration1: 20000
     CastTimeFlags:
@@ -9078,6 +9153,27 @@ Body:
       - Level: 10
         Count: 12
     Element: Dark
+    Knockback:
+      - Level: 1
+        Amount: 2
+      - Level: 2
+        Amount: 3
+      - Level: 3
+        Amount: 3
+      - Level: 4
+        Amount: 4
+      - Level: 5
+        Amount: 4
+      - Level: 6
+        Amount: 5
+      - Level: 7
+        Amount: 5
+      - Level: 8
+        Amount: 6
+      - Level: 9
+        Amount: 6
+      - Level: 10
+        Amount: 7
     CastCancel: true
   - Id: 342
     Name: NPC_STOP
@@ -9490,7 +9586,7 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    Knockback: 1
+    Knockback: 2
     CastCancel: true
     CastTime:
       - Level: 1
@@ -9561,6 +9657,8 @@ Body:
       Id: Basilica
       Layout: 2
       Interval: 300
+      Flag:
+        RangedSingleUnit: true
   - Id: 363
     Name: HP_MEDITATIO
     Description: Meditatio
@@ -9757,6 +9855,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 3
     CastCancel: true
     AfterCastActDelay: 300
     CastTimeFlags:
@@ -10149,7 +10248,6 @@ Body:
     Element: Weapon
     SplashArea: 1
     ActiveInstance: 14
-    Knockback: 14
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 1500
@@ -10168,12 +10266,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 383
     Name: SN_WINDWALK
@@ -10522,12 +10615,7 @@ Body:
         Musical: true
         Whip: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 395
     Name: CG_MOONLIT
@@ -10541,6 +10629,7 @@ Body:
       IsEnsemble: true
     HitCount: 1
     SplashArea: 3
+    Knockback: 2
     CastCancel: true
     Duration1:
       - Level: 1
@@ -10572,6 +10661,8 @@ Body:
       Id: Moonlit
       Layout: 4
       Interval: -1
+      Flag:
+        Ensemble: true
   - Id: 396
     Name: CG_MARIONETTE
     Description: Marionette Control
@@ -10836,7 +10927,6 @@ Body:
     HitCount: 1
     Element: Earth
     ActiveInstance: 2
-    Knockback: 2
     CastCancel: true
     Duration1: 20000
     Duration2: 10000
@@ -10846,6 +10936,8 @@ Body:
       Id: Fogwall
       Layout: -1
       Interval: -1
+      Flag:
+        RemovedByFireRain: true
   - Id: 405
     Name: PF_SPIDERWEB
     Description: Fiber Lock
@@ -10858,7 +10950,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     Duration1: 16000
     Duration2: 8000
     Requires:
@@ -10870,6 +10961,8 @@ Body:
       Id: Spiderweb
       Interval: -1
       Target: Enemy
+      Flag:
+        RemovedByFireRain: true
   - Id: 406
     Name: ASC_METEORASSAULT
     Description: Meteor Assault
@@ -10963,7 +11056,6 @@ Body:
     HitCount: 1
     SplashArea: 3
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     Duration1: 20000
     CastTimeFlags:
@@ -10988,7 +11080,6 @@ Body:
     HitCount: 1
     SplashArea: 3
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     Duration1: 20000
     CastTimeFlags:
@@ -11009,6 +11100,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Knockback: 4
     CastCancel: true
     CastTime:
       - Level: 1
@@ -11160,6 +11252,7 @@ Body:
     HitCount: -3
     Element: Weapon
     SplashArea: 1
+    Knockback: 2
     Duration2: 2000
     Requires:
       SpCost:
@@ -11291,17 +11384,17 @@ Body:
     HitCount: 1
     Element:
       - Level: 1
-        Element: Holy
+        Element: Earth
       - Level: 2
-        Element: Holy
+        Element: Wind
       - Level: 3
-        Element: Holy
+        Element: Water
       - Level: 4
-        Element: Holy
+        Element: Fire
       - Level: 5
-        Element: Holy
+        Element: Ghost
       - Level: 6
-        Element: Holy
+        Element: Dark
       - Level: 7
         Element: Holy
     Duration1: 300000
@@ -11374,6 +11467,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 2
     CastCancel: true
     AfterCastActDelay: 1000
     Duration1:
@@ -11406,6 +11500,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 2
     CastCancel: true
     AfterCastActDelay: 1000
     Duration1:
@@ -11438,6 +11533,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 2
     CastCancel: true
     AfterCastActDelay: 1000
     Duration1:
@@ -12399,6 +12495,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Endowed
+    Knockback: 2
     CastTime: 100
     AfterCastActDelay: 500
     Requires:
@@ -12908,6 +13005,8 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        DualMode: true
+        RemovedByFireRain: true
   - Id: 485
     Name: WS_CARTTERMINATION
     Description: Cart Termination
@@ -13089,6 +13188,8 @@ Body:
       Id: Hermode
       Layout: 3
       Interval: -1
+      Flag:
+        Ensemble: true
   - Id: 489
     Name: CG_TAROTCARD
     Description: Tarot Card of Fate
@@ -13321,12 +13422,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 500
     Name: GS_GLITTERING
@@ -13374,9 +13470,13 @@ Body:
       SpCost: 20
       Ammo:
         Arrow: true
+        Dagger: true
         Bullet: true
+        Shell: true
         Grenade: true
+        Shuriken: true
         Kunai: true
+        Cannonball: true
         Throwweapon: true
       AmmoAmount: 1
       SpiritSphereCost: 1
@@ -13400,9 +13500,13 @@ Body:
       SpCost: 30
       Ammo:
         Arrow: true
+        Dagger: true
         Bullet: true
+        Shell: true
         Grenade: true
+        Shuriken: true
         Kunai: true
+        Cannonball: true
         Throwweapon: true
       AmmoAmount: 1
       SpiritSphereCost: 1
@@ -13484,9 +13588,13 @@ Body:
       SpCost: 10
       Ammo:
         Arrow: true
+        Dagger: true
         Bullet: true
+        Shell: true
         Grenade: true
+        Shuriken: true
         Kunai: true
+        Cannonball: true
         Throwweapon: true
       AmmoAmount: 1
       SpiritSphereCost: 1
@@ -13570,12 +13678,7 @@ Body:
         Revolver: true
         Rifle: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 513
     Name: GS_DISARM
@@ -13604,12 +13707,7 @@ Body:
         Revolver: true
         Rifle: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 514
     Name: GS_PIERCINGSHOT
@@ -13643,12 +13741,7 @@ Body:
         Revolver: true
         Rifle: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 515
     Name: GS_RAPIDSHOWER
@@ -13688,12 +13781,7 @@ Body:
       Weapon:
         Revolver: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 5
   - Id: 516
     Name: GS_DESPERADO
@@ -13735,12 +13823,7 @@ Body:
       Weapon:
         Revolver: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 10
     Unit:
       Id: Dummyskill
@@ -13813,6 +13896,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 5
     CastTime: 1000
     AfterCastActDelay: 1000
     Requires:
@@ -13840,12 +13924,7 @@ Body:
       Weapon:
         Shotgun: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 519
     Name: GS_FULLBUSTER
@@ -13907,12 +13986,7 @@ Body:
       Weapon:
         Shotgun: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount:
         - Level: 1
           Amount: 2
@@ -13995,12 +14069,7 @@ Body:
       Weapon:
         Shotgun: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 5
   - Id: 521
     Name: GS_GROUNDDRIFT
@@ -14018,6 +14087,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 3
     CastTime: 2000
     Duration1:
       - Level: 1
@@ -14074,14 +14144,7 @@ Body:
       Weapon:
         Grenade: true
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
         Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
     Unit:
       Id: Grounddrift_Wind
@@ -14109,14 +14172,7 @@ Body:
     Requires:
       SpCost: 2
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
         Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
   - Id: 524
     Name: NJ_KUNAI
@@ -14145,14 +14201,7 @@ Body:
         - Level: 5
           Amount: 10
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
         Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
   - Id: 525
     Name: NJ_HUUMA
@@ -14249,6 +14298,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 3
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -14407,6 +14457,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Knockback: 7
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -14647,6 +14698,7 @@ Body:
       Target: Enemy
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 536
     Name: NJ_BAKUENRYU
     Description: Raging Fire Dragon
@@ -14880,6 +14932,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 539
     Name: NJ_HYOUSYOURAKU
     Description: Ice Meteor
@@ -15118,7 +15171,6 @@ Body:
         Max: 8
       - Level: 5
         Max: 9
-    Knockback: 5
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -15335,7 +15387,6 @@ Body:
     Element: Fire
     SplashArea: 3
     ActiveInstance: 14
-    Knockback: 14
   - Id: 655
     Name: NPC_ICEBREATH
     Description: Ice Breath
@@ -15350,7 +15401,6 @@ Body:
     Element: Water
     SplashArea: 3
     ActiveInstance: 14
-    Knockback: 14
     Duration2: 12000
   - Id: 656
     Name: NPC_THUNDERBREATH
@@ -15366,7 +15416,6 @@ Body:
     Element: Wind
     SplashArea: 3
     ActiveInstance: 14
-    Knockback: 14
   - Id: 657
     Name: NPC_ACIDBREATH
     Description: Acid Breath
@@ -15381,7 +15430,6 @@ Body:
     Element: Poison
     SplashArea: 3
     ActiveInstance: 14
-    Knockback: 14
     Duration2: 60000
   - Id: 658
     Name: NPC_DARKNESSBREATH
@@ -15397,7 +15445,6 @@ Body:
     Element: Dark
     SplashArea: 3
     ActiveInstance: 14
-    Knockback: 14
   - Id: 659
     Name: NPC_DRAGONFEAR
     Description: Dragon Fear
@@ -15457,6 +15504,7 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 7
+    Knockback: 7
   - Id: 662
     Name: NPC_HELLJUDGEMENT
     Description: Hell's Judgement
@@ -16300,6 +16348,8 @@ Body:
       Id: Reverberation
       Interval: 1000
       Target: Enemy
+      Flag:
+        NoKnockback: true
   - Id: 726
     Name: NPC_REVERBERATION_ATK
     Description: Reverberation Attack
@@ -16353,6 +16403,7 @@ Body:
     Flags:
       IsQuest: true
     Hit: Single
+    Knockback: 2
     Duration1: 300000
     Requires:
       SpCost: 15
@@ -16408,11 +16459,6 @@ Body:
       SpCost: 15
       Ammo:
         Dagger: true
-        Bullet: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
   - Id: 1005
     Name: RG_CLOSECONFINE
@@ -16443,6 +16489,7 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 1
+    Knockback: 3
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -16499,6 +16546,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 3
     CopyFlags:
       Skill:
         Plagiarism: true
@@ -16626,6 +16674,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 5
     AfterCastActDelay: 2000
     Duration2: 5000
     Requires:
@@ -16850,6 +16899,7 @@ Body:
     HitCount: 1
     Element: Wind
     SplashArea: 2
+    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -17130,6 +17180,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 3
+    Knockback: 7
     CastTime: 2000
     AfterCastActDelay: 1000
     Requires:
@@ -17634,6 +17685,7 @@ Body:
     HitCount: -7
     Element: Fire
     SplashArea: 3
+    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -17699,6 +17751,7 @@ Body:
     Hit: Multi_Hit
     HitCount: -20
     SplashArea: 9
+    Knockback: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -18098,7 +18151,6 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 1
-    Knockback: 1
     CopyFlags:
       Skill:
         Reproduce: true
@@ -18115,7 +18167,6 @@ Body:
     HitCount: 1
     Element: Wind
     ActiveInstance: 1
-    Knockback: 1
     CopyFlags:
       Skill:
         Reproduce: true
@@ -18132,7 +18183,6 @@ Body:
     HitCount: 1
     Element: Water
     ActiveInstance: 1
-    Knockback: 1
     CopyFlags:
       Skill:
         Reproduce: true
@@ -18149,7 +18199,6 @@ Body:
     HitCount: 1
     Element: Earth
     ActiveInstance: 1
-    Knockback: 1
     CopyFlags:
       Skill:
         Reproduce: true
@@ -18436,6 +18485,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 3
     AfterCastActDelay: 2000
     Requires:
       SpCost:
@@ -18501,7 +18551,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     AfterCastActDelay: 2000
     Duration1:
@@ -18531,6 +18580,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 2033
     Name: GC_CLOAKINGEXCEED
     Description: Cloaking Exceed
@@ -18926,7 +18976,6 @@ Body:
     Element: Holy
     SplashArea: 2
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime:
       - Level: 1
@@ -19520,12 +19569,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 10
   - Id: 2234
     Name: RA_FEARBREEZE
@@ -19612,12 +19656,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 2237
     Name: RA_DETONATOR
@@ -19654,7 +19693,6 @@ Body:
     HitCount: 1
     SplashArea: 2
     ActiveInstance: 3
-    Knockback: 3
     Duration1: 15000
     Duration2:
       - Level: 1
@@ -19680,6 +19718,8 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        NoKnockback: true
+        RemovedByFireRain: true
   - Id: 2239
     Name: RA_CLUSTERBOMB
     Description: Cluster Bomb
@@ -19698,7 +19738,6 @@ Body:
     HitCount: 1
     SplashArea: 3
     ActiveInstance: 3
-    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -19716,6 +19755,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 2240
     Name: RA_WUGMASTERY
     Description: Warg Mastery
@@ -19913,7 +19953,6 @@ Body:
     Element: Fire
     SplashArea: 2
     ActiveInstance: 1
-    Knockback: 1
     AfterCastActDelay: 2000
     Duration1: 15000
     Requires:
@@ -19931,6 +19970,7 @@ Body:
       Flag:
         NoReiteration: true
         NoPc: true
+        RemovedByFireRain: true
   - Id: 2250
     Name: RA_COBALTTRAP
     Description: Cobalt Trap
@@ -19950,7 +19990,6 @@ Body:
     Element: Water
     SplashArea: 2
     ActiveInstance: 1
-    Knockback: 1
     AfterCastActDelay: 2000
     Duration1: 15000
     Requires:
@@ -19968,6 +20007,7 @@ Body:
       Flag:
         NoReiteration: true
         NoPc: true
+        RemovedByFireRain: true
   - Id: 2251
     Name: RA_MAIZETRAP
     Description: Maize Trap
@@ -19987,7 +20027,6 @@ Body:
     Element: Earth
     SplashArea: 2
     ActiveInstance: 1
-    Knockback: 1
     AfterCastActDelay: 2000
     Duration1: 15000
     Requires:
@@ -20005,6 +20044,7 @@ Body:
       Flag:
         NoReiteration: true
         NoPc: true
+        RemovedByFireRain: true
   - Id: 2252
     Name: RA_VERDURETRAP
     Description: Verdure Trap
@@ -20024,7 +20064,6 @@ Body:
     Element: Wind
     SplashArea: 2
     ActiveInstance: 1
-    Knockback: 1
     AfterCastActDelay: 2000
     Duration1: 15000
     Requires:
@@ -20042,6 +20081,7 @@ Body:
       Flag:
         NoReiteration: true
         NoPc: true
+        RemovedByFireRain: true
   - Id: 2253
     Name: RA_FIRINGTRAP
     Description: Firing Trap
@@ -20062,7 +20102,6 @@ Body:
     Element: Fire
     SplashArea: 2
     ActiveInstance: 2
-    Knockback: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -20080,6 +20119,7 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
+        RemovedByFireRain: true
   - Id: 2254
     Name: RA_ICEBOUNDTRAP
     Description: Icebound Trap
@@ -20100,7 +20140,6 @@ Body:
     Element: Water
     SplashArea: 2
     ActiveInstance: 2
-    Knockback: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -20118,6 +20157,7 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
+        RemovedByFireRain: true
   - Id: 2255
     Name: NC_MADOLICENCE
     Description: Mado License
@@ -20229,7 +20269,6 @@ Body:
     Element: Fire
     SplashArea: 1
     ActiveInstance: 5
-    Knockback: 5
     CastTime:
       - Level: 1
         Time: 500
@@ -20356,14 +20395,7 @@ Body:
         - Level: 3
           Amount: 60
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
         Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
       State: Mado
       ItemCost:
@@ -20432,6 +20464,7 @@ Body:
       AllowOnMado: true
     Hit: Single
     HitCount: 1
+    Knockback: 7
     AfterCastActDelay: 500
     Requires:
       SpCost: 5
@@ -20450,6 +20483,7 @@ Body:
       AllowOnMado: true
     Hit: Single
     HitCount: 1
+    Knockback: 7
     AfterCastActDelay: 500
     Requires:
       SpCost: 5
@@ -20486,6 +20520,7 @@ Body:
         Area: 3
       - Level: 3
         Area: 4
+    Knockback: 5
     CastTime:
       - Level: 1
         Time: 2000
@@ -20823,6 +20858,17 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback:
+      - Level: 1
+        Amount: 2
+      - Level: 2
+        Amount: 3
+      - Level: 3
+        Amount: 4
+      - Level: 4
+        Amount: 5
+      - Level: 5
+        Amount: 6
     Cooldown:
       - Level: 1
         Time: 5000
@@ -20951,7 +20997,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 2
-    Knockback: 2
     CastCancel: true
     Duration1:
       - Level: 1
@@ -21002,7 +21047,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 2
-    Knockback: 2
     CastCancel: true
     Duration1:
       - Level: 1
@@ -21261,6 +21305,7 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Weapon
+    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -21292,12 +21337,7 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 3
   - Id: 2289
     Name: SC_BODYPAINT
@@ -21652,7 +21692,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 2000
@@ -21690,6 +21729,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 2300
     Name: SC_DIMENSIONDOOR
     Description: Dimension Door
@@ -21702,7 +21742,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 2000
@@ -21732,6 +21771,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 2301
     Name: SC_CHAOSPANIC
     Description: Chaos Panic
@@ -21786,6 +21826,8 @@ Body:
         NoReiteration: true
         NoFootSet: true
         NoOverlap: true
+        RangedSingleUnit: true
+        RemovedByFireRain: true
   - Id: 2302
     Name: SC_MAELSTROM
     Description: Maelstrom
@@ -21800,7 +21842,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    Knockback: 1
     NoNearNPC:
       Type:
         WarpPortal: true
@@ -21833,6 +21874,8 @@ Body:
       Interval: -1
       Flag:
         NoReiteration: true
+        RangedSingleUnit: true
+        RemovedByFireRain: true
   - Id: 2303
     Name: SC_BLOODYLUST
     Description: Bloody Lust
@@ -21875,6 +21918,8 @@ Body:
         NoOverlap: true
         PathCheck: true
         NoMob: true
+        RangedSingleUnit: true
+        RemovedByFireRain: true
   - Id: 2304
     Name: SC_FEINTBOMB
     Description: Feint Bomb
@@ -21886,6 +21931,13 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback:
+      - Level: 1
+        Amount: 3
+      - Level: 2
+        Amount: 6
+      - Level: 3
+        Amount: 9
     CopyFlags:
       Skill:
         Reproduce: true
@@ -21925,7 +21977,6 @@ Body:
     Element: Weapon
     SplashArea: 1
     ActiveInstance: 11
-    Knockback: 11
     Cooldown: 2000
     Requires:
       SpCost:
@@ -22117,6 +22168,13 @@ Body:
       Splash: true
     Hit: Single
     HitCount: 1
+    Knockback:
+      - Level: 1
+        Amount: 2
+      - Level: 2
+        Amount: 0
+      - Level: 3
+        Amount: 0
     CopyFlags:
       Skill:
         Reproduce: true
@@ -22564,6 +22622,17 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback:
+      - Level: 1
+        Amount: 3
+      - Level: 2
+        Amount: 4
+      - Level: 3
+        Amount: 5
+      - Level: 4
+        Amount: 6
+      - Level: 5
+        Amount: 7
     CopyFlags:
       Skill:
         Reproduce: true
@@ -23027,6 +23096,17 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback:
+      - Level: 1
+        Amount: 2
+      - Level: 2
+        Amount: 3
+      - Level: 3
+        Amount: 4
+      - Level: 4
+        Amount: 5
+      - Level: 5
+        Amount: 6
     CopyFlags:
       Skill:
         Reproduce: true
@@ -23155,6 +23235,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 7
     Requires:
       SpCost: 1
   - Id: 2343
@@ -23878,6 +23959,8 @@ Body:
       Id: Reverberation
       Interval: 1000
       Target: Enemy
+      Flag:
+        NoKnockback: true
   - Id: 2415
     Name: WM_REVERBERATION_MELEE
     Description: Reverberation Melee
@@ -23981,18 +24064,15 @@ Body:
       Weapon:
         Bow: true
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 20
     Unit:
       Id: Severe_Rainstorm
       Range: 5
       Interval: 300
       Target: Enemy
+      Flag:
+        DualMode: true
   - Id: 2419
     Name: WM_POEMOFNETHERWORLD
     Description: Poem of The Netherworld
@@ -24008,7 +24088,6 @@ Body:
     HitCount: 1
     SplashArea: 1
     ActiveInstance: 5
-    Knockback: 5
     CastCancel: true
     CastTime: 3000
     Duration1:
@@ -24059,6 +24138,7 @@ Body:
       Flag:
         NoFootSet: true
         PathCheck: true
+        NoKnockback: true
   - Id: 2420
     Name: WM_VOICEOFSIREN
     Description: Voice of Siren
@@ -24885,7 +24965,6 @@ Body:
         Max: 14
       - Level: 5
         Max: 16
-    Knockback: 8
     CopyFlags:
       Skill:
         Reproduce: true
@@ -24935,7 +25014,6 @@ Body:
         Max: 14
       - Level: 5
         Max: 16
-    Knockback: 8
     CopyFlags:
       Skill:
         Reproduce: true
@@ -25374,6 +25452,7 @@ Body:
       Target: Enemy
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 2451
     Name: SO_STRIKING
     Description: Striking
@@ -25466,6 +25545,8 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RangedSingleUnit: true
+        RemovedByFireRain: true
   - Id: 2453
     Name: SO_VACUUM_EXTREME
     Description: Vacuum Extreme
@@ -25550,6 +25631,7 @@ Body:
       Target: Enemy
       Flag:
         PathCheck: true
+        RemovedByFireRain: true
   - Id: 2454
     Name: SO_VARETYR_SPEAR
     Description: Varetyr Spear
@@ -25941,7 +26023,6 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime: 1000
     Duration1: 60000
@@ -25967,6 +26048,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 2466
     Name: SO_WATER_INSIGNIA
     Description: Water Insignia
@@ -25980,7 +26062,6 @@ Body:
     HitCount: 1
     Element: Water
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime: 1000
     Duration1: 60000
@@ -26006,6 +26087,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 2467
     Name: SO_WIND_INSIGNIA
     Description: Wind Insignia
@@ -26019,7 +26101,6 @@ Body:
     HitCount: 1
     Element: Wind
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime: 1000
     Duration1: 60000
@@ -26045,6 +26126,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 2468
     Name: SO_EARTH_INSIGNIA
     Description: Earth Insignia
@@ -26058,7 +26140,6 @@ Body:
     HitCount: 1
     Element: Earth
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime: 1000
     Duration1: 60000
@@ -26084,6 +26165,7 @@ Body:
       Interval: -1
       Flag:
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 2474
     Name: GN_TRAINING_SWORD
     Description: Sword Training
@@ -26104,6 +26186,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
+    Knockback: 2
     AfterCastActDelay: 500
     Duration1: 5000
     Cooldown:
@@ -26178,14 +26261,7 @@ Body:
         - Level: 5
           Amount: 50
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
         Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
       State: Cart
   - Id: 2478
@@ -26226,7 +26302,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -26268,6 +26343,7 @@ Body:
       Flag:
         NoReiteration: true
         NoFootSet: true
+        RemovedByFireRain: true
   - Id: 2480
     Name: GN_BLOOD_SUCKER
     Description: Blood Sucker
@@ -26280,7 +26356,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -26384,7 +26459,7 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 1
-    Knockback: 1
+    Knockback: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -26425,6 +26500,8 @@ Body:
       Range: 1
       Interval: 300
       Target: Enemy
+      Flag:
+        RemovedByFireRain: true
   - Id: 2483
     Name: GN_CRAZYWEED
     Description: Crazy Weed
@@ -26531,7 +26608,6 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 1
-    Knockback: 1
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26592,6 +26668,7 @@ Body:
         NoOverlap: true
         PathCheck: true
         Skill: true
+        RemovedByFireRain: true
   - Id: 2486
     Name: GN_FIRE_EXPANSION
     Description: Fire Expansion
@@ -26641,6 +26718,8 @@ Body:
       Id: Fire_Expansion_Smoke_Powder
       Layout: 2
       Interval: -1
+      Flag:
+        RangedSingleUnit: true
   - Id: 2488
     Name: GN_FIRE_EXPANSION_TEAR_GAS
     Description: Fire Expansion Tear Gas
@@ -26656,6 +26735,8 @@ Body:
       Id: Fire_Expansion_Tear_Gas
       Layout: 2
       Interval: -1
+      Flag:
+        RangedSingleUnit: true
   - Id: 2489
     Name: GN_FIRE_EXPANSION_ACID
     Description: Fire Expansion Acid
@@ -26718,7 +26799,6 @@ Body:
         Max: 5
       - Level: 5
         Max: 6
-    Knockback: 2
     CopyFlags:
       Skill:
         Reproduce: true
@@ -26768,6 +26848,7 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
+        RemovedByFireRain: true
   - Id: 2491
     Name: GN_HELLS_PLANT_ATK
     Description: Hell's Plant Attack
@@ -26852,13 +26933,6 @@ Body:
     Requires:
       SpCost: 4
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
         Throwweapon: true
       AmmoAmount: 1
   - Id: 2494
@@ -27070,12 +27144,7 @@ Body:
       Weapon:
         Rifle: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 2554
     Name: RL_BANISHING_BUSTER
@@ -27117,12 +27186,7 @@ Body:
       Weapon:
         Shotgun: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 2555
     Name: RL_B_TRAP
@@ -27147,7 +27211,6 @@ Body:
     HitCount: 1
     SplashArea: 1
     ActiveInstance: 1
-    Knockback: 1
     CastTime:
       - Level: 1
         Time: 2000
@@ -27303,12 +27366,7 @@ Body:
       Weapon:
         Shotgun: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
   - Id: 2558
     Name: RL_E_CHAIN
@@ -27372,12 +27430,9 @@ Body:
         Shotgun: true
         Grenade: true
       Ammo:
-        Dagger: true
         Bullet: true
         Shell: true
         Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
       Status:
         Qd_Shot_Ready: true
@@ -27392,7 +27447,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     Duration1: 30000
     Cooldown: 1000
     Requires:
@@ -27433,12 +27487,7 @@ Body:
       Weapon:
         Revolver: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 5
   - Id: 2562
     Name: RL_H_MINE
@@ -27514,12 +27563,7 @@ Body:
         - Level: 5
           Amount: 36
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 1
       Equipment:
         Silver_Bullet: true
@@ -27562,6 +27606,7 @@ Body:
         Area: 5
       - Level: 5
         Area: 6
+    Knockback: 3
     AfterCastActDelay: 1000
     Cooldown:
       - Level: 1
@@ -27589,12 +27634,7 @@ Body:
       Weapon:
         Gatling: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 5
   - Id: 2566
     Name: RL_D_TAIL
@@ -27638,14 +27678,7 @@ Body:
       Weapon:
         Grenade: true
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
         Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 1
   - Id: 2567
     Name: RL_FIRE_RAIN
@@ -27668,12 +27701,7 @@ Body:
       Weapon:
         Gatling: true
       Ammo:
-        Dagger: true
         Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
       AmmoAmount: 10
     Unit:
       Id: Fire_Rain
@@ -27757,6 +27785,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 6
     CastTime:
       - Level: 1
         Time: 5000
@@ -28025,14 +28054,7 @@ Body:
         - Level: 5
           Amount: 20
       Ammo:
-        Dagger: true
-        Bullet: true
-        Shell: true
-        Grenade: true
-        Shuriken: true
         Kunai: true
-        Cannonball: true
-        Throwweapon: true
       AmmoAmount: 8
   - Id: 3008
     Name: KO_MUCHANAGE
@@ -28285,7 +28307,17 @@ Body:
       NoDamage: true
     Hit: Single
     ActiveInstance: 1
-    Knockback: 1
+    Knockback:
+      - Level: 1
+        Amount: 3
+      - Level: 2
+        Amount: 4
+      - Level: 3
+        Amount: 5
+      - Level: 4
+        Amount: 6
+      - Level: 5
+        Amount: 7
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
@@ -29104,7 +29136,6 @@ Body:
     Element: Weapon
     SplashArea: 3
     ActiveInstance: 3
-    Knockback: 3
     CopyFlags:
       Skill:
         Reproduce: true
@@ -29247,6 +29278,19 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Knockback:
+      - Level: 1
+        Amount: 4
+      - Level: 2
+        Amount: 5
+      - Level: 3
+        Amount: 6
+      - Level: 4
+        Amount: 7
+      - Level: 5
+        Amount: 8
+      - Level: 6
+        Amount: 9
     AfterCastActDelay: 500
     Duration1: 50000
     Duration2: 20000
@@ -29381,6 +29425,7 @@ Body:
       Interval: -1
       Flag:
         NoReiteration: true
+        RangedSingleUnit: true
   - Id: 5014
     Name: ALL_FULL_THROTTLE
     Description: Full Throttle
@@ -30086,7 +30131,6 @@ Body:
     HitCount: 1
     Element: Poison
     ActiveInstance: 1
-    Knockback: 1
     CastTime:
       - Level: 1
         Time: 500
@@ -30270,15 +30314,15 @@ Body:
     HitCount: -6
     Element:
       - Level: 1
-        Element: Ghost
+        Element: Wind
       - Level: 2
-        Element: Ghost
+        Element: Neutral
       - Level: 3
-        Element: Ghost
+        Element: Wind
       - Level: 4
-        Element: Ghost
+        Element: Neutral
       - Level: 5
-        Element: Ghost
+        Element: Wind
     CastCancel: true
     CastTime:
       - Level: 1
@@ -30317,15 +30361,15 @@ Body:
     HitCount: -6
     Element:
       - Level: 1
-        Element: Ghost
+        Element: Wind
       - Level: 2
-        Element: Ghost
+        Element: Neutral
       - Level: 3
-        Element: Ghost
+        Element: Wind
       - Level: 4
-        Element: Ghost
+        Element: Neutral
       - Level: 5
-        Element: Ghost
+        Element: Wind
     SplashArea:
       - Level: 1
         Area: 2
@@ -30560,6 +30604,7 @@ Body:
         Size: 9
     Hit: Single
     HitCount: 1
+    Knockback: 3
     CastTime:
       - Level: 1
         Time: 800
@@ -30942,7 +30987,6 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 1
-    Knockback: 1
     CastTime:
       - Level: 1
         Time: 5000
@@ -31070,7 +31114,6 @@ Body:
     Hit: Single
     HitCount: 1
     ActiveInstance: 3
-    Knockback: 3
     CastTime:
       - Level: 1
         Time: 4000
@@ -31113,6 +31156,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 8201
     Name: MS_BASH
     Description: Bash
@@ -31182,6 +31226,7 @@ Body:
     HitCount: 1
     Element: Fire
     SplashArea: 2
+    Knockback: 2
     AfterCastWalkDelay: 2000
     Duration1: 2000
     Duration2: 10000
@@ -31223,6 +31268,7 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 1
+    Knockback: 1
     CastTime: 700
     Requires:
       SpCost:
@@ -31342,12 +31388,7 @@ Body:
     Requires:
       SpCost: 12
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 8208
     Name: MA_SHOWER
@@ -31366,16 +31407,12 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
+    Knockback: 2
     Duration1: 100
     Requires:
       SpCost: 15
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 8209
     Name: MA_SKIDTRAP
@@ -31392,6 +31429,17 @@ Body:
     Range: 3
     Hit: Single
     HitCount: 1
+    Knockback:
+      - Level: 1
+        Amount: 6
+      - Level: 2
+        Amount: 7
+      - Level: 3
+        Amount: 8
+      - Level: 4
+        Amount: 9
+      - Level: 5
+        Amount: 10
     Duration1:
       - Level: 1
         Time: 300000
@@ -31582,6 +31630,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    Knockback: 6
     CastTime: 1500
     CastTimeFlags:
       IgnoreDex: true
@@ -31590,12 +31639,7 @@ Body:
     Requires:
       SpCost: 15
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 8215
     Name: MA_SHARPSHOOTING
@@ -31613,7 +31657,6 @@ Body:
     Element: Weapon
     SplashArea: 1
     ActiveInstance: 14
-    Knockback: 14
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 1500
@@ -31634,12 +31677,7 @@ Body:
         - Level: 5
           Amount: 30
       Ammo:
-        Shell: true
-        Grenade: true
-        Shuriken: true
-        Kunai: true
-        Cannonball: true
-        Throwweapon: true
+        Arrow: true
       AmmoAmount: 1
   - Id: 8216
     Name: ML_PIERCE
@@ -31669,7 +31707,7 @@ Body:
     Element: Weapon
     SplashArea: 2
     ActiveInstance: 5
-    Knockback: 5
+    Knockback: 2
     CastTime: 700
     CastTimeFlags:
       IgnoreDex: true
@@ -32405,6 +32443,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
+    Knockback: 2
     Requires:
       SpCost: 40
   - Id: 8402
@@ -32428,7 +32467,7 @@ Body:
     HitCount: 1
     Element: Fire
     ActiveInstance: 3
-    Knockback: 3
+    Knockback: 2
     Duration1: 15000
     Requires:
       SpCost: 80
@@ -32484,6 +32523,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 8407
     Name: EL_WIND_STEP
     Description: Wind Step
@@ -32493,6 +32533,7 @@ Body:
       NoDamage: true
     Hit: Single
     HitCount: 1
+    Knockback: 5
     Requires:
       SpCost: 40
   - Id: 8408
@@ -32526,6 +32567,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 8410
     Name: EL_SOLID_SKIN
     Description: Solid Skin
@@ -32568,6 +32610,7 @@ Body:
       Flag:
         NoOverlap: true
         PathCheck: true
+        RangedSingleUnit: true
   - Id: 8413
     Name: EL_PYROTECHNIC
     Description: Pyrotechnic
