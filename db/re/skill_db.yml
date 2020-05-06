@@ -28397,6 +28397,7 @@ Body:
         Time: 60000
     Requires:
       SpCost: 40
+      State: Moonstance
   - Id: 2575
     Name: SJ_LUNARSTANCE
     Description: Lunar Stance
@@ -28440,6 +28441,7 @@ Body:
           Amount: 55
         - Level: 7
           Amount: 60
+      State: Moonstance
   - Id: 2577
     Name: SJ_LIGHTOFSTAR
     Description: Light of Star
@@ -28463,6 +28465,7 @@ Body:
         Time: 60000
     Requires:
       SpCost: 40
+      State: Starstance
   - Id: 2578
     Name: SJ_STARSTANCE
     Description: Star Stance
@@ -28507,6 +28510,7 @@ Body:
           Amount: 45
         - Level: 7
           Amount: 50
+      State: Moonstance
   - Id: 2580
     Name: SJ_FLASHKICK
     Description: Flash Kick
@@ -28549,6 +28553,7 @@ Body:
           Amount: 20
         - Level: 7
           Amount: 15
+      State: Starstance
   - Id: 2581
     Name: SJ_STAREMPEROR
     Description: Star Emperor Advent
@@ -28578,6 +28583,7 @@ Body:
           Amount: 85
         - Level: 5
           Amount: 90
+      State: Universestance
   - Id: 2582
     Name: SJ_NOVAEXPLOSING
     Description: Nova Explosion
@@ -28609,6 +28615,7 @@ Body:
           Amount: 75
         - Level: 5
           Amount: 80
+      State: Universestance
   - Id: 2583
     Name: SJ_UNIVERSESTANCE
     Description: Universe Stance
@@ -28665,6 +28672,7 @@ Body:
           Amount: 65
         - Level: 7
           Amount: 70
+      State: Starstance
   - Id: 2585
     Name: SJ_GRAVITYCONTROL
     Description: Gravity Control
@@ -28682,6 +28690,7 @@ Body:
     Cooldown: 20000
     Requires:
       SpCost: 80
+      State: Universestance
   - Id: 2586
     Name: SJ_BOOKOFDIMENSION
     Description: Book of Dimension
@@ -28707,6 +28716,7 @@ Body:
         Time: 30000
     Requires:
       SpCost: 40
+      State: Universestance
   - Id: 2587
     Name: SJ_BOOKOFCREATINGSTAR
     Description: Book of Creating Star
@@ -28745,6 +28755,7 @@ Body:
           Amount: 65
         - Level: 5
           Amount: 70
+      State: Universestance
     Unit:
       Id: Creatingstar
       Layout: 2
@@ -28794,6 +28805,7 @@ Body:
         Time: 60000
     Requires:
       SpCost: 40
+      State: Sunstance
   - Id: 2591
     Name: SJ_SUNSTANCE
     Description: Sun Stance
@@ -28836,6 +28848,7 @@ Body:
           Amount: 49
         - Level: 7
           Amount: 52
+      State: Sunstance
   - Id: 2593
     Name: SJ_PROMINENCEKICK
     Description: Prominence Kick
@@ -28855,6 +28868,7 @@ Body:
       IgnoreStatus: true
     Requires:
       SpCost: 20
+      State: Sunstance
   - Id: 2594
     Name: SJ_FALLINGSTAR_ATK
     Description: Falling Star Attack
@@ -28872,6 +28886,7 @@ Body:
     CastCancel: true
     Requires:
       SpCost: 1
+      State: Starstance
   - Id: 2595
     Name: SJ_FALLINGSTAR_ATK2
     Description: Falling Star Attack 2
@@ -28890,6 +28905,7 @@ Body:
     CastCancel: true
     Requires:
       SpCost: 1
+      State: Starstance
   - Id: 2596
     Name: SP_SOULGOLEM
     Description: Golem's Soul
@@ -29135,6 +29151,8 @@ Body:
           Amount: 1
         - Level: 9
           Amount: 1
+        - Level: 10
+          Amount: 0
   - Id: 2603
     Name: SP_SHA
     Description: Esha
@@ -33282,25 +33300,25 @@ Body:
       Id: Dummyskill
       Range:
         - Level: 1
-          Size: 2
+          Size: 1
         - Level: 2
-          Size: 2
+          Size: 1
         - Level: 3
-          Size: 3
+          Size: 1
         - Level: 4
-          Size: 3
+          Size: 2
         - Level: 5
-          Size: 4
+          Size: 2
         - Level: 6
-          Size: 0
+          Size: 2
         - Level: 7
-          Size: 0
+          Size: 3
         - Level: 8
-          Size: 0
+          Size: 3
         - Level: 9
-          Size: 0
+          Size: 3
         - Level: 10
-          Size: 0
+          Size: 4
       Interval: 1000
       Target: Enemy
       Flag:

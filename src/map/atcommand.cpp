@@ -1857,7 +1857,7 @@ ACMD_FUNC(bodystyle)
 
 	memset(atcmd_output, '\0', sizeof(atcmd_output));
 
-	if (!(sd->class_&JOBL_THIRD)) {
+	if (!(sd->class_ & JOBL_THIRD) || (sd->class_ & MAPID_THIRDMASK) == MAPID_SUPER_NOVICE_E || (sd->class_ & MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || (sd->class_ & MAPID_THIRDMASK) == MAPID_SOUL_REAPER) {
 		clif_displaymessage(fd, msg_txt(sd,740));	// This job has no alternate body styles.
 		return -1;
 	}
@@ -4057,8 +4057,8 @@ ACMD_FUNC(reload) {
 		if (quest_db.reload())
 			clif_displaymessage(fd, msg_txt(sd,1377)); // Quest database has been reloaded.
 	} else if (strstr(command, "instancedb") || strncmp(message, "instancedb", 4) == 0) {
-		instance_reload();
-		clif_displaymessage(fd, msg_txt(sd,516)); // Instance database has been reloaded.
+		if (instance_db.reload())
+			clif_displaymessage(fd, msg_txt(sd,516)); // Instance database has been reloaded.
 	} else if (strstr(command, "achievementdb") || strncmp(message, "achievementdb", 4) == 0) {
 		achievement_db_reload();
 		clif_displaymessage(fd, msg_txt(sd,771)); // Achievement database has been reloaded.
