@@ -21,6 +21,7 @@
 #include "../common/strlib.hpp"
 #include "../common/timer.hpp"
 #include "../common/utils.hpp"
+#include "../common/utilities.hpp"
 
 #include "achievement.hpp"
 #include "atcommand.hpp"
@@ -17663,7 +17664,7 @@ void clif_instance_create(int instance_id, int num)
 	if (!sd)
 		return;
 
-	std::shared_ptr<s_instance_db> db = instance_db.find(util::umap_find(instances, instance_id)->id);
+	std::shared_ptr<s_instance_db> db = instance_db.find(rathena::util::umap_find(instances, instance_id)->id);
 
 	if (!db)
 		return;
@@ -17713,7 +17714,7 @@ void clif_instance_status(int instance_id, unsigned int limit1, unsigned int lim
 	if (!sd)
 		return;
 
-	std::shared_ptr<s_instance_db> db = instance_db.find(util::umap_find(instances, instance_id)->id);
+	std::shared_ptr<s_instance_db> db = instance_db.find(rathena::util::umap_find(instances, instance_id)->id);
 
 	if (!db)
 		return;
