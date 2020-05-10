@@ -21277,18 +21277,17 @@ Body:
         Time: 2000
       - Level: 5
         Time: 2200
-    AfterCastActDelay: 1000
-    Cooldown:
+    AfterCastActDelay:
       - Level: 1
-        Time: 150
+        Time: 1000
       - Level: 2
-        Time: 200
+        Time: 1000
       - Level: 3
-        Time: 300
+        Time: 1000
       - Level: 4
-        Time: 450
+        Time: 1000
       - Level: 5
-        Time: 650 
+        Time: 1000
     FixedCastTime:
       - Level: 1
         Time: 600
