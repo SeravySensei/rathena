@@ -1030,6 +1030,10 @@ void initChangeTables(void)
 	set_sc( SP_SOULREAPER	, SC_SOULREAPER		, EFST_SOULREAPER	, SCB_NONE );
 	set_sc( SP_SOULCOLLECT	, SC_SOULCOLLECT	, EFST_SOULCOLLECT	, SCB_NONE );
 
+#ifdef RENEWAL
+	set_sc( NV_HELPANGEL			, SC_HELPANGEL		, EFST_HELPANGEL	, SCB_NONE );
+#endif
+
 	/* Storing the target job rather than simply SC_SPIRIT simplifies code later on */
 	SkillStatusChangeTable[skill_get_index(SL_ALCHEMIST)]	= (sc_type)MAPID_ALCHEMIST,
 	SkillStatusChangeTable[skill_get_index(SL_MONK)]		= (sc_type)MAPID_MONK,
@@ -3201,11 +3205,11 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 		//Only for BL_PC
 		if (bl->type == BL_PC) {
 			struct map_session_data *sd = map_id2sd(bl->id);
-			uint8 i;
+			uint16 skill_lv;
 
 			bonus += sd->bonus.hp;
-			if ((i = pc_checkskill(sd,CR_TRUST)) > 0)
-				bonus += i * 200;
+			if ((skill_lv = pc_checkskill(sd,CR_TRUST)) > 0)
+				bonus += skill_lv * 200;
 			if (pc_checkskill(sd,SU_SPRITEMABLE) > 0)
 				bonus += 1000;
 			if (pc_checkskill(sd, SU_POWEROFSEA) > 0) {
@@ -3214,6 +3218,10 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 					pc_checkskill(sd, SU_GROOMING) + pc_checkskill(sd, SU_PURRING) + pc_checkskill(sd, SU_SHRIMPARTY)) > 19)
 						bonus += 2000;
 			}
+			if ((skill_lv = pc_checkskill(sd, NV_BREAKTHROUGH)) > 0)
+				bonus += 350 * skill_lv + (skill_lv > 4 ? 250 : 0);
+			if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
+				bonus += 350 * skill_lv + (skill_lv > 4 ? 250 : 0);
 #ifndef HP_SP_TABLES
 			if ((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE && sd->status.base_level >= 99)
 				bonus += 2000; // Supernovice lvl99 hp bonus.
@@ -3366,6 +3374,7 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 		if (bl->type == BL_PC) {
 			struct map_session_data *sd = map_id2sd(bl->id);
 			uint8 i;
+			uint16 skill_lv;
 
 			bonus += sd->bonus.sp;
 			if ((i = pc_checkskill(sd,SL_KAINA)) > 0)
@@ -3382,6 +3391,10 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 					pc_checkskill(sd, SU_GROOMING) + pc_checkskill(sd, SU_PURRING) + pc_checkskill(sd, SU_SHRIMPARTY)) > 19)
 						bonus += 200;
 			}
+			if ((skill_lv = pc_checkskill(sd, NV_BREAKTHROUGH)) > 0)
+				bonus += 30 * skill_lv + (skill_lv > 4 ? 50 : 0);
+			if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
+				bonus += 30 * skill_lv + (skill_lv > 4 ? 50 : 0);
 		}
 
 		//Bonus by SC
@@ -5440,6 +5453,8 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 
 				// Any +MATK you get from skills and cards, including cards in weapon, is added here.
 				if (sd) {
+					uint16 skill_lv;
+
 					if (sd->bonus.ematk > 0)
 						status->matk_min += sd->bonus.ematk;
 					if (pc_checkskill(sd, SU_POWEROFLAND) > 0) {
@@ -5447,6 +5462,8 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 						pc_checkskill(sd, SU_CHATTERING) + pc_checkskill(sd, SU_MEOWMEOW) + pc_checkskill(sd, SU_NYANGGRASS)) > 19)
 							status->matk_min += status->matk_min * 20 / 100;
 					}
+					if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
+						status->matk_min += 15 * skill_lv + (skill_lv > 4 ? 25 : 0);
 				}
 
 				status->matk_buff = status_calc_ematk(bl, sc, status->matk_min) - status->matk_min;
@@ -11709,6 +11726,10 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val1 = 15; // Heal Power rate bonus
 			val2 = 30; // SP Recovery rate bonus
 			break;
+		case SC_HELPANGEL:
+			tick_time = 1000;
+			val4 = tick / tick_time;
+			break;
 
 		case SC_SUNSTANCE:
 			val2 = 2 + val1; // ATK Increase
@@ -14396,6 +14417,13 @@ TIMER_FUNC(status_change_timer){
 		pc_addsoulball(sd, skill_get_time2(SP_SOULCOLLECT, sce->val1), sce->val2);
 		if( sd->soulball < sce->val2 ){
 			sc_timer_next(sce->val3 + tick);
+			return 0;
+		}
+		break;
+	case SC_HELPANGEL:
+		if (--(sce->val4) >= 0) {
+			status_heal(bl, 1000, 350, 2);
+			sc_timer_next(1000 + tick);
 			return 0;
 		}
 		break;
