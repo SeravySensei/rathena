@@ -56,7 +56,7 @@ enum sc_type : int16;
 
 //Update this max as necessary. 55 is the value needed for Super Baby currently
 //Raised to 105 since Expanded Super Baby needs it.
-#define MAX_SKILL_TREE 105
+#define MAX_SKILL_TREE 150
 //Total number of classes (for data storage)
 #define CLASS_COUNT (JOB_MAX - JOB_NOVICE_HIGH + JOB_MAX_BASIC)
 

@@ -31,7 +31,7 @@ struct status_change_entry;
 #define MAX_PRODUCE_RESOURCE	12 /// Max Produce requirements
 #define MAX_SKILL_ARROW_DB		150 /// Max Arrow Creation DB
 #define MAX_ARROW_RESULT		5 /// Max Arrow results/created
-#define MAX_SKILL_LEVEL 13 /// Max Skill Level (for skill_db storage)
+#define MAX_SKILL_LEVEL 20 /// Max Skill Level (for skill_db storage)
 #define MAX_MOBSKILL_LEVEL 100	/// Max monster skill level (on skill usage)
 #define MAX_SKILL_CRIMSON_MARKER 3 /// Max Crimson Marker targets (RL_C_MARKER)
 #define SKILL_NAME_LENGTH 31 /// Max Skill Name length
@@ -1958,9 +1958,9 @@ enum e_skill {
 	AB_VITUPERATUM = 5072,
 	AB_CONVENIO,
 	ALL_LIGHTNING_STORM,
-	NV_BREAKTHROUGH,
-	NV_HELPANGEL,
-	NV_TRANSCENDENCE,
+	NV_BREAKTHROUGH = 5075,
+	NV_HELPANGEL = 5076,
+	NV_TRANSCENDENCE = 5077,
 
 	HLIF_HEAL = 8001,
 	HLIF_AVOID,
