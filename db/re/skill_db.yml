@@ -13445,8 +13445,11 @@ Body:
     Name: CR_ACIDDEMONSTRATION
     Description: Acid Demonstration
     MaxLevel: 10
-    Type: Weapon
+    Type: Misc
     TargetType: Attack
+    DamageFlags:
+      IgnoreDefense: true
+      IgnoreFlee: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -13473,10 +13476,9 @@ Body:
     Element: Weapon
     CastCancel: true
     AfterCastActDelay: 1000
-    Cooldown: 150
     FixedCastTime: 1000
     Requires:
-      SpCost: 50
+      SpCost: 30
       ItemCost:
         - Item: Fire_Bottle
           Amount: 1

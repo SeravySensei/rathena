@@ -5505,6 +5505,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		clif_emotion(src,ET_ANGER);
 	case SN_FALCONASSAULT:
 	case PA_PRESSURE:
+	case CR_ACIDDEMONSTRATION:
 	case TF_THROWSTONE:
 #ifdef RENEWAL
 	case ASC_BREAKER:

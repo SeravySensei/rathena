@@ -1042,9 +1042,7 @@ bool battle_check_sc(struct block_list *src, struct block_list *target, struct s
 	}
 
 	if (sc->data[SC_NEUTRALBARRIER] && ((d->flag&(BF_LONG|BF_MAGIC)) == BF_LONG
-#ifndef RENEWAL
 		|| skill_id == CR_ACIDDEMONSTRATION
-#endif
 		)) {
 		d->dmg_lv = ATK_MISS;
 		return false;
@@ -3762,13 +3760,13 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case MA_SHARPSHOOTING:
 			skillratio += 100 + 50 * skill_lv;
 			break;
-#ifdef RENEWAL
+/*#ifdef RENEWAL
 		case CR_ACIDDEMONSTRATION:
 			skillratio += -100 + 200 * skill_lv + sstatus->int_ + sstatus->vit; // !TODO: Confirm status bonus
 			if (target->type == BL_PC)
 				skillratio /= 2;
 			break;
-#endif
+#endif*/
 		case CG_ARROWVULCAN:
 			skillratio += 100 + 100 * skill_lv;
 			break;
