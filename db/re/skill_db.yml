@@ -26928,12 +26928,11 @@ Body:
     Type: Weapon
     TargetType: Attack
     DamageFlags:
-      NoDamage: true
       Splash: true
     Range: 11
     Hit: Multi_Hit
     HitCount: 2
-    Element: Weapon
+    Element: Poison
     SplashArea:
       - Level: 1
         Area: 1
@@ -27063,7 +27062,7 @@ Body:
       - Level: 10
         Time: 7500
     AfterCastActDelay: 500
-    Cooldown: 5000
+    Cooldown: 1000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -27102,7 +27101,7 @@ Body:
       TargetTrap: true
       IgnoreLandProtector: true
     Hit: Multi_Hit
-    HitCount: 2
+    HitCount: 1
     Element: Weapon
     SplashArea: 2
     ActiveInstance:
@@ -27135,7 +27134,7 @@ Body:
       SpCost: 1
     Unit:
       Id: Dummyskill
-      Range: 1
+      Range: 4
       Interval: 100
       Target: Enemy
       Flag:
@@ -27206,7 +27205,7 @@ Body:
     Unit:
       Id: Demonic_Fire
       Range: 2
-      Interval: 2000
+      Interval: 200
       Target: Enemy
       Flag:
         NoOverlap: true
@@ -27333,7 +27332,6 @@ Body:
     CopyFlags:
       Skill:
         Reproduce: true
-    CastCancel: true
     CastTime:
       - Level: 1
         Time: 3000
@@ -27376,7 +27374,7 @@ Body:
     Unit:
       Id: Hells_Plant
       Range: 2
-      Interval: 300 # !TODO: Confirm interval
+      Interval: 500 # !TODO: Confirm interval
       Target: Enemy
   - Id: 2491
     Name: GN_HELLS_PLANT_ATK

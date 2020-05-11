@@ -11052,12 +11052,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			sc_start(src,bl,SC_STRIPSHIELD,100,val1,tick);
 			break;
 		case SC_GN_CARTBOOST:
-			if( val1 < 3 )
-				val2 = 50;
-			else if( val1 > 2 && val1 < 5 )
-				val2 = 75;
-			else
-				val2 = 100;
+				val2 = 10* val1;
 			break;
 		case SC_PROPERTYWALK:
 			val3 = 0;
@@ -11529,7 +11524,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val2 = 5 * val1; //HP rate bonus
 			break;
 		case SC_ILLUSIONDOPING:
-			val2 = 50; // -Hit
+			val2 = 75; // -Hit
 			break;
 
 		case SC_OVERHEAT:
@@ -13980,7 +13975,7 @@ TIMER_FUNC(status_change_timer){
 			if (is_infinite_defense(bl, BF_MISC)) // Only does 1 damage to infinte defense type.
 				damage = 1;
 			else
-				damage =  200 + 100 * sce->val1 + status_get_int(src);
+				damage =  200 + 100 * sce->val1 + 3*status_get_int(src);
 			status_damage(src, bl, damage, 0, clif_damage(bl,bl,tick,status->amotion,status->dmotion+200,damage,1,DMG_NORMAL,0,false), 0, 0);
 			unit_skillcastcancel(bl,1);
 			if ( sc->data[type] ) {

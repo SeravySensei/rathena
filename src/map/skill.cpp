@@ -4358,11 +4358,6 @@ static TIMER_FUNC(skill_timerskill){
 				case SR_KNUCKLEARROW:
 					skill_attack(BF_WEAPON, src, src, target, skl->skill_id, skl->skill_lv, tick, skl->flag|SD_LEVEL);
 					break;
-				case GN_SPORE_EXPLOSION:
-					clif_skill_damage(src, target, tick, status_get_amotion(src), 0, -30000, 1, skl->skill_id, skl->skill_lv, DMG_SINGLE);
-					map_foreachinrange(skill_area_sub, target, skill_get_splash(skl->skill_id, skl->skill_lv), BL_CHAR,
-									   src, skl->skill_id, skl->skill_lv, tick, skl->flag|1|BCT_ENEMY, skill_castend_damage_id);
-					break;
 				case CH_PALMSTRIKE:
 					{
 						struct status_change* tsc = status_get_sc(target);
@@ -4793,9 +4788,6 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case NPC_PETRIFYATTACK:
 	case NPC_CURSEATTACK:
 	case NPC_SLEEPATTACK:
-#ifdef RENEWAL
-	case CR_ACIDDEMONSTRATION:
-#endif
 	case LK_AURABLADE:
 	case LK_SPIRALPIERCE:
 	case ML_SPIRALPIERCE:
@@ -5107,6 +5099,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case MA_SHOWER:
 	case MG_NAPALMBEAT:
 	case MG_FIREBALL:
+	case GN_SPORE_EXPLOSION:
 	case RG_RAID:
 	case HW_NAPALMVULCAN:
 	case NJ_HUUMA:
@@ -5181,13 +5174,6 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 				sflag |= SD_LEVEL; // -1 will be used in packets instead of the skill level
 			if( skill_area_temp[1] != bl->id && !inf2[INF2_ISNPC] )
 				sflag |= SD_ANIMATION; // original target gets no animation (as well as all NPC skills)
-
-			switch (skill_id) {
-				case GN_SPORE_EXPLOSION:
-					if (flag&2 && skill_area_temp[1] == bl->id)
-						sflag |= 2048; // Flag for main target
-					break;
-			}
 
 			// If a enemy player is standing next to a mob when splash Es- skill is casted, the player won't get hurt.
 			if ((skill_id == SP_SHA || skill_id == SP_SWHOO) && !battle_config.allow_es_magic_pc && bl->type != BL_MOB)
@@ -6039,15 +6025,6 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		}
 		else if( sd )
 			clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
-		break;
-
-	case GN_SPORE_EXPLOSION:
-		if( flag&1 )
-			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag);
-		else {
-			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
-			skill_addtimerskill(src, gettick() + skill_get_time(skill_id, skill_lv), bl->id, 0, 0, skill_id, skill_lv, 0, 0);
-		}
 		break;
 
 	case KO_JYUMONJIKIRI: {
@@ -10973,19 +10950,14 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			}
 		}
 		break;
-	case GN_SPORE_EXPLOSION:
-		clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
-		skill_castend_damage_id(src, bl, skill_id, skill_lv, tick, flag|1|2); // First attack to target
-		sc_start4(src, bl, type, 100, skill_lv, skill_id, src->id, 0, skill_get_time(skill_id, skill_lv));
-		break;
 	case GN_MANDRAGORA:
 		if( flag&1 ) {
-			int rate = 25 + (10 * skill_lv) - (tstatus->vit + tstatus->luk) / 5;
+			int rate = 60 + (10 * skill_lv) - (tstatus->vit + tstatus->luk) / 5;
 
 			if (rate < 10)
 				rate = 10;
-			if (bl->type == BL_MOB || (tsc && tsc->data[type]))
-				break; // Don't activate if target is a monster or zap SP if target already has Mandragora active.
+/*			if (bl->type == BL_MOB || (tsc && tsc->data[type]))
+				break; // Don't activate if target is a monster or zap SP if target already has Mandragora active.*/
 			if (rnd()%100 < rate) {
 				sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv));
 				status_zap(bl,0,status_get_max_sp(bl) * (25 + 5 * skill_lv) / 100);
@@ -11621,6 +11593,7 @@ static int8 skill_castend_id_check(struct block_list *src, struct block_list *ta
 			break;
 		case MG_NAPALMBEAT:
 		case MG_FIREBALL:
+		case GN_SPORE_EXPLOSION:
 		case HT_BLITZBEAT:
 		case AS_GRIMTOOTH:
 		case MO_COMBOFINISH:
@@ -12797,7 +12770,7 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 
 	case GN_CRAZYWEED: {
 			int area = skill_get_splash(GN_CRAZYWEED_ATK, skill_lv);
-			for( i = 0; i < 3 + (skill_lv/2); i++ ) {
+			for( i = 0; i < skill_lv; i++ ) {
 				int x1 = x - area + rnd()%(area * 2 + 1);
 				int y1 = y - area + rnd()%(area * 2 + 1);
 				skill_addtimerskill(src,tick+i*150,0,x1,y1,GN_CRAZYWEED_ATK,skill_lv,-1,0);
@@ -12816,14 +12789,10 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 
 			if (ud->skillunit[i_su]->skill_id == GN_DEMONIC_FIRE && distance_xy(x, y, su->bl.x, su->bl.y) < 4) {
 				switch (skill_lv) {
-					case 1: {
-							// TODO:
-							int duration = (int)(sg->limit - DIFF_TICK(tick, sg->tick));
-
-							skill_delunit(su);
-							skill_unitsetting(src, GN_DEMONIC_FIRE, 1, x, y, duration);
-							flag |= 1;
-						}
+					case 1: 
+						if (sg->skill_lv < 10) sg->skill_lv += 10;
+						su->limit += 10000;
+						sg->limit = su->limit;
 						break;
 					case 2:
 						map_foreachinallarea(skill_area_sub, src->m, su->bl.x - 2, su->bl.y - 2, su->bl.x + 2, su->bl.y + 2, BL_CHAR, src, GN_DEMONIC_FIRE, skill_lv + 20, tick, flag|BCT_ENEMY|SD_LEVEL|1, skill_castend_damage_id);
@@ -14720,6 +14689,8 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 		case UNT_HELLS_PLANT:
 			if( battle_check_target(&unit->bl,bl,BCT_ENEMY) > 0 )
 				skill_attack(skill_get_type(GN_HELLS_PLANT_ATK), ss, &unit->bl, bl, GN_HELLS_PLANT_ATK, sg->skill_lv, tick, SCSTART_NONE);
+/*			if (ss != bl) // The caster is the only one who can step on the Plants without destroying them
+				sg->limit = DIFF_TICK(tick, sg->tick) + 100; */
 			break;
 
 		case UNT_ZEPHYR:
@@ -17226,7 +17197,11 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 		return 0;
 
 	if (bl->type == BL_MOB || bl->type == BL_NPC)
+	{
+		if ((sc->data[SC_MANDRAGORA]) && (time>0)) return (int)(time+ sc->data[SC_MANDRAGORA]->val1 * 500);
+		else
 		return (int)time;
+	}
 
 	if (fixed < 0) 
 		fixed = 0;
@@ -20034,56 +20009,44 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 							break;
 					}
 
-					if( make_per >= 400 && make_per > difficulty)
-						qty = 10;
-					else if( make_per >= 300 && make_per > difficulty)
-						qty = 7;
-					else if( make_per >= 100 && make_per > difficulty)
-						qty = 6;
-					else if( make_per >= 1 && make_per > difficulty)
-						qty = 5;
-					else
-						qty = 4;
+					qty = skill_lv;
+					if (make_per < difficulty + 400) qty = ( qty * make_per ) / ( difficulty+400);
 					make_per = 10000;
 				}
 				break;
 			case GN_MIX_COOKING:
 				{
-					int difficulty = 30 + rnd()%120; // Random number between (30 ~ 150)
+				int difficulty = 30 + rnd() % 120; // Random number between (30 ~ 150)
 
-					make_per = sd->status.job_level / 4 + status->luk / 2 + status->dex / 3; // (Caster?s Job Level / 4) + (Caster?s LUK / 2) + (Caster?s DEX / 3)
-					qty = ~(5 + rnd()%5) + 1;
+				make_per = sd->status.base_level / 4 + status->luk / 2 + status->dex / 3; // (Caster?s Job Level / 4) + (Caster?s LUK / 2) + (Caster?s DEX / 3)
 
-					switch(nameid){// difficulty factor
-						case ITEMID_SAVAGE_FULL_ROAST:
-						case ITEMID_COCKTAIL_WARG_BLOOD:
-						case ITEMID_MINOR_STEW:
-						case ITEMID_SIROMA_ICED_TEA:
-						case ITEMID_DROSERA_HERB_SALAD:
-						case ITEMID_PETITE_TAIL_NOODLES:
-							difficulty += 15;
-							break;
-					}
-
-					if( make_per >= 30 && make_per > difficulty)
-						qty = 10 + rnd()%2;
-					else if( make_per >= 10 && make_per > difficulty)
-						qty = 10;
-					else if( make_per == 10 && make_per > difficulty)
-						qty = 8;
-					else if( (make_per >= 50 || make_per < 30) && make_per < difficulty)
-						;// Food/Bomb creation fails.
-					else if( make_per >= 30 && make_per < difficulty)
-						qty = 5;
-
-					if( qty < 0 || (skill_lv == 1 && make_per < difficulty)){
-						qty = ~qty + 1;
-						make_per = 0;
-					}
-					else
-						make_per = 10000;
-					qty = (skill_lv > 1 ? qty : 1);
+				switch (nameid) {// difficulty factor
+				case ITEMID_APPLE_BOMB:
+					difficulty += 5;
+					break;
+				case ITEMID_COCONUT_BOMB:
+				case ITEMID_MELON_BOMB:
+					difficulty += 10;
+					break;
+				case ITEMID_SAVAGE_FULL_ROAST:
+				case ITEMID_COCKTAIL_WARG_BLOOD:
+				case ITEMID_MINOR_STEW:
+				case ITEMID_SIROMA_ICED_TEA:
+				case ITEMID_DROSERA_HERB_SALAD:
+				case ITEMID_PETITE_TAIL_NOODLES:
+				case ITEMID_PINEAPPLE_BOMB:
+					difficulty += 15;
+					break;
+				case ITEMID_BANANA_BOMB:
+					difficulty += 20;
+					break;
 				}
+
+				if (skill_lv == 1) { qty = 1; make_per = 10000 + (make_per - difficulty) * 10; }
+				else if (make_per >= difficulty) { qty = 10 + ((make_per - difficulty) / 10); make_per = 10000 + (make_per - difficulty) * 10;
+				}
+
+			}
 				break;
 			default:
 				if (sd->menuskill_id == AM_PHARMACY &&
