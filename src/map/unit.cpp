@@ -4809,8 +4809,7 @@ int targetlauda2(block_list * bl, va_list ap)
 	if (sd->sc.data[SC_SLEEP]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
 	if (sd->sc.data[SC_SILENCE]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
 	if (sd->sc.data[SC_DEEPSLEEP]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
-	if (sd->sc.data[SC_FEAR]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
-
+	if (sd->sc.data[SC_MANDRAGORA]) { targetbl = bl; foundtargetID = sd->bl.id;  return 1; };
 
 	return 0;
 }
@@ -5840,6 +5839,13 @@ void skillwhenidle(struct map_session_data *sd) {
 		}
 	}
 
+	// Cart Boost
+	if (pc_checkskill(sd, GN_CARTBOOST) > 0) {
+		if (!(sd->sc.data[SC_GN_CARTBOOST]))
+				if (pc_iscarton(sd)) {
+					unit_skilluse_ifable(&sd->bl, SELF, GN_CARTBOOST, pc_checkskill(sd, GN_CARTBOOST));
+				}
+	}
 
 	// Acceleration
 	if (pc_checkskill(sd, NC_ACCELERATION) > 0) {
@@ -7558,6 +7564,17 @@ TIMER_FUNC(unit_autopilot_timer)
 					 unit_skilluse_ifablexy(&sd->bl, sd->bl.id, MG_SAFETYWALL, pc_checkskill(sd, MG_SAFETYWALL));
 			}
 		}
+		// Wall of Thron
+		if ((Dangerdistance <= 3)) {
+			if (canskill(sd)) if ((pc_checkskill(sd, GN_WALLOFTHORN) > 0) && (dangermd->status.rhw.range <= 3)
+				&& ((dangermd->status.rhw.atk2 > sd->battle_status.hp / 5) || (dangercount >= 3) && (dangermd->status.rhw.atk2 > sd->battle_status.hp / 12))
+				&& (pc_search_inventory(sd, 6210) >= 0))
+				// If we are in tanking mode, distance must be 1, we will otherwise move towards monster!
+			{
+				if ((sd->state.autopilotmode != 1) || (Dangerdistance <= 1))
+					unit_skilluse_ifablexy(&sd->bl, sd->bl.id, GN_WALLOFTHORN, pc_checkskill(sd, GN_WALLOFTHORN));
+			}
+		}
 		// Steel Body
 		// Tanking mode only, against very powerful enemies
 		if ((Dangerdistance <= 10) || sd->state.specialtanking) {
@@ -7883,6 +7900,15 @@ TIMER_FUNC(unit_autopilot_timer)
 									spelltocast = WZ_METEOR; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
+							// Crazy Weed
+							if (canskill(sd)) if ((pc_checkskill(sd, GN_CRAZYWEED) > 0) && (Dangerdistance > 900))
+								if (pc_search_inventory(sd, 6210) >= 0) {
+								int area = 2;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skill_get_ele(GN_CRAZYWEED, pc_checkskill(sd, GN_CRAZYWEED)));
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = GN_CRAZYWEED; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
 
 							// Cold Slower
 							if (canskill(sd)) if ((pc_checkskill(sd, NC_COLDSLOWER) > 2))
@@ -7995,6 +8021,20 @@ TIMER_FUNC(unit_autopilot_timer)
 									priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(MG_FIREBALL, pc_checkskill(sd, MG_FIREBALL)));
 									if (((priority >= 6) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
 										spelltocast = MG_FIREBALL; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+							// Spore Explosion
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							// **** Note, I changed this skill to be a sinple AOE with no time delay. If you did not, you might want different AI.
+							if (canskill(sd)) if ((pc_checkskill(sd, GN_SPORE_EXPLOSION) > 0)) {
+								resettargets();
+								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = pc_checkskill(sd, GN_SPORE_EXPLOSION);
+									priority = 2* map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(GN_SPORE_EXPLOSION, pc_checkskill(sd, GN_SPORE_EXPLOSION)));
+									if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 11)) {
+										spelltocast = GN_SPORE_EXPLOSION; bestpriority = priority; IDtarget = foundtargetID;
 									}
 								}
 							}
@@ -8300,6 +8340,7 @@ TIMER_FUNC(unit_autopilot_timer)
 						else
 						if ((spelltocast == MG_FIREBALL) // Skills that target a monster, not the ground 
 							|| (spelltocast == NJ_HUUMA)
+							|| (spelltocast == GN_SPORE_EXPLOSION)
 							|| (spelltocast == NJ_BAKUENRYU)
 							|| (spelltocast == NJ_KAMAITACHI)
 							|| (spelltocast == AC_SHOWER)
@@ -8882,7 +8923,16 @@ TIMER_FUNC(unit_autopilot_timer)
 									if (cannonballchange(sd, targetRAmd) == 1) unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_ARMSCANNON, pc_checkskill(sd, NC_ARMSCANNON));
 								}
 				}
-
+			// Cart Cannon
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GN_CARTCANNON) >= 3))
+				if (rangeddist <= 11) {
+					if (elemallowed(targetRAmd, ELE_NEUTRAL)) // Counts as neutral even if it is not
+						if (pc_iscarton(sd))
+								if ((checksprate(sd, targetRAmd, 10))
+									|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
+									if (cannonballchange(sd, targetRAmd) == 1) unit_skilluse_ifable(&sd->bl, foundtargetRA, GN_CARTCANNON, pc_checkskill(sd, GN_CARTCANNON));
+								}
+				}
 
 			// Flying Kick
 			if ((sd->class_ & MAPID_UPPERMASK)!= MAPID_SOUL_LINKER) if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, TK_JUMPKICK) > 0)) {
@@ -9630,6 +9680,14 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 						unit_skilluse_ifable(&sd->bl, foundtargetID, NC_AXETORNADO, pc_checkskill(sd, NC_AXETORNADO));
 					}
 				}
+			// Cart Tornado
+			if (canskill(sd)) if (pc_checkskill(sd, GN_CART_TORNADO) > 0) if (pc_iscarton(sd)) {
+				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
+					if ((checksprate(sd, targetmd, 10))
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, GN_CART_TORNADO, pc_checkskill(sd, GN_CART_TORNADO));
+					}
+			}
 			// Cart Revolution skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_CARTREVOLUTION)>0) if (pc_iscarton(sd)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
