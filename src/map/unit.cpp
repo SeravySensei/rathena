@@ -3747,6 +3747,13 @@ int targetnearestwalkto(block_list * bl, va_list ap)
 
 }
 
+int counttargets(block_list * bl, va_list ap)
+{
+		if (isshootabletarget(bl->id)) 
+		return 1;
+	else return 0;
+
+}
 // Use this to target a skill or attack that goes over cliffs but not through walls
 int targetnearest(block_list * bl, va_list ap)
 {
@@ -6201,18 +6208,31 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 			leaderdistance = distance_bl(leaderbl, bl);
 		}
 	}
+	int masterdistance = distance_bl(&mastersd->bl, bl);
 
 	getreachabletargets(sd);
 	// leadersd is the person we position ourselves to : the party leader, or lacking one, the owner of the homunculus.
+	// mastersd is always the owner of homunculus
 
 	// Support skills
 	// Lif - Urgent Escape
-	if (canskill(sd)) if (hom_checkskill(hd, HLIF_AVOID) > 0) if (leaderdistance <= 2) // seems to have limited range? Not sure how much?
+	if (canskill(sd)) if (hom_checkskill(hd, HLIF_AVOID) > 0) if (masterdistance <= 2) // seems to have limited range? Not sure how much?
 		if (!(sd->sc.data[SC_AVOID])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HLIF_AVOID, hom_checkskill(hd, HLIF_AVOID));
 		}
+	// Eira - Overed Boost
+	if (canskill(sd)) if (hom_checkskill(hd, MH_OVERED_BOOST) > 4) if (masterdistance <= 2)
+		if ((mastersd->battle_status.agi<=120)) // High agi might not benefit from the buff
+		if (!(mastersd->sc.data[SC_OVERED_BOOST])) {
+			homu_skilluse_ifable(&sd->bl, SELF, MH_OVERED_BOOST, hom_checkskill(hd, MH_OVERED_BOOST));
+		}
+	// Eira - Light of Regen
+	if (canskill(sd)) if (hom_checkskill(hd, MH_LIGHT_OF_REGENE) > 0) if (masterdistance <= 5)
+			if (!(mastersd->sc.data[SC_LIGHT_OF_REGENE])) {
+				homu_skilluse_ifable(&sd->bl, SELF, MH_LIGHT_OF_REGENE, hom_checkskill(hd, MH_LIGHT_OF_REGENE));
+			}
 	// Amistr - Bulwark
-	if (canskill(sd)) if (hom_checkskill(hd, HAMI_DEFENCE) > 0) if (leaderdistance <= 2)
+	if (canskill(sd)) if (hom_checkskill(hd, HAMI_DEFENCE) > 0) if (masterdistance <= 2)
 		if (!(sd->sc.data[SC_DEFENCE])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HAMI_DEFENCE, hom_checkskill(hd, HAMI_DEFENCE));
 		}
@@ -6240,12 +6260,16 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 		if (!(sd->sc.data[SC_SPEED])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HFLI_SPEED, hom_checkskill(hd, HFLI_SPEED));
 		}
-
+	// Eira - Silent Breeze
+	if (canskill(sd)) if (hom_checkskill(hd, MH_SILENT_BREEZE) > 0)
+		if (mastersd->battle_status.hp < mastersd->battle_status.max_hp*(0.1+0.04*mastersd->battle_status.int_)) // INT resists Silence so higher INT=safer to use this skill
+			if (mastersd->battle_status.hp < mastersd->battle_status.max_hp*0.7)
+				homu_skilluse_ifable(&sd->bl, mastersd->bl.id, MH_SILENT_BREEZE, hom_checkskill(hd, MH_SILENT_BREEZE));
 	// Lif - Healing Hands
 	if (canskill(sd)) if (hom_checkskill(hd, HLIF_HEAL)>0)
-		if ((leadersd->battle_status.hp < leadersd->battle_status.max_hp*0.4))
-			if (pc_search_inventory(leadersd, 545) >= 0) {
-				homu_skilluse_ifable(&sd->bl, leadersd->bl.id, HLIF_HEAL, hom_checkskill(hd, HLIF_HEAL));
+		if ((mastersd->battle_status.hp < mastersd->battle_status.max_hp*0.4))
+			if (pc_search_inventory(mastersd, 545) >= 0) {
+				homu_skilluse_ifable(&sd->bl, mastersd->bl.id, HLIF_HEAL, hom_checkskill(hd, HLIF_HEAL));
 
 	}
 	// Attack skills
@@ -6256,15 +6280,31 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	if (hd->autopilotmode!=3) if (canskill(sd))
 		if (hom_checkskill(hd, HVAN_CAPRICE) > 0)
 			homu_skilluse_ifable(&sd->bl, foundtargetID, HVAN_CAPRICE, hom_checkskill(hd, HVAN_CAPRICE));
+	// Eira Xeno Slasher
+	if (hd->autopilotmode != 3) if (canskill(sd))
+		if (hd->battle_status.sp > 0.5*hd->battle_status.max_sp) // keep sp for the healing skills
+		{ 
+			int xenocount = map_foreachinrange(counttargets, targetbl, 4, BL_MOB, sd);
+			if (xenocount>=3)
+				if (elemallowed(targetmd, ELE_WIND)) // Note, only checks primary target
+					if (hom_checkskill(hd, MH_XENO_SLASHER) > 0)
+					homu_skilluse_ifable(&sd->bl, foundtargetID, MH_XENO_SLASHER, hom_checkskill(hd, MH_XENO_SLASHER));
+
+	// Eira Eraser Cutter
+			// **** Note, I changed this to be uninterruptable. If you did not, you need additional conditions here.
+		if (hom_checkskill(hd, MH_ERASER_CUTTER) > 0)
+			if (elemallowed(targetmd, ELE_NEUTRAL))
+			homu_skilluse_ifable(&sd->bl, foundtargetID, MH_ERASER_CUTTER, hom_checkskill(hd, MH_ERASER_CUTTER));
+		}
 
 	// Vanil Chaotic Blessings
 	// No enemies nearby so heal is 50-50% to be self or owner
 	// Must use at level 5 otherwise healing target selection is bad
 	if (foundtargetID == -1) if (canskill(sd)) if (hom_checkskill(hd, HVAN_CHAOTIC) >= 5)
 		// owner's hp low or own hp very low
-		if ((leadersd->battle_status.hp < leadersd->battle_status.max_hp*0.5) ||
+		if ((mastersd->battle_status.hp < mastersd->battle_status.max_hp*0.5) ||
 			(sd->battle_status.hp < sd->battle_status.max_hp*0.32)) {
-				homu_skilluse_ifable(&sd->bl, leadersd->bl.id, HVAN_CHAOTIC, hom_checkskill(hd, HVAN_CHAOTIC));
+				homu_skilluse_ifable(&sd->bl, mastersd->bl.id, HVAN_CHAOTIC, hom_checkskill(hd, HVAN_CHAOTIC));
 			}
 
 

@@ -8477,6 +8477,9 @@ int pc_dead(struct map_session_data *sd,struct block_list *src)
 	//Reset "can log out" tick.
 	if( battle_config.prevent_logout )
 		sd->canlog_tick = gettick() - battle_config.prevent_logout;
+
+	// revive yourself if homunculus skill active on autpilot, don't wait for player input
+	if ((sd->sc.data[SC_LIGHT_OF_REGENE]) && (sd->state.autopilotmode>0)) pc_revive_item(sd);
 	return 1;
 }
 
