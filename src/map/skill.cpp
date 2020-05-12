@@ -11197,7 +11197,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case MH_OVERED_BOOST:
 		if (hd && battle_get_master(src)) {
 			sc_start(src, battle_get_master(src), type, 100, skill_lv, skill_get_time(skill_id, skill_lv));
-			sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv));
+			//sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv));
 			skill_blockhomun_start(hd, skill_id, skill_get_cooldown(skill_id, skill_lv));
 		}
 		break;

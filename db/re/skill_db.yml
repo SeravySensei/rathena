@@ -32581,7 +32581,7 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: -1
-    AfterCastActDelay: 35000
+    Cooldown: 35000
     Duration1: 40000
     FixedCastTime: -1
     Requires:
@@ -33273,6 +33273,7 @@ Body:
           Amount: 70
         - Level: 5
           Amount: 80
+    Cooldown: 300000
   - Id: 8023
     Name: MH_OVERED_BOOST
     Description: Overed Boost
@@ -33338,7 +33339,6 @@ Body:
     Range: 7
     Hit: Multi_Hit
     HitCount: -6
-    CastCancel: true
     CastTime:
       - Level: 1
         Time: 1500

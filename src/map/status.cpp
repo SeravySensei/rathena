@@ -11413,8 +11413,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val4 = 2 + 2 * val1; // Chance of holy attack
 			break;
 		case SC_OVERED_BOOST:
-			val2 = 400 + 40 * val1; // flee bonus
-			val3 = 180 + 2 * val1; // aspd bonus
+			val2 = 300 + 40 * val1; // flee bonus
+			val3 = 170 + 2 * val1; // aspd bonus
 			val4 = 50; // def reduc %
 			break;
 		case SC_GRANITIC_ARMOR:
