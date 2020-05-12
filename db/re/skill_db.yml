@@ -34124,7 +34124,7 @@ Body:
       - Level: 5
         Time: 3000
     AfterCastActDelay: 1000
-    Duration1: 60000
+    Duration1: 120000
     FixedCastTime: 1000
     Requires:
       SpCost:
