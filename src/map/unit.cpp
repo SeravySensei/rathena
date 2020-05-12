@@ -6231,6 +6231,39 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 			if (!(mastersd->sc.data[SC_LIGHT_OF_REGENE])) {
 				homu_skilluse_ifable(&sd->bl, SELF, MH_LIGHT_OF_REGENE, hom_checkskill(hd, MH_LIGHT_OF_REGENE));
 			}
+	// Dieter - Magma Flow
+	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_MAGMA_FLOW) > 0)
+		if (!(sd->sc.data[SC_MAGMA_FLOW])) {
+			homu_skilluse_ifable(&sd->bl, SELF, MH_MAGMA_FLOW, hom_checkskill(hd, MH_MAGMA_FLOW));
+		}
+	// Dieter - Granitic Armor
+	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_GRANITIC_ARMOR) > 0)
+		if (!(sd->sc.data[SC_GRANITIC_ARMOR])) {
+			homu_skilluse_ifable(&sd->bl, SELF, MH_GRANITIC_ARMOR, hom_checkskill(hd, MH_GRANITIC_ARMOR));
+		}
+	// Bayeri self-buffs
+	if (foundtargetID > -1)	if (canskill(sd))
+		if (!(sd->sc.data[SC_GOLDENE_FERSE]))
+			if (!(sd->sc.data[SC_ANGRIFFS_MODUS])) {
+				if (hom_checkskill(hd, MH_GOLDENE_FERSE) > 0)
+					if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_HOLY) > 0) // must need a holy endow
+						homu_skilluse_ifable(&sd->bl, SELF, MH_GOLDENE_FERSE, hom_checkskill(hd, MH_GOLDENE_FERSE));
+				if (hom_checkskill(hd, MH_ANGRIFFS_MODUS) > 0)
+						homu_skilluse_ifable(&sd->bl, SELF, MH_ANGRIFFS_MODUS, hom_checkskill(hd, MH_ANGRIFFS_MODUS));
+			}
+	// Dieter - Pyroclastic
+	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_PYROCLASTIC) > 0)
+		if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_FIRE) > 0) // must need a fire endow
+			if ((mastersd->status.weapon == W_1HAXE) || (mastersd->status.weapon == W_2HAXE) // must use unbreakable weapon
+				|| (mastersd->status.weapon == W_MACE))
+		if (!(sd->sc.data[SC_PYROCLASTIC])) {
+			homu_skilluse_ifable(&sd->bl, SELF, MH_PYROCLASTIC, hom_checkskill(hd, MH_PYROCLASTIC));
+		}
+	// Sera - Pain Killer
+	if (canskill(sd)) if (hom_checkskill(hd, MH_PAIN_KILLER) > 0) if (masterdistance <= 2)
+		if (!(sd->sc.data[SC_PAIN_KILLER])) {
+			homu_skilluse_ifable(&sd->bl, mastersd->bl.id, MH_PAIN_KILLER, hom_checkskill(hd, MH_PAIN_KILLER));
+		}
 	// Amistr - Bulwark
 	if (canskill(sd)) if (hom_checkskill(hd, HAMI_DEFENCE) > 0) if (masterdistance <= 2)
 		if (!(sd->sc.data[SC_DEFENCE])) {
@@ -6272,31 +6305,71 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 				homu_skilluse_ifable(&sd->bl, mastersd->bl.id, HLIF_HEAL, hom_checkskill(hd, HLIF_HEAL));
 
 	}
+	// Bayeri - safety wall
+	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_STEINWAND) > 0)
+		if (targetdistance<=1) // must be tanking the enemy
+		if (!(sd->sc.data[SC_SAFETYWALL])) {
+			homu_skilluse_ifable(&sd->bl, SELF, MH_STEINWAND, hom_checkskill(hd, MH_STEINWAND));
+		}
 	// Attack skills
 	// and other skills requiring an enemy target check
 	resettargets();
 	map_foreachinrange(targetnearest, &sd->bl, 9, BL_MOB, sd);
-	// Vanil Caprice
-	if (hd->autopilotmode!=3) if (canskill(sd))
-		if (hom_checkskill(hd, HVAN_CAPRICE) > 0)
-			homu_skilluse_ifable(&sd->bl, foundtargetID, HVAN_CAPRICE, hom_checkskill(hd, HVAN_CAPRICE));
-	// Eira Xeno Slasher
-	if (hd->autopilotmode != 3) if (canskill(sd))
-		if (hd->battle_status.sp > 0.5*hd->battle_status.max_sp) // keep sp for the healing skills
-		{ 
-			int xenocount = map_foreachinrange(counttargets, targetbl, 4, BL_MOB, sd);
-			if (xenocount>=3)
-				if (elemallowed(targetmd, ELE_WIND)) // Note, only checks primary target
+	if (foundtargetID > -1) {
+		// Dieter Lava Slide
+		if (hom_checkskill(hd, MH_LAVA_SLIDE) > 0)
+			if (map_foreachinrange(AOEPriority, targetbl, 2, BL_MOB, ELE_FIRE) >= 6)
+				homu_skilluse_ifable(&sd->bl, foundtargetID, MH_LAVA_SLIDE, hom_checkskill(hd, MH_LAVA_SLIDE));
+		// Bayeri - Heilige Stange
+		if (hom_checkskill(hd, MH_HEILIGE_STANGE) > 0)
+			if (map_foreachinrange(AOEPriority, targetbl, 2, BL_MOB, ELE_HOLY) >= 6)
+				homu_skilluse_ifable(&sd->bl, foundtargetID, MH_HEILIGE_STANGE, hom_checkskill(hd, MH_HEILIGE_STANGE));
+		// Eira Xeno Slasher
+		if (hd->autopilotmode != 3) if (canskill(sd))
+			if (hd->battle_status.sp > 0.5*hd->battle_status.max_sp) // keep sp for the healing skills
+			{
+				if (map_foreachinrange(AOEPriority, targetbl, 4, BL_MOB, ELE_WIND) >= 6)
 					if (hom_checkskill(hd, MH_XENO_SLASHER) > 0)
-					homu_skilluse_ifable(&sd->bl, foundtargetID, MH_XENO_SLASHER, hom_checkskill(hd, MH_XENO_SLASHER));
+							homu_skilluse_ifable(&sd->bl, foundtargetID, MH_XENO_SLASHER, hom_checkskill(hd, MH_XENO_SLASHER));
 
-	// Eira Eraser Cutter
-			// **** Note, I changed this to be uninterruptable. If you did not, you need additional conditions here.
-		if (hom_checkskill(hd, MH_ERASER_CUTTER) > 0)
-			if (elemallowed(targetmd, ELE_NEUTRAL))
-			homu_skilluse_ifable(&sd->bl, foundtargetID, MH_ERASER_CUTTER, hom_checkskill(hd, MH_ERASER_CUTTER));
-		}
-
+				// Eira Eraser Cutter
+				// **** Note, I changed this to be uninterruptable. If you did not, you need additional conditions here.
+				if (hom_checkskill(hd, MH_ERASER_CUTTER) > 0)
+					if (elemallowed(targetmd, ELE_NEUTRAL))
+						homu_skilluse_ifable(&sd->bl, foundtargetID, MH_ERASER_CUTTER, hom_checkskill(hd, MH_ERASER_CUTTER));
+			}
+		// Vanil Caprice
+		if (hd->autopilotmode != 3) if (canskill(sd))
+			if (hom_checkskill(hd, HVAN_CAPRICE) > 0)
+				homu_skilluse_ifable(&sd->bl, foundtargetID, HVAN_CAPRICE, hom_checkskill(hd, HVAN_CAPRICE));
+		// Bayeri Stahl Horn
+		if (hom_checkskill(hd, MH_STAHL_HORN) > 0)
+			homu_skilluse_ifable(&sd->bl, foundtargetID, MH_STAHL_HORN, hom_checkskill(hd, MH_STAHL_HORN));
+		// Sera Needle of Paralysis
+		if (hom_checkskill(hd, MH_NEEDLE_OF_PARALYZE) > 0)
+			if (elemallowed(targetmd, ELE_POISON))
+				homu_skilluse_ifable(&sd->bl, foundtargetID, MH_NEEDLE_OF_PARALYZE, hom_checkskill(hd, MH_NEEDLE_OF_PARALYZE));
+		// Eleanor Midnight Frenzy
+		if (hd->autopilotmode != 3) if (canskill(sd))
+			if (hom_checkskill(hd, MH_MIDNIGHT_FRENZY) > 0)
+				if (hd->homunculus.spiritball > 1)
+					if ((sd->sc.data[SC_COMBO] && sd->sc.data[SC_COMBO]->val1 == MH_SILVERVEIN_RUSH))
+						if ((sd->sc.data[SC_STYLE_CHANGE] && sd->sc.data[SC_STYLE_CHANGE]->val1 == MH_MD_FIGHTING))
+							homu_skilluse_ifable(&sd->bl, foundtargetID, MH_MIDNIGHT_FRENZY, hom_checkskill(hd, MH_MIDNIGHT_FRENZY));
+		// Eleanor Silverine Rush
+		if (hd->autopilotmode != 3) if (canskill(sd))
+			if (hom_checkskill(hd, MH_SILVERVEIN_RUSH) > 0)
+				if (hd->homunculus.spiritball > 0)
+					if ((sd->sc.data[SC_COMBO] && sd->sc.data[SC_COMBO]->val1 == MH_SONIC_CRAW))
+						if ((sd->sc.data[SC_STYLE_CHANGE] && sd->sc.data[SC_STYLE_CHANGE]->val1 == MH_MD_FIGHTING))
+							homu_skilluse_ifable(&sd->bl, foundtargetID, MH_SILVERVEIN_RUSH, hom_checkskill(hd, MH_SILVERVEIN_RUSH));
+		// Eleanor Sonic Claw
+		if (hd->autopilotmode != 3) if (canskill(sd))
+			if (hom_checkskill(hd, MH_SONIC_CRAW) > 0)
+				if (hd->homunculus.spiritball >= 3)
+					if ((sd->sc.data[SC_STYLE_CHANGE] && sd->sc.data[SC_STYLE_CHANGE]->val1 == MH_MD_FIGHTING))
+						homu_skilluse_ifable(&sd->bl, foundtargetID, MH_SONIC_CRAW, hom_checkskill(hd, MH_SONIC_CRAW));
+	}
 	// Vanil Chaotic Blessings
 	// No enemies nearby so heal is 50-50% to be self or owner
 	// Must use at level 5 otherwise healing target selection is bad
