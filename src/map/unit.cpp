@@ -4693,6 +4693,22 @@ int targetangelus(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetsong2(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (!sd->sc.data[SC_SWINGDANCE])
+		if (!sd->sc.data[SC_HARMONIZE])
+			if (!sd->sc.data[SC_ECHOSONG])
+				if (!sd->sc.data[SC_RUSHWINDMILL])
+					if (!sd->sc.data[SC_MOONLITSERENADE])
+						if (!sd->sc.data[SC_SYMPHONYOFLOVER])
+	{ targetbl = bl; foundtargetID = sd->bl.id; };
+
+	return 0;
+}
+
 int targetwindwalk(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd = (struct map_session_data*)bl;
@@ -7143,6 +7159,18 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+		}
+
+		/// Wanderer/Minstrel Songs Group A
+		// ****Note : I've modded Harmonize to be a self party buff like the other 5.
+		// If you did not, you should remove it from the atcommand autosong2.
+		if (sd->state.autosong2>0)
+		if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong2) > 0) {
+			resettargets();
+			map_foreachinrange(targetsong2, &sd->bl, 11, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, SELF, sd->state.autosong2, pc_checkskill(sd, sd->state.autosong2));
+			}
 		}
 
 		/// Angelus

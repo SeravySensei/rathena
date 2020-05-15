@@ -110,3 +110,39 @@ ACMD_FUNC(autoconc)
 sd->state.enableconc=!sd->state.enableconc;
 return 0;
 }
+
+ACMD_FUNC(autosong2)
+{
+if (!message || !*message) { clif_displaymessage(fd, "please specify type a song to play :");
+clif_displaymessage(fd, "Swing Lover Serenade Windmill Echo Harmonize");
+ }
+else {
+sd->state.autosong2 = 0; clif_displaymessage(fd, message);
+
+if (!strcmp(message,"Swing")) {sd->state.autosong2 = WA_SWING_DANCE;};
+if (!strcmp(message,"Harmonize")) {sd->state.autosong2 = MI_HARMONIZE;  };
+if (!strcmp(message,"Echo")) {sd->state.autosong2 = MI_ECHOSONG; };
+if (!strcmp(message,"Windmill")) {sd->state.autosong2 = MI_RUSH_WINDMILL; };
+if (!strcmp(message,"Serenade")) {sd->state.autosong2 = WA_MOONLIT_SERENADE; };
+if (!strcmp(message,"Lover")) {sd->state.autosong2 = WA_SYMPHONY_OF_LOVER; };
+}
+return 0; 
+}
+
+ACMD_FUNC(autosong3)
+{
+if (!message || !*message) { clif_displaymessage(fd, "please specify type a song to play :");
+clif_displaymessage(fd, "Not Implemented");
+ }
+else {
+sd->state.autosong3 = 0; clif_displaymessage(fd, message);
+
+if (!strcmp(message,"Swing")) {sd->state.autosong3 = WA_SWING_DANCE;};
+if (!strcmp(message,"Harmonize")) {sd->state.autosong3 = MI_HARMONIZE;  };
+if (!strcmp(message,"Echo")) {sd->state.autosong3 = MI_ECHOSONG; };
+if (!strcmp(message,"Windmill")) {sd->state.autosong3 = MI_RUSH_WINDMILL; };
+if (!strcmp(message,"Serenade")) {sd->state.autosong3 = WA_MOONLIT_SERENADE; };
+if (!strcmp(message,"Lover")) {sd->state.autosong3 = WA_SYMPHONY_OF_LOVER; };
+}
+return 0; 
+}
