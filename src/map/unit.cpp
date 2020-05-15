@@ -5436,6 +5436,8 @@ bool checksprate(map_session_data * sd, mob_data *targetmd, int rat)
 		return true; else return false;
 }
 
+int arrowelement;
+
 int arrowchange(map_session_data * sd, mob_data *targetmd)
 {
 	unsigned short arrows[] = {
@@ -5454,6 +5456,7 @@ int arrowchange(map_session_data * sd, mob_data *targetmd)
 	int i,j;
 	int best = -1; int bestprio = -1;
 	bool eqp = false;
+	arrowelement = ELE_NONE;
 
 	for (i = 0; i < ARRAYLENGTH(arrows); i++) {
 		if ((index = pc_search_inventory(sd, arrows[i])) >= 0) {
@@ -5461,6 +5464,7 @@ int arrowchange(map_session_data * sd, mob_data *targetmd)
 		if (elemstrong(targetmd, arrowelem[i])) j += 500;
 		if (elemallowed(targetmd, arrowelem[i])) if (j>bestprio) {
 			bestprio = j; best = index; eqp = pc_checkequip2(sd, arrows[i], EQI_AMMO, EQI_AMMO+1);
+			arrowelement = arrowelem[i];
 		}
 		}
 	}
@@ -6918,6 +6922,20 @@ TIMER_FUNC(unit_autopilot_timer)
 					else saythis(sd, "I'm out of Blue Gemstones!", 5); // Twice per second
 				}
 			}
+			/// Death Valley
+			if ((pc_checkskill(sd, WM_DEADHILLHERE) > 0)) if (pc_inventory_count(sd, 6144) < 8)
+				saythis(sd, "I'm low on Tears of Regret!", 600); // Once per minute
+			if (canskill(sd)) if ((pc_checkskill(sd, WM_DEADHILLHERE) > 0))
+				if (!duplicateskill(p, WM_DEADHILLHERE)) {
+				resettargets();
+				map_foreachinrange(targetresu, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					if (pc_search_inventory(sd, 6144) >= 0) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, WM_DEADHILLHERE, pc_checkskill(sd, WM_DEADHILLHERE));
+					}
+					else saythis(sd, "I'm out of Tears of Regret!", 5); // Twice per second
+				}
+			}
 		}
 		// Turn Undead, if able, prioritize higher than healing! Instantly killing mob is more useful than trying to tank it!
 		if (canskill(sd)) if (pc_checkskill(sd, PR_TURNUNDEAD) > 0) if (sd->state.autopilotmode == 2)
@@ -8241,7 +8259,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									if (foundtargetID > -1) {
 										int area = 1; // This skill hits more area than this but see First Wind comments.
 										arrowchange(sd, targetmd);
-										priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(SN_SHARPSHOOTING, pc_checkskill(sd, SN_SHARPSHOOTING)));
+										priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
 										if (((priority >= 7) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
 											spelltocast = SN_SHARPSHOOTING; bestpriority = priority; IDtarget = foundtargetID;
 										}
@@ -8275,7 +8293,7 @@ TIMER_FUNC(unit_autopilot_timer)
 								if (foundtargetID > -1) if (distance_bl(targetbl, &sd->bl) <= 10 ) {
 									int area = 1; if (pc_checkskill(sd, AC_SHOWER) >= 6) area++;
 									arrowchange(sd, targetmd);
-									priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(AC_SHOWER, pc_checkskill(sd, AC_SHOWER)));
+									priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
 									if (((priority >= 6) && (priority > bestpriority))) {
 										spelltocast = AC_SHOWER; bestpriority = priority; IDtarget = foundtargetID;
 									}
@@ -8291,9 +8309,25 @@ TIMER_FUNC(unit_autopilot_timer)
 									int area = 1; if (pc_checkskill(sd, RA_ARROWSTORM) >= 6) area++;
 									arrowchange(sd, targetmd);
 									// *** NOTE *** I nerfed the damage of this skill, if you did not, probably better to change priority to 3* and >=18 below
-									priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skill_get_ele(AC_SHOWER, pc_checkskill(sd, AC_SHOWER)));
+									priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
 									if (((priority >= 12) && (priority > bestpriority))) {
 										spelltocast = RA_ARROWSTORM; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+
+							// Severe Rainstorm
+							if (canskill(sd)) if ((pc_checkskill(sd, WM_SEVERE_RAINSTORM) > 0)) if (sd->status.weapon == W_BOW)
+							{
+								resettargets();
+								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = 1; if (pc_checkskill(sd, WM_SEVERE_RAINSTORM) >= 6) area++;
+									arrowchange(sd, targetmd);
+									// *** NOTE *** I nerfed the damage of this skill, if you did not, probably better to change priority to 3* and >=18 below
+									priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
+									if (((priority >= 12) && (priority > bestpriority))) {
+										spelltocast = WM_SEVERE_RAINSTORM; bestpriority = priority; IDtarget = foundtargetID;
 									}
 								}
 							}
@@ -8874,6 +8908,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					if ((sd->sc.data[SC_BITE] || sd->sc.data[SC_ANKLE] || sd->sc.data[SC_ELECTRICSHOCKER]))
 						if (rangeddist <= 9 + pc_checkskill(sd, AC_VULTURE)) {
 							arrowchange(sd, targetRAmd);
+							if (elemallowed(targetRAmd,arrowelement))
 							unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_AIMEDBOLT, pc_checkskill(sd, RA_AIMEDBOLT));
 					}
 			// Warg Strike
@@ -8913,6 +8948,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					if (sd->status.weapon == W_BOW)
 						{
 							arrowchange(sd, targetRAmd);
+							if (elemallowed(targetRAmd, arrowelement))
 							unit_skilluse_ifable(&sd->bl, foundtargetRA, HT_POWER, pc_checkskill(sd, HT_POWER));
 						}
 				}
@@ -8926,13 +8962,14 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 
 			// Double Strafe
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGSTRIKE) > 0)) if (sd->state.autopilotmode != 3)
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, AC_DOUBLE) > 0)) if (sd->state.autopilotmode != 3)
 			if (rangeddist<= 9 + pc_checkskill(sd, AC_VULTURE)) {
 				if (sd->status.weapon == W_BOW)
 					if (checksprate(sd, targetRAmd,10)
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 						arrowchange(sd, targetRAmd);
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, RA_WUGSTRIKE, pc_checkskill(sd, RA_WUGSTRIKE));
+						if (elemallowed(targetRAmd, arrowelement))
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, AC_DOUBLE, pc_checkskill(sd, AC_DOUBLE));
 					}
 			}
 			// Knuckle Boost
@@ -9297,11 +9334,30 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 				}
 			}
+			// Reverbation
+			if (foundtargetRA > -1) if (canskill(sd) && ((pc_checkskill(sd, WM_REVERBERATION) > 0))) {
+				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
+				if (targetmd->ud.walktimer==INVALID_TIMER) { // only on non-moving targets
+					arrowchange(sd, targetRAmd);
+					if (elemallowed(targetRAmd, arrowelement)) {
+						unit_skilluse_ifablexy(&sd->bl, foundtargetRA, WM_REVERBERATION, pc_checkskill(sd, WM_REVERBERATION));
+					}
+				}
+			}
 			// Arrow Vulcan
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, CG_ARROWVULCAN) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetRAmd, skill_get_ele(CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN)))) {
-						arrowchange(sd, targetRAmd);
+					arrowchange(sd, targetRAmd);
+					if (elemallowed(targetRAmd, arrowelement)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN));
+					}
+				}
+			}
+			// Metallic Sound
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, WM_METALICSOUND) > 0)) {
+				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
+					if (sd->battle_status.matk_min>= pc_rightside_atk(sd)*0.42) { // Don't bother unless we have at least some MATK, even then lower priority than the other skills
+					if (elemallowed(targetRAmd, ELE_NEUTRAL)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN));
 					}
 				}
@@ -9309,19 +9365,17 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Musical strike
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, BA_MUSICALSTRIKE) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetRAmd, skill_get_ele(BA_MUSICALSTRIKE, pc_checkskill(sd, BA_MUSICALSTRIKE)))) {
 						arrowchange(sd, targetRAmd);
+						if (elemallowed(targetRAmd, arrowelement))
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, BA_MUSICALSTRIKE, pc_checkskill(sd, BA_MUSICALSTRIKE));
-					}
 				}
 			}
 			// Throw Arrow
 			if (foundtargetRA > -1) if (canskill(sd) && ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))) if ((pc_checkskill(sd, DC_THROWARROW) > 0)) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetRAmd, skill_get_ele(DC_THROWARROW, pc_checkskill(sd, DC_THROWARROW)))) {
 						arrowchange(sd, targetRAmd);
+						if (elemallowed(targetRAmd, arrowelement))
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, DC_THROWARROW, pc_checkskill(sd, DC_THROWARROW));
-					}
 				}
 			}
 
