@@ -861,7 +861,7 @@ void initChangeTables(void)
 	set_sc( WA_MOONLIT_SERENADE		, SC_MOONLITSERENADE		, EFST_MOONLIT_SERENADE, SCB_MATK );
 	set_sc( MI_RUSH_WINDMILL		, SC_RUSHWINDMILL		, EFST_RUSH_WINDMILL, SCB_WATK  );
 	set_sc( MI_ECHOSONG			, SC_ECHOSONG			, EFST_ECHOSONG			, SCB_DEF  );
-	set_sc( MI_HARMONIZE			, SC_HARMONIZE			, EFST_HARMONIZE			, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK );
+	set_sc( MI_HARMONIZE			, SC_HARMONIZE			, EFST_HARMONIZE			, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK|SCB_HIT|SCB_CRIT );
 	set_sc_with_vfx( WM_POEMOFNETHERWORLD	, SC_NETHERWORLD		, EFST_NETHERWORLD		, SCB_NONE );
 	set_sc_with_vfx( WM_VOICEOFSIREN	, SC_VOICEOFSIREN		, EFST_SIREN, SCB_NONE );
 	set_sc_with_vfx( WM_LULLABY_DEEPSLEEP	, SC_DEEPSLEEP			, EFST_HANDICAPSTATE_DEEP_SLEEP, SCB_NONE );
@@ -5818,10 +5818,8 @@ static unsigned short status_calc_str(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(str,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		str -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(str,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		str += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		str += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_CHASEWALK2])
@@ -5904,10 +5902,8 @@ static unsigned short status_calc_agi(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(agi,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		agi -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(agi,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		agi += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_CONCENTRATE] && !sc->data[SC_QUAGMIRE])
 		agi += (agi-sc->data[SC_CONCENTRATE]->val3)*sc->data[SC_CONCENTRATE]->val2/100;
 	if(sc->data[SC_INCALLSTATUS])
@@ -5988,10 +5984,8 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(vit,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		vit -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(vit,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		vit += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		vit += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_INCVIT])
@@ -6062,10 +6056,8 @@ static unsigned short status_calc_int(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(int_,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		int_ -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(int_,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		int_ += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		int_ += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_INCINT])
@@ -6151,10 +6143,8 @@ static unsigned short status_calc_dex(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(dex,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		dex -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(dex,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		dex += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_CONCENTRATE] && !sc->data[SC_QUAGMIRE])
 		dex += (dex-sc->data[SC_CONCENTRATE]->val4)*sc->data[SC_CONCENTRATE]->val2/100;
 	if(sc->data[SC_INCALLSTATUS])
@@ -6237,10 +6227,8 @@ static unsigned short status_calc_luk(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(luk,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) {
-		luk -= sc->data[SC_HARMONIZE]->val2;
-		return (unsigned short)cap_value(luk,0,USHRT_MAX);
-	}
+	if(sc->data[SC_HARMONIZE]) 
+		luk += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_CURSE])
 		return 0;
 	if(sc->data[SC_INCALLSTATUS])
@@ -6626,6 +6614,8 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 	if(!sc || !sc->count)
 		return cap_value(critical,10,SHRT_MAX);
 
+	if (sc->data[SC_HARMONIZE]) {
+		critical += sc->data[SC_HARMONIZE]->val2;
 	if (sc->data[SC_INCCRI])
 		critical += sc->data[SC_INCCRI]->val2;
 	if (sc->data[SC_CRIFOOD])
@@ -6668,6 +6658,8 @@ static signed short status_calc_hit(struct block_list *bl, struct status_change 
 	if(!sc || !sc->count)
 		return cap_value(hit,1,SHRT_MAX);
 
+	if (sc->data[SC_HARMONIZE]) {
+		hit += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCHIT])
 		hit += sc->data[SC_INCHIT]->val1;
 	if(sc->data[SC_HITFOOD])
@@ -11073,20 +11065,20 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			tick_time = 1000; // [GodLesZ] tick time
 			break;
 		case SC_SWINGDANCE:
-			val3 = 5 * val1 + val2; // Walk speed and aspd reduction.
+			val3 = 5 * val1; // Walk speed and aspd reduction.
 			break;
 		case SC_SYMPHONYOFLOVER:
-			val3 = 12 * val1 + val2 + (sd?sd->status.job_level:50) / 4; // MDEF Increase in %
+			val3 = 10 * val1; // MDEF Increase in %
 			break;
 		case SC_MOONLITSERENADE: // MATK Increase
 		case SC_RUSHWINDMILL: // ATK Increase
-			val3 = 6 * val1 + val2 + (sd?sd->status.job_level:50) / 5;
+			val3 = 10 * val1;
 			break;
 		case SC_ECHOSONG:
-			val3 = 6 * val1 + val2 + (sd?sd->status.job_level:50) / 4; // DEF Increase in %
+			val3 = 10 * val1; // DEF Increase in %
 			break;
 		case SC_HARMONIZE:
-			val2 = 5 + 5 * val1;
+			val2 = 2 * val1;
 			break;
 		case SC_VOICEOFSIREN:
 			val4 = tick / 2000;

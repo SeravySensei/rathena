@@ -3762,6 +3762,7 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+      TargetHidden: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -24328,32 +24329,40 @@ Body:
     Name: MI_HARMONIZE
     Description: Harmonize
     MaxLevel: 5
-    TargetType: Support
+    TargetType: Self
     DamageFlags:
       NoDamage: true
-    Flags:
-      IgnoreKagehumi: true
-    Range: 9
+      Splash: true
     Hit: Single
     HitCount: 1
+    SplashArea:
+      - Level: 1
+        Area: 7
+      - Level: 2
+        Area: 8
+      - Level: 3
+        Area: 9
+      - Level: 4
+        Area: 10
+      - Level: 5
+        Area: 11
     CastCancel: true
     CastTime: 1000
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 2000
     Duration1: 60000
-    Cooldown: 5000
     FixedCastTime: -1
     Requires:
       SpCost:
         - Level: 1
-          Amount: 70
+          Amount: 86
         - Level: 2
-          Amount: 75
+          Amount: 92
         - Level: 3
-          Amount: 80
+          Amount: 98
         - Level: 4
-          Amount: 85
+          Amount: 104
         - Level: 5
-          Amount: 90
+          Amount: 110
       Weapon:
         Musical: true
         Whip: true
@@ -24396,15 +24405,15 @@ Body:
     AfterCastActDelay: 1000
     Cooldown:
       - Level: 1
-        Time: 2000
+        Time: 300
       - Level: 2
-        Time: 2500
+        Time: 300
       - Level: 3
-        Time: 3000
+        Time: 300
       - Level: 4
-        Time: 3500
+        Time: 300
       - Level: 5
-        Time: 4000
+        Time: 300
     FixedCastTime: -1
     Requires:
       SpCost:
