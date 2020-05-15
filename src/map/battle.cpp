@@ -2314,11 +2314,9 @@ int battle_calc_chorusbonus(struct map_session_data *sd) {
 
 	members = party_foreachsamemap(party_sub_count_class, sd, 0, MAPID_THIRDMASK, MAPID_MINSTRELWANDERER);
 
-	if (members < 3)
-		return 0; // Bonus remains 0 unless 3 or more Minstrels/Wanderers are in the party.
 	if (members > 7)
-		return 5; // Maximum effect possible from 7 or more Minstrels/Wanderers.
-	return members - 2; // Effect bonus from additional Minstrels/Wanderers if not above the max possible.
+		return 7; // Maximum effect possible from 7 or more Minstrels/Wanderers.
+	return members; // Effect bonus from additional Minstrels/Wanderers if not above the max possible.
 }
 
 struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list *target,uint16 skill_id,uint16 skill_lv,int mflag);
@@ -4658,13 +4656,9 @@ static void battle_attack_sc_bonus(struct Damage* wd, struct block_list *src, st
 		}
 		if (sc->data[SC_DANCEWITHWUG]) {
 			if (skill_get_inf2(skill_id, INF2_INCREASEDANCEWITHWUGDAMAGE)) {
-				ATK_ADDRATE(wd->damage, wd->damage2, sc->data[SC_DANCEWITHWUG]->val1 * 10 * battle_calc_chorusbonus(sd));
-				RE_ALLATK_ADDRATE(wd, sc->data[SC_DANCEWITHWUG]->val1 * 10 * battle_calc_chorusbonus(sd));
+				ATK_ADDRATE(wd->damage, wd->damage2, 5*(sc->data[SC_DANCEWITHWUG]->val1 + 2*battle_calc_chorusbonus(sd)));
+				RE_ALLATK_ADDRATE(wd, 5 * (sc->data[SC_DANCEWITHWUG]->val1 + 2 * battle_calc_chorusbonus(sd)));
 			}
-			ATK_ADDRATE(wd->damage, wd->damage2, sc->data[SC_DANCEWITHWUG]->val1 * 2 * battle_calc_chorusbonus(sd));
-#ifdef RENEWAL
-			ATK_ADDRATE(wd->equipAtk, wd->equipAtk2, sc->data[SC_DANCEWITHWUG]->val1 * 2 * battle_calc_chorusbonus(sd));
-#endif
 		}
 		if(sc->data[SC_ZENKAI] && sstatus->rhw.ele == sc->data[SC_ZENKAI]->val2) {
 			ATK_ADD(wd->damage, wd->damage2, 200);

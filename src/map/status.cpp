@@ -861,15 +861,15 @@ void initChangeTables(void)
 	set_sc( WA_MOONLIT_SERENADE		, SC_MOONLITSERENADE		, EFST_MOONLIT_SERENADE, SCB_MATK );
 	set_sc( MI_RUSH_WINDMILL		, SC_RUSHWINDMILL		, EFST_RUSH_WINDMILL, SCB_WATK  );
 	set_sc( MI_ECHOSONG			, SC_ECHOSONG			, EFST_ECHOSONG			, SCB_DEF  );
-	set_sc( MI_HARMONIZE			, SC_HARMONIZE			, EFST_HARMONIZE			, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK|SCB_HIT|SCB_CRIT );
+	set_sc( MI_HARMONIZE			, SC_HARMONIZE			, EFST_HARMONIZE			, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK|SCB_HIT|SCB_CRI );
 	set_sc_with_vfx( WM_POEMOFNETHERWORLD	, SC_NETHERWORLD		, EFST_NETHERWORLD		, SCB_NONE );
 	set_sc_with_vfx( WM_VOICEOFSIREN	, SC_VOICEOFSIREN		, EFST_SIREN, SCB_NONE );
 	set_sc_with_vfx( WM_LULLABY_DEEPSLEEP	, SC_DEEPSLEEP			, EFST_HANDICAPSTATE_DEEP_SLEEP, SCB_NONE );
 	set_sc( WM_SIRCLEOFNATURE		, SC_SIRCLEOFNATURE		, EFST_SIRCLEOFNATURE		, SCB_NONE );
 	set_sc( WM_GLOOMYDAY			, SC_GLOOMYDAY			, EFST_GLOOMYDAY			, SCB_FLEE|SCB_SPEED|SCB_ASPD );
 	set_sc( WM_SONG_OF_MANA			, SC_SONGOFMANA			, EFST_SONG_OF_MANA, SCB_NONE );
-	set_sc( WM_DANCE_WITH_WUG		, SC_DANCEWITHWUG		, EFST_DANCE_WITH_WUG, SCB_ASPD );
-	set_sc( WM_SATURDAY_NIGHT_FEVER		, SC_SATURDAYNIGHTFEVER		, EFST_SATURDAY_NIGHT_FEVER, SCB_BATK|SCB_DEF|SCB_FLEE|SCB_REGEN );
+	set_sc( WM_DANCE_WITH_WUG		, SC_DANCEWITHWUG		, EFST_DANCE_WITH_WUG, SCB_DEX|SCB_AGI );
+	set_sc( WM_SATURDAY_NIGHT_FEVER		, SC_SATURDAYNIGHTFEVER		, EFST_SATURDAY_NIGHT_FEVER, SCB_WATK|SCB_DEF|SCB_FLEE|SCB_REGEN );
 	set_sc( WM_LERADS_DEW			, SC_LERADSDEW			, EFST_LERADS_DEW, SCB_MAXHP );
 	set_sc( WM_MELODYOFSINK			, SC_MELODYOFSINK		, EFST_MELODYOFSINK		, SCB_INT );
 	set_sc( WM_BEYOND_OF_WARCRY		, SC_BEYONDOFWARCRY		, EFST_BEYOND_OF_WARCRY, SCB_STR|SCB_CRI|SCB_MAXHP );
@@ -1609,14 +1609,12 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC__IGNORANCE]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC__MANHOLE]				|= SCS_NOCAST;
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOCAST;
-	StatusChangeStateTable[SC_SATURDAYNIGHTFEVER]	|= SCS_NOCAST;
 	StatusChangeStateTable[SC_CURSEDCIRCLE_TARGET]	|= SCS_NOCAST;
 	StatusChangeStateTable[SC_KINGS_GRACE]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC_GRAVITYCONTROL]		|= SCS_NOCAST;
 
 	/* StatusChangeState (SCS_) NOCHAT (skills) */
 	StatusChangeStateTable[SC_BERSERK]				|= SCS_NOCHAT;
-	StatusChangeStateTable[SC_SATURDAYNIGHTFEVER]	|= SCS_NOCHAT;
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOCHAT;
 	StatusChangeStateTable[SC_NOCHAT]				|= SCS_NOCHAT|SCS_NOCHATCOND;
 }
@@ -5918,6 +5916,8 @@ static unsigned short status_calc_agi(struct block_list *bl, struct status_chang
 		agi += sc->data[SC_SOULCOLD]->val1;
 	if(sc->data[SC_TRUESIGHT])
 		agi += 5;
+	if (sc->data[SC_DANCEWITHWUG])
+		agi += sc->data[SC_DANCEWITHWUG]->val3;
 	if(sc->data[SC_INCREASEAGI])
 		agi += sc->data[SC_INCREASEAGI]->val2;
 	if(sc->data[SC_INCREASING])
@@ -6159,6 +6159,8 @@ static unsigned short status_calc_dex(struct block_list *bl, struct status_chang
 		dex += 5;
 	if(sc->data[SC_HAWKEYES])
 		dex += sc->data[SC_HAWKEYES]->val1;
+	if (sc->data[SC_DANCEWITHWUG])
+		dex += sc->data[SC_DANCEWITHWUG]->val3;
 	if(sc->data[SC_TRUESIGHT])
 		dex += 5;
 	if(sc->data[SC_QUAGMIRE])
@@ -6344,8 +6346,6 @@ static unsigned short status_calc_batk(struct block_list *bl, struct status_chan
 		batk += batk * sc->data[SC_FLEET]->val3/100;
 	if(sc->data[SC__ENERVATION])
 		batk -= batk * sc->data[SC__ENERVATION]->val2 / 100;
-	if(sc->data[SC_SATURDAYNIGHTFEVER])
-		batk += 100 * sc->data[SC_SATURDAYNIGHTFEVER]->val1;
 	if( sc->data[SC_ZANGETSU] )
 		batk += sc->data[SC_ZANGETSU]->val2;
 	if(sc->data[SC_QUEST_BUFF1])
@@ -6382,8 +6382,10 @@ static unsigned short status_calc_watk(struct block_list *bl, struct status_chan
 
 	if(sc->data[SC_DRUMBATTLE])
 		watk += sc->data[SC_DRUMBATTLE]->val2;
-if (sc->data[SC_IMPOSITIO])
+	if (sc->data[SC_IMPOSITIO])
 	watk += sc->data[SC_IMPOSITIO]->val2;
+	if (sc->data[SC_SATURDAYNIGHTFEVER])
+	watk += 60 * sc->data[SC_SATURDAYNIGHTFEVER]->val1;
 	if(sc->data[SC_WATKFOOD])
 		watk += sc->data[SC_WATKFOOD]->val1;
 	if(sc->data[SC_VOLCANO])
@@ -6487,6 +6489,8 @@ static unsigned short status_calc_ematk(struct block_list *bl, struct status_cha
 
 	if (sc->data[SC_MATKPOTION])
 		matk += sc->data[SC_MATKPOTION]->val1;
+	if (sc->data[SC_SATURDAYNIGHTFEVER])
+		matk += 50 * sc->data[SC_SATURDAYNIGHTFEVER]->val1;
 	if (sc->data[SC_MATKFOOD])
 		matk += sc->data[SC_MATKFOOD]->val1;
 	if(sc->data[SC_MANA_PLUS])
@@ -6614,7 +6618,7 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 	if(!sc || !sc->count)
 		return cap_value(critical,10,SHRT_MAX);
 
-	if (sc->data[SC_HARMONIZE]) {
+	if (sc->data[SC_HARMONIZE]) 
 		critical += sc->data[SC_HARMONIZE]->val2;
 	if (sc->data[SC_INCCRI])
 		critical += sc->data[SC_INCCRI]->val2;
@@ -6658,7 +6662,7 @@ static signed short status_calc_hit(struct block_list *bl, struct status_change 
 	if(!sc || !sc->count)
 		return cap_value(hit,1,SHRT_MAX);
 
-	if (sc->data[SC_HARMONIZE]) {
+	if (sc->data[SC_HARMONIZE]) 
 		hit += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCHIT])
 		hit += sc->data[SC_INCHIT]->val1;
@@ -7399,8 +7403,6 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, b
 			bonus -= sc->data[SC__GROOMY]->val2;
 		if (sc->data[SC_SWINGDANCE])
 			bonus += sc->data[SC_SWINGDANCE]->val3;
-		if (sc->data[SC_DANCEWITHWUG])
-			bonus += sc->data[SC_DANCEWITHWUG]->val3;
 		if (sc->data[SC_GLOOMYDAY])
 			bonus -= sc->data[SC_GLOOMYDAY]->val3;
 		if (sc->data[SC_EARTHDRIVE])
@@ -7590,8 +7592,6 @@ static short status_calc_aspd_rate(struct block_list *bl, struct status_change *
 		aspd_rate += sc->data[SC__GROOMY]->val2 * 10;
 	if( sc->data[SC_SWINGDANCE] )
 		aspd_rate -= sc->data[SC_SWINGDANCE]->val3 * 10;
-	if( sc->data[SC_DANCEWITHWUG] )
-		aspd_rate -= sc->data[SC_DANCEWITHWUG]->val3 * 10;
 	if( sc->data[SC_GLOOMYDAY] )
 		aspd_rate += sc->data[SC_GLOOMYDAY]->val3 * 10;
 	if( sc->data[SC_EARTHDRIVE] )
@@ -11095,7 +11095,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			tick_time = 1000; // [GodLesZ] tick time
 			break;
 		case SC_SONGOFMANA:
-			val3 = 10 + min(5 * val2, 35);
+			val3 = val1*val2*2;
 			val4 = tick/5000;
 			tick_time = 5000; // [GodLesZ] tick time
 			break;
@@ -11127,11 +11127,10 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			}
 			break;
 		case SC_DANCEWITHWUG:
-			val3 = 5 + 5 * val2; // ASPD Increase
-			val4 = 20 + 10 * val2; // Fixed Cast Time Reduction
+			val3 = 3 + 2*val1 + 2*val2; // DEX, AGI increase
 			break;
 		case SC_LERADSDEW:
-			val3 = 200 * val1 + min(300 * val2, 2500); // MaxHP Increase
+			val3 = status_get_lv(bl) *2* (val1 + 2*val2);
 			break;
 		case SC_MELODYOFSINK:
 			val3 = val1 * val2; // INT Reduction.
@@ -11147,7 +11146,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				struct unit_data *ud = unit_bl2ud(bl);
 				if( ud == NULL ) return 0;
 				ud->state.skillcastcancel = 0;
-				val3 = 15 - min(3 * val2, 15);
+				val3 = 42 - 6 * val2;
 			}
 			break;
 		case SC_REFLECTDAMAGE:
