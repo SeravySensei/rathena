@@ -132,17 +132,20 @@ return 0;
 ACMD_FUNC(autosong3)
 {
 if (!message || !*message) { clif_displaymessage(fd, "please specify type a song to play :");
-clif_displaymessage(fd, "Not Implemented");
+clif_displaymessage(fd, "Circle Fever Warg Mana Sinking Humming Lerad Warcry Frigg");
  }
 else {
 sd->state.autosong3 = 0; clif_displaymessage(fd, message);
 
-if (!strcmp(message,"Swing")) {sd->state.autosong3 = WA_SWING_DANCE;};
-if (!strcmp(message,"Harmonize")) {sd->state.autosong3 = MI_HARMONIZE;  };
-if (!strcmp(message,"Echo")) {sd->state.autosong3 = MI_ECHOSONG; };
-if (!strcmp(message,"Windmill")) {sd->state.autosong3 = MI_RUSH_WINDMILL; };
-if (!strcmp(message,"Serenade")) {sd->state.autosong3 = WA_MOONLIT_SERENADE; };
-if (!strcmp(message,"Lover")) {sd->state.autosong3 = WA_SYMPHONY_OF_LOVER; };
+if (!strcmp(message,"Circle")) {sd->state.autosong3 = WM_SIRCLEOFNATURE;};
+if (!strcmp(message,"Fever")) {sd->state.autosong3 = WM_SATURDAY_NIGHT_FEVER;  };
+if (!strcmp(message,"Warg")) {sd->state.autosong3 = WM_DANCE_WITH_WUG; };
+if (!strcmp(message,"Mana")) {sd->state.autosong3 = WM_SONG_OF_MANA; };
+if (!strcmp(message,"Sinking")) {sd->state.autosong3 = WM_MELODYOFSINK; };
+if (!strcmp(message,"Humming")) {sd->state.autosong3 = WM_UNLIMITED_HUMMING_VOICE; };
+if (!strcmp(message,"Lerad")) {sd->state.autosong3 = WM_LERADS_DEW; };
+if (!strcmp(message,"Warcry")) {sd->state.autosong3 = WM_BEYOND_OF_WARCRY; };
+if (!strcmp(message,"Frigg")) {sd->state.autosong3 = WM_FRIGG_SONG; };
 }
 return 0; 
 }

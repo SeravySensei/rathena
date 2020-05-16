@@ -4290,6 +4290,17 @@ int AOEPriority(block_list * bl, va_list ap)
 	return 2; // Default
 }
 
+int DeepSleepPriority(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+
+	int result = 0;
+	result += 100 * (1 - (sd->battle_status.hp / sd->battle_status.max_hp));
+	result += 200 * (1 - (sd->battle_status.sp / sd->battle_status.max_sp));
+
+	return result;
+}
+
 int AOEPrioritySandman(block_list * bl, va_list ap)
 {
 	struct mob_data *md;
@@ -4693,6 +4704,26 @@ int targetangelus(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetgloomy(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	// They won't be using skills so no need to buff
+	if (sd->state.autopilotmode == 3) return 0;
+	// Must know at least one of the good skills buffed by this effect
+	if (pc_checkskill(sd, KN_BRANDISHSPEAR) < 10)
+		if (pc_checkskill(sd, LK_SPIRALPIERCE) < 5)
+			if (pc_checkskill(sd, PA_SHIELDCHAIN) < 5)
+				if (pc_checkskill(sd, RK_HUNDREDSPEAR) < 10)
+					if (pc_checkskill(sd, LG_SHIELDPRESS) < 5) return 0;
+	if ((sd->battle_status.sp < (40 * sd->battle_status.max_sp) / 100)) return 0; // if target is low on sp don't bother they won't be able to skill much
+	
+	if (!sd->sc.data[SC_GLOOMYDAY]) { targetbl = bl; foundtargetID = sd->bl.id; };
+
+	return 0;
+}
+
 int targetsong2(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd = (struct map_session_data*)bl;
@@ -4705,6 +4736,29 @@ int targetsong2(block_list * bl, va_list ap)
 					if (!sd->sc.data[SC_MOONLITSERENADE])
 						if (!sd->sc.data[SC_SYMPHONYOFLOVER])
 	{ targetbl = bl; foundtargetID = sd->bl.id; };
+
+	return 0;
+}
+
+int targetsong3(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (!sd->sc.data[SC_VOICEOFSIREN])
+			if (!sd->sc.data[SC_GLOOMYDAY])
+				if (!sd->sc.data[SC_SONGOFMANA])
+					if (!sd->sc.data[SC_DANCEWITHWUG])
+						if (!sd->sc.data[SC_SATURDAYNIGHTFEVER])
+						if (!sd->sc.data[SC_LERADSDEW])
+							if (!sd->sc.data[SC_FRIGG_SONG])
+								if (!sd->sc.data[SC_MELODYOFSINK])
+									if (!sd->sc.data[SC_BEYONDOFWARCRY])
+										if (!sd->sc.data[SC_UNLIMITEDHUMMINGVOICE])
+											if (!sd->sc.data[SC_SIRCLEOFNATURE])
+						{
+							targetbl = bl; foundtargetID = sd->bl.id;
+						};
 
 	return 0;
 }
@@ -5733,6 +5787,14 @@ int ammochange2(map_session_data * sd, mob_data *targetmd) {
 
 void skillwhenidle(struct map_session_data *sd) {
 
+	// Deep Sleep Lullaby
+	// **** Note I changed this to cause the effect on the party so it is basically a recovery spell that is useful outside battle.
+	// Remove this block if you use the original DSL.
+	if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
+		if (map_foreachinrange(AOEPriority, targetbl, 9, BL_MOB) >= 150* map_foreachinrange(counttargets, targetbl, 9, BL_PC)) {
+			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
+		}
+	}
 	// Fury
 	// Use if tanking mode only, otherwise unlikely to be normal attacking so crit doesn't matter.
 	// For Asura preparation, it is used in the asura strike logic instead
@@ -7172,6 +7234,23 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, sd->state.autosong2, pc_checkskill(sd, sd->state.autosong2));
 			}
 		}
+		/// Wanderer/Minstrel Songs Group B
+		if (sd->state.autosong3 > 0)
+			if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong3) > 0) {
+				resettargets();
+				map_foreachinrange(targetsong3, &sd->bl, 11, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, SELF, sd->state.autosong3, pc_checkskill(sd, sd->state.autosong3));
+				}
+			}
+		/// Gloomy Day
+		if (canskill(sd)) if (pc_checkskill(sd, WM_GLOOMYDAY) > 0) {
+			resettargets();
+			map_foreachinrange(targetgloomy, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, WM_GLOOMYDAY, pc_checkskill(sd, WM_GLOOMYDAY));
+			}
+		}
 
 		/// Angelus
 		if (canskill(sd)) if (pc_checkskill(sd, AL_ANGELUS)>0) {
@@ -7776,6 +7855,12 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+		/// Siren's Voice
+		if (canskill(sd)) if (pc_checkskill(sd, WM_VOICEOFSIREN) > 0) {
+			// At least 5 enemies must be present
+			if (map_foreachinrange(AOEPriority, &sd->bl, 6, BL_MOB, ELE_NONE) >= 10)
+				unit_skilluse_ifable(&sd->bl, SELF, WM_VOICEOFSIREN, pc_checkskill(sd, WM_VOICEOFSIREN));
+		}
 		/// Frost Joker
 		if (canskill(sd)) if (pc_checkskill(sd, BA_FROSTJOKER) > 0) {
 			// At least 5 enemies must be present
@@ -8340,6 +8425,23 @@ TIMER_FUNC(unit_autopilot_timer)
 									priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
 									if (((priority >= 12) && (priority > bestpriority))) {
 										spelltocast = RA_ARROWSTORM; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+
+							// Great Echo
+							if (canskill(sd)) if ((pc_checkskill(sd, WM_GREAT_ECHO) > 0))
+								if (pc_search_inventory(sd, 11513) >= 0)
+							{
+								resettargets();
+								map_foreachinrange(targetnearest, targetbl2, 9 , BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = 1; if (pc_checkskill(sd, WM_GREAT_ECHO) >= 6) area++;
+									arrowchange(sd, targetmd);
+									// *** NOTE *** I modified the "chorusbonus" function to return the number of performers (1 for solo 2 for two etc), so you might want to change priority here
+									priority = battle_calc_chorusbonus(sd) * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, arrowelement);
+									if (((priority >= 6* battle_calc_chorusbonus(sd)) && (priority > bestpriority))) {
+										spelltocast = WM_GREAT_ECHO; bestpriority = priority; IDtarget = foundtargetID;
 									}
 								}
 							}
