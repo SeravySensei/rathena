@@ -32,13 +32,13 @@ Header:
 
 Body:
   - Skill: MG_NAPALMBEAT
-    Probability: 6000
+    Probability: 1000
   - Skill: MG_SAFETYWALL
     Probability: 4000
   - Skill: MG_SOULSTRIKE
     Probability: 6000
   - Skill: MG_COLDBOLT
-    Probability: 6000
+    Probability: 8000
   - Skill: MG_FROSTDIVER
     Probability: 6000
   - Skill: MG_FIREBALL
@@ -46,20 +46,18 @@ Body:
   - Skill: MG_FIREWALL
     Probability: 4000
   - Skill: MG_FIREBOLT
-    Probability: 6000
+    Probability: 8000
   - Skill: MG_LIGHTNINGBOLT
-    Probability: 6000
+    Probability: 8000
   - Skill: MG_THUNDERSTORM
-    Probability: 4000
+    Probability: 5000
   - Skill: WZ_FIREPILLAR
     Probability: 4000
   - Skill: WZ_METEOR
-    Probability: 4000
+    Probability: 5000
   - Skill: WZ_JUPITEL
-    Probability: 6000
+    Probability: 8000
   - Skill: WZ_VERMILION
-    Probability: 4000
-  - Skill: WZ_WATERBALL
-    Probability: 6000
+    Probability: 5000
   - Skill: WZ_STORMGUST
-    Probability: 4000
+    Probability: 5000

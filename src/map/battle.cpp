@@ -4253,14 +4253,9 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio = (status_get_dex(src) + status_get_agi(src)) * skill_lv / 9;
 			break;
 		case WM_GREAT_ECHO:
-			skillratio += 300 + 200 * skill_lv;
 			if (sd) {
-				int chorusbonus = battle_calc_chorusbonus(sd);
-
-				// Chorus bonus don't count the first 2 Minstrels/Wanderers and only increases when their are 3 or more. [Rytech]
-				if (chorusbonus >= 1 && chorusbonus <= 5)
-					skillratio += 100<<(chorusbonus-1); // 1->100; 2->200; 3->400; 4->800; 5->1600
-			}
+				skillratio += -100 + 100 * skill_lv * battle_calc_chorusbonus(sd);
+			} else skillratio += -100 + 100 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case GN_CART_TORNADO: { // 100% + skill lv *50% + DEX% + Weight/50 %

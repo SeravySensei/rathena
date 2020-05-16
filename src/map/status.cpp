@@ -871,10 +871,10 @@ void initChangeTables(void)
 	set_sc( WM_DANCE_WITH_WUG		, SC_DANCEWITHWUG		, EFST_DANCE_WITH_WUG, SCB_DEX|SCB_AGI );
 	set_sc( WM_SATURDAY_NIGHT_FEVER		, SC_SATURDAYNIGHTFEVER		, EFST_SATURDAY_NIGHT_FEVER, SCB_WATK|SCB_DEF|SCB_FLEE|SCB_REGEN );
 	set_sc( WM_LERADS_DEW			, SC_LERADSDEW			, EFST_LERADS_DEW, SCB_MAXHP );
-	set_sc( WM_MELODYOFSINK			, SC_MELODYOFSINK		, EFST_MELODYOFSINK		, SCB_INT );
-	set_sc( WM_BEYOND_OF_WARCRY		, SC_BEYONDOFWARCRY		, EFST_BEYOND_OF_WARCRY, SCB_STR|SCB_CRI|SCB_MAXHP );
+	set_sc( WM_MELODYOFSINK			, SC_MELODYOFSINK		, EFST_MELODYOFSINK		, SCB_DEF2|SCB_SPEED );
+	set_sc( WM_BEYOND_OF_WARCRY		, SC_BEYONDOFWARCRY		, EFST_BEYOND_OF_WARCRY, SCB_SPEED|SCB_MAXHP );
 	set_sc( WM_UNLIMITED_HUMMING_VOICE	, SC_UNLIMITEDHUMMINGVOICE	, EFST_UNLIMITED_HUMMING_VOICE, SCB_NONE );
-	set_sc( WM_FRIGG_SONG			, SC_FRIGG_SONG			, EFST_FRIGG_SONG			, SCB_MAXHP );
+	set_sc( WM_FRIGG_SONG			, SC_FRIGG_SONG			, EFST_FRIGG_SONG			, SCB_MAXHP|SCB_VIT|SCB_INT|SCB_STR|SCB_AGI );
 
 	/* Sorcerer */
 	set_sc( SO_FIREWALK		, SC_PROPERTYWALK	, EFST_PROPERTYWALK	, SCB_NONE );
@@ -3275,8 +3275,6 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 				bonus += sc->data[SC_MERC_HPUP]->val2;
 			if(sc->data[SC_EPICLESIS])
 				bonus += sc->data[SC_EPICLESIS]->val2;
-			if(sc->data[SC_FRIGG_SONG])
-				bonus += sc->data[SC_FRIGG_SONG]->val2;
 			if(sc->data[SC_FORCEOFVANGUARD])
 				bonus += (3 * sc->data[SC_FORCEOFVANGUARD]->val1);
 			if(sc->data[SC_INSPIRATION])
@@ -3307,8 +3305,6 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 			//Decreasing
 			if(sc->data[SC_VENOMBLEED])
 				bonus -= 15;
-			if(sc->data[SC_BEYONDOFWARCRY])
-				bonus -= sc->data[SC_BEYONDOFWARCRY]->val4;
 			if(sc->data[SC__WEAKNESS])
 				bonus -= sc->data[SC__WEAKNESS]->val2;
 			if(sc->data[SC_EQC])
@@ -3511,6 +3507,9 @@ static unsigned int status_calc_maxhpsp_pc(struct map_session_data* sd, unsigned
 		item_bonus = (dmax * status_get_hpbonus_item(&sd->bl) / 100);
 		dmax += equip_bonus + item_bonus;
 		dmax += (int64)(dmax * status_get_hpbonus(&sd->bl,STATUS_BONUS_RATE) / 100); //Aegis accuracy
+		if (sd->sc.data[SC_BEYONDOFWARCRY])
+			dmax = (int64)(dmax*(100-sd->sc.data[SC_BEYONDOFWARCRY]->val4) /100);
+
 	}
 	else { //Calculates MaxSP
 		double equip_bonus = 0, item_bonus = 0;
@@ -5816,7 +5815,9 @@ static unsigned short status_calc_str(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(str,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) 
+	if (sc->data[SC_FRIGG_SONG])
+		str -= sc->data[SC_FRIGG_SONG]->val3;
+	if(sc->data[SC_HARMONIZE])
 		str += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		str += sc->data[SC_INCALLSTATUS]->val1;
@@ -5854,8 +5855,6 @@ static unsigned short status_calc_str(struct block_list *bl, struct status_chang
 		str += ((sc->data[SC_SPIRIT]->val3)>>16)&0xFF;
 	if(sc->data[SC_GIANTGROWTH])
 		str += 30;
-	if(sc->data[SC_BEYONDOFWARCRY])
-		str -= sc->data[SC_BEYONDOFWARCRY]->val3;
 	if(sc->data[SC_SAVAGE_STEAK])
 		str += sc->data[SC_SAVAGE_STEAK]->val1;
 	if(sc->data[SC_INSPIRATION])
@@ -5900,7 +5899,9 @@ static unsigned short status_calc_agi(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(agi,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) 
+	if (sc->data[SC_FRIGG_SONG])
+		agi -= sc->data[SC_FRIGG_SONG]->val3;
+	if(sc->data[SC_HARMONIZE])
 		agi += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_CONCENTRATE] && !sc->data[SC_QUAGMIRE])
 		agi += (agi-sc->data[SC_CONCENTRATE]->val3)*sc->data[SC_CONCENTRATE]->val2/100;
@@ -5984,7 +5985,9 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(vit,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) 
+	if (sc->data[SC_FRIGG_SONG])
+		vit += sc->data[SC_FRIGG_SONG]->val3;
+	if(sc->data[SC_HARMONIZE])
 		vit += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		vit += sc->data[SC_INCALLSTATUS]->val1;
@@ -6056,7 +6059,9 @@ static unsigned short status_calc_int(struct block_list *bl, struct status_chang
 	if(!sc || !sc->count)
 		return cap_value(int_,0,USHRT_MAX);
 
-	if(sc->data[SC_HARMONIZE]) 
+	if (sc->data[SC_FRIGG_SONG])
+		int_ += sc->data[SC_FRIGG_SONG]->val3;
+	if(sc->data[SC_HARMONIZE])
 		int_ += sc->data[SC_HARMONIZE]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		int_ += sc->data[SC_INCALLSTATUS]->val1;
@@ -6090,8 +6095,6 @@ static unsigned short status_calc_int(struct block_list *bl, struct status_chang
 		int_ += ((sc->data[SC_SPIRIT]->val4)>>16)&0xFF;
 	if(sc->data[SC_INSPIRATION])
 		int_ += sc->data[SC_INSPIRATION]->val3;
-	if(sc->data[SC_MELODYOFSINK])
-		int_ -= sc->data[SC_MELODYOFSINK]->val3;
 	if(sc->data[SC_MANDRAGORA])
 		int_ -= 4 * sc->data[SC_MANDRAGORA]->val1;
 	if(sc->data[SC_COCKTAIL_WARG_BLOOD])
@@ -6642,8 +6645,6 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 		critical += sc->data[SC__INVISIBILITY]->val3 * 10;
 	if (sc->data[SC__UNLUCKY])
 		critical -= sc->data[SC__UNLUCKY]->val2;
-	if(sc->data[SC_BEYONDOFWARCRY])
-		critical += sc->data[SC_BEYONDOFWARCRY]->val3;
 	if (sc->data[SC_SOULSHADOW])
 		critical += 10 * sc->data[SC_SOULSHADOW]->val3;
 
@@ -6988,6 +6989,8 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 #endif
 	if (sc->data[SC_PRESTIGE])
 		def2 += sc->data[SC_PRESTIGE]->val3;
+	if (sc->data[SC_MELODYOFSINK])
+		def2 += sc->data[SC_MELODYOFSINK]->val3;
 	if(sc->data[SC_POISON])
 		def2 -= def2 * 25/100;
 	if(sc->data[SC_DPOISON])
@@ -7235,8 +7238,10 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			if (sc->data[SC_CREATINGSTAR])
 				val = max(val, 90);
 
+			if (sc->data[SC_MELODYOFSINK])
+				val += sc->data[SC_MELODYOFSINK]->val4;
 			if( sd && sd->bonus.speed_rate + sd->bonus.speed_add_rate > 0 ) // Permanent item-based speedup
-				val = max( val, sd->bonus.speed_rate + sd->bonus.speed_add_rate );
+				val += max( val, sd->bonus.speed_rate + sd->bonus.speed_add_rate );
 		}
 		speed_rate += val;
 		val = 0;
@@ -7281,7 +7286,6 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			val = max(val, sc->data[SC_ARCLOUSEDASH]->val3);
 		if( sc->data[SC_DORAM_WALKSPEED] )
 			val = max(val, sc->data[SC_DORAM_WALKSPEED]->val1);
-
 		// !FIXME: official items use a single bonus for this [ultramage]
 		if( sc->data[SC_SPEEDUP0] ) // Temporary item-based speedup
 			val += sc->data[SC_SPEEDUP0]->val1 ;
@@ -7289,6 +7293,9 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			val += -(sd->bonus.speed_rate + sd->bonus.speed_add_rate);
 
 		speed_rate -= val;
+
+		if (sc->data[SC_BEYONDOFWARCRY])
+			speed_rate = speed_rate*sc->data[SC_BEYONDOFWARCRY]->val3 /100;
 
 		if( speed_rate < 40 )
 			speed_rate = 40;
@@ -8636,7 +8643,8 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			break;
 		case SC_VOICEOFSIREN:
 			// Resistance: {(Target's Base Level / 10) + (Target's Job Level / 5)} seconds
-			tick_def2 = status_get_lv(bl) * 100 + (sd ? sd->status.job_level : 1) * 200;
+			sc_def = status->int_ * 40;
+			tick_def2 = status_get_lv(bl) * 100;
 			break;
 		case SC_B_TRAP:
 			tick_def = (sd ? sd->status.str : status_get_base_status(bl)->str) * 50; //! TODO: Figure out reduction formula
@@ -9694,6 +9702,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 	case SC_DANCEWITHWUG:
 	case SC_SATURDAYNIGHTFEVER:
 	case SC_LERADSDEW:
+	case SC_FRIGG_SONG:
 	case SC_MELODYOFSINK:
 	case SC_BEYONDOFWARCRY:
 	case SC_UNLIMITEDHUMMINGVOICE:
@@ -9701,6 +9710,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		if (type != SC_VOICEOFSIREN) status_change_end(bl, SC_VOICEOFSIREN, INVALID_TIMER);
 		if (type != SC_DEEPSLEEP) status_change_end(bl, SC_DEEPSLEEP, INVALID_TIMER);
 		if (type != SC_LERADSDEW) status_change_end(bl, SC_LERADSDEW, INVALID_TIMER);
+		if (type != SC_FRIGG_SONG) status_change_end(bl, SC_FRIGG_SONG, INVALID_TIMER);
 		if (type != SC_MELODYOFSINK) status_change_end(bl, SC_MELODYOFSINK, INVALID_TIMER);
 		if (type != SC_BEYONDOFWARCRY) status_change_end(bl, SC_BEYONDOFWARCRY, INVALID_TIMER);
 		if (type != SC_UNLIMITEDHUMMINGVOICE) status_change_end(bl, SC_UNLIMITEDHUMMINGVOICE, INVALID_TIMER);
@@ -11115,8 +11125,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			}
 			break;
 		case SC_GLOOMYDAY_SK:
-			// Random number between [15 ~ (Voice Lesson Skill Level x 5) + (Skill Level x 10)] %.
-			val2 = 15 + rnd()%( (sd?pc_checkskill(sd, WM_LESSON)*5:0) + val1*10 );
+			val2 = pc_checkskill(sd, WM_LESSON) * 5 + val1 * 15;
 			break;
 		case SC_SITDOWN_FORCE:
 		case SC_BANANA_BOMB_SITDOWN:
@@ -11133,13 +11142,12 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val3 = status_get_lv(bl) *2* (val1 + 2*val2);
 			break;
 		case SC_MELODYOFSINK:
-			val3 = val1 * val2; // INT Reduction.
-			val4 = tick/1000;
-			tick_time = 1000;
+			val3 = val1 * 10 + val2 * 10; // DEF2 bonus
+			val4 = val1 * 10 - val2 * 7; // SPD reduction
 			break;
 		case SC_BEYONDOFWARCRY:
-			val3 = val1 * val2; // STR and CRIT Reduction
-			val4 = 4 * val1 + min(4 * (val2 - 2), 40); // MaxHP Reduction
+			val3 = 70; // Speed boost
+			val4 = 50-7*val2; // MaxHP Reduction
 			break;
 		case SC_UNLIMITEDHUMMINGVOICE:
 			{
@@ -11482,10 +11490,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val3 = 100 + 20 * val1; // sp cost inc
 			break;
 		case SC_FRIGG_SONG:
-			val2 = 5 * val1; // maxhp bonus
-			val3 = 80 + 20 * val1; // healing
-			tick_time = 1000;
-			val4 = tick / tick_time;
+			val3 = val1 * 2 + (val2-1) *3;
 			break;
 		case SC_FLASHCOMBO:
 			val2 = 20 * val1 + 20; // atk bonus
@@ -14023,14 +14028,6 @@ TIMER_FUNC(status_change_timer){
 		}
 		break;
 
-	case SC_MELODYOFSINK:
-		if( --(sce->val4) >= 0 ) {
-			status_charge(bl, 0, status->max_sp * ( 2 * sce->val1 + 2 * sce->val2 ) / 100);
-			sc_timer_next(1000+tick);
-			return 0;
-		}
-		break;
-
 	case SC_CRYSTALIZE:
 		if( --(sce->val4) >= 0 ) { // Drains 2% of HP and 1% of SP every seconds.
 			if (!status_charge(bl, status->max_hp * 2 / 100, status->max_sp / 100))
@@ -14252,13 +14249,6 @@ TIMER_FUNC(status_change_timer){
 	case SC_KINGS_GRACE:
 		if( --(sce->val4) >= 0 ) {
 			status_percent_heal(bl, sce->val2, 0);
-			sc_timer_next(1000 + tick);
-			return 0;
-		}
-		break;
-	case SC_FRIGG_SONG:
-		if( --(sce->val4) >= 0 ) {
-			status_heal(bl, sce->val3, 0, 0);
 			sc_timer_next(1000 + tick);
 			return 0;
 		}

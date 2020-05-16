@@ -24786,15 +24786,15 @@ Body:
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 12000
+        Time: 6000
       - Level: 2
-        Time: 14000
+        Time: 12000
       - Level: 3
-        Time: 16000
-      - Level: 4
         Time: 18000
+      - Level: 4
+        Time: 24000
       - Level: 5
-        Time: 20000
+        Time: 30000
     Cooldown: 10000
     FixedCastTime: 1000
     Requires:
@@ -24940,15 +24940,15 @@ Body:
     HitCount: 1
     SplashArea:
       - Level: 1
-        Area: 2
+        Area: 4
       - Level: 2
-        Area: 3
+        Area: 4
       - Level: 3
-        Area: 3
+        Area: 5
       - Level: 4
-        Area: 4
+        Area: 5
       - Level: 5
-        Area: 4
+        Area: 5
     CastCancel: true
     CastTime:
       - Level: 1
@@ -25303,30 +25303,30 @@ Body:
     HitCount: 1
     SplashArea:
       - Level: 1
-        Area: 5
-      - Level: 2
-        Area: 5
-      - Level: 3
-        Area: 6
-      - Level: 4
-        Area: 6
-      - Level: 5
         Area: 7
+      - Level: 2
+        Area: 8
+      - Level: 3
+        Area: 9
+      - Level: 4
+        Area: 10
+      - Level: 5
+        Area: 11
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 20000
+        Time: 80000
       - Level: 2
-        Time: 30000
+        Time: 90000
       - Level: 3
-        Time: 40000
+        Time: 100000
       - Level: 4
-        Time: 50000
+        Time: 110000
       - Level: 5
-        Time: 60000
-    Cooldown: 180000
+        Time: 120000
+    Cooldown: 120000
     FixedCastTime: 500
     Requires:
       SpCost:
@@ -25357,29 +25357,29 @@ Body:
     HitCount: 1
     SplashArea:
       - Level: 1
-        Area: 5
-      - Level: 2
-        Area: 5
-      - Level: 3
-        Area: 6
-      - Level: 4
-        Area: 6
-      - Level: 5
         Area: 7
+      - Level: 2
+        Area: 8
+      - Level: 3
+        Area: 9
+      - Level: 4
+        Area: 10
+      - Level: 5
+        Area: 11
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 20000
+        Time: 100000
       - Level: 2
-        Time: 30000
+        Time: 120000
       - Level: 3
-        Time: 40000
+        Time: 140000
       - Level: 4
-        Time: 50000
+        Time: 160000
       - Level: 5
-        Time: 60000
+        Time: 180000
     Cooldown: 180000
     FixedCastTime: 500
     Requires:
@@ -31014,18 +31014,18 @@ Body:
     HitCount: 1
     SplashArea:
       - Level: 1
-        Area: 5
-      - Level: 2
-        Area: 6
-      - Level: 3
         Area: 7
-      - Level: 4
+      - Level: 2
         Area: 8
-      - Level: 5
+      - Level: 3
         Area: 9
+      - Level: 4
+        Area: 10
+      - Level: 5
+        Area: 11
     CastTime: 1000
     AfterCastActDelay: 2000
-    Duration1: 60000
+    Duration1: 180000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -31042,9 +31042,6 @@ Body:
       Weapon:
         Musical: true
         Whip: true
-      ItemCost:
-        - Item: Heartbroken_Tears
-          Amount: 1
   - Id: 5008
     Name: SO_ELEMENTAL_SHIELD
     Description: Elemental Shield
