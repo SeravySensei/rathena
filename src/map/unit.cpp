@@ -6133,6 +6133,17 @@ int targetberserkpotion(block_list * bl, va_list ap)
 	return 0;
 }
 
+// 
+int targetpowerimplant(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->state.autopilotmode == 3) return 0;
+	if ((sd->battle_status.batk > sd->status.base_level) || (sd->battle_status.batk > 120))
+	if (sd->spiritball<3) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+	return 0;
+}
 
 bool hasgun(struct map_session_data *sd)
 {
@@ -7340,6 +7351,19 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, foundtargetID, AM_BERSERKPITCHER, pc_checkskill(sd, AM_BERSERKPITCHER));
 			}
 		}
+
+		/// Power Implantation
+		if (canskill(sd)) if (pc_checkskill(sd, SR_POWERVELOCITY) > 0)
+			if (pc_checkskill(sd, CH_SOULCOLLECT) > 0)
+			if (sd->spiritball>=5) {
+			resettargets();
+			map_foreachinrange(targetpowerimplant, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, SR_POWERVELOCITY, pc_checkskill(sd, SR_POWERVELOCITY));
+			}
+		}
+
+
 		/// Soul Link
 		if (canskill(sd)) if ((sd->class_ & MAPID_UPPERMASK)== MAPID_SOUL_LINKER) {
 			resettargets();
@@ -9949,6 +9973,16 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					unit_skilluse_ifable(&sd->bl, SELF, TK_COUNTER, pc_checkskill(sd, TK_COUNTER));
 				}
 			}
+
+			// Dragon Combo skill
+			// This is basically Bash for Shura
+			if (canskill(sd)) if (pc_checkskill(sd, SR_DRAGONCOMBO) > 0) {
+				if ((checksprate(sd, targetmd, 10))
+					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SR_DRAGONCOMBO, pc_checkskill(sd, SR_DRAGONCOMBO));
+				}
+			}
+
 
 			// Investigate skill
 			// Avoid if combo skill requiring sphere is available, combo is better.

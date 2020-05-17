@@ -995,7 +995,7 @@ short pc_maxaspd(struct map_session_data *sd);
 
 // clientside display macros (values to the left/right of the "+")
 #ifdef RENEWAL
-	#define pc_leftside_atk(sd) ((sd)->battle_status.batk)
+	#define pc_leftside_atk(sd) ((sd)->battle_status.batk*2)
 	#define pc_rightside_atk(sd) ((sd)->battle_status.watk + (sd)->battle_status.watk2 + (sd)->battle_status.eatk)
 	#define pc_leftside_def(sd) ((sd)->battle_status.def2)
 	#define pc_rightside_def(sd) ((sd)->battle_status.def)
