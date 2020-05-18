@@ -23219,15 +23219,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 12
+          Amount: 7
         - Level: 2
           Amount: 14
         - Level: 3
-          Amount: 16
+          Amount: 21
         - Level: 4
-          Amount: 18
+          Amount: 28
         - Level: 5
-          Amount: 20
+          Amount: 35
   - Id: 2328
     Name: SR_EARTHSHAKER
     Description: Earth Shaker
@@ -23399,8 +23399,29 @@ Body:
           Amount: 70
         - Level: 10
           Amount: 75
+      HpRateCost:
+        - Level: 1
+          Amount: -12
+        - Level: 2
+          Amount: -14
+        - Level: 3
+          Amount: -16
+        - Level: 4
+          Amount: -18
+        - Level: 5
+          Amount: -20
+        - Level: 6
+          Amount: -22
+        - Level: 7
+          Amount: -24
+        - Level: 8
+          Amount: -26
+        - Level: 9
+          Amount: -28
+        - Level: 10
+          Amount: -30
       Status:
-        Explosionspirits: true
+      Explosionspirits: true
       SpiritSphereCost: 2
   - Id: 2331
     Name: SR_HELLGATE
@@ -23410,25 +23431,25 @@ Body:
       SpCost: 1
       SpRateCost:
         - Level: 1
-          Amount: -11
-        - Level: 2
           Amount: -12
-        - Level: 3
-          Amount: -13
-        - Level: 4
+        - Level: 2
           Amount: -14
-        - Level: 5
-          Amount: -15
-        - Level: 6
+        - Level: 3
           Amount: -16
-        - Level: 7
-          Amount: -17
-        - Level: 8
+        - Level: 4
           Amount: -18
-        - Level: 9
-          Amount: -19
-        - Level: 10
+        - Level: 5
           Amount: -20
+        - Level: 6
+          Amount: -22
+        - Level: 7
+          Amount: -24
+        - Level: 8
+          Amount: -26
+        - Level: 9
+          Amount: -28
+        - Level: 10
+          Amount: -30
       SpiritSphereCost: 5
   - Id: 2332
     Name: SR_RAMPAGEBLASTER
@@ -23800,8 +23821,29 @@ Body:
         Time: 1000
     FixedCastTime: -1
     Requires:
-      SpCost: 100
-      SpiritSphereCost: 2
+      SpCost: 1
+      SpRateCost:
+        - Level: 1
+          Amount: -12
+        - Level: 2
+          Amount: -14
+        - Level: 3
+          Amount: -16
+        - Level: 4
+          Amount: -18
+        - Level: 5
+          Amount: -20
+        - Level: 6
+          Amount: -22
+        - Level: 7
+          Amount: -24
+        - Level: 8
+          Amount: -26
+        - Level: 9
+          Amount: -28
+        - Level: 10
+          Amount: -30
+      SpiritSphereCost: 5
   - Id: 2344
     Name: SR_GENTLETOUCH_QUIET
     Description: Gentle Touch - Quiet
