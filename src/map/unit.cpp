@@ -4475,6 +4475,21 @@ int targetCure(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetGTCure(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (sd->sc.data[SC_SILENCE]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_CONFUSION]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_BLIND]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_FREEZE]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_POISON]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_STONE]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (sd->sc.data[SC_STUN]) { targetbl = bl; foundtargetID = sd->bl.id; };
+
+	return 0;
+}
+
 int targetstatusrecovery(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd = (struct map_session_data*)bl;
@@ -5803,6 +5818,14 @@ int ammochange2(map_session_data * sd, mob_data *targetmd) {
 	return 0;
 }
 
+// Reduce lag - do not try using skills if already decided to use one and started it
+// Checking this ahead of time instead of executing all the logic and targeting for all the skills only do fail them is better
+bool canskill(struct map_session_data *sd)
+{
+	return ((sd->ud.skilltimer == INVALID_TIMER) && (DIFF_TICK(gettick(), sd->ud.canact_tick) >= 0));
+
+};
+
 
 void skillwhenidle(struct map_session_data *sd) {
 
@@ -5814,6 +5837,14 @@ void skillwhenidle(struct map_session_data *sd) {
 			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
 		}
 	}
+	// Rising Dragon
+	if (canskill(sd))
+	if (pc_checkskill(sd, SR_RAISINGDRAGON) > 0) {
+		if (sd->spiritball < 10) {
+			unit_skilluse_ifable(&sd->bl, SELF, SR_RAISINGDRAGON, pc_checkskill(sd, SR_RAISINGDRAGON));
+		}
+	}
+
 	// Fury
 	// Use if tanking mode only, otherwise unlikely to be normal attacking so crit doesn't matter.
 	// For Asura preparation, it is used in the asura strike logic instead
@@ -5826,6 +5857,7 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Dangerous Soul Collect (Zen)
+	if (canskill(sd))
 	if (pc_checkskill(sd, CH_SOULCOLLECT) > 0) {
 		int radra = 0; if (sd->sc.data[SC_RAISINGDRAGON]) { radra = sd->sc.data[SC_RAISINGDRAGON]->val1; }
 		if (4 + radra>sd->spiritball) {
@@ -5833,23 +5865,51 @@ void skillwhenidle(struct map_session_data *sd) {
 		}
 	}
 
+	// Sura - Gentle Touch
+	if (canskill(sd))
+		if ((pc_checkskill(sd, SR_GENTLETOUCH_REVITALIZE) > 0)
+			|| (pc_checkskill(sd, SR_GENTLETOUCH_CHANGE) > 0)
+			|| (pc_checkskill(sd, SR_GENTLETOUCH_ENERGYGAIN) > 0))
+		{
+			if (!(sd->sc.data[SC_GT_ENERGYGAIN])
+				&& !(sd->sc.data[SC_GT_CHANGE])
+				&& !(sd->sc.data[SC_GT_REVITALIZE])
+				) {
+				if (sd->state.autopilotmode == 1) // Tanking mode we want spheres
+					if (pc_checkskill(sd, SR_GENTLETOUCH_ENERGYGAIN) > 0)
+				unit_skilluse_ifable(&sd->bl, SELF, SR_GENTLETOUCH_ENERGYGAIN, pc_checkskill(sd, SR_GENTLETOUCH_ENERGYGAIN));
+				if (sd->state.autopilotmode == 2) // Skill mode we want ATK
+					if (pc_checkskill(sd, SR_GENTLETOUCH_CHANGE) > 0)
+					unit_skilluse_ifable(&sd->bl, SELF, SR_GENTLETOUCH_CHANGE, pc_checkskill(sd, SR_GENTLETOUCH_CHANGE));
+				if (sd->state.autopilotmode == 3) // Support mode we want maxhp
+					if (pc_checkskill(sd, SR_GENTLETOUCH_REVITALIZE) > 0)
+					unit_skilluse_ifable(&sd->bl, SELF, SR_GENTLETOUCH_REVITALIZE, pc_checkskill(sd, SR_GENTLETOUCH_REVITALIZE));
+				// if the default skill wasn't available, use maxhp
+				if (canskill(sd)) if (pc_checkskill(sd, SR_GENTLETOUCH_REVITALIZE) > 0)
+					unit_skilluse_ifable(&sd->bl, SELF, SR_GENTLETOUCH_REVITALIZE, pc_checkskill(sd, SR_GENTLETOUCH_REVITALIZE));
+			}
+		}
+
 	// Defending Aura
 	// Turn it off when not actively fighting. This ensures it won't be accidentaly left on when leaving the area with ranged monsters.
-	if ((pc_checkskill(sd, CR_DEFENDER) > 0) &&
+	if (canskill(sd))
+		if ((pc_checkskill(sd, CR_DEFENDER) > 0) &&
 		(sd->sc.data[SC_DEFENDER]))
 	{
 		unit_skilluse_ifable(&sd->bl, SELF, CR_DEFENDER, pc_checkskill(sd, CR_DEFENDER));
 	}
 
 	// Flip Coin
-	if ((pc_checkskill(sd, GS_GLITTERING) > 4)) {
+	if (canskill(sd))
+		if ((pc_checkskill(sd, GS_GLITTERING) > 4)) {
 		if ((sd->spiritball < 10)) {
 				unit_skilluse_ifable(&sd->bl, SELF, GS_GLITTERING, pc_checkskill(sd, GS_GLITTERING));
 			}
 	}
 
 	// Magical Bullet
-	if ((pc_checkskill(sd, GS_MAGICALBULLET) > 0)) {
+	if (canskill(sd))
+		if ((pc_checkskill(sd, GS_MAGICALBULLET) > 0)) {
 		if (!(sd->sc.data[SC_MAGICALBULLET]))
 			// Must have high ASPD and INT
 			if (sd->battle_status.agi>=0.6*sd->status.base_level)
@@ -5860,7 +5920,8 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Summon Spirit Sphere
-	if (pc_checkskill(sd, MO_CALLSPIRITS) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, MO_CALLSPIRITS) > 0) {
 		int radra = 0; if (sd->sc.data[SC_RAISINGDRAGON]) { radra = sd->sc.data[SC_RAISINGDRAGON]->val1; }
 		if (pc_checkskill(sd, MO_CALLSPIRITS) + radra>sd->spiritball) {
 			unit_skilluse_ifable(&sd->bl, SELF, MO_CALLSPIRITS, pc_checkskill(sd, MO_CALLSPIRITS));
@@ -5868,33 +5929,38 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Sightblaster
-	if (pc_checkskill(sd, WZ_SIGHTBLASTER) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, WZ_SIGHTBLASTER) > 0) {
 		if (!(sd->sc.data[SC_SIGHTBLASTER])) {
 			unit_skilluse_ifable(&sd->bl, SELF, WZ_SIGHTBLASTER, pc_checkskill(sd, WZ_SIGHTBLASTER));
 		}
 	}
 
 	// Pick Stone
-	if (pc_checkskill(sd, TF_PICKSTONE) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, TF_PICKSTONE) > 0) {
 		if (pc_inventory_count(sd, 7049) < 12) {
 			unit_skilluse_ifable(&sd->bl, SELF, TF_PICKSTONE, pc_checkskill(sd, TF_PICKSTONE));
 		}
 	}
 	// Aqua Benedicta
-	if (pc_checkskill(sd, AL_HOLYWATER) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, AL_HOLYWATER) > 0) {
 		if ((pc_inventory_count(sd, 523) < 40) && (pc_inventory_count(sd, ITEMID_EMPTY_BOTTLE)>0)
 			&& (skill_produce_mix(sd, AL_HOLYWATER, ITEMID_HOLY_WATER, 0, 0, 0, 1, -1))) {
 			unit_skilluse_ifable(&sd->bl, SELF, AL_HOLYWATER, pc_checkskill(sd, AL_HOLYWATER));
 		}
 	}
 	// Energy Coat
-	if (pc_checkskill(sd, MG_ENERGYCOAT) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, MG_ENERGYCOAT) > 0) {
 		if (!(sd->sc.data[SC_ENERGYCOAT])) {
 			unit_skilluse_ifable(&sd->bl, SELF, MG_ENERGYCOAT, pc_checkskill(sd, MG_ENERGYCOAT));
 		}
 	}
 	// Prestige
-	if (pc_checkskill(sd, LG_PRESTIGE) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, LG_PRESTIGE) > 0) {
 		if (!(sd->sc.data[SC_PRESTIGE]))
 			if (!(sd->sc.data[SC_INSPIRATION]))
 				if (!(sd->sc.data[SC_BANDING])) {
@@ -5903,21 +5969,24 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 	
 	// Recognized Spell
-	if (pc_checkskill(sd, WL_RECOGNIZEDSPELL) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, WL_RECOGNIZEDSPELL) > 0) {
 		if (!(sd->sc.data[SC_RECOGNIZEDSPELL])) {
 			unit_skilluse_ifable(&sd->bl, SELF, WL_RECOGNIZEDSPELL, pc_checkskill(sd, WL_RECOGNIZEDSPELL));
 		}
 	}
 
 	// Double Casting
-	if (pc_checkskill(sd, PF_DOUBLECASTING) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, PF_DOUBLECASTING) > 0) {
 		if (!(sd->sc.data[SC_DOUBLECAST])) {
 			unit_skilluse_ifable(&sd->bl, SELF, PF_DOUBLECASTING, pc_checkskill(sd, PF_DOUBLECASTING));
 		}
 	}
 
 	// AUTOSPELL
-	if (pc_checkskill(sd, SA_AUTOSPELL) > 0)
+	if (canskill(sd))
+		if (pc_checkskill(sd, SA_AUTOSPELL) > 0)
 	if (sd->state.autopilotmode==1) { // Tanking mode only, this triggers on normal physical atacks
 		if (!(sd->sc.data[SC_AUTOSPELL])) {
 			unit_skilluse_ifable(&sd->bl, SELF, SA_AUTOSPELL, pc_checkskill(sd, SA_AUTOSPELL));
@@ -5925,21 +5994,24 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Memorize
-	if (pc_checkskill(sd, PF_MEMORIZE) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, PF_MEMORIZE) > 0) {
 		if (!(sd->sc.data[SC_MEMORIZE])) {
 			unit_skilluse_ifable(&sd->bl, SELF, PF_MEMORIZE, pc_checkskill(sd, PF_MEMORIZE));
 		}
 	}
 
 	// Vanguard Force
-	if (pc_checkskill(sd, LG_FORCEOFVANGUARD) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, LG_FORCEOFVANGUARD) > 0) {
 		if (!(sd->sc.data[SC_FORCEOFVANGUARD])) {
 			unit_skilluse_ifable(&sd->bl, SELF, LG_FORCEOFVANGUARD, pc_checkskill(sd, LG_FORCEOFVANGUARD));
 		}
 	}
 
 	// Cart Boost
-	if (pc_checkskill(sd, WS_CARTBOOST) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, WS_CARTBOOST) > 0) {
 		if (!(sd->sc.data[SC_CARTBOOST]))
 			if (!pc_ismadogear(sd))
 			if  (pc_iscarton(sd)) {
@@ -5948,7 +6020,8 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Cart Boost
-	if (pc_checkskill(sd, GN_CARTBOOST) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, GN_CARTBOOST) > 0) {
 		if (!(sd->sc.data[SC_GN_CARTBOOST]))
 				if (pc_iscarton(sd)) {
 					unit_skilluse_ifable(&sd->bl, SELF, GN_CARTBOOST, pc_checkskill(sd, GN_CARTBOOST));
@@ -5956,7 +6029,8 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Acceleration
-	if (pc_checkskill(sd, NC_ACCELERATION) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, NC_ACCELERATION) > 0) {
 		if (!(sd->sc.data[SC_ACCELERATION]))
 			if (pc_ismadogear(sd))
 				if (pc_search_inventory(sd, 2800) >= 0)
@@ -5966,7 +6040,8 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 	// Hovering
 	// check if equipped by item 2801
-			if (pc_checkskill(sd, NC_HOVERING) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, NC_HOVERING) > 0) {
 			if (!(sd->sc.data[SC_HOVERING]))
 				if (pc_ismadogear(sd))
 					pc_checkequip2(sd,2801, EQI_ACC_L, EQI_MAX);
@@ -5977,7 +6052,8 @@ void skillwhenidle(struct map_session_data *sd) {
 
 
 	// Weapon Repair
-	if (pc_checkskill(sd, BS_REPAIRWEAPON) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, BS_REPAIRWEAPON) > 0) {
 		if ((pc_search_inventory(sd, 998) >= 0) && (pc_search_inventory(sd, 1002) >= 0) && (pc_search_inventory(sd, 999) >= 0)
 			&& (pc_search_inventory(sd, 756) >= 0))
 		{
@@ -5995,6 +6071,7 @@ void skillwhenidle(struct map_session_data *sd) {
 
 	// Reading spellbook or summon balls to prepare for Release
 	bool b = false;
+	if (canskill(sd))
 	if (pc_checkskill(sd, WL_READING_SB) > 0) {
 		// freeze spell if none frozen
 		if (!(sd->sc.data[SC_SPELLBOOK1])
@@ -6038,42 +6115,48 @@ void skillwhenidle(struct map_session_data *sd) {
 
 
 	// Amplify Magic Power
-	if (pc_checkskill(sd, HW_MAGICPOWER) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, HW_MAGICPOWER) > 0) {
 		if (!(sd->sc.data[SC_MAGICPOWER])) {
 			unit_skilluse_ifable(&sd->bl, SELF, HW_MAGICPOWER, pc_checkskill(sd, HW_MAGICPOWER));
 		}
 	}
 
 	// Enchant Blade
-	if (pc_checkskill(sd, RK_ENCHANTBLADE) > 0) if (sd->state.autopilotmode == 1) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, RK_ENCHANTBLADE) > 0) if (sd->state.autopilotmode == 1) {
 		if (!(sd->sc.data[SC_ENCHANTBLADE])) {
 			unit_skilluse_ifable(&sd->bl, SELF, RK_ENCHANTBLADE, pc_checkskill(sd, RK_ENCHANTBLADE));
 		}
 	}
 
 	// Exceed Break
-	if (pc_checkskill(sd, LG_EXEEDBREAK) > 0) if (sd->state.autopilotmode == 1) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, LG_EXEEDBREAK) > 0) if (sd->state.autopilotmode == 1) {
 		if (!(sd->sc.data[SC_EXEEDBREAK])) {
 			unit_skilluse_ifable(&sd->bl, SELF, LG_EXEEDBREAK, pc_checkskill(sd, LG_EXEEDBREAK));
 		}
 	}
 
 	// Guns - Increase Accuracy
-	if (pc_checkskill(sd, GS_INCREASING) > 0) if (sd->spiritball >= 4) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, GS_INCREASING) > 0) if (sd->spiritball >= 4) {
 		if (!(sd->sc.data[SC_INCREASING])) {
 			unit_skilluse_ifable(&sd->bl, SELF, GS_INCREASING, pc_checkskill(sd, GS_INCREASING));
 		}
 	}
 	
 	// Ninja Aura
-	if (pc_checkskill(sd, NJ_NEN) > 0) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, NJ_NEN) > 0) {
 		if (!(sd->sc.data[SC_NEN])) {
 			unit_skilluse_ifable(&sd->bl, SELF, NJ_NEN, pc_checkskill(sd, NJ_NEN));
 		}
 	}
 
 	// Taekwon Sprint
-	if (pc_checkskill(sd, TK_RUN) >= 7) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, TK_RUN) >= 7) {
 		if ((sd->status.weapon == W_FIST))
 			if (!(sd->sc.data[SC_SPURT]))
 		{
@@ -6082,14 +6165,16 @@ void skillwhenidle(struct map_session_data *sd) {
 	}
 
 	// Duple Light
-	if (pc_checkskill(sd, AB_DUPLELIGHT) > 0) if (sd->state.autopilotmode == 1) {
+	if (canskill(sd))
+		if (pc_checkskill(sd, AB_DUPLELIGHT) > 0) if (sd->state.autopilotmode == 1) {
 		if (!(sd->sc.data[SC_DUPLELIGHT])) {
 			unit_skilluse_ifable(&sd->bl, SELF, AB_DUPLELIGHT, pc_checkskill(sd, AB_DUPLELIGHT));
 		}
 	}
 
 	// Ancilla - create when high on sp and idle
-	if (pc_checkskill(sd, AB_ANCILLA) > 0) 
+	if (canskill(sd))
+		if (pc_checkskill(sd, AB_ANCILLA) > 0)
 		if (pc_inventory_count(sd, ITEMID_BLUE_GEMSTONE) >= 12)
 		if (pc_inventory_count(sd, 12333) <3)
 			if (sd->battle_status.sp >= 0.9*sd->battle_status.max_sp)
@@ -6100,14 +6185,6 @@ void skillwhenidle(struct map_session_data *sd) {
 
 	return;
 }
-
-// Reduce lag - do not try using skills if already decided to use one and started it
-// Checking this ahead of time instead of executing all the logic and targeting for all the skills only do fail them is better
-bool canskill(struct map_session_data *sd)
-{
-	return ((sd->ud.skilltimer == INVALID_TIMER) && (DIFF_TICK(gettick(), sd->ud.canact_tick) >= 0));
-
-};
 
 void sitdown(struct map_session_data *sd) {
 	if (pc_checkskill(sd, LK_TENSIONRELAX) > 0)
@@ -6769,6 +6846,10 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetID > -1) {
 			// if target exists, check for Spheres, then Fury, then SP, then use
 				if (sd->spiritball<5) {
+					// Rising Dragon
+						if (pc_checkskill(sd, SR_RAISINGDRAGON) > 0) {
+								unit_skilluse_ifable(&sd->bl, SELF, SR_RAISINGDRAGON, pc_checkskill(sd, SR_RAISINGDRAGON));
+						}
 					// Dangerous Soul Collect (Zen)
 					if (pc_checkskill(sd, CH_SOULCOLLECT) > 0) {
 						int radra = 0; if (sd->sc.data[SC_RAISINGDRAGON]) { radra = sd->sc.data[SC_RAISINGDRAGON]->val1; }
@@ -7142,11 +7223,20 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 		/// Cure
-		if (canskill(sd)) if (pc_checkskill(sd, AL_CURE)>0) {
+		if (canskill(sd)) if (pc_checkskill(sd, AL_CURE)>0)	 {
 			resettargets();
 			map_foreachinrange(targetCure, &sd->bl, 9, BL_PC, sd);
 			if (foundtargetID > -1) {
 				unit_skilluse_ifable(&sd->bl, foundtargetID, AL_CURE, pc_checkskill(sd, AL_CURE));
+			}
+		}
+		/// Gentle Touch Cure
+		if (canskill(sd)) if (pc_checkskill(sd, SR_GENTLETOUCH_CURE) > 0)
+			if (sd->spiritball > 0) {
+			resettargets();
+			map_foreachinrange(targetGTCure, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, SR_GENTLETOUCH_CURE, pc_checkskill(sd, SR_GENTLETOUCH_CURE));
 			}
 		}
 		/// Detoxify
@@ -8044,11 +8134,12 @@ TIMER_FUNC(unit_autopilot_timer)
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		// Skills to use before attacking
 		// Ruwach, Sight
-		if (canskill(sd)) if ((pc_checkskill(sd, AL_RUWACH) > 0) || (pc_checkskill(sd, MG_SIGHT) > 0) || (pc_checkskill(sd, NC_INFRAREDSCAN) > 0)){
+		if (canskill(sd)) if ((pc_checkskill(sd, SR_EARTHSHAKER) > 0) || (pc_checkskill(sd, AL_RUWACH) > 0) || (pc_checkskill(sd, MG_SIGHT) > 0) || (pc_checkskill(sd, NC_INFRAREDSCAN) > 0)){
 			if (!((sd->sc.data[SC_RUWACH]) || (sd->sc.data[SC_SIGHT]))) {
 				resettargets();
 				map_foreachinrange(targetnearest, &sd->bl, 11, BL_MOB, sd);
 				if ((targetdistance <= 3) && (targetdistance > -1) && (targetmd->sc.data[SC_HIDING] || targetmd->sc.data[SC_CLOAKING])) {
+					if (pc_checkskill(sd, SR_EARTHSHAKER) > 0) unit_skilluse_ifable(&sd->bl, SELF, SR_EARTHSHAKER, pc_checkskill(sd, SR_EARTHSHAKER));
 					if (pc_checkskill(sd, NC_INFRAREDSCAN) > 0) if (pc_ismadogear(sd)) unit_skilluse_ifable(&sd->bl, SELF, NC_INFRAREDSCAN, pc_checkskill(sd, NC_INFRAREDSCAN));
 					if (pc_checkskill(sd, AL_RUWACH) > 0) unit_skilluse_ifable(&sd->bl, SELF, AL_RUWACH, pc_checkskill(sd, AL_RUWACH));
 					if (pc_checkskill(sd, MG_SIGHT) > 0) unit_skilluse_ifable(&sd->bl, SELF, MG_SIGHT, pc_checkskill(sd, MG_SIGHT));
@@ -8184,6 +8275,15 @@ TIMER_FUNC(unit_autopilot_timer)
 								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, WZ_METEOR));
 								if ((priority >= 18) && (priority > bestpriority)) {
 									spelltocast = WZ_METEOR; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+							// Ride in Lightning - Sura AOE
+							if (canskill(sd)) if ((pc_checkskill(sd, SR_RIDEINLIGHTNING) > 3))
+							if (sd->spiritball>=5) {
+								int area = 3;
+								priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, SR_RIDEINLIGHTNING));
+								if ((priority >= 12) && (priority > bestpriority)) {
+									spelltocast = SR_RIDEINLIGHTNING; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
 							// Crazy Weed
@@ -8604,6 +8704,18 @@ TIMER_FUNC(unit_autopilot_timer)
 							priority = 2 * map_foreachinrange(AOEPriorityIP, &sd->bl, area, BL_MOB, skillelem(sd, NJ_HYOUSYOURAKU));
 							if ((priority >= 12) && (priority > bestpriority)) {
 								spelltocast = NJ_HYOUSYOURAKU; bestpriority = priority; IDtarget = sd->bl.id;
+							}
+						}
+					}
+					// Sura - Lion Howl
+					if (canskill(sd)) if ((pc_checkskill(sd, SR_HOWLINGOFLION) >= 5)
+						//					 &&	((Dangerdistance > 900) || (sd->special_state.no_castcancel)) 
+						) {
+						 {
+							int area = 7;
+							priority = 2 * map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, skillelem(sd, SR_HOWLINGOFLION));
+							if ((priority >= 12) && (priority > bestpriority)) {
+								spelltocast = SR_HOWLINGOFLION; bestpriority = priority; IDtarget = sd->bl.id;
 							}
 						}
 					}
@@ -9853,12 +9965,34 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, LG_EARTHDRIVE)) >= 6)
 						unit_skilluse_ifable(&sd->bl, SELF, LG_EARTHDRIVE, pc_checkskill(sd, LG_EARTHDRIVE));
 				}
-			// Sky Nety Blow - Sura
+			// Rampage Blaster - Sura
+			// *** Note : I changed this skill to have high cooldown. If you did not, reduce the needed priority to 6
+			if (canskill(sd)) if ((pc_checkskill(sd, SR_RAMPAGEBLASTER) > 0)) {
+				// At least 5 enemies in range (or 3 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 3, BL_MOB, skillelem(sd, SR_RAMPAGEBLASTER)) >= 10)
+					unit_skilluse_ifable(&sd->bl, SELF, SR_RAMPAGEBLASTER, pc_checkskill(sd, SR_RAMPAGEBLASTER));
+			}
+			// Earth Shaker or Sky Net Blow decider if both known
+			// *** Note I nerfed the damage formula on Earth Shaker and changed them to be Earth/Wind element, otherwise it's probably strictly superior to Sky net Blow.
+			if (canskill(sd)) if ((pc_checkskill(sd, SR_SKYNETBLOW) == 5) && (pc_checkskill(sd, SR_EARTHSHAKER) == 5)) {
+				if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SR_SKYNETBLOW)) > (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SR_EARTHSHAKER))))
+					unit_skilluse_ifable(&sd->bl, SELF, SR_SKYNETBLOW, pc_checkskill(sd, SR_SKYNETBLOW));
+				else
+					unit_skilluse_ifable(&sd->bl, SELF, SR_EARTHSHAKER, pc_checkskill(sd, SR_EARTHSHAKER));
+			}
+			// Earth Shaker - Sura
+			if (canskill(sd)) if ((pc_checkskill(sd, SR_EARTHSHAKER) > 0)) {
+				// At least 3 enemies in range (or 2 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SR_EARTHSHAKER)) >= 6)
+					unit_skilluse_ifable(&sd->bl, SELF, SR_EARTHSHAKER, pc_checkskill(sd, SR_EARTHSHAKER));
+			}
+			// Sky Net Blow - Sura
 			if (canskill(sd)) if ((pc_checkskill(sd, SR_SKYNETBLOW) > 0)) {
 				// At least 3 enemies in range (or 2 if weak to element)
 				if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SR_SKYNETBLOW)) >= 6)
 					unit_skilluse_ifable(&sd->bl, SELF, SR_SKYNETBLOW, pc_checkskill(sd, SR_SKYNETBLOW));
 			}
+
 			// Magnum Break
 			if (canskill(sd)) if ((pc_checkskill(sd, SM_MAGNUM) > 0)) {
 					// At least 3 enemies in range (or 2 if weak to element)
@@ -10053,6 +10187,15 @@ if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, SR_DRAGONCOMBO, pc_checkskill(sd, SR_DRAGONCOMBO));
 				}
+			}
+			// Gentle Touch Silence
+			// Damage is like Dragon Combo but this also silences, however it costs a lot more SP and can't combo so AI should only use if Dragon Combo wasn't available.
+			if (canskill(sd)) if (pc_checkskill(sd, SR_GENTLETOUCH_QUIET) > 0) {
+				if (elemallowed(targetmd, skillelem(sd, SR_GENTLETOUCH_QUIET)))
+					if ((checksprate(sd, targetmd, 10))
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, SR_GENTLETOUCH_QUIET, pc_checkskill(sd, SR_GENTLETOUCH_QUIET));
+					}
 			}
 
 
