@@ -4148,13 +4148,12 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case SR_EARTHSHAKER:
 			if (tsc && ((tsc->option&(OPTION_HIDE|OPTION_CLOAK|OPTION_CHASEWALK)) || tsc->data[SC_CAMOUFLAGE] || tsc->data[SC_STEALTHFIELD] || tsc->data[SC__SHADOWFORM])) {
 				//[(Skill Level x 300) x (Caster Base Level / 100) + (Caster STR x 3)] %
-				skillratio += -100 + 300 * skill_lv;
+				skillratio += -100 + 80 * skill_lv + sstatus->agi;
+				skillratio *= 2;
 				RE_LVL_DMOD(100);
-				skillratio += status_get_str(src) * 3;
 			} else { //[(Skill Level x 400) x (Caster Base Level / 100) + (Caster STR x 2)] %
-				skillratio += -100 + 400 * skill_lv;
+				skillratio += -100 + 80 * skill_lv + sstatus->int_;
 				RE_LVL_DMOD(100);
-				skillratio += status_get_str(src) * 2;
 			}
 			break;
 
@@ -4187,21 +4186,17 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 
 		case SR_RAMPAGEBLASTER:
 			if (tsc && tsc->data[SC_EARTHSHAKER]) {
-				skillratio += 1400 + 550 * skill_lv;
-				RE_LVL_DMOD(120);
+				skillratio += 2400 + 400 * skill_lv;
+				RE_LVL_DMOD(100);
 			} else {
-				skillratio += 900 + 350 * skill_lv;
-				RE_LVL_DMOD(150);
+				skillratio += 1900 + 400 * skill_lv;
+				RE_LVL_DMOD(100);
 			}
-			if (sc->data[SC_GT_CHANGE])
-				skillratio += skillratio * 30 / 100;
 			break;
 		case SR_KNUCKLEARROW:
 			if (wd->miscflag&4) { // ATK [(Skill Level x 150) + (1000 x Target current weight / Maximum weight) + (Target Base Level x 5) x (Caster Base Level / 150)] %
-				skillratio += -100 + 150 * skill_lv + status_get_lv(target) * 5;
-				if (tsd && tsd->weight)
-					skillratio += 100 * tsd->weight / tsd->max_weight;
-				RE_LVL_DMOD(150);
+				skillratio += -100 + 150 * skill_lv;
+				RE_LVL_DMOD(100);
 			} else {
 				if (status_get_class_(target) == CLASS_BOSS)
 					skillratio += 400 + 200 * skill_lv;
@@ -4209,8 +4204,6 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 					skillratio += 400 + 100 * skill_lv;
 				RE_LVL_DMOD(100);
 			}
-			if (sc->data[SC_GT_CHANGE])
-				skillratio += skillratio * 30 / 100;
 			break;
 		case SR_WINDMILL: // ATK [(Caster Base Level + Caster DEX) x Caster Base Level / 100] %
 			skillratio += -100 + status_get_lv(src) + status_get_dex(src);
@@ -4225,7 +4218,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case SR_GENTLETOUCH_QUIET:
-			skillratio += -100 + 100 * skill_lv + status_get_dex(src);
+			skillratio += -100 + 100 * skill_lv + 2*status_get_dex(src);
 			RE_LVL_DMOD(100);
 			break;
 		case SR_HOWLINGOFLION:
@@ -4233,10 +4226,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(150);
 			break;
 		case SR_RIDEINLIGHTNING: // ATK [{(Skill Level x 40) + Additional Damage} x Caster Base Level / 100] %
-			skillratio += -100 + 40 * skill_lv;
-			if (sd && sd->status.weapon == W_KNUCKLE)
-				skillratio += skillratio * 25 / 100;
-			RE_LVL_DMOD(100);
+			skillratio += -100 + 50 * skill_lv;
 			break;
 		case WM_REVERBERATION_MELEE:
 			// ATK [{(Skill Level x 100) + 300} x Caster Base Level / 100]
@@ -4592,8 +4582,6 @@ static void battle_attack_sc_bonus(struct Damage* wd, struct block_list *src, st
 				RE_ALLATK_ADDRATE(wd, 100);
 			}
 		}
-		if (sc->data[SC_GT_CHANGE])
-			ATK_ADDRATE(wd->damage, wd->damage2, sc->data[SC_GT_CHANGE]->val1);
 		if (sc->data[SC_EDP]) {
 			switch(skill_id) {
 				case AS_SPLASHER:
@@ -4799,9 +4787,6 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 			def1 = (def1*(100-i))/100;
 			def2 = (def2*(100-i))/100;
 		}
-
-		if (tsc->data[SC_GT_REVITALIZE])
-			def1 += tsc->data[SC_GT_REVITALIZE]->val4;
 
 		if (tsc->data[SC_OVERED_BOOST] && target->type == BL_PC)
 			def1 = (def1 * tsc->data[SC_OVERED_BOOST]->val4) / 100;
@@ -5484,7 +5469,7 @@ static struct Damage battle_calc_weapon_attack(struct block_list *src, struct bl
 		ATK_RATE(wd.damage, wd.damage2, ratio);
 		RE_ALLATK_RATE(&wd, ratio);
 
-		int bonus_damage = battle_calc_skill_constant_addition(&wd, src, target, skill_id, skill_lv); // other skill bonuses
+		int64 bonus_damage = battle_calc_skill_constant_addition(&wd, src, target, skill_id, skill_lv); // other skill bonuses
 
 		ATK_ADD(wd.damage, wd.damage2, bonus_damage);
 

@@ -23212,7 +23212,7 @@ Body:
     Range: 1
     Hit: Multi_Hit
     HitCount: -3
-    Element: Weapon
+    Element: Wind
     SplashArea: 2
     AfterCastActDelay: 500
     FixedCastTime: -1
@@ -23241,7 +23241,7 @@ Body:
     Range: 1
     Hit: Single
     HitCount: 1
-    Element: Weapon
+    Element: Earth
     SplashArea:
       - Level: 1
         Area: 1
@@ -23270,15 +23270,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 36
+          Amount: 10
         - Level: 2
-          Amount: 40
+          Amount: 20
         - Level: 3
-          Amount: 44
+          Amount: 30
         - Level: 4
-          Amount: 48
+          Amount: 40
         - Level: 5
-          Amount: 52
+          Amount: 50
   - Id: 2329
     Name: SR_FALLENEMPIRE
     Description: Fallen Empire
@@ -23467,10 +23467,10 @@ Body:
     Element: Weapon
     SplashArea: 3
     AfterCastActDelay: 1000
-    Cooldown: 10000
+    Cooldown: 120000
     FixedCastTime: -1
     Requires:
-      SpCost: 100
+      SpCost: 200
       Status:
         Explosionspirits: true
       SpiritSphereCost: 5
@@ -23535,7 +23535,7 @@ Body:
         Time: 6000
       - Level: 5
         Time: 7000
-    Cooldown: 10000
+    Cooldown: 15000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -23666,7 +23666,6 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 2
-    CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 500
     Cooldown: 3000
@@ -24066,7 +24065,7 @@ Body:
         Area: 6
       - Level: 5
         Area: 7
-    CastTime: 1000
+    CastTime: 5000
     Duration1:
       - Level: 1
         Time: 12000

@@ -851,8 +851,8 @@ void initChangeTables(void)
 	set_sc( SR_LIGHTNINGWALK		, SC_LIGHTNINGWALK	, EFST_LIGHTNINGWALK		, SCB_NONE );
 	set_sc( SR_RAISINGDRAGON		, SC_RAISINGDRAGON	, EFST_RAISINGDRAGON		, SCB_REGEN|SCB_MAXHP|SCB_MAXSP );
 	set_sc( SR_GENTLETOUCH_ENERGYGAIN	, SC_GT_ENERGYGAIN	, EFST_GENTLETOUCH_ENERGYGAIN	, SCB_NONE );
-	set_sc( SR_GENTLETOUCH_CHANGE		, SC_GT_CHANGE		, EFST_GENTLETOUCH_CHANGE		, SCB_WATK|SCB_ASPD );
-	set_sc( SR_GENTLETOUCH_REVITALIZE	, SC_GT_REVITALIZE	, EFST_GENTLETOUCH_REVITALIZE	, SCB_MAXHP|SCB_REGEN );
+	set_sc( SR_GENTLETOUCH_CHANGE		, SC_GT_CHANGE		, EFST_GENTLETOUCH_CHANGE		, SCB_WATK|SCB_ASPD|SCB_DEF2|SCB_MDEF2 );
+	set_sc( SR_GENTLETOUCH_REVITALIZE	, SC_GT_REVITALIZE	, EFST_GENTLETOUCH_REVITALIZE	, SCB_MAXHP|SCB_REGEN|SCB_DEF2 );
 	set_sc( SR_FLASHCOMBO			, SC_FLASHCOMBO		, EFST_FLASHCOMBO			, SCB_WATK );
 
 	/* Wanderer / Minstrel */
@@ -7012,6 +7012,10 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 		def2 -= def2 * sc->data[SC_EQC]->val2 / 100;
 	if( sc->data[SC_CAMOUFLAGE] )
 		def2 -= def2 * 5 * sc->data[SC_CAMOUFLAGE]->val3 / 100;
+	if (sc->data[SC_GT_CHANGE])
+		def2 -= sc->data[SC_GT_CHANGE]->val4;
+	if (sc->data[SC_GT_REVITALIZE])
+		def2 += sc->data[SC_GT_REVITALIZE]->val4;
 
 #ifdef RENEWAL
 	return (short)cap_value(def2,SHRT_MIN,SHRT_MAX);
@@ -7109,6 +7113,8 @@ static signed short status_calc_mdef2(struct block_list *bl, struct status_chang
 		mdef2 -= mdef2 * sc->data[SC_MINDBREAKER]->val3/100;
 	if(sc->data[SC_BURNING])
 		mdef2 -= mdef2 * 25 / 100;
+	if (sc->data[SC_GT_CHANGE])
+		mdef2 -= sc->data[SC_GT_CHANGE]->val4;
 
 #ifdef RENEWAL
 	return (short)cap_value(mdef2,SHRT_MIN,SHRT_MAX);
@@ -7414,8 +7420,6 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, b
 			bonus -= sc->data[SC_GLOOMYDAY]->val3;
 		if (sc->data[SC_EARTHDRIVE])
 			bonus -= 25;
-		if (sc->data[SC_GT_CHANGE])
-			bonus += sc->data[SC_GT_CHANGE]->val3;
 		if (sc->data[SC_MELON_BOMB])
 			bonus -= sc->data[SC_MELON_BOMB]->val3;
 		if (sc->data[SC_PAIN_KILLER])
@@ -11211,15 +11215,16 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC_GT_CHANGE:
 			// Take note there is no def increase as skill desc says. [malufett]
-			val2 = val1 * 8; // ATK increase
+			val2 = val1 * 12; // ATK increase
 			val3 = status->agi * val1 / 60; // ASPD increase: [(Target AGI x Skill Level) / 60] %
+			val4 = val1 * 15; // DEF, MDEF reduction
 			break;
 		case SC_GT_REVITALIZE:
 			// Take note there is no vit, aspd, speed increase as skill desc says. [malufett]
 			val2 = 2 * val1; // MaxHP: [(Skill Level * 2)]%
 			val3 = val1 * 30 + 50; // Natural HP recovery increase: [(Skill Level x 30) + 50] %
 			// The stat def is not shown in the status window and it is processed differently
-			val4 = val1 * 20; // STAT DEF increase
+			val4 = val1 * 15; // STAT DEF increase
 			break;
 		case SC_PYROTECHNIC_OPTION:
 			val2 = 60; // Eatk Renewal (Atk2)
