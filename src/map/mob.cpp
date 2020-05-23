@@ -1724,7 +1724,7 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 			if (mob_warpchase(md, tbl))
 				return true; //Chasing this target.
 			if(md->ud.walktimer != INVALID_TIMER && (!can_move || md->ud.walkpath.path_pos <= battle_config.mob_chase_refresh)
-				&& (tbl || md->ud.walkpath.path_pos == 0))
+				&& (tbl || ((md->ud.walkpath.path_pos == 0) && !(md->ud.walkpath.path[0]==DIR_CENTER))))
 				return true; //Walk at least "mob_chase_refresh" cells before dropping the target unless target is non-existent
 			mob_unlocktarget(md, tick); //Unlock target
 			tbl = NULL;
@@ -1894,7 +1894,7 @@ static bool mob_ai_sub_hard(struct mob_data *md, t_tick tick)
 			clif_takeitem(&md->bl,tbl);
 			md->ud.canact_tick = tick + md->status.amotion;
 			unit_set_walkdelay(&md->bl, tick, md->status.amotion, 1);
-		}
+		} 
 		//Clear item.
 		map_clearflooritem(tbl);
 		mob_unlocktarget(md, tick);

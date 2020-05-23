@@ -25657,15 +25657,15 @@ Body:
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 2200
+        Time: 2500
       - Level: 2
-        Time: 2400
+        Time: 3500
       - Level: 3
-        Time: 2600
+        Time: 4500
       - Level: 4
-        Time: 2800
+        Time: 5500
       - Level: 5
-        Time: 3000
+        Time: 6500
     AfterCastActDelay: 1000
     Duration1: 500
     Duration2:
@@ -25682,13 +25682,13 @@ Body:
     Cooldown: 5000
     FixedCastTime:
       - Level: 1
-        Time: 1800
+        Time: 200
       - Level: 2
-        Time: 1600
+        Time: 400
       - Level: 3
-        Time: 1400
+        Time: 600
       - Level: 4
-        Time: 1200
+        Time: 800
       - Level: 5
         Time: 1000
     Requires:
@@ -25756,7 +25756,7 @@ Body:
         Time: 18000
       - Level: 5
         Time: 20000
-    Cooldown: 5000
+    Cooldown: 1000
     FixedCastTime:
       - Level: 1
         Time: 800
@@ -25826,15 +25826,15 @@ Body:
       - Level: 1
         Time: 2200
       - Level: 2
-        Time: 3400
+        Time: 2600
       - Level: 3
-        Time: 4600
+        Time: 3000
       - Level: 4
-        Time: 5800
+        Time: 3400
       - Level: 5
-        Time: 6000
+        Time: 3800
     AfterCastActDelay: 1000
-    Cooldown: 2000
+    Cooldown: 0
     FixedCastTime:
       - Level: 1
         Time: 800
@@ -25978,7 +25978,7 @@ Body:
         Time: 16000
       - Level: 5
         Time: 20000
-    Cooldown: 5000
+    Cooldown: 16000
     FixedCastTime:
       - Level: 1
         Time: 700
@@ -26156,8 +26156,8 @@ Body:
         Time: 10000
       - Level: 5
         Time: 12000
-    Duration2: 2000
-    Cooldown: 5000
+    Duration2: 6000
+    Cooldown: 60000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -26184,7 +26184,7 @@ Body:
           Size: 2
         - Level: 5
           Size: 3
-      Interval: 500
+      Interval: 100
       Target: Enemy
       Flag:
         PathCheck: true
@@ -26215,16 +26215,15 @@ Body:
     CastCancel: true
     CastTime:
       - Level: 1
-        Time: 2200
+        Time: 2500
       - Level: 2
-        Time: 2400
-      - Level: 3
-        Time: 2600
-      - Level: 4
-        Time: 2800
-      - Level: 5
         Time: 3000
-    AfterCastActDelay: 1000
+      - Level: 3
+        Time: 3500
+      - Level: 4
+        Time: 4000
+      - Level: 5
+        Time: 4500
     Duration1:
       - Level: 1
         Time: 2200
@@ -26236,18 +26235,18 @@ Body:
         Time: 2800
       - Level: 5
         Time: 3000
-    Cooldown: 2000
+    Cooldown: 0
     FixedCastTime:
       - Level: 1
-        Time: 1800
+        Time: 100
       - Level: 2
-        Time: 1600
+        Time: 200
       - Level: 3
-        Time: 1400
+        Time: 300
       - Level: 4
-        Time: 1200
+        Time: 400
       - Level: 5
-        Time: 1000
+        Time: 500
     Requires:
       SpCost:
         - Level: 1

@@ -4270,7 +4270,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case SO_VARETYR_SPEAR://ATK [{( Striking Level x 50 ) + ( Varetyr Spear Skill Level x 50 )} x Caster Base Level / 100 ] %
-			skillratio += -100 + 50 * skill_lv + ((sd) ? pc_checkskill(sd, SO_STRIKING) * 50 : 0);
+			skillratio += -100 + 40 * skill_lv + sstatus->int_*4;
 			RE_LVL_DMOD(100);
 			if (sc && sc->data[SC_BLAST_OPTION])
 				skillratio += (sd ? sd->status.job_level * 5 : 0);
@@ -6216,25 +6216,25 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += (sd ? sd->status.job_level / 2 : 0);
 					break;
 				case SO_EARTHGRAVE:
-					skillratio += -100 + sstatus->int_ * skill_lv + ((sd) ? pc_checkskill(sd, SA_SEISMICWEAPON) * 200 : 0);
+					skillratio += -100 + 600 + 200 * skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
 						skillratio += (sd ? sd->status.job_level * 5 : 0);
 					break;
 				case SO_DIAMONDDUST:
-					skillratio = (200 * ((sd) ? pc_checkskill(sd, SA_FROSTWEAPON) : 0) + sstatus->int_ * skill_lv);
+					skillratio += -100 + 600+ 200* skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_COOLER_OPTION])
 						skillratio += (sd ? sd->status.job_level * 5 : 0);
 					break;
 				case SO_POISON_BUSTER:
-					skillratio += 900 + 300 * skill_lv;
-					RE_LVL_DMOD(120);
+					skillratio += 900 + 500 * skill_lv;
+					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
 						skillratio += (sd ? sd->status.job_level * 5 : 0);
 					break;
 				case SO_PSYCHIC_WAVE:
-					skillratio += -100 + 70 * skill_lv + 3 * sstatus->int_;
+					skillratio += -100 + 50 * skill_lv + 2 * sstatus->int_;
 					RE_LVL_DMOD(100);
 					if (sc && (sc->data[SC_HEATER_OPTION] || sc->data[SC_COOLER_OPTION] ||
 						sc->data[SC_BLAST_OPTION] || sc->data[SC_CURSED_SOIL_OPTION]))
@@ -6242,12 +6242,11 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					break;
 				case SO_CLOUD_KILL:
 					skillratio += -100 + 40 * skill_lv;
-					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
-						skillratio += (sd ? sd->status.job_level : 0);
+						skillratio += 40;
 					break;
 				case SO_VARETYR_SPEAR: //MATK [{( Endow Tornado skill level x 50 ) + ( Caster INT x Varetyr Spear Skill level )} x Caster Base Level / 100 ] %
-					skillratio += -100 + status_get_int(src) * skill_lv + ((sd) ? pc_checkskill(sd, SA_LIGHTNINGLOADER) * 50 : 0);
+					skillratio += -100 + 40 * skill_lv + sstatus->str * 4;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_BLAST_OPTION])
 						skillratio += (sd ? sd->status.job_level * 5 : 0);

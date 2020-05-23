@@ -19,7 +19,7 @@ char_port: 6121
 // Map Server IP
 // The IP address which clients will use to connect.
 // Set this to what your server's public IP address is.
-map_ip: 0.0.0.0
+map_ip: seravy.ddns.net
 
 // Map Server Port
 map_port: 5121
