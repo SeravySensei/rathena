@@ -3588,6 +3588,7 @@ struct mob_data * dangermd;
 int dangercount;
 int warpx, warpy;
 struct party_data *p;
+int partycount;
 
 bool ispartymember(struct map_session_data *sd)
 {
@@ -4301,6 +4302,16 @@ int DeepSleepPriority(block_list * bl, va_list ap)
 	return result;
 }
 
+int WarmerPriority(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+
+	int result = 0;
+	result += 100 * (1 - (sd->battle_status.hp / sd->battle_status.max_hp));
+
+	return result;
+}
+
 int AOEPrioritySandman(block_list * bl, va_list ap)
 {
 	struct mob_data *md;
@@ -4970,6 +4981,17 @@ int targetmanus(block_list * bl, va_list ap)
 	if (!ispartymember(sd)) return 0;
 	if (sd->state.autopilotmode == 3) return 0;
 	if ((!sd->sc.data[SC_IMPOSITIO]) && ((sd->battle_status.batk>sd->status.base_level) || (sd->battle_status.batk>120))) { targetbl = bl; foundtargetID = sd->bl.id; };
+
+	return 0;
+}
+
+int targetstriking(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->state.autopilotmode == 3) return 0;
+	if ((!sd->sc.data[SC_STRIKING]) && ((sd->battle_status.batk > sd->status.base_level) || (sd->battle_status.batk > 120))) { targetbl = bl; foundtargetID = sd->bl.id; };
 
 	return 0;
 }
@@ -5833,8 +5855,14 @@ void skillwhenidle(struct map_session_data *sd) {
 	// **** Note I changed this to cause the effect on the party so it is basically a recovery spell that is useful outside battle.
 	// Remove this block if you use the original DSL.
 	if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
-		if (map_foreachinrange(AOEPriority, targetbl, 9, BL_MOB) >= 150* map_foreachinrange(counttargets, targetbl, 9, BL_PC)) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <=0) && (map_foreachinrange(DeepSleepPriority, targetbl, 9, BL_PC)>=150*partycount)) {
 			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
+		}
+	}
+	// Warmer - also heals mobs so only use when idle
+	if (pc_checkskill(sd, SO_WARMER) > 0) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, targetbl, 9, BL_PC) >= 50*partycount)) {
+			unit_skilluse_ifable(&sd->bl, sd->bl.id, SO_WARMER, pc_checkskill(sd, SO_WARMER));
 		}
 	}
 	// Rising Dragon
@@ -6683,7 +6711,7 @@ TIMER_FUNC(unit_autopilot_timer)
 	block_list * leaderbl;
 	int leaderID, leaderdistance;
 	struct map_session_data *leadersd;
-	int partycount = 1;
+	partycount = 1;
 
 	party_id = sd->status.party_id;
 	p = party_search(party_id);
@@ -7680,6 +7708,14 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (!duplicateskill(p, PR_IMPOSITIO)) unit_skilluse_ifable(&sd->bl, SELF, PR_IMPOSITIO, pc_checkskill(sd, PR_IMPOSITIO));
 			}
 		}
+		/// Striking
+		if (canskill(sd)) if (pc_checkskill(sd, SO_STRIKING) > 2) { // at least lv3
+			resettargets();
+			map_foreachinrange(targetstriking, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				if (!duplicateskill(p, SO_STRIKING)) unit_skilluse_ifable(&sd->bl, foundtargetID, SO_STRIKING, pc_checkskill(sd, SO_STRIKING));
+			}
+		}
 		/// Suffragium
 		if (canskill(sd)) if (pc_checkskill(sd, PR_SUFFRAGIUM) > 0) {
 			resettargets();
@@ -8277,6 +8313,42 @@ TIMER_FUNC(unit_autopilot_timer)
 									spelltocast = WZ_METEOR; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
+							// Psychic Wave
+							if (canskill(sd)) if ((pc_checkskill(sd, SO_PSYCHIC_WAVE) > 0) && (Dangerdistance > 900)) {
+								int area = 3;
+								if (pc_checkskill(sd, SO_PSYCHIC_WAVE) > 2) area++;
+								if (pc_checkskill(sd, SO_PSYCHIC_WAVE) > 4) area++;
+								int waveelem = ELE_NEUTRAL;
+								if (sd->sc.data[SC_HEATER_OPTION])
+										waveelem = sd->sc.data[SC_HEATER_OPTION]->val3;
+								else if (sd->sc.data[SC_COOLER_OPTION])
+									waveelem = sd->sc.data[SC_COOLER_OPTION]->val3;
+									else if (sd->sc.data[SC_BLAST_OPTION])
+									waveelem = sd->sc.data[SC_BLAST_OPTION]->val3;
+									else if (sd->sc.data[SC_CURSED_SOIL_OPTION])
+									waveelem = sd->sc.data[SC_CURSED_SOIL_OPTION]->val3;
+
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, waveelem);
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = SO_PSYCHIC_WAVE; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+							// Diamond Dust
+							if (canskill(sd)) if ((pc_checkskill(sd, SO_DIAMONDDUST) > 0) && (Dangerdistance > 900)) {
+								int area = 4;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, SO_DIAMONDDUST));
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = SO_DIAMONDDUST; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+							// Earth Grave
+							if (canskill(sd)) if ((pc_checkskill(sd, SO_EARTHGRAVE) > 0) && (Dangerdistance > 900)) {
+								int area = 4;
+								priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, SO_EARTHGRAVE));
+								if ((priority >= 18) && (priority > bestpriority)) {
+									spelltocast = SO_EARTHGRAVE; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
 							// Ride in Lightning - Sura AOE
 							if (canskill(sd)) if ((pc_checkskill(sd, SR_RIDEINLIGHTNING) > 3))
 							if (sd->spiritball>=5) {
@@ -8834,6 +8906,8 @@ TIMER_FUNC(unit_autopilot_timer)
 		map_foreachinrange(targetnearest, &sd->bl, 9, BL_MOB, sd);
 		int foundtargetID2 = foundtargetID;
 		int targetdistance2 = targetdistance;
+		struct mob_data * targetmd2 = targetmd;
+		struct block_list * targetbl2 = targetbl;
 
 		// Hunter TRAPS
 		// These don't go into the AOEs because they are melee range and not interruptable
@@ -8855,7 +8929,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			}*/
 
 		// Need INT or no bow equipped! Otherwise just shoot at things, is better?
-		if (distance_bl(targetbl, &sd->bl) <= 3) if ((sd->battle_status.int_>=50) || (sd->status.weapon != W_BOW)) {
+		if (distance_bl(targetbl2, &sd->bl) <= 3) if ((sd->battle_status.int_>=50) || (sd->status.weapon != W_BOW)) {
 			int spelltocast = -1;
 			int bestpriority = -1;
 			int priority;
@@ -8864,7 +8938,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((pc_checkskill(sd, RA_CLUSTERBOMB) > 4))
 				{
 					int area = 2;
-					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, RA_CLUSTERBOMB));
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, RA_CLUSTERBOMB));
 					if ((priority >= 6) && (priority > bestpriority)) {
 						spelltocast = RA_CLUSTERBOMB; bestpriority = priority; IDtarget = sd->bl.id;
 					}
@@ -8873,7 +8947,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((pc_checkskill(sd, RA_FIRINGTRAP) > 4))
 				{
 					int area = 2;
-					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, RA_FIRINGTRAP));
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, RA_FIRINGTRAP));
 					if ((priority >= 6) && (priority > bestpriority)) {
 						spelltocast = RA_FIRINGTRAP; bestpriority = priority; IDtarget = sd->bl.id;
 					}
@@ -8882,7 +8956,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((pc_checkskill(sd, RA_ICEBOUNDTRAP) > 4))
 				{
 					int area = 2;
-					priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, RA_ICEBOUNDTRAP));
+					priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, RA_ICEBOUNDTRAP));
 					if ((priority >= 6) && (priority > bestpriority)) {
 						spelltocast = RA_ICEBOUNDTRAP; bestpriority = priority; IDtarget = sd->bl.id;
 					}
@@ -8892,7 +8966,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((pc_checkskill(sd, HT_CLAYMORETRAP) > 4))
 				{
 					int area = 2;
-					priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, HT_CLAYMORETRAP));
+					priority = map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, HT_CLAYMORETRAP));
 					if ((priority >= 3) && (priority > bestpriority)) {
 						spelltocast = HT_CLAYMORETRAP; bestpriority = priority; IDtarget = sd->bl.id;
 					}
@@ -8901,7 +8975,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((pc_checkskill(sd, HT_BLASTMINE) > 4))
 				{
 					int area = 1;
-					priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, HT_BLASTMINE));
+					priority = map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, HT_BLASTMINE));
 					if ((priority >= 3) && (priority > bestpriority)) {
 						spelltocast = HT_BLASTMINE; bestpriority = priority; IDtarget = sd->bl.id;
 					}
@@ -8910,7 +8984,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// These two are single target!!
 			if ((pc_checkskill(sd, HT_LANDMINE) > 4))
 			{
-				if (elemstrong(targetmd, skill_get_ele(HT_LANDMINE, pc_checkskill(sd, HT_LANDMINE)))) priority = 2; else priority = 1;
+				if (elemstrong(targetmd2, skillelem(sd, HT_LANDMINE))) priority = 2; else priority = 1;
 				if (priority > bestpriority) {
 					spelltocast = HT_LANDMINE; bestpriority = priority; IDtarget = sd->bl.id;
 				}
@@ -8919,7 +8993,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// If yours still does the default, super low damage, remove this block.
 			if ((pc_checkskill(sd, HT_FREEZINGTRAP) > 4))
 			{
-				if (elemstrong(targetmd, skill_get_ele(HT_FREEZINGTRAP, pc_checkskill(sd, HT_FREEZINGTRAP)))) priority = 2; else priority = 1;
+				if (elemstrong(targetmd2, skill_get_ele(HT_FREEZINGTRAP, pc_checkskill(sd, HT_FREEZINGTRAP)))) priority = 2; else priority = 1;
 				if (priority > bestpriority) {
 					spelltocast = HT_FREEZINGTRAP; bestpriority = priority; IDtarget = sd->bl.id;
 				}
@@ -8934,12 +9008,12 @@ TIMER_FUNC(unit_autopilot_timer)
 
 		// Full Strip
 		// Use on bosses or much higher level enemies.
-		if (foundtargetID2 > -1) if ((status_get_class_(bl) == CLASS_BOSS) || (targetmd->level > sd->status.base_level + 30))
+		if (foundtargetID2 > -1) if ((status_get_class_(bl) == CLASS_BOSS) || (targetmd2->level > sd->status.base_level + 30))
 			if (canskill(sd)) if (pc_checkskill(sd, ST_FULLSTRIP) > 4)
 				// Don't bother if we already stipped something.
-				if (!(targetmd->sc.data[SC_STRIPHELM] || targetmd->sc.data[SC_STRIPSHIELD] || targetmd->sc.data[SC_STRIPWEAPON] || targetmd->sc.data[SC_STRIPARMOR]))
+				if (!(targetmd2->sc.data[SC_STRIPHELM] || targetmd2->sc.data[SC_STRIPSHIELD] || targetmd2->sc.data[SC_STRIPWEAPON] || targetmd2->sc.data[SC_STRIPARMOR]))
 					// Don't bother with targets that have some protection
-					if (!(targetmd->sc.data[SC_CP_WEAPON] || targetmd->sc.data[SC_CP_HELM] || targetmd->sc.data[SC_CP_ARMOR] || targetmd->sc.data[SC_CP_SHIELD]))
+					if (!(targetmd2->sc.data[SC_CP_WEAPON] || targetmd2->sc.data[SC_CP_HELM] || targetmd2->sc.data[SC_CP_ARMOR] || targetmd2->sc.data[SC_CP_SHIELD]))
 						// Must have at least enough DEX for 10% chance - nevermind, DEX can only add a bonus, but not reduce the chance
 		//				if (sd->battle_status.dex>=targetmd->status.dex-25)
 					{
@@ -8970,7 +9044,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				// Move to enemy while hidden
 				if (targetdistance2 > 1) {
 					struct walkpath_data wpd1;
-					if (path_search(&wpd1, sd->bl.m, bl->x, bl->y, targetbl->x, targetbl->y, 0, CELL_CHKNOPASS, MAX_WALKPATH))
+					if (path_search(&wpd1, sd->bl.m, bl->x, bl->y, targetbl2->x, targetbl2->y, 0, CELL_CHKNOPASS, MAX_WALKPATH))
 						newwalk(&sd->bl, bl->x + dirx[wpd1.path[0]], bl->y + diry[wpd1.path[0]], 8);
 					return 0;
 				}
@@ -8986,11 +9060,11 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Use this if we're not bow rogues, and/or already hiding.
 		// Yes, this is a melee skill that can be used outside tanking mode. The Rogue can hide in reaction and avoid harm.
 		if ((sd->sc.data[SC_HIDING]) || (sd->status.weapon != W_BOW))
-		if (foundtargetID2 > -1) if (elemallowed(targetmd,skillelem(sd,RG_BACKSTAP)))
+		if (foundtargetID2 > -1) if (elemallowed(targetmd2,skillelem(sd,RG_BACKSTAP)))
 		if (canskill(sd)) if (pc_checkskill(sd, RG_BACKSTAP) > 0) if (sd->state.autopilotmode == 2) {
 			if (targetdistance2 > 1) {
 				struct walkpath_data wpd1;
-				if (path_search(&wpd1, sd->bl.m, bl->x, bl->y, targetbl->x, targetbl->y, 0, CELL_CHKNOPASS, MAX_WALKPATH))
+				if (path_search(&wpd1, sd->bl.m, bl->x, bl->y, targetbl2->x, targetbl2->y, 0, CELL_CHKNOPASS, MAX_WALKPATH))
 					newwalk(&sd->bl, bl->x + dirx[wpd1.path[0]], bl->y + diry[wpd1.path[0]], 8);
 				return 0;
 			} else
@@ -9021,14 +9095,14 @@ TIMER_FUNC(unit_autopilot_timer)
 		int windelem = 0;
 		if (sd->sc.data[SC_SEVENWIND]) windelem= skill_get_ele(TK_SEVENWIND, sd->sc.data[SC_SEVENWIND]->val1);
 		if (foundtargetID2 > -1) if (canskill(sd))
-			if (elemstrong(targetmd, windelem)) {
+			if (elemstrong(targetmd2, windelem)) {
 
 				if (sd->sc.data[SC_SMA]) if (pc_checkskill(sd, SL_SMA) > 0) {
 					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_SMA, pc_checkskill(sd, SL_SMA));
 					}
 				}
-				if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd->status.size == SZ_SMALL) {
+				if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd2->status.size == SZ_SMALL) {
 					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_STIN, pc_checkskill(sd, SL_STIN));
 					}
@@ -9045,7 +9119,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_DRAINLIFE) > 0) {
 			if (sd->battle_status.hp < (70 * sd->battle_status.max_hp) / 100)
 			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-				if (elemallowed(targetmd, skillelem(sd, WL_DRAINLIFE))) {
+				if (elemallowed(targetmd2, skillelem(sd, WL_DRAINLIFE))) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE));
 				}
 			}
@@ -9053,7 +9127,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Crimson Rock on vulnerable enemy - this deals enough damage to be used as a single target even though it has AOE
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CRIMSONROCK) > 0) {
 			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-				if (elemstrong(targetmd, skillelem(sd, WL_CRIMSONROCK))) {
+				if (elemstrong(targetmd2, skillelem(sd, WL_CRIMSONROCK))) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK));
 				}
 			}
@@ -9061,7 +9135,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Hell Inferno on vulnerable enemy - treat as shadow element
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_HELLINFERNO) > 0) {
 			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-				if (elemstrong(targetmd, ELE_DARK)) {
+				if (elemstrong(targetmd2, ELE_DARK)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_HELLINFERNO, pc_checkskill(sd, WL_HELLINFERNO));
 				}
 			}
@@ -9070,16 +9144,36 @@ TIMER_FUNC(unit_autopilot_timer)
 		// For simplicity this is treated as a single target, assuming it'll chain on the same or similar enemies.
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CHAINLIGHTNING) > 0) {
 			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-				if (elemstrong(targetmd, ELE_WIND)) {
+				if (elemstrong(targetmd2, ELE_WIND)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CHAINLIGHTNING, pc_checkskill(sd, WL_CHAINLIGHTNING));
 				}
 			}
 		}
 
+		// Poison Buster on vulnerable enemy
+		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, SO_POISON_BUSTER) > 0)
+			if (targetmd2->sc.data[SC_POISON]){
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+				if (elemstrong(targetmd2, skillelem(sd, SO_POISON_BUSTER))) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_POISON_BUSTER, pc_checkskill(sd, SO_POISON_BUSTER));
+				}
+			}
+		}
+
+		// Varetyr Spear
+		if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_VARETYR_SPEAR) > 0)) {
+			if (sd->battle_status.str >= 50) // Not worth it unless using both the atk and matk portion well
+				if (sd->battle_status.int_ >= 50)
+					if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
+						if (elemstrong(targetmd2, skillelem(sd, SO_VARETYR_SPEAR))) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_VARETYR_SPEAR, pc_checkskill(sd, SO_VARETYR_SPEAR));
+						}
+					}
+		}
 		// Jupitel Thunder on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_JUPITEL) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, WZ_JUPITEL))) {
+					if (elemstrong(targetmd2, skillelem(sd, WZ_JUPITEL))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_JUPITEL, pc_checkskill(sd, WZ_JUPITEL));
 					}
 				}
@@ -9087,7 +9181,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Soul Expansion on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_SOULEXPANSION) > 0) {
 			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-				if (elemstrong(targetmd, skillelem(sd, WL_SOULEXPANSION))) {
+				if (elemstrong(targetmd2, skillelem(sd, WL_SOULEXPANSION))) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION));
 				}
 			}
@@ -9095,7 +9189,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Napalm Vulcan on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, HW_NAPALMVULCAN) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, HW_NAPALMVULCAN))) {
+					if (elemstrong(targetmd2, skillelem(sd, HW_NAPALMVULCAN))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, HW_NAPALMVULCAN, pc_checkskill(sd, HW_NAPALMVULCAN));
 					}
 				}
@@ -9103,15 +9197,16 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Earth Spike on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_EARTHSPIKE) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, WZ_EARTHSPIKE))) {
+					if (elemstrong(targetmd2, skillelem(sd, WZ_EARTHSPIKE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_EARTHSPIKE, pc_checkskill(sd, WZ_EARTHSPIKE));
 					}
 				}
 			}
 			// Fire Bolt on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, MG_FIREBOLT) > 0) {
-				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, MG_FIREBOLT))) {
+				if ((((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+				|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))) {
+					if (elemstrong(targetmd2, skillelem(sd, MG_FIREBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_FIREBOLT, pc_checkskill(sd, MG_FIREBOLT));
 					}
 				}
@@ -9120,15 +9215,16 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, NJ_KOUENKA) > 0)
 			if (pc_rightside_atk(sd)*1.2 <sd->battle_status.matk_min) { // Note : if skill is unmodded, a higher multiplier is needed
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, NJ_KOUENKA))) {
+					if (elemstrong(targetmd2, skillelem(sd, NJ_KOUENKA))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_KOUENKA, pc_checkskill(sd, NJ_KOUENKA));
 					}
 				}
 			}
 			// Cold Bolt on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, MG_COLDBOLT) > 0) {
-				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, MG_COLDBOLT))) {
+				if ((((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+					|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))){
+					if (elemstrong(targetmd2, skillelem(sd, MG_COLDBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_COLDBOLT, pc_checkskill(sd, MG_COLDBOLT));
 					}
 				}
@@ -9137,15 +9233,16 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, NJ_HYOUSENSOU) > 0)
 				if (pc_rightside_atk(sd)*1.2 < sd->battle_status.matk_min) { // Note : if skill is unmodded, a higher multiplier is needed
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, NJ_HYOUSENSOU))) {
+					if (elemstrong(targetmd2, skillelem(sd, NJ_HYOUSENSOU))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_HYOUSENSOU, pc_checkskill(sd, NJ_HYOUSENSOU));
 					}
 				}
 			}
 			// Lightning Bolt on vulnerable enemy
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, MG_LIGHTNINGBOLT) > 0) {
-				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, MG_LIGHTNINGBOLT))) {
+				if ((((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+					|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))) {
+					if (elemstrong(targetmd2, skillelem(sd, MG_LIGHTNINGBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_LIGHTNINGBOLT, pc_checkskill(sd, MG_LIGHTNINGBOLT));
 					}
 				}
@@ -9154,7 +9251,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, NJ_HUUJIN) > 0)
 				if (pc_rightside_atk(sd)*1.2 < sd->battle_status.matk_min) { // Note : if skill is unmodded, a higher multiplier is needed
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, NJ_HUUJIN))) {
+					if (elemstrong(targetmd2, skillelem(sd, NJ_HUUJIN))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_HUUJIN, pc_checkskill(sd, NJ_HUUJIN));
 					}
 				}
@@ -9162,7 +9259,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Soul Strike on vulnerable enemy
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, MG_SOULSTRIKE) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemstrong(targetmd, skillelem(sd, MG_SOULSTRIKE))) {
+					if (elemstrong(targetmd2, skillelem(sd, MG_SOULSTRIKE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_SOULSTRIKE, pc_checkskill(sd, MG_SOULSTRIKE));
 					}
 				}
@@ -9239,7 +9336,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Axe Boomerang
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_AXEBOOMERANG) > 0))
 				if ((sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE))
-					if (elemallowed(targetmd, skillelem(sd, NC_AXEBOOMERANG))) {
+					if (elemallowed(targetRAmd, skillelem(sd, NC_AXEBOOMERANG))) {
 					// Knockback can be a problem but at least this is instant cast and ranged, pretty much the only skill of this kind on the class without a mado
 					if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_AXEBOOMERANG, pc_checkskill(sd, NC_AXEBOOMERANG));
@@ -9326,7 +9423,7 @@ TIMER_FUNC(unit_autopilot_timer)
 
 			// Finger Offensive
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, MO_FINGEROFFENSIVE) > 0)) if (sd->spiritball >= pc_checkskill(sd, MO_FINGEROFFENSIVE)) {
-				if (elemallowed(targetmd, skillelem(sd, MO_FINGEROFFENSIVE)))
+				if (elemallowed(targetRAmd, skillelem(sd, MO_FINGEROFFENSIVE)))
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, MO_FINGEROFFENSIVE, pc_checkskill(sd, MO_FINGEROFFENSIVE));
 				}
@@ -9405,7 +9502,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Banishing Point
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, LG_BANISHINGPOINT) > 0))
 				if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
-				if (elemallowed(targetmd, skillelem(sd, LG_BANISHINGPOINT))) {
+				if (elemallowed(targetRAmd, skillelem(sd, LG_BANISHINGPOINT))) {
 				// While this is good enough to use in melee range, only after AOEs
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, LG_BANISHINGPOINT, pc_checkskill(sd, LG_BANISHINGPOINT));
@@ -9423,7 +9520,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_SONICWAVE) > 0))
 					// not really strong enough to use if aleady engaged in melee in tanking mode
 					if (rangeddist <= 9) if ((sd->state.autopilotmode == 2))
-						if (elemallowed(targetmd, skillelem(sd, RK_SONICWAVE))) {
+						if (elemallowed(targetRAmd, skillelem(sd, RK_SONICWAVE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_SONICWAVE, pc_checkskill(sd, RK_SONICWAVE));
 				}
 			// Spear Boomerang
@@ -9473,14 +9570,14 @@ TIMER_FUNC(unit_autopilot_timer)
 			windelem = 0;
 			if (sd->sc.data[SC_SEVENWIND]) windelem = skill_get_ele(TK_SEVENWIND, sd->sc.data[SC_SEVENWIND]->val1);
 			if (foundtargetID2 > -1) if (canskill(sd))
-				if (elemallowed(targetmd, windelem)) {
+				if (elemallowed(targetmd2, windelem)) {
 
 					if (sd->sc.data[SC_SMA]) if (pc_checkskill(sd, SL_SMA) > 0) {
 						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_SMA, pc_checkskill(sd, SL_SMA));
 						}
 					}
-					if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd->status.size == SZ_SMALL) {
+					if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd2->status.size == SZ_SMALL) {
 						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_STIN, pc_checkskill(sd, SL_STIN));
 						}
@@ -9496,7 +9593,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Damage is good enough to use this as single target even before any 1st or 2nd skill
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_CRIMSONROCK) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, WL_CRIMSONROCK))) {
+					if (elemallowed(targetmd2, skillelem(sd, WL_CRIMSONROCK))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CRIMSONROCK, pc_checkskill(sd, WL_CRIMSONROCK));
 					}
 				}
@@ -9505,7 +9602,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Hell Inferno - treat as shadow element
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_HELLINFERNO) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, ELE_DARK)) {
+					if (elemallowed(targetmd2, ELE_DARK)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_HELLINFERNO, pc_checkskill(sd, WL_HELLINFERNO));
 					}
 				}
@@ -9514,15 +9611,34 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Chain Lightning
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_CHAINLIGHTNING) > 0)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, ELE_WIND)) {
+					if (elemallowed(targetmd2, ELE_WIND)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_CHAINLIGHTNING, pc_checkskill(sd, WL_CHAINLIGHTNING));
+					}
+				}
+			}
+			// Poison Buster on vulnerable enemy
+			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, SO_POISON_BUSTER) > 0)
+				if (targetmd2->sc.data[SC_POISON]) {
+					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+						if (elemallowed(targetmd2, skillelem(sd, SO_POISON_BUSTER))) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_POISON_BUSTER, pc_checkskill(sd, SO_POISON_BUSTER));
+						}
+					}
+				}
+			// Varetyr Spear
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_VARETYR_SPEAR) > 0)) {
+				if (sd->battle_status.str >= 50) // Not worth it unless using both the atk and matk portion well
+					if (sd->battle_status.int_ >= 50)
+						if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
+					if (elemallowed(targetmd2, skillelem(sd, SO_VARETYR_SPEAR))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_VARETYR_SPEAR, pc_checkskill(sd, SO_VARETYR_SPEAR));
 					}
 				}
 			}
 			// Jupitel Thunder
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WZ_JUPITEL) > 0)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, WZ_JUPITEL))) {
+					if (elemallowed(targetmd2, skillelem(sd, WZ_JUPITEL))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_JUPITEL, pc_checkskill(sd, WZ_JUPITEL));
 					}
 				}
@@ -9530,7 +9646,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Soul Expansion
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_SOULEXPANSION) > 0)) {
 				if ((sd->state.autopilotmode == 2)) {
-					if (elemallowed(targetmd, skillelem(sd, WL_SOULEXPANSION))) {
+					if (elemallowed(targetmd2, skillelem(sd, WL_SOULEXPANSION))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_SOULEXPANSION, pc_checkskill(sd, WL_SOULEXPANSION));
 					}
 				}
@@ -9539,7 +9655,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// prefer soul expansion, more spammable for almost same damage, this is only really worth it for healing or when neutral element is necessary
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WL_DRAINLIFE) > 3)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, WL_DRAINLIFE))) {
+					if (elemallowed(targetmd2, skillelem(sd, WL_DRAINLIFE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WL_DRAINLIFE, pc_checkskill(sd, WL_DRAINLIFE));
 					}
 				}
@@ -9547,7 +9663,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Napalm Vulcan
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, HW_NAPALMVULCAN) > 0)) {
 				if ((sd->state.autopilotmode == 2)) {
-					if (elemallowed(targetmd, skillelem(sd, HW_NAPALMVULCAN))) {
+					if (elemallowed(targetmd2, skillelem(sd, HW_NAPALMVULCAN))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, HW_NAPALMVULCAN, pc_checkskill(sd, HW_NAPALMVULCAN));
 					}
 				}
@@ -9556,7 +9672,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// As it's 200% DMG per hit so less affected by MDEF
 			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_EARTHSPIKE) >= 5) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skill_get_ele(WZ_EARTHSPIKE, pc_checkskill(sd, WZ_EARTHSPIKE)))) {
+					if (elemallowed(targetmd2, skill_get_ele(WZ_EARTHSPIKE, pc_checkskill(sd, WZ_EARTHSPIKE)))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_EARTHSPIKE, pc_checkskill(sd, WZ_EARTHSPIKE));
 					}
 				}
@@ -9564,34 +9680,45 @@ TIMER_FUNC(unit_autopilot_timer)
 			// bolts, use highest level
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, MG_FIREBOLT) > 0) && (pc_checkskill(sd, MG_FIREBOLT) >= pc_checkskill(sd, MG_COLDBOLT))
 				&& (pc_checkskill(sd, MG_FIREBOLT) >= pc_checkskill(sd, MG_LIGHTNINGBOLT))) {
-				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, MG_FIREBOLT))) {
+				if (((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
+					|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))) 
+						{
+					if (elemallowed(targetmd2, skillelem(sd, MG_FIREBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_FIREBOLT, pc_checkskill(sd, MG_FIREBOLT));
 					}
 				}
 			}
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, MG_COLDBOLT) > 0) && (pc_checkskill(sd, MG_COLDBOLT) >= pc_checkskill(sd, MG_FIREBOLT))
 				&& (pc_checkskill(sd, MG_COLDBOLT) >= pc_checkskill(sd, MG_LIGHTNINGBOLT))) {
-				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, MG_COLDBOLT))) {
+				if (((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
+					|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))) 
+						{
+					if (elemallowed(targetmd2, skillelem(sd, MG_COLDBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_COLDBOLT, pc_checkskill(sd, MG_COLDBOLT));
 					}
 				}
 			}
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, MG_LIGHTNINGBOLT) > 0) && (pc_checkskill(sd, MG_LIGHTNINGBOLT) >= pc_checkskill(sd, MG_COLDBOLT))
 				&& (pc_checkskill(sd, MG_LIGHTNINGBOLT) >= pc_checkskill(sd, MG_FIREBOLT))) {
-				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, MG_LIGHTNINGBOLT))) {
+				if (((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
+					|| ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))) 
+						{
+					if (elemallowed(targetmd2, skillelem(sd, MG_LIGHTNINGBOLT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_LIGHTNINGBOLT, pc_checkskill(sd, MG_LIGHTNINGBOLT));
 					}
 				}
 			}
+			// Spell Fist to interrupt ongoing bolt (tanking mode only)
+			if ((sd->state.autopilotmode == 1) && (pc_checkskill(sd, SO_SPELLFIST) > 2) && (!sd->sc.data[SC_SPELLFIST]))
+				if ((sd->skill_id_old== MG_FIREBOLT) || (sd->skill_id_old == MG_COLDBOLT) || (sd->skill_id_old == MG_LIGHTNINGBOLT))
+					unit_skilluse_ifable(&sd->bl, SELF, SO_SPELLFIST, pc_checkskill(sd, SO_SPELLFIST));
+
 			// ninja bolts, use highest level
 			if (foundtargetID2 > -1) if (pc_rightside_atk(sd)*1.5 < sd->battle_status.matk_min) { // Note : if skill is unmodded, a higher multiplier is needed
 				if (canskill(sd)) if ((pc_checkskill(sd, NJ_HUUJIN) > 0) && (pc_checkskill(sd, NJ_HUUJIN) >= pc_checkskill(sd, NJ_HYOUSENSOU))
 					&& (pc_checkskill(sd, NJ_HUUJIN) >= pc_checkskill(sd, NJ_KOUENKA))) {
 					if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-						if (elemallowed(targetmd, skillelem(sd, NJ_HUUJIN))) {
+						if (elemallowed(targetmd2, skillelem(sd, NJ_HUUJIN))) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_HUUJIN, pc_checkskill(sd, NJ_HUUJIN));
 						}
 					}
@@ -9599,7 +9726,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, NJ_HYOUSENSOU) > 0) && (pc_checkskill(sd, NJ_HYOUSENSOU) >= pc_checkskill(sd, NJ_HUUJIN))
 					&& (pc_checkskill(sd, NJ_HYOUSENSOU) >= pc_checkskill(sd, NJ_KOUENKA))) {
 					if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-						if (elemallowed(targetmd, skillelem(sd, NJ_HYOUSENSOU))) {
+						if (elemallowed(targetmd2, skillelem(sd, NJ_HYOUSENSOU))) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_HYOUSENSOU, pc_checkskill(sd, NJ_HYOUSENSOU));
 						}
 					}
@@ -9607,7 +9734,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, NJ_KOUENKA) > 0) && (pc_checkskill(sd, NJ_KOUENKA) >= pc_checkskill(sd, NJ_HYOUSENSOU))
 					&& (pc_checkskill(sd, NJ_KOUENKA) >= pc_checkskill(sd, NJ_HUUJIN))) {
 					if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-						if (elemallowed(targetmd, skillelem(sd, NJ_KOUENKA))) {
+						if (elemallowed(targetmd2, skillelem(sd, NJ_KOUENKA))) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, NJ_KOUENKA, pc_checkskill(sd, NJ_KOUENKA));
 						}
 					}
@@ -9616,7 +9743,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Soul Strike
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, MG_SOULSTRIKE) > 0)) {
 				if ((sd->state.autopilotmode == 2)) {
-					if (elemallowed(targetmd, skillelem(sd, MG_SOULSTRIKE))) {
+					if (elemallowed(targetmd2, skillelem(sd, MG_SOULSTRIKE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_SOULSTRIKE, pc_checkskill(sd, MG_SOULSTRIKE));
 					}
 				}
@@ -9624,7 +9751,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Reverbation
 			if (foundtargetRA > -1) if (canskill(sd) && ((pc_checkskill(sd, WM_REVERBERATION) > 0))) {
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
-				if (targetmd->ud.walktimer==INVALID_TIMER) { // only on non-moving targets
+				if (targetRAmd->ud.walktimer==INVALID_TIMER) { // only on non-moving targets
 					arrowchange(sd, targetRAmd);
 					if (elemallowed(targetRAmd, arrowelement)) {
 						unit_skilluse_ifablexy(&sd->bl, foundtargetRA, WM_REVERBERATION, pc_checkskill(sd, WM_REVERBERATION));
@@ -9669,14 +9796,14 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Holy Light
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, AL_HOLYLIGHT) > 0)) {
 				if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900)) {
-					if (elemallowed(targetmd, skillelem(sd, AL_HOLYLIGHT))) {
+					if (elemallowed(targetmd2, skillelem(sd, AL_HOLYLIGHT))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, AL_HOLYLIGHT, pc_checkskill(sd, AL_HOLYLIGHT));
 					}
 				}
 			}
 
 			// If we still failed to pick a skill, the enemy is probably dark or holy and resists all elements so we have to compromise and use whatever.
-			if (foundtargetID2 > -1) if (canskill(sd)) if ((targetmd->status.def_ele == ELE_DARK) || ((targetmd->status.def_ele == ELE_HOLY)))
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((targetmd2->status.def_ele == ELE_DARK) || ((targetmd2->status.def_ele == ELE_HOLY)))
 			{ // Gravity Field
 				// High Wizards can pull this ace out of their sleeve if they have gems and aren't under attack
 				if (canskill(sd)) if ((pc_checkskill(sd, HW_GRAVITATION) > 0) && (Dangerdistance > 900) && (pc_search_inventory(sd, ITEMID_BLUE_GEMSTONE)>=0)) {
@@ -9684,24 +9811,24 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 				// Storm Gust - this can at least freeze things and keep them under control, as well as change them to water element
 				// However use at lowest level for maximal freezing efficiency and faster cast time - damage isn't going to be good anyway
-				if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
+				if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)))
 				if (canskill(sd)) if ((pc_checkskill(sd, WZ_STORMGUST) > 0) && ((Dangerdistance > 900) && (!duplicateskill(p, WZ_STORMGUST)))) {
-					if ((!(targetmd->status.def_ele == ELE_UNDEAD)) && (!((status_get_class_(targetbl) == CLASS_BOSS))))
+					if ((!(targetmd2->status.def_ele == ELE_UNDEAD)) && (!((status_get_class_(targetbl2) == CLASS_BOSS))))
 					unit_skilluse_ifablexy(&sd->bl, foundtargetID2, WZ_STORMGUST, 1);
 					else // Immune to freezing, use highest level!
 						unit_skilluse_ifablexy(&sd->bl, foundtargetID2, WZ_STORMGUST, pc_checkskill(sd, WZ_STORMGUST));
 				}
 				//  Use JT if SG isn't an option, best single target damage
-				if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
+				if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)))
 					if (canskill(sd)) if ((pc_checkskill(sd, WZ_JUPITEL) > 0) && ((Dangerdistance > 900) || (sd->special_state.no_castcancel))) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_JUPITEL, pc_checkskill(sd, WZ_JUPITEL));
 				}
 				// If we are under attack, we have to cast something faster...
-if (canskill(sd)) if ((pc_checkskill(sd, HW_MAGICCRASHER) > 0) && (elemallowed(targetmd, sd->battle_status.rhw.ele))) {
+if (canskill(sd)) if ((pc_checkskill(sd, HW_MAGICCRASHER) > 0) && (elemallowed(targetmd2, sd->battle_status.rhw.ele))) {
 	unit_skilluse_ifable(&sd->bl, foundtargetID2, HW_MAGICCRASHER, pc_checkskill(sd, HW_MAGICCRASHER));
 }
 // Not everyone is a high wizard
-if (!((targetmd->status.def_ele == ELE_HOLY) || (targetmd->status.def_ele < 4)))
+if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)))
 	if (canskill(sd)) if ((pc_checkskill(sd, MG_SOULSTRIKE) > 0)) {
 		unit_skilluse_ifable(&sd->bl, foundtargetID2, MG_SOULSTRIKE, pc_checkskill(sd, MG_SOULSTRIKE));
 	}
