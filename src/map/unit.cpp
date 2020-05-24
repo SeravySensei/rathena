@@ -6018,6 +6018,13 @@ void skillwhenidle(struct map_session_data *sd) {
 			unit_skilluse_ifable(&sd->bl, SELF, MG_ENERGYCOAT, pc_checkskill(sd, MG_ENERGYCOAT));
 		}
 	}
+	// Auto Shadow Spell
+	if (canskill(sd))
+		if (pc_checkskill(sd, SC_AUTOSHADOWSPELL) > 0) {
+			if (!(sd->sc.data[SC__AUTOSHADOWSPELL])) {
+				unit_skilluse_ifable(&sd->bl, SELF, SC_AUTOSHADOWSPELL, pc_checkskill(sd, SC_AUTOSHADOWSPELL));
+			}
+		}
 	// Prestige
 	if (canskill(sd))
 		if (pc_checkskill(sd, LG_PRESTIGE) > 0) {

@@ -10206,8 +10206,27 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				(sd->cloneskill_idx > 0 && sd->status.skill[sd->cloneskill_idx].id) )
 			{
 				sc_start(src,src,SC_STOP,100,skill_lv,INFINITE_TICK);// The skill_lv is stored in val1 used in skill_select_menu to determine the used skill lvl [Xazax]
-				clif_autoshadowspell_list(sd);
-				clif_skill_nodamage(src,bl,skill_id,1,1);
+				if (sd->state.autopilotmode == 0) {
+					clif_autoshadowspell_list(sd);
+					clif_skill_nodamage(src, bl, skill_id, 1, 1);
+				}
+				else {
+					int ass = -1; int i; int c;
+					for (i = 0, c = 0; i < MAX_SKILL; i++)
+						if (sd->status.skill[i].flag == SKILL_FLAG_PLAGIARIZED && sd->status.skill[i].id > 0 &&
+							skill_get_inf2(sd->status.skill[i].id, INF2_ISAUTOSHADOWSPELL))
+						{
+							ass = sd->status.skill[i].id;
+							c++;
+						}
+					sd->menuskill_id = 0; sd->menuskill_val = 0;
+					if (ass > 0) {
+					skill_select_menu(sd, ass);
+					clif_skill_nodamage(src, bl, skill_id, 1, 1);
+					}
+					else
+						clif_skill_fail(sd, skill_id, USESKILL_FAIL_IMITATION_SKILL_NONE, 0);
+				}
 			}
 			else
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_IMITATION_SKILL_NONE,0);
@@ -20524,7 +20543,7 @@ int skill_select_menu(struct map_session_data *sd,uint16 skill_id) {
 
 	lv = (aslvl + 5) / 2; // The level the skill will be autocasted
 	lv = min(lv,sd->status.skill[sk_idx].lv);
-	prob = (aslvl >= 10) ? 15 : (30 - 2 * aslvl); // Probability at level 10 was increased to 15.
+	prob = 5 + aslvl;
 	sc_start4(&sd->bl,&sd->bl,SC__AUTOSHADOWSPELL,100,id,lv,prob,0,skill_get_time(SC_AUTOSHADOWSPELL,aslvl));
 	return 0;
 }
