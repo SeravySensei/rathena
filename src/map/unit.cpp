@@ -5776,8 +5776,8 @@ int cannonballchange(map_session_data * sd, mob_data *targetmd)
 	}
 	else {
 		char* msg = "I have no cannonball to fire!";
-		saythis(sd, msg, 50);
-		return 0;
+saythis(sd, msg, 50);
+return 0;
 	}
 
 }
@@ -5792,12 +5792,12 @@ void recoversp(map_session_data *sd, int goal)
 	int16 index = -1;
 
 	// Ancilla is special, always use it even if not set to use sp items
-	if ((index = pc_search_inventory(sd,12333)) >= 0)
+	if ((index = pc_search_inventory(sd, 12333)) >= 0)
 		if ((sd->battle_status.sp < (goal*sd->battle_status.max_sp) / 100)
-			|| (sd->battle_status.sp < (25*sd->battle_status.max_sp) / 100))
-		pc_useitem(sd, index);
+			|| (sd->battle_status.sp < (25 * sd->battle_status.max_sp) / 100))
+			pc_useitem(sd, index);
 
-	if (sd->battle_status.sp <  (goal*sd->battle_status.max_sp) / 100) {
+	if (sd->battle_status.sp < (goal*sd->battle_status.max_sp) / 100) {
 		//ShowError("Need to heal");
 
 		unsigned short spotions[] = {
@@ -5848,6 +5848,13 @@ bool canskill(struct map_session_data *sd)
 
 };
 
+int modetolv(int mode)
+{
+	if (mode == EL_MODE_PASSIVE) return 1;
+	if (mode == EL_MODE_ASSIST) return 2;
+	if (mode == EL_MODE_AGGRESSIVE) return 3;
+	return 99;
+}
 
 void skillwhenidle(struct map_session_data *sd) {
 
@@ -5855,16 +5862,41 @@ void skillwhenidle(struct map_session_data *sd) {
 	// **** Note I changed this to cause the effect on the party so it is basically a recovery spell that is useful outside battle.
 	// Remove this block if you use the original DSL.
 	if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
-		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <=0) && (map_foreachinrange(DeepSleepPriority, targetbl, 9, BL_PC)>=150*partycount)) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(DeepSleepPriority, targetbl, 9, BL_PC) >= 150 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
 		}
 	}
 	// Warmer - also heals mobs so only use when idle
 	if (pc_checkskill(sd, SO_WARMER) > 0) {
-		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, targetbl, 9, BL_PC) >= 50*partycount)) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, targetbl, 9, BL_PC) >= 50 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, sd->bl.id, SO_WARMER, pc_checkskill(sd, SO_WARMER));
 		}
 	}
+
+	// Sorcerer, summon elemental
+	if (canskill(sd))
+		if ((!sd->ed) && (sd->state.autoelemtype > 0)) {
+			int suski = 0;
+			if (sd->state.autoelemtype == ELE_FIRE) suski = SO_SUMMON_AGNI;
+			if (sd->state.autoelemtype == ELE_WATER) suski = SO_SUMMON_AQUA;
+			if (sd->state.autoelemtype == ELE_WIND) suski = SO_SUMMON_VENTUS;
+			if (sd->state.autoelemtype == ELE_EARTH) suski = SO_SUMMON_TERA;
+			if (suski) 	if (pc_checkskill(sd, suski) >= sd->state.autoelemlevel)
+				if (pc_inventory_count(sd, sd->state.autoelemreqitem) >= sd->state.autoelemreqitemnum)
+			{
+			unit_skilluse_ifable(&sd->bl, SELF, suski,sd->state.autoelemlevel);
+}
+	}
+	// Set elemental mode
+	if (canskill(sd))
+		if ((sd->ed) && (sd->state.autoelemtype > 0)) {
+			if (!(sd->ed->elemental.mode == sd->state.autoelemmode))
+				if (pc_checkskill(sd, SO_EL_CONTROL)>=modetolv(sd->state.autoelemmode))
+			{
+					unit_skilluse_ifable(&sd->bl, SELF, SO_EL_CONTROL, modetolv(sd->state.autoelemmode));
+			}
+		}
+
 	// Rising Dragon
 	if (canskill(sd))
 	if (pc_checkskill(sd, SR_RAISINGDRAGON) > 0) {
@@ -7210,6 +7242,13 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, foundtargetID, AL_HEAL, pc_checkskill(sd, AL_HEAL));
 			}
 		}
+		// Sorcerer Element Cure
+		if ((sd->ed) && (sd->state.autoelemtype > 0))
+			if (pc_checkskill(sd, SO_EL_CURE) > 0)
+				if ((sd->ed->battle_status.sp<0.5*sd->ed->battle_status.max_sp)
+					|| (sd->ed->battle_status.hp < 0.5*sd->ed->battle_status.max_hp))
+					unit_skilluse_ifable(&sd->bl, SELF, SO_EL_CURE, 1);
+
 		/// Slim Potion Pitcher
 		// Note : used as if it was single target, wasteful. This should be improved!
 		if (canskill(sd)) if (pc_checkskill(sd, CR_SLIMPITCHER) >=10) {
@@ -9160,6 +9199,17 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+		// Elemental Action
+		if (sd->ed)
+		if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_EL_ACTION) > 0)) {
+			if (sd->ed->battle_status.sp >= 0.3*sd->ed->battle_status.max_sp) // Avoid running out of SP
+				if (!(sd->state.autopilotmode == 3)) {
+						if (elemstrong(targetmd2, sd->state.autoelemtype)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_EL_ACTION, pc_checkskill(sd, SO_EL_ACTION));
+						}
+					}
+		}
+		
 		// Varetyr Spear
 		if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_VARETYR_SPEAR) > 0)) {
 			if (sd->battle_status.str >= 50) // Not worth it unless using both the atk and matk portion well
@@ -9624,6 +9674,16 @@ TIMER_FUNC(unit_autopilot_timer)
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_POISON_BUSTER, pc_checkskill(sd, SO_POISON_BUSTER));
 						}
 					}
+				}
+			// Elemental Action
+			if (sd->ed)
+				if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_EL_ACTION) > 0)) {
+					if (sd->ed->battle_status.sp >= 0.3*sd->ed->battle_status.max_sp) // Avoid running out of SP
+						if (!(sd->state.autopilotmode == 3)) {
+							if (elemallowed(targetmd2, sd->state.autoelemtype)) {
+								unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_EL_ACTION, pc_checkskill(sd, SO_EL_ACTION));
+							}
+						}
 				}
 			// Varetyr Spear
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, SO_VARETYR_SPEAR) > 0)) {

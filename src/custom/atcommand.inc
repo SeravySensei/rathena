@@ -149,3 +149,62 @@ if (!strcmp(message,"Frigg")) {sd->state.autosong3 = WM_FRIGG_SONG; };
 }
 return 0; 
 }
+
+ACMD_FUNC(autoelem)
+{
+if (!message || !*message || !(strlen(message)==3)) { clif_displaymessage(fd, "please specify elemental to use with a 3 character code:");
+clif_displaymessage(fd, "F/W/I/E = Fire/Water/Wind/Earth");
+clif_displaymessage(fd, "1/2/3 = Elemental level");
+clif_displaymessage(fd, "P/O/D = Passive/Offense/Defense");
+clif_displaymessage(fd, "Example : @autoelem F3P - level 3 Fire elemental in Passive mode.");
+
+ }
+else {
+clif_displaymessage(fd, message);
+sd->state.autoelemtype=ELE_WIND;
+sd->state.autoelemlevel=1;
+sd->state.autoelemmode=0;
+
+if (message[0]=='F') {sd->state.autoelemtype = ELE_FIRE;};
+if (message[0]=='W') {sd->state.autoelemtype = ELE_WATER;};
+if (message[0]=='I') {sd->state.autoelemtype = ELE_WIND;};
+if (message[0]=='E') {sd->state.autoelemtype = ELE_EARTH;};
+if (message[1]=='1') {sd->state.autoelemlevel = 1;};
+if (message[1]=='2') {sd->state.autoelemlevel = 2;};
+if (message[1]=='3') {sd->state.autoelemlevel = 3;};
+if (message[2]=='P') {sd->state.autoelemmode = EL_MODE_PASSIVE;};
+if (message[2]=='O') {sd->state.autoelemmode = EL_MODE_AGGRESSIVE;};
+if (message[2]=='D') {sd->state.autoelemmode = EL_MODE_ASSIST;};
+
+if ((sd->state.autoelemtype == ELE_FIRE) && (sd->state.autoelemlevel == 1))
+{ sd->state.autoelemreqitem=990; sd->state.autoelemreqitemnum=3;}
+if ((sd->state.autoelemtype == ELE_FIRE) && (sd->state.autoelemlevel == 2))
+{ sd->state.autoelemreqitem=990; sd->state.autoelemreqitemnum=6;}
+if ((sd->state.autoelemtype == ELE_FIRE) && (sd->state.autoelemlevel == 3))
+{ sd->state.autoelemreqitem=994; sd->state.autoelemreqitemnum=1;}
+
+if ((sd->state.autoelemtype == ELE_WATER) && (sd->state.autoelemlevel == 1))
+{ sd->state.autoelemreqitem=991; sd->state.autoelemreqitemnum=3;}
+if ((sd->state.autoelemtype == ELE_WATER) && (sd->state.autoelemlevel == 2))
+{ sd->state.autoelemreqitem=991; sd->state.autoelemreqitemnum=6;}
+if ((sd->state.autoelemtype == ELE_WATER) && (sd->state.autoelemlevel == 3))
+{ sd->state.autoelemreqitem=995; sd->state.autoelemreqitemnum=1;}
+
+if ((sd->state.autoelemtype == ELE_WIND) && (sd->state.autoelemlevel == 1))
+{ sd->state.autoelemreqitem=992; sd->state.autoelemreqitemnum=3;}
+if ((sd->state.autoelemtype == ELE_WIND) && (sd->state.autoelemlevel == 2))
+{ sd->state.autoelemreqitem=992; sd->state.autoelemreqitemnum=6;}
+if ((sd->state.autoelemtype == ELE_WIND) && (sd->state.autoelemlevel == 3))
+{ sd->state.autoelemreqitem=996; sd->state.autoelemreqitemnum=1;}
+
+if ((sd->state.autoelemtype == ELE_EARTH) && (sd->state.autoelemlevel == 1))
+{ sd->state.autoelemreqitem=993; sd->state.autoelemreqitemnum=3;}
+if ((sd->state.autoelemtype == ELE_EARTH) && (sd->state.autoelemlevel == 2))
+{ sd->state.autoelemreqitem=993; sd->state.autoelemreqitemnum=6;}
+if ((sd->state.autoelemtype == ELE_EARTH) && (sd->state.autoelemlevel == 3))
+{ sd->state.autoelemreqitem=997; sd->state.autoelemreqitemnum=1;}
+
+
+}
+return 0; 
+}
