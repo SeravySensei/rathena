@@ -160,6 +160,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost:
         - Level: 1
@@ -251,6 +254,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     SplashArea:
       - Level: 1
         Area: 2
@@ -368,6 +374,9 @@ Body:
     Flags:
       IsAutoShadowSpell: true
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -553,6 +562,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -630,6 +642,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -755,6 +770,9 @@ Body:
     CastCancel: true
     CastTime: 640
     AfterCastActDelay: 1500
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Duration2:
       - Level: 1
         Time: 5500
@@ -853,6 +871,9 @@ Body:
     Flags:
       IsAutoShadowSpell: true
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -932,6 +953,9 @@ Body:
     TargetType: Ground
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -1020,6 +1044,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -1138,6 +1165,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -1256,6 +1286,9 @@ Body:
     TargetType: Ground
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -1401,6 +1434,9 @@ Body:
     SplashArea: 2
     CastCancel: true
     Duration1: 10000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 10
   - Id: 25
@@ -1509,6 +1545,9 @@ Body:
     Element: Holy
     CastCancel: true
     AfterCastActDelay: 1000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost:
         - Level: 1
@@ -1873,6 +1912,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 5
       ZenyCost:
@@ -1972,6 +2014,9 @@ Body:
     HitCount: 2
     Element: Weapon
     AfterCastActDelay: 100
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Duration1: 100
     Requires:
       SpCost: 12
@@ -1992,6 +2037,9 @@ Body:
       TargetTrap: true
       IgnoreLandProtector: true
       AlterRangeVulture: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: -9
     Hit: Single
     HitCount: 1
@@ -2104,6 +2152,9 @@ Body:
     HitCount: 1
     Element: Poison
     Duration2: 20000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 12
   - Id: 53
@@ -2130,6 +2181,9 @@ Body:
       NoDamage: true
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -2376,6 +2430,9 @@ Body:
     Knockback: 3
     CastTime: 350
     FixedCastTime: 350
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost:
         - Level: 1
@@ -2493,6 +2550,9 @@ Body:
     Element: Holy
     CastCancel: true
     AfterCastActDelay: 2000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Duration1:
       - Level: 1
         Time: 60000
@@ -2531,6 +2591,9 @@ Body:
       IgnoreDefense: true
     Flags:
       IsEnsemble: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -2561,6 +2624,9 @@ Body:
     DamageFlags:
       NoDamage: true
       IgnoreDefense: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -2836,6 +2902,9 @@ Body:
     Element: Holy
     CastCancel: true
     CastTime: 800
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     AfterCastActDelay: 3000
     FixedCastTime: 200
     Requires:
@@ -2863,6 +2932,9 @@ Body:
     TargetType: Ground
     Range: 9
     Hit: Multi_Hit
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     HitCount:
       - Level: 1
         Count: 1
@@ -2956,6 +3028,9 @@ Body:
       IgnoreDefense: true
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -3092,6 +3167,9 @@ Body:
     Flags:
       IsAutoShadowSpell: true
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Single
     HitCount: 1
     Element: Fire
@@ -3133,6 +3211,9 @@ Body:
     TargetType: Ground
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -3265,6 +3346,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -3383,6 +3467,9 @@ Body:
     TargetType: Ground
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount: -10
@@ -3494,6 +3581,9 @@ Body:
     TargetType: Attack
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount: 1
@@ -3593,6 +3683,9 @@ Body:
       Splash: true
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Single
     HitCount: 1
     Element: Water
@@ -3692,6 +3785,9 @@ Body:
     TargetType: Ground
     Flags:
       IsAutoShadowSpell: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -3763,6 +3859,9 @@ Body:
     Flags:
       IsAutoShadowSpell: true
       TargetHidden: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -3842,6 +3941,9 @@ Body:
     Flags:
       IsAutoShadowSpell: true
       TargetHidden: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -4327,6 +4429,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Earth
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     AfterCastActDelay: 1000
     Duration1: 200000
     Duration2: 5000
@@ -4500,6 +4605,9 @@ Body:
       AlterRangeResearchTrap: true
       IgnoreHovering: true
       AllowOnWarg: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 3
     Hit: Single
     HitCount: 1
@@ -4557,6 +4665,9 @@ Body:
     AfterCastActDelay: 1000
     Duration1: 200000
     FixedCastTime: 1000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 10
       ItemCost:
@@ -4588,6 +4699,9 @@ Body:
       IgnoreHovering: true
       AllowOnWarg: true
     Range: 3
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Single
     HitCount: 1
     Element: Fire
@@ -5054,6 +5168,9 @@ Body:
       NoDamage: true
       IgnoreElement: true
       IgnoreFlee: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 1
     Hit: Single
     HitCount: 1
@@ -5186,6 +5303,9 @@ Body:
     Flags:
       IsQuest: true
       AlterRangeVulture: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: -9
     Hit: Single
     HitCount: 1
@@ -5208,6 +5328,9 @@ Body:
     Flags:
       IsQuest: true
     Range: 1
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Single
     HitCount: 1
     Element: Earth
@@ -5261,6 +5384,9 @@ Body:
     AfterCastActDelay: 100
     Duration1: 5000
     Duration2: 20000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 2
       ItemCost:
@@ -5338,6 +5464,9 @@ Body:
     CastCancel: true
     CastTime: 800
     FixedCastTime: 200
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost: 15
   - Id: 157
@@ -6131,6 +6260,9 @@ Body:
       IgnoreFlee: true
     Flags:
       AllowWhenHidden: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: -1
     Hit: Single
     HitCount: 1
@@ -6509,6 +6641,9 @@ Body:
     Flags:
       IgnoreAutoGuard: true
       IgnoreCicada: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -6558,6 +6693,9 @@ Body:
     CastCancel: true
     CastTime: 500
     AfterCastActDelay: 500
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Duration1:
       - Level: 1
         Time: 3
@@ -6884,6 +7022,9 @@ Body:
     Range: 3
     Hit: Single
     HitCount: 1
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Knockback:
       - Level: 1
         Amount: 5
@@ -6907,6 +7048,9 @@ Body:
     TargetType: Attack
     Flags:
       IncreaseGloomyDayDamage: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range:
       - Level: 1
         Size: 3
@@ -6966,6 +7110,9 @@ Body:
     TargetType: Attack
     Flags:
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: -2
     Hit: Multi_Hit
     HitCount: -2
@@ -7004,6 +7151,9 @@ Body:
       IgnoreFlee: true
     Flags:
       TargetSelf: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 5
     Hit: Single
     HitCount: 1
@@ -7226,6 +7376,9 @@ Body:
     Element: Weapon
     CastDelayFlags:
       IgnoreStatus: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
   - Id: 264
     Name: MO_BODYRELOCATION
     Description: Snap
@@ -7254,6 +7407,9 @@ Body:
       IgnoreFlee: true
     Flags:
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 2
     Hit: Single
     HitCount: 1
@@ -7284,6 +7440,9 @@ Body:
       TargetTrap: true
     Range: 9
     Hit: Multi_Hit
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     HitCount:
       - Level: 1
         Count: 1
@@ -7430,6 +7589,9 @@ Body:
       IgnoreFlee: true
     Flags:
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: -2
     Hit: Single
     HitCount: 1
@@ -11560,6 +11722,9 @@ Body:
     Range: 9
     Hit: Multi_Hit
     HitCount: -3
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Element: Weapon
     Requires:
       SpCost:
@@ -14809,6 +14974,9 @@ Body:
     Type: Magic
     TargetType: Attack
     Range: 9
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Multi_Hit
     HitCount:
       - Level: 1
@@ -14906,6 +15074,9 @@ Body:
     Hit: Multi_Hit
     HitCount: 1
     Element: Fire
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -14979,6 +15150,9 @@ Body:
     AfterCastActDelay: 2000
     Duration1: 100
     FixedCastTime: 600
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Requires:
       SpCost:
         - Level: 1
@@ -15009,6 +15183,9 @@ Body:
     TargetType: Attack
     Range: 9
     Hit: Multi_Hit
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     HitCount:
       - Level: 1
         Count: 3
@@ -15213,6 +15390,9 @@ Body:
     Type: Magic
     TargetType: Self
     Hit: Single
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     HitCount: 1
     Element: Water
     CastTime:
@@ -15279,6 +15459,9 @@ Body:
     Type: Magic
     TargetType: Attack
     Range: 9
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Multi_Hit
     HitCount:
       - Level: 1
@@ -15358,6 +15541,9 @@ Body:
     Element: Wind
     CastCancel: true
     CastTime: 2000
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Duration1: 100
     Requires:
       SpCost:
@@ -15397,6 +15583,9 @@ Body:
     MaxLevel: 5
     Type: Magic
     TargetType: Attack
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Flags:
       TargetTrap: true
     Range:
@@ -16899,6 +17088,9 @@ Body:
       IsQuest: true
       IgnoreAutoGuard: true
       IgnoreCicada: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Range: 9
     Hit: Multi_Hit
     HitCount: 1
@@ -16955,6 +17147,9 @@ Body:
     Flags:
       IsQuest: true
       TargetTrap: true
+    CopyFlags:
+      Skill:
+        Plagiarism: true
     Hit: Single
     HitCount: 1
     Element: Fire
@@ -17259,6 +17454,9 @@ Body:
     Element: Weapon
     AfterCastActDelay: 1000
     Cooldown: 2000
+    CopyFlags:
+      Skill:
+        Reproduce: true
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -17365,6 +17563,9 @@ Body:
     Element: Wind
     SplashArea: 4
     Knockback: 3
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Duration1: 15000
     Cooldown: 2000
     FixedCastTime: -1
@@ -17397,6 +17598,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea: 5
     CastTime: 1000
     Cooldown: 2000
@@ -17812,6 +18016,9 @@ Body:
       Splash: true
     Flags:
       AlterRangeRadius: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Multi_Hit
     HitCount:
       - Level: 1
@@ -17862,6 +18069,9 @@ Body:
     TargetType: Self
     DamageFlags:
       Splash: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Multi_Hit
     HitCount: -5
     Element: Water
@@ -18123,6 +18333,9 @@ Body:
     Hit: Single
     HitCount: 1
     CastCancel: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastTime: 4000
     Cooldown: 2000
     FixedCastTime: 1000
@@ -18156,6 +18369,9 @@ Body:
     Knockback: 3
     CastCancel: true
     CastTime: 5000
+    CopyFlags:
+      Skill:
+        Reproduce: true
     AfterCastActDelay: 2000
     Duration1: 5000
     Cooldown: 5000
@@ -18184,6 +18400,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Fire
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastCancel: true
     CastTime: 3000
     AfterCastActDelay: 1000
@@ -18216,6 +18435,9 @@ Body:
     HitCount: -20
     SplashArea: 9
     Knockback: 2
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -18281,6 +18503,9 @@ Body:
     AfterCastActDelay: 350
     Duration1: 100
     FixedCastTime: 500
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
@@ -18314,6 +18539,9 @@ Body:
     Flags:
       TargetHidden: true
     Range: 6
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Multi_Hit
     HitCount:
       - Level: 1
@@ -18755,6 +18983,9 @@ Body:
     Hit: Multi_Hit
     HitCount: -7
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     AfterCastActDelay:
       - Level: 1
         Time: 2500
@@ -18778,6 +19009,9 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Attack
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range:
       - Level: 1
         Size: 5
@@ -19027,6 +19261,9 @@ Body:
     MaxLevel: 1
     Type: Weapon
     TargetType: Self
+    CopyFlags:
+      Skill:
+        Reproduce: true
     DamageFlags:
       Splash: true
     Hit: Single
@@ -19147,6 +19384,9 @@ Body:
     CastTime: 2000
     AfterCastActDelay: 500
     FixedCastTime: 500
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
@@ -19191,6 +19431,9 @@ Body:
     Hit: Multi_Hit
     HitCount: -10
     Element: Holy
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea:
       - Level: 1
         Area: 1
@@ -19618,6 +19861,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Holy
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea: 15
     CastCancel: true
     CastTime: 3000
@@ -19634,6 +19880,9 @@ Body:
     DamageFlags:
       NoDamage: true
       IgnoreDefense: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 11
     Hit: Single
     HitCount: 1
@@ -19736,6 +19985,9 @@ Body:
     CastCancel: true
     CastTime: 2000
     AfterCastActDelay: 1000
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Duration1:
       - Level: 1
         Time: 90000
@@ -19905,6 +20157,9 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea:
       - Level: 1
         Area: 3
@@ -20054,6 +20309,9 @@ Body:
     HitCount: 1
     Element: Weapon
     CastCancel: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastTime: 4000
     AfterCastActDelay: 1000
     FixedCastTime: 500
@@ -20163,6 +20421,9 @@ Body:
     Hit: Single
     HitCount: 1
     SplashArea: 3
+    CopyFlags:
+      Skill:
+        Reproduce: true
     ActiveInstance: 3
     Duration1: 15000
     FixedCastTime: -1
@@ -20528,6 +20789,9 @@ Body:
       TargetTrap: true
       AlterRangeResearchTrap: true
       AllowOnWarg: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 3
     Hit: Single
     HitCount: 1
@@ -20570,6 +20834,9 @@ Body:
     Element: Water
     SplashArea: 2
     ActiveInstance: 2
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Duration1: 15000
     Duration2: 20000
     FixedCastTime: -1
@@ -21601,6 +21868,9 @@ Body:
     TargetType: Attack
     DamageFlags:
       Splash: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 1
     Hit: Single
     HitCount: 1
@@ -21802,6 +22072,9 @@ Body:
     CastTime: 1000
     AfterCastActDelay: 500
     FixedCastTime: -1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Requires:
       SpCost:
         - Level: 1
@@ -22570,6 +22843,9 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Attack
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Flags:
       IncreaseGloomyDayDamage: true
     Range: 1
@@ -22689,6 +22965,9 @@ Body:
     DamageFlags:
       Splash: true
     Hit: Single
+    CopyFlags:
+      Skill:
+        Reproduce: true
     HitCount: 1
     Element:
       - Level: 1
@@ -23009,6 +23288,9 @@ Body:
       Splash: true
     Flags:
       TargetHidden: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Multi_Hit
     HitCount: -5
     Element: Earth
@@ -23213,6 +23495,9 @@ Body:
     Hit: Multi_Hit
     HitCount: -3
     Element: Wind
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea: 2
     AfterCastActDelay: 500
     FixedCastTime: -1
@@ -23239,6 +23524,9 @@ Body:
     Flags:
       TargetTrap: true
     Range: 1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Single
     HitCount: 1
     Element: Earth
@@ -23457,6 +23745,9 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Self
+    CopyFlags:
+      Skill:
+        Reproduce: true
     DamageFlags:
       Splash: true
     Flags:
@@ -23612,6 +23903,9 @@ Body:
     Description: Knuckle Arrow
     MaxLevel: 5
     Type: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     TargetType: Attack
     Range:
       - Level: 1
@@ -23665,6 +23959,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea: 2
     CastTime: 1000
     AfterCastActDelay: 500
@@ -24053,6 +24350,9 @@ Body:
       Splash: true
     Hit: Single
     HitCount: 1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Element: Weapon
     SplashArea:
       - Level: 1
@@ -24114,6 +24414,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea:
       - Level: 1
         Area: 1
@@ -24417,6 +24720,9 @@ Body:
     MaxLevel: 5
     Type: Magic
     TargetType: Attack
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 9
     Hit: Multi_Hit
     HitCount:
@@ -24478,6 +24784,9 @@ Body:
       Splash: true
     Flags:
       IsTrap: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -24581,6 +24890,9 @@ Body:
     Hit: Single
     HitCount: 1
     CastCancel: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastTime:
       - Level: 1
         Time: 1500
@@ -25523,6 +25835,9 @@ Body:
     TargetType: Self
     Flags:
       IgnoreHovering: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Single
     HitCount: 1
     Element: Fire
@@ -25570,6 +25885,9 @@ Body:
     TargetType: Self
     Flags:
       IgnoreHovering: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Hit: Single
     HitCount: 1
     Element: Wind
@@ -25650,6 +25968,9 @@ Body:
     TargetType: Ground
     Flags:
       TargetHidden: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 9
     Hit: Single
     HitCount: -3
@@ -25730,6 +26051,9 @@ Body:
     Range: 9
     Hit: Single
     HitCount: -5
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Element: Water
     CastCancel: true
     CastTime:
@@ -25810,6 +26134,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Poison
+    CopyFlags:
+      Skill:
+        Reproduce: true
     SplashArea:
       - Level: 1
         Area: 1
@@ -25867,6 +26194,9 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -25943,6 +26273,9 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Poison
+    CopyFlags:
+      Skill:
+        Reproduce: true
     CastCancel: true
     CastTime:
       - Level: 1
@@ -26200,6 +26533,9 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Element: Wind
     SplashArea:
       - Level: 1
@@ -26892,6 +27228,9 @@ Body:
     ActiveInstance: 3
     CastCancel: true
     CastTime: 1500
+    CopyFlags:
+      Skill:
+        Reproduce: true
     AfterCastActDelay: 500
     Duration1:
       - Level: 1
@@ -26938,6 +27277,9 @@ Body:
     TargetType: Attack
     DamageFlags:
       NoDamage: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 11
     Hit: Single
     HitCount: 1
@@ -26980,6 +27322,9 @@ Body:
     TargetType: Attack
     DamageFlags:
       Splash: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 11
     Hit: Multi_Hit
     HitCount: 2
@@ -27027,6 +27372,9 @@ Body:
     Flags:
       IgnoreAutoGuard: true
       IgnoreCicada: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 11
     Hit: Single
     HitCount: 1
@@ -27086,6 +27434,9 @@ Body:
       Splash: true
     Flags:
       IgnoreLandProtector: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 11
     Hit: Single
     HitCount: 1
@@ -30820,6 +31171,9 @@ Body:
     Range: 1
     Hit: Multi_Hit
     HitCount: 3
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Element: Weapon
     Duration1: 5000
     Cooldown: 60000
@@ -30844,6 +31198,9 @@ Body:
     TargetType: Attack
     DamageFlags:
       Splash: true
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Range: 7
     Hit: Single
     HitCount: 1
