@@ -36335,7 +36335,7 @@ Body:
     Hit: Single
     HitCount: -5
     Element: Earth
-    SplashArea: 1
+    SplashArea: 3
     Requires:
       SpCost: 80
   - Id: 10000

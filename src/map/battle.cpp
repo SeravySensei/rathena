@@ -4273,13 +4273,15 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += -100 + 40 * skill_lv + sstatus->int_*4;
 			RE_LVL_DMOD(100);
 			if (sc && sc->data[SC_BLAST_OPTION])
-				skillratio += (sd ? sd->status.job_level * 5 : 0);
+				skillratio += 40;
 			break;
 		// Physical Elemantal Spirits Attack Skills
 		case EL_CIRCLE_OF_FIRE:
 		case EL_FIRE_BOMB_ATK:
-		case EL_STONE_RAIN:
 			skillratio += 200;
+			break;
+		case EL_STONE_RAIN:
+			skillratio += 700;
 			break;
 		case EL_FIRE_WAVE_ATK:
 			skillratio += 500;
@@ -6207,19 +6209,19 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					skillratio += -100 + 60 * skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_HEATER_OPTION])
-						skillratio += (sd ? sd->status.job_level / 2 : 0);
+						skillratio += 100;
 					break;
 				case SO_ELECTRICWALK:
 					skillratio += -100 + 60 * skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_BLAST_OPTION])
-						skillratio += (sd ? sd->status.job_level / 2 : 0);
+						skillratio += 100;
 					break;
 				case SO_EARTHGRAVE:
 					skillratio += -100 + 600 + 200 * skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
-						skillratio += (sd ? sd->status.job_level * 5 : 0);
+						skillratio += 200;
 					break;
 				case SO_DIAMONDDUST:
 					skillratio += -100 + 600+ 200* skill_lv;
@@ -6231,14 +6233,11 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					skillratio += 900 + 500 * skill_lv;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
-						skillratio += (sd ? sd->status.job_level * 5 : 0);
+						skillratio += 500;
 					break;
 				case SO_PSYCHIC_WAVE:
 					skillratio += -100 + 50 * skill_lv + 2 * sstatus->int_;
 					RE_LVL_DMOD(100);
-					if (sc && (sc->data[SC_HEATER_OPTION] || sc->data[SC_COOLER_OPTION] ||
-						sc->data[SC_BLAST_OPTION] || sc->data[SC_CURSED_SOIL_OPTION]))
-						skillratio += 20;
 					break;
 				case SO_CLOUD_KILL:
 					skillratio += -100 + 40 * skill_lv;
@@ -6249,7 +6248,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					skillratio += -100 + 40 * skill_lv + sstatus->str * 4;
 					RE_LVL_DMOD(100);
 					if (sc && sc->data[SC_BLAST_OPTION])
-						skillratio += (sd ? sd->status.job_level * 5 : 0);
+						skillratio += 40;
 					break;
 				case GN_DEMONIC_FIRE:
 					if (skill_lv > 20)	{ // Fire expansion Lv.2 
@@ -6435,22 +6434,22 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				case MG_LIGHTNINGBOLT:
 				case MG_THUNDERSTORM:
 					if(sc->data[SC_GUST_OPTION])
-						ad.damage += (6 + sstatus->int_ / 4) + max(sstatus->dex - 10, 0) / 30;
+						ad.damage = (ad.damage *12) /10;
 					break;
 				case MG_FIREBOLT:
 				case MG_FIREWALL:
 					if(sc->data[SC_PYROTECHNIC_OPTION])
-						ad.damage += (6 + sstatus->int_ / 4) + max(sstatus->dex - 10, 0) / 30;
+						ad.damage = (ad.damage * 12) / 10;
 					break;
 				case MG_COLDBOLT:
 				case MG_FROSTDIVER:
 					if(sc->data[SC_AQUAPLAY_OPTION])
-						ad.damage += (6 + sstatus->int_ / 4) + max(sstatus->dex - 10, 0) / 30;
+						ad.damage = (ad.damage * 12) / 10;
 					break;
 				case WZ_EARTHSPIKE:
 				case WZ_HEAVENDRIVE:
 					if(sc->data[SC_PETROLOGY_OPTION])
-						ad.damage += (6 + sstatus->int_ / 4) + max(sstatus->dex - 10, 0) / 30;
+						ad.damage = (ad.damage * 12) / 10;
 					break;
 			}
 		}
