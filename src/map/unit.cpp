@@ -8225,6 +8225,9 @@ TIMER_FUNC(unit_autopilot_timer)
 					if (pc_checkskill(sd, NC_INFRAREDSCAN) > 0) if (pc_ismadogear(sd)) unit_skilluse_ifable(&sd->bl, SELF, NC_INFRAREDSCAN, pc_checkskill(sd, NC_INFRAREDSCAN));
 					if (pc_checkskill(sd, AL_RUWACH) > 0) unit_skilluse_ifable(&sd->bl, SELF, AL_RUWACH, pc_checkskill(sd, AL_RUWACH));
 					if (pc_checkskill(sd, MG_SIGHT) > 0) unit_skilluse_ifable(&sd->bl, SELF, MG_SIGHT, pc_checkskill(sd, MG_SIGHT));
+					if (pc_checkskill(sd, SC_BODYPAINT) > 0)
+						if (pc_inventory_count(sd, 6121) > 0)
+							if (pc_inventory_count(sd, 6120) > 0) unit_skilluse_ifable(&sd->bl, SELF, SC_BODYPAINT, pc_checkskill(sd, SC_BODYPAINT));
 				}
 			}
 		}
@@ -9074,7 +9077,18 @@ TIMER_FUNC(unit_autopilot_timer)
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, ST_FULLSTRIP, pc_checkskill(sd, ST_FULLSTRIP));
 						return 0;
 					}
-
+		// Feint Bomb
+		if (canskill(sd)) if ((pc_checkskill(sd, SC_FEINTBOMB) > 0))
+			if (sd->state.autopilotmode != 3)
+				if (sd->battle_status.dex >= 30) // requires dex to deal good damage
+				if (pc_inventory_count(sd, 6122) > 0)
+				if (pc_inventory_count(sd, 6123) > 0)
+				{
+			// At least 3 enemies in range (or 2 if weak to element)
+			if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SC_FEINTBOMB)) >= 6)
+				unit_skilluse_ifable(&sd->bl, SELF, SC_FEINTBOMB, pc_checkskill(sd, SC_FEINTBOMB));
+		}
+		
 		// Rogue - use while hiding type skills
 		// Don't even think about it without maxed Tunnel Drive or if in tanking mode
 		if (pc_checkskill(sd, RG_TUNNELDRIVE) >= 5) if (foundtargetID2 > -1)
@@ -9400,6 +9414,18 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 				}
 
+			// Triangle Shot
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, SC_TRIANGLESHOT) > 0)) if (sd->state.autopilotmode != 3)
+				if (sd->battle_status.str >= 50) // need AGI to use this!
+					if (rangeddist <= 9 + pc_checkskill(sd, AC_VULTURE)) {
+					if (sd->status.weapon == W_BOW)
+						if (checksprate(sd, targetRAmd, 10)
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							arrowchange(sd, targetRAmd);
+							if (elemallowed(targetRAmd, arrowelement))
+								unit_skilluse_ifable(&sd->bl, foundtargetRA, SC_TRIANGLESHOT, pc_checkskill(sd, SC_TRIANGLESHOT));
+						}
+				}
 			// Double Strafe
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, AC_DOUBLE) > 0)) if (sd->state.autopilotmode != 3)
 			if (rangeddist<= 9 + pc_checkskill(sd, AC_VULTURE)) {
@@ -10090,6 +10116,30 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 						}
 			}
 
+			// Deadly Infection
+			if (canskill(sd))
+				if (pc_checkskill(sd, SC_DEADLYINFECT) > 0) {
+					if (
+						(sd->sc.data[SC_CURSE]) ||
+						(sd->sc.data[SC_SILENCE]) ||
+						(sd->sc.data[SC_CONFUSION]) ||
+						(sd->sc.data[SC_BLIND]) ||
+						(sd->sc.data[SC_HALLUCINATION]) ||
+						(sd->sc.data[SC_DECREASEAGI]) ||
+						(sd->sc.data[SC_STRIPWEAPON]) || // *** Note, if you haven't made strip skills spreadable then remove these lines
+						(sd->sc.data[SC_STRIPSHIELD]) ||
+						(sd->sc.data[SC_STRIPARMOR]) ||
+						(sd->sc.data[SC_STRIPHELM]) ||
+						(sd->sc.data[SC__STRIPACCESSORY]) ||
+						(sd->sc.data[SC_FEAR]) ||
+						(sd->sc.data[SC_FREEZING]) ||
+						(sd->sc.data[SC_POISON]) ||
+						(sd->sc.data[SC_BLEEDING]) ||
+						(sd->sc.data[SC_BURNING])
+						) {
+						unit_skilluse_ifable(&sd->bl, SELF, SC_DEADLYINFECT, pc_checkskill(sd, SC_DEADLYINFECT));
+					}
+				}
 
 			// Hammerfall
 			// If 4 or more things are attacking us and the nearest is in range and can be stunned
