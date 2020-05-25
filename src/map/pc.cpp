@@ -5350,7 +5350,6 @@ bool pc_isUseitem(struct map_session_data *sd,int n)
 		(sd->sc.data[SC_GRAVITATION] && sd->sc.data[SC_GRAVITATION]->val3 == BCT_SELF) ||
 		sd->sc.data[SC_TRICKDEAD] ||
 		sd->sc.data[SC_HIDING] ||
-		sd->sc.data[SC__SHADOWFORM] ||
 		sd->sc.data[SC__INVISIBILITY] ||
 		sd->sc.data[SC__MANHOLE] ||
 		sd->sc.data[SC_DEEPSLEEP] ||
@@ -9623,8 +9622,7 @@ bool pc_can_attack( struct map_session_data *sd, int target_id ) {
 	if (sd->state.block_action & PCBLOCK_ATTACK)
 		return false;
 
-	if( sd->sc.data[SC__SHADOWFORM] ||
-		sd->sc.data[SC_CURSEDCIRCLE_ATKER] ||
+	if( sd->sc.data[SC_CURSEDCIRCLE_ATKER] ||
 		sd->sc.data[SC_CURSEDCIRCLE_TARGET] ||
 		sd->sc.data[SC_CRYSTALIZE] ||
 		sd->sc.data[SC_ALL_RIDING] || // The client doesn't let you, this is to make cheat-safe

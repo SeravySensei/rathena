@@ -4059,12 +4059,12 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case SC_TRIANGLESHOT:
-			skillratio += 200 + (skill_lv - 1) * status_get_agi(src) / 2;
-			RE_LVL_DMOD(120);
+			skillratio += skill_lv * 40 + status_get_agi(src) * 2;
+			RE_LVL_DMOD(100);
 			break;
 		case SC_FEINTBOMB:
-			skillratio += -100 + (skill_lv + 1) * status_get_dex(src) / 2 * ((sd) ? sd->status.job_level / 10 : 1);
-			RE_LVL_DMOD(120);
+			skillratio += 400 + 30* skill_lv + status_get_dex(src) * 2;
+			RE_LVL_DMOD(100);
 			break;
 		case LG_CANNONSPEAR:
 			skillratio += -100 + skill_lv * (50 + status_get_str(src));

@@ -1604,7 +1604,6 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_DEATHBOUND]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC_OBLIVIONCURSE]		|= SCS_NOCAST;
 	StatusChangeStateTable[SC_WHITEIMPRISON]		|= SCS_NOCAST;
-	StatusChangeStateTable[SC__SHADOWFORM]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC__INVISIBILITY]		|= SCS_NOCAST;
 	StatusChangeStateTable[SC_CRYSTALIZE]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC__IGNORANCE]			|= SCS_NOCAST;
@@ -11004,7 +11003,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			break;
 		case SC__STRIPACCESSORY:
 			if (!sd)
-				val2 = 20;
+				val2 = 25;
 			break;
 		case SC__INVISIBILITY:
 			val2 = 50 - 10 * val1; // ASPD
@@ -14803,11 +14802,11 @@ int status_change_spread(struct block_list *src, struct block_list *bl, bool typ
 			//case SC_WINKCHARM:
 			//case SC_STOP:
 			case SC_ORCISH:
-			//case SC_STRIPWEAPON: // Omg I got infected and had the urge to strip myself physically.
-			//case SC_STRIPSHIELD: // No this is stupid and shouldnt be spreadable at all.
-			//case SC_STRIPARMOR: // Disabled until I can confirm if it does or not. [Rytech]
-			//case SC_STRIPHELM:
-			//case SC__STRIPACCESSORY:
+			case SC_STRIPWEAPON: // Omg I got infected and had the urge to strip myself physically.
+			case SC_STRIPSHIELD: // No this is stupid and shouldnt be spreadable at all.
+			case SC_STRIPARMOR: // Disabled until I can confirm if it does or not. [Rytech]
+			case SC_STRIPHELM:
+			case SC__STRIPACCESSORY:
 			//case SC_BITE:
 			case SC_FEAR:
 			case SC_FREEZING:

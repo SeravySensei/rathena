@@ -2738,7 +2738,7 @@ bool skill_strip_equip(struct block_list *src, struct block_list *target, uint16
 			break;
 		}
 		case SC_STRIPACCESSARY:
-			rate = 12 + 2 * skill_lv;
+			rate = 10 + 4 * skill_lv;
 			break;
 		default:
 			return false;
@@ -15422,7 +15422,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		return false;
 	}
 
-	if( sc && ( sc->data[SC__SHADOWFORM] || sc->data[SC__IGNORANCE] ) )
+	if( sc && ( sc->data[SC__IGNORANCE] ) )
 		return false;
 
 	//Checks if disabling skill - in which case no SP requirements are necessary
@@ -18447,12 +18447,12 @@ bool skill_check_shadowform(struct block_list *bl, int64 damage, int hit)
 			return false;
 		}
 
-		status_damage(bl, src, damage, 0, clif_damage(src, src, gettick(), 500, 500, damage, hit, (hit > 1 ? DMG_MULTI_HIT : DMG_NORMAL), 0, false), 0, SC__SHADOWFORM);
-		if( sc && sc->data[SC__SHADOWFORM] && (--sc->data[SC__SHADOWFORM]->val3) <= 0 ) {
+		status_damage(bl, src, damage *85 /100, 0, clif_damage(src, src, gettick(), 500, 500, damage*85/100, hit, (hit > 1 ? DMG_MULTI_HIT : DMG_NORMAL), 0, false), 0, SC__SHADOWFORM);
+/*		if( sc && sc->data[SC__SHADOWFORM] && (--sc->data[SC__SHADOWFORM]->val3) <= 0 ) {
 			status_change_end(bl, SC__SHADOWFORM, INVALID_TIMER);
 			if( src->type == BL_PC )
 				((TBL_PC*)src)->shadowform_id = 0;
-		}
+		}*/
 		return true;
 	}
 	return false;

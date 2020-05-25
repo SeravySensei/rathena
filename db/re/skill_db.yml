@@ -22003,7 +22003,7 @@ Body:
     Name: SC_SHADOWFORM
     Description: Shadow Form
     MaxLevel: 5
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Flags:
@@ -22069,8 +22069,8 @@ Body:
     Element: Weapon
     Knockback: 3
     CastCancel: true
-    CastTime: 1000
-    AfterCastActDelay: 500
+    CastTime: 200
+    AfterCastActDelay: 0
     FixedCastTime: -1
     CopyFlags:
       Skill:
@@ -22695,7 +22695,7 @@ Body:
   - Id: 2304
     Name: SC_FEINTBOMB
     Description: Feint Bomb
-    MaxLevel: 3
+    MaxLevel: 10
     Type: Weapon
     TargetType: Self
     Flags:
@@ -22705,15 +22705,15 @@ Body:
     Element: Weapon
     Knockback:
       - Level: 1
-        Amount: 1
-      - Level: 2
-        Amount: 2
-      - Level: 3
         Amount: 3
-      - Level: 4
+      - Level: 2
         Amount: 4
-      - Level: 5
+      - Level: 3
         Amount: 5
+      - Level: 4
+        Amount: 6
+      - Level: 5
+        Amount: 6
       - Level: 6
         Amount: 6
       - Level: 7
@@ -22723,7 +22723,7 @@ Body:
       - Level: 9
         Amount: 9
       - Level: 10
-        Amount: 10
+        Amount: 9
     CopyFlags:
       Skill:
         Reproduce: true
@@ -22736,9 +22736,23 @@ Body:
         - Level: 1
           Amount: 24
         - Level: 2
-          Amount: 28
+          Amount: 25
         - Level: 3
+          Amount: 26
+        - Level: 4
+          Amount: 27
+        - Level: 5
+          Amount: 28
+        - Level: 6
+          Amount: 29
+        - Level: 7
+          Amount: 30
+        - Level: 8
+          Amount: 31
+        - Level: 9
           Amount: 32
+        - Level: 10
+          Amount: 33
       ItemCost:
         - Item: Paint_Brush
           Amount: 0
