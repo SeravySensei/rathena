@@ -22210,7 +22210,7 @@ Body:
     Name: SC_ENERVATION
     Description: Masquerade - Enervation
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22218,15 +22218,13 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
-    Cooldown: 2000
+        Time: 420000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -22245,7 +22243,7 @@ Body:
     Name: SC_GROOMY
     Description: Masquerade - Gloomy
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22253,16 +22251,14 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
+        Time: 420000
     Cooldown: 2000
-    FixedCastTime: -1
     Requires:
       SpCost:
         - Level: 1
@@ -22280,7 +22276,7 @@ Body:
     Name: SC_IGNORANCE
     Description: Masquerade - Ignorance
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22288,15 +22284,13 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
-    Cooldown: 2000
+        Time: 420000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -22315,7 +22309,7 @@ Body:
     Name: SC_LAZINESS
     Description: Masquerade - Laziness
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22323,15 +22317,13 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
-    Cooldown: 2000
+        Time: 420000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -22350,7 +22342,7 @@ Body:
     Name: SC_UNLUCKY
     Description: Masquerade - Unlucky
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22358,15 +22350,13 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
-    Cooldown: 2000
+        Time: 420000
     FixedCastTime: -1
     Requires:
       SpCost:
@@ -22385,7 +22375,7 @@ Body:
     Name: SC_WEAKNESS
     Description: Masquerade - Weakness
     MaxLevel: 3
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 3
@@ -22393,15 +22383,13 @@ Body:
     HitCount: 1
     CastCancel: true
     CastTime: 2000
-    AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 10000
+        Time: 300000
       - Level: 2
-        Time: 15000
+        Time: 360000
       - Level: 3
-        Time: 20000
-    Cooldown: 2000
+        Time: 420000
     FixedCastTime: -1
     Requires:
       SpCost:

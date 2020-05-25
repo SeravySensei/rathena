@@ -6975,6 +6975,12 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SR_LIGHTNINGWALK:
 	case GN_CARTBOOST:
 	case KO_MEIKYOUSISUI:
+	case SC_ENERVATION:
+	case SC_GROOMY:
+	case SC_LAZINESS:
+	case SC_UNLUCKY:
+	case SC_WEAKNESS:
+	case SC_IGNORANCE:
 	case ALL_ODINS_POWER:
 	case ALL_FULL_THROTTLE:
 	case RA_UNLIMIT:
@@ -10261,48 +10267,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			map_foreachinallrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR,
 				src, skill_id, skill_lv, tick, flag|BCT_ENEMY|1, skill_castend_nodamage_id);
 		}
-		break;
-
-	case SC_ENERVATION:
-	case SC_GROOMY:
-	case SC_LAZINESS:
-	case SC_UNLUCKY:
-	case SC_WEAKNESS:
-		if( !(tsc && tsc->data[type]) ) {
-			int rate;
-
-			if (status_get_class_(bl) == CLASS_BOSS)
-				break;
-			rate = status_get_lv(src) / 10 + rnd_value(sstatus->dex / 12, sstatus->dex / 4) + ( sd ? sd->status.job_level : 50 ) + 10 * skill_lv
-					   - (status_get_lv(bl) / 10 + rnd_value(tstatus->agi / 6, tstatus->agi / 3) + tstatus->luk / 10 + ( dstsd ? (dstsd->max_weight / 10 - dstsd->weight / 10 ) / 100 : 0));
-			rate = cap_value(rate, skill_lv + sstatus->dex / 20, 100);
-			clif_skill_nodamage(src,bl,skill_id,0,sc_start(src,bl,type,rate,skill_lv,skill_get_time(skill_id,skill_lv)));
-		} else if( sd )
-			 clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
-		break;
-
-	case SC_IGNORANCE:
-		if( !(tsc && tsc->data[type]) ) {
-			int rate;
-
-			if (status_get_class_(bl) == CLASS_BOSS)
-				break;
-			rate = status_get_lv(src) / 10 + rnd_value(sstatus->dex / 12, sstatus->dex / 4) + ( sd ? sd->status.job_level : 50 ) + 10 * skill_lv
-					   - (status_get_lv(bl) / 10 + rnd_value(tstatus->agi / 6, tstatus->agi / 3) + tstatus->luk / 10 + ( dstsd ? (dstsd->max_weight / 10 - dstsd->weight / 10 ) / 100 : 0));
-			rate = cap_value(rate, skill_lv + sstatus->dex / 20, 100);
-			if (clif_skill_nodamage(src,bl,skill_id,0,sc_start(src,bl,type,rate,skill_lv,skill_get_time(skill_id,skill_lv)))) {
-				int sp = 100 * skill_lv;
-
-				if( dstmd )
-					sp = dstmd->level;
-				if( !dstmd )
-					status_zap(bl, 0, sp);
-
-				status_heal(src, 0, sp / 2, 3);
-			} else if( sd )
-				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
-		} else if( sd )
-			clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 		break;
 
 	case LG_TRAMPLE:
@@ -15422,9 +15386,6 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		return false;
 	}
 
-	if( sc && ( sc->data[SC__IGNORANCE] ) )
-		return false;
-
 	//Checks if disabling skill - in which case no SP requirements are necessary
 	if( sc && skill_disable_check(sc,skill_id))
 		return true;
@@ -15887,7 +15848,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 			}
 			break;
 		case RA_WUGMASTERY:
-			if( (pc_isfalcon(sd) && !battle_config.warg_can_falcon) || pc_isridingwug(sd) || sd->sc.data[SC__GROOMY]) {
+			if( (pc_isfalcon(sd) && !battle_config.warg_can_falcon) || pc_isridingwug(sd) ) {
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 				return false;
 			}
@@ -16749,8 +16710,6 @@ struct s_skill_condition skill_get_requirement(struct map_session_data* sd, uint
 	req.sp = cap_value(req.sp * sp_skill_rate_bonus / 100, 0, SHRT_MAX);
 
 	if( sc ) {
-		if( sc->data[SC__LAZINESS] )
-			req.sp += req.sp + sc->data[SC__LAZINESS]->val1 * 10;
 		if (sc->data[SC_UNLIMITEDHUMMINGVOICE])
 			req.sp += req.sp * sc->data[SC_UNLIMITEDHUMMINGVOICE]->val3 / 100;
 		if( sc->data[SC_RECOGNIZEDSPELL] )
@@ -16766,13 +16725,6 @@ struct s_skill_condition skill_get_requirement(struct map_session_data* sd, uint
 	}
 
 	req.zeny = skill->require.zeny[skill_lv-1];
-
-	if( sc && sc->data[SC__UNLUCKY] ) {
-		if(sc->data[SC__UNLUCKY]->val1 < 3)
-			req.zeny += sc->data[SC__UNLUCKY]->val1 * 250;
-		else
-			req.zeny += 1000;
-	}
 
 	req.spiritball = skill->require.spiritball[skill_lv-1];
 	req.state = skill->require.state;
@@ -17210,8 +17162,6 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 		// Multiplicative Variable CastTime values
 		if (sc->data[SC_SLOWCAST])
 			VARCAST_REDUCTION(-sc->data[SC_SLOWCAST]->val2);
-		if (sc->data[SC__LAZINESS])
-			VARCAST_REDUCTION(-sc->data[SC__LAZINESS]->val2);
 		if (sc->data[SC_MEMORIZE]) {
 			reduce_cast_rate += 50;
 			if ((--sc->data[SC_MEMORIZE]->val2) <= 0)
