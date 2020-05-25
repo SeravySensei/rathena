@@ -4681,6 +4681,78 @@ int targetbless(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetenervation(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.agi <= 30) 
+		if (sd->base_status.dex >= 70)
+			if (!sd->sc.data[SC__ENERVATION]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetlaziness(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.dex <= 30)
+		if (sd->base_status.int_ >= 70)
+			if (!sd->sc.data[SC__LAZINESS]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetgroomy(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.vit <= 30)
+		if (sd->base_status.int_ >= 70)
+			if (!sd->sc.data[SC__GROOMY]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetweakness(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.str <= 30)
+		if (sd->base_status.agi >= 70)
+			if (!sd->sc.data[SC__WEAKNESS]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetunlucky(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.luk <= 30)
+		if (sd->base_status.agi >= 70)
+			if (!sd->sc.data[SC__UNLUCKY]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetignorance(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (sd->base_status.int_ <= 30)
+		if (sd->base_status.str >= 70)
+			if (!sd->sc.data[SC__IGNORANCE]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
 int targetkaahi(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd2;
@@ -7526,6 +7598,61 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, foundtargetID, AL_BLESSING, pc_checkskill(sd, AL_BLESSING));
 			}
 		}
+		/// Masquarades
+		/// **** Note, I changed these skills to debuff one stat in exchange for raising another.
+		// Remove these if you use the default skills.
+		if (canskill(sd)) if (pc_inventory_count(sd, 6121) > 0)
+			if (pc_inventory_count(sd, 6120) > 0) {
+
+			if (pc_checkskill(sd, SC_ENERVATION) >= 3) {
+			resettargets();
+			map_foreachinrange(targetenervation, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, SC_ENERVATION, pc_checkskill(sd, SC_ENERVATION));
+			}
+		}
+
+			if (pc_checkskill(sd, SC_GROOMY) >= 3) {
+				resettargets();
+				map_foreachinrange(targetgroomy, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SC_GROOMY, pc_checkskill(sd, SC_GROOMY));
+				}
+			}
+
+			if (pc_checkskill(sd, SC_LAZINESS) >= 3) {
+				resettargets();
+				map_foreachinrange(targetlaziness, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SC_LAZINESS, pc_checkskill(sd, SC_LAZINESS));
+				}
+			}
+
+			if (pc_checkskill(sd, SC_WEAKNESS) >= 3) {
+				resettargets();
+				map_foreachinrange(targetweakness, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SC_WEAKNESS, pc_checkskill(sd, SC_WEAKNESS));
+				}
+			}
+
+			if (pc_checkskill(sd, SC_UNLUCKY) >= 3) {
+				resettargets();
+				map_foreachinrange(targetunlucky, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SC_UNLUCKY, pc_checkskill(sd, SC_UNLUCKY));
+				}
+			}
+
+			if (pc_checkskill(sd, SC_IGNORANCE) >= 3) {
+				resettargets();
+				map_foreachinrange(targetignorance, &sd->bl, 9, BL_PC, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SC_IGNORANCE, pc_checkskill(sd, SC_IGNORANCE));
+				}
+			}
+
+			}
 		/// Berserk Pitcher
 		if (canskill(sd)) if (pc_checkskill(sd, AM_BERSERKPITCHER) > 0) if (pc_inventory_count(sd, 657)>=2) {
 			resettargets();
