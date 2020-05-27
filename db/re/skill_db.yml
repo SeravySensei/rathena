@@ -8792,7 +8792,7 @@ Body:
     Unit:
       Id: Dissonance
       Layout: 5
-      Interval: 3000
+      Interval: 1500
       Target: Enemy
       Flag:
         Song: true
@@ -9083,7 +9083,7 @@ Body:
     Unit:
       Id: Uglydance
       Layout: 5
-      Interval: 3000
+      Interval: 1500
       Target: Enemy
       Flag:
         Song: true
@@ -19845,10 +19845,6 @@ Body:
           Amount: 70
         - Level: 4
           Amount: 80
-  - Id: 2049
-    Name: AB_EUCHARISTICA
-    Description: Eucharistica
-    MaxLevel: 0
   - Id: 2050
     Name: AB_RENOVATIO
     Description: Renovatio

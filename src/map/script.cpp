@@ -21105,8 +21105,11 @@ BUILDIN_FUNC(setmounting) {
 		// SC_HIDING, SC__INVISIBILITY, SC__SHADOWFORM, SC_SUHIDE already disable item usage
 		script_pushint(st, 0); // Silent failure
 	} else {
-		if( sd->sc.data[SC_ALL_RIDING] )
+		if (sd->sc.data[SC_ALL_RIDING]) {
+			sd->ud.canact_tick = gettick() + 10000;
+			clif_status_change(&sd->bl, EFST_POSTDELAY, 1, 10000, 0, 0, 0);
 			status_change_end(&sd->bl, SC_ALL_RIDING, INVALID_TIMER); //release mount
+		}
 		else
 			sc_start(NULL, &sd->bl, SC_ALL_RIDING, 10000, 1, INFINITE_TICK); //mount
 		script_pushint(st,1);//in both cases, return 1.

@@ -1455,6 +1455,11 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 		// Renewal: steel body reduces all incoming damage to 1/10 [helvetica]
 		if( sc->data[SC_STEELBODY] )
 			damage = damage > 10 ? damage / 10 : 1;
+		if (sc->data[SC_BARRIER])
+			damage = 1;
+		if (sc->data[SC_KEEPING])
+			if (flag&BF_WEAPON)
+				damage = damage > 10 ? damage / 10 : 1;
 #endif
 
 		//Finally added to remove the status of immobile when Aimed Bolt is used. [Jobbie]
@@ -6624,9 +6629,9 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			break;
 		case DC_UGLYDANCE:
 		case BA_DISSONANCE:
-			md.damage = 30 + skill_lv * 10;
+			md.damage = 50 + skill_lv * 20 + sd->battle_status.rhw.atk / 4;
 			if (sd)
-				md.damage += 3 * pc_checkskill(sd,BA_MUSICALLESSON);
+				md.damage += 3 * (pc_checkskill(sd,BA_MUSICALLESSON) + pc_checkskill(sd, DC_DANCINGLESSON));
 			break;
 		case NPC_SELFDESTRUCTION:
 			md.damage = sstatus->hp;

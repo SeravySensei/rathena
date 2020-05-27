@@ -691,6 +691,20 @@ gef_fild10,73,340,5	script	Kafra Employee::kaf_gef_fild10	116,{
 	callfunc "F_KafEnd",0,1,"at the Orc Dungeon";
 }
 
+// - Glast Heim
+glast_01,364,307,5	script	Kafra Employee::kaf_glast01	116,{
+	cutin "kafra_06",2;
+	mes "[Kafra Employee]";
+	mes "Welcome to the";
+	mes "Kafra Corporation.";
+	mes "Kafra's Employees are";
+	mes "always ready to serve you.";
+	mes "How can I help you today?";
+	callfunc "F_Kafra",5,6,1,130,0;
+	savepoint "glast_01",368,304,1,1;
+	callfunc "F_KafEnd",0,1,"at Glast Heim";
+}
+
 // - Treasure Island
 alb2trea,59,69,5	script	Kafra Employee::kaf_alb2trea	117,{
 	cutin "kafra_01",2;

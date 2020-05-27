@@ -6875,11 +6875,11 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 
 	if(sc->data[SC_BERSERK])
 		return 0;
-	if(sc->data[SC_BARRIER])
-		return 100;
-	if(sc->data[SC_KEEPING])
-		return 90;
 #ifndef RENEWAL /// Steel Body does not provide 90 DEF in [RENEWAL]
+	if (sc->data[SC_BARRIER])
+		return 100;
+	if (sc->data[SC_KEEPING])
+		return 90;
 	if(sc->data[SC_STEELBODY])
 		return 90;
 #endif
@@ -7053,10 +7053,10 @@ static defType status_calc_mdef(struct block_list *bl, struct status_change *sc,
 
 	if(sc->data[SC_BERSERK])
 		return 0;
-	if(sc->data[SC_BARRIER])
-		return 100;
 
 #ifndef RENEWAL /// Steel Body does not provide 90 MDEF in [RENEWAL]
+	if (sc->data[SC_BARRIER])
+		return 100;
 	if(sc->data[SC_STEELBODY])
 		return 90;
 #endif
@@ -7186,7 +7186,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			else if( sc->data[SC_ALL_RIDING] )
 				val = battle_config.rental_mount_speed_boost;
 		}
-		speed_rate -= val;
+		speed_rate = (speed_rate * 100) / (100.0 + val);
 
 		// GetMoveSlowValue()
 		if( sd && sc->data[SC_HIDING] && pc_checkskill(sd,RG_TUNNELDRIVE) > 0 )
@@ -7311,13 +7311,13 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 		if( sd && sd->bonus.speed_rate + sd->bonus.speed_add_rate < 0 ) // Permanent item-based speedup
 			val += -(sd->bonus.speed_rate + sd->bonus.speed_add_rate);
 
-		speed_rate -= val;
+		speed_rate = (speed_rate *100) / (100.0 + val);
 
 		if (sc->data[SC_BEYONDOFWARCRY])
 			speed_rate = speed_rate*sc->data[SC_BEYONDOFWARCRY]->val3 /100;
 
-		if( speed_rate < 40 )
-			speed_rate = 40;
+		if( speed_rate < 30 )
+			speed_rate = 30;
 	}
 
 	// GetSpeed()
