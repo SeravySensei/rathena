@@ -172,7 +172,6 @@ IG_Pet_Egg_Scroll1,12209,200,2,1,0,0,1	// 2x Insurance
 IG_Pet_Egg_Scroll1,7620,80,1,1,0,0,1	// 1x Enriched_Oridecon
 IG_Pet_Egg_Scroll1,12211,300,2,1,0,0,1	// 2x Kafra_Card
 IG_Pet_Egg_Scroll1,12220,300,2,1,0,0,1	// 2x Adrenaline_Scroll
-IG_Pet_Egg_Scroll1,12213,10,1,1,0,0,1	// 1x Neuralizer
 IG_Pet_Egg_Scroll1,5227,10,1,1,0,0,1	// 1x Red_Deviruchi_Cap
 
 IG_Pet_Egg_Scroll2,12208,90,2,1,0,0,1	// 2x Battle_Manual
@@ -194,7 +193,6 @@ IG_Pet_Egg_Scroll3,12209,200,2,1,0,0,1	// 2x Insurance
 IG_Pet_Egg_Scroll3,7620,80,1,1,0,0,1	// 1x Enriched_Oridecon
 IG_Pet_Egg_Scroll3,12211,300,2,1,0,0,1	// 2x Kafra_Card
 IG_Pet_Egg_Scroll3,12220,300,2,1,0,0,1	// 2x Adrenaline_Scroll
-IG_Pet_Egg_Scroll3,12213,10,1,1,0,0,1	// 1x Neuralizer
 IG_Pet_Egg_Scroll3,5232,100,1,1,0,0,1	// 1x Pink_Drooping_Kitty
 
 IG_Pet_Egg_Scroll4,12208,90,2,1,0,0,1	// 2x Battle_Manual
@@ -309,7 +307,6 @@ IG_Pet_Egg_Scroll8,12208,80,2,1,0,0,1	// 2x Battle_Manual
 IG_Pet_Egg_Scroll8,12219,60,5,1,0,0,1	// 5x Wind_Walk_10_Scroll
 IG_Pet_Egg_Scroll8,7621,120,5,1,0,0,1	// 5x Token_Of_Siegfried
 IG_Pet_Egg_Scroll8,12212,244,10,1,0,0,1	// 10x Giant_Fly_Wing
-IG_Pet_Egg_Scroll8,12213,1,1,1,0,0,1	// 1x Neuralizer
 IG_Pet_Egg_Scroll8,12210,150,2,1,0,0,1	// 2x Bubble_Gum
 IG_Pet_Egg_Scroll8,607,200,10,1,0,0,1	// 10x Yggdrasilberry
 IG_Pet_Egg_Scroll8,12090,100,5,1,0,0,1	// 5x Agi_Dish10
@@ -323,7 +320,6 @@ IG_Pet_Egg_Scroll9,12209,50,2,1,0,0,1	// 2x Insurance
 IG_Pet_Egg_Scroll9,7620,160,2,1,0,0,1	// 2x Enriched_Oridecon
 IG_Pet_Egg_Scroll9,12211,80,10,1,0,0,1	// 10x Kafra_Card
 IG_Pet_Egg_Scroll9,12220,200,5,1,0,0,1	// 5x Adrenaline_Scroll
-IG_Pet_Egg_Scroll9,12213,1,1,1,0,0,1	// 1x Neuralizer
 IG_Pet_Egg_Scroll9,617,60,3,1,0,0,1	// 3x Old_Violet_Box
 IG_Pet_Egg_Scroll9,12075,208,5,1,0,0,1	// 5x Str_Dish10
 IG_Pet_Egg_Scroll9,4169,5,1,1,0,0,1	// 1x Dark_Illusion_Card
@@ -894,7 +890,6 @@ IG_Lucky_Scroll08,12211,220,5,0,0,0,1	// 5x Kafra_Card
 IG_Lucky_Scroll08,12208,210,5,0,0,0,1	// 5x Battle_Manual
 IG_Lucky_Scroll08,12210,210,5,0,0,0,1	// 5x Bubble_Gum
 IG_Lucky_Scroll08,12922,100,5,0,0,0,1	// 5x Token_Of_Siegfried_Box
-IG_Lucky_Scroll08,12213,2,1,0,0,0,1	// 1x Neuralizer
 IG_Lucky_Scroll08,5226,1,1,0,0,0,1	// 1x Mini_Propeller_
 IG_Lucky_Scroll08,12999,5,1,0,0,0,1	// 1x Branch_Of_Dead_Tree_Box
 IG_Lucky_Scroll08,4168,1,1,0,0,0,1	// 1x Dark_Lord_Card
@@ -1049,7 +1044,6 @@ IG_Surprise_Scroll,604,130,6,1,0,0,1	// 6x Branch_Of_Dead_Tree
 IG_Surprise_Scroll,12709,80,10,1,0,0,1	// 10x Guyak_Candy
 IG_Surprise_Scroll,12710,80,10,1,0,0,1	// 10x Guyak_Pudding
 IG_Surprise_Scroll,13904,1,1,1,0,0,1	// 1x Bell_Ribbon_Box
-IG_Surprise_Scroll,12213,1,1,1,0,0,1	// 1x Neuralizer
 
 IG_July7_Scroll,14001,0,1,0,0,0,1	// 1x Basic_Siege_Supply_Box
 IG_July7_Scroll,12405,1500,10,1,0,0,1	// 10x Underripe_Yggseed
@@ -1307,7 +1301,6 @@ IG_RWC2010_SuitcaseA,604,130,6,1,0,0,1	// 6x Branch_Of_Dead_Tree
 IG_RWC2010_SuitcaseA,12709,80,10,1,0,0,1	// 10x Guyak_Candy
 IG_RWC2010_SuitcaseA,12710,80,10,1,0,0,1	// 10x Guyak_Pudding
 IG_RWC2010_SuitcaseA,18509,1,1,1,0,0,1	// 1x RWC2010_Indonesia
-IG_RWC2010_SuitcaseA,12213,1,1,1,0,0,1	// 1x Neuralizer
 
 IG_RWC2010_SuitcaseB,14508,201,7,1,0,0,1	// 7x Zeny_Scroll
 IG_RWC2010_SuitcaseB,13747,112,1,1,0,0,1	// 1x S_Def_Potion_Box30
@@ -2452,7 +2445,6 @@ IG_Tw_Red_Scroll,12406,500,10,1,0,0,0	// 10x Psychic_ArmorS
 IG_Tw_Red_Scroll,13286,824,5,1,0,0,0	// 5x M_Brisket_To_Throw
 IG_Tw_Red_Scroll,13990,400,1,1,0,0,0	// 1x Job_Manual50_Box
 IG_Tw_Red_Scroll,18684,100,1,1,1,0,0	// 1x Showy_High_Cap
-IG_Tw_Red_Scroll,12213,10,1,1,1,0,0	// 1x Neuralizer
 IG_Tw_Red_Scroll,4500,10,1,1,1,0,0	// 1x Sealed_Orc_Load_Card
 IG_Tw_Red_Scroll,4131,1,1,1,1,0,0	// 1x Moonlight_Flower_Card
 IG_Tw_Red_Scroll,1281,3,1,1,1,0,0	// 1x Krieger_Katar1
@@ -4574,7 +4566,6 @@ IG_Sapphire_Egg,12710,500,5,1,0,0,0	// 5x Guyak_Pudding
 IG_Sapphire_Egg,12259,200,1,1,0,0,0	// 1x Miracle_Medicine
 IG_Sapphire_Egg,2133,150,1,1,0,0,0	// 1x Tournament_Shield
 IG_Sapphire_Egg,12246,99,1,1,0,0,0	// 1x Magic_Card_Album
-IG_Sapphire_Egg,12213,50,1,1,0,0,0	// 1x Neuralizer
 IG_Sapphire_Egg,5462,50,1,1,0,0,0	// 1x Spiked_Scarf
 IG_Sapphire_Egg,6229,50,1,1,1,0,0	// 1x Guarantee_Weapon_8Up
 IG_Sapphire_Egg,6233,50,1,1,1,0,0	// 1x Guarantee_Armor_8Up
@@ -4620,7 +4611,6 @@ IG_Idn_Wisdom_Egg,12246,99,1,1,0,0,1	// 1x Magic_Card_Album
 IG_Idn_Wisdom_Egg,6230,50,1,1,0,0,1	// 1x Guarantee_Weapon_7Up
 IG_Idn_Wisdom_Egg,6234,50,1,1,0,0,1	// 1x Guarantee_Armor_7Up
 IG_Idn_Wisdom_Egg,5361,50,1,1,0,0,1	// 1x Gang_Scarf
-IG_Idn_Wisdom_Egg,12213,50,1,1,0,0,1	// 1x Neuralizer
 IG_Idn_Wisdom_Egg,6229,25,1,1,0,0,1	// 1x Guarantee_Weapon_8Up
 IG_Idn_Wisdom_Egg,6233,25,1,1,0,0,1	// 1x Guarantee_Armor_8Up
 IG_Idn_Wisdom_Egg,4263,1,1,1,0,0,1	// 1x Incant_Samurai_Card

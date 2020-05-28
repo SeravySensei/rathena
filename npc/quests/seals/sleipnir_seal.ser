@@ -347,7 +347,7 @@ que_god01,98,98,4	script	Manager#G	69,{
 					else if (.@god_treasure1 < 736) getitem 5166,1; //Spinx_Helm_
 					else if (.@god_treasure1 < 784) getitem 5158,1; //Holy_Bonnet_
 					else if (.@god_treasure1 < 832) getitem 2249,1; //Coronet
-					else if (.@god_treasure1 < 880) getitem 5157,1; //Viking_Helm_
+					else if (.@god_treasure1 < 880) getitem 2299,1; //Viking_Helm_
 					else if (.@god_treasure1 < 940) getitem 2285,1; //Apple_Of_Archer
 					else getitem 5093,1; //Blue_Coif_
 				}

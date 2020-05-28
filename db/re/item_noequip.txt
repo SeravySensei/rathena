@@ -181,7 +181,6 @@
 11548,16	// Woe_White_Potion
 11549,16	// Woe_Blue_Potion
 12033,16	// Box_Of_Sunlight
-12213,16	// Neuralizer
 12218,16	// Assumptio_5_Scroll
 12388,16	// Runstone_Crush
 12389,16	// Runstone_Storm

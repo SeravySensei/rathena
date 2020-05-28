@@ -123,7 +123,7 @@
 					mes "Huh, S Class?! Oh my god, are you serious?*Tremble*";
 					mes "So...which S class weapon would you like to make a slot?!";
 					next;
-					switch(select("Zephyrus:Mailbreaker:Dragon Slayer:Swordbreaker:Assasin Dagger:Grand Cross:Executioner"))
+					switch(select("Zephyrus:Mailbreaker:Dragon Slayer:Swordbreaker:Assasin Dagger:Grand Cross"))
 					{
 						case 1: callfunc "Func_Socket2",1468, 1481,40,51,1000,984,5,999,10;
 						case 2: callfunc "Func_Socket2",1225,13032,40,51,1000,984,5,999,10;
@@ -131,7 +131,6 @@
 						case 4: callfunc "Func_Socket2",1224,13031,40,51,1000,984,5,999,10;
 						case 5: callfunc "Func_Socket2",1232,13033,40,51,1000,984,5,999,10;
 						case 6: callfunc "Func_Socket2",1528, 1540,40,51,1000,984,5,999,10;
-						case 7: callfunc "Func_Socket2",1169, 1179,40,51,1000,984,5,999,10;
 					}
 			}
 		case 2:
@@ -172,11 +171,10 @@
 					mes "A class? You seem to want little too much. But, no problem.";
 					mes "So, what kind of armor do you have?";
 					next;
-					switch(select("Pirate Bandana:Black Leather Boots:Magni Cap"))
+					switch(select("Pirate Bandana:Black Leather Boots"))
 					{
 						case 1: callfunc "Func_Socket2",2287,5350,50,61,500,985,1; // 50,61 - it's not a typo
 						case 2: callfunc "Func_Socket2",2425,2434,40,51,500,985,1;
-						case 3: callfunc "Func_Socket2",5122,18594,40,51,500,985,1; //Success rate is rolling D100 between arg2 and arg3
 						//case 3: callfunc "Func_Socket2",15053,15056,x,x,x,x,x;	// Special Ninja Suit (Needs more info)
 					}
 				case 4:

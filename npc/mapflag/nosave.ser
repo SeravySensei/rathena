@@ -267,9 +267,7 @@ moc_fild22b	mapflag	nosave	SavePoint
 que_dan01	mapflag	nosave	SavePoint
 que_dan02	mapflag	nosave	SavePoint
 schg_que01	mapflag	nosave	SavePoint
-schg_dun01	mapflag	nosave	SavePoint
 arug_que01	mapflag	nosave	SavePoint
-arug_dun01	mapflag	nosave	SavePoint
 
 // Orc's Memory ===================
 1@orcs	mapflag	nosave	SavePoint
