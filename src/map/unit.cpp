@@ -9074,16 +9074,23 @@ TIMER_FUNC(unit_autopilot_timer)
 		/// Also fetch target for skills blocked by Pneuma separately
 		resettargets();
 		map_foreachinrange(targetnearestusingranged, &sd->bl, AUTOPILOT_RANGE_CAP, BL_MOB, sd);
-		int foundtargetRA = foundtargetID;
-		struct block_list * targetRAbl = targetbl;
-		struct mob_data * targetRAmd = targetmd;
+		int foundtargetRA;
+		foundtargetRA = foundtargetID;
+		struct block_list * targetRAbl;
+		targetRAbl = targetbl;
+		struct mob_data * targetRAmd;
+		targetRAmd = targetmd;
 		int rangeddist = targetdistance;
 		resettargets();
 		map_foreachinrange(targetnearest, &sd->bl, 9, BL_MOB, sd);
-		int foundtargetID2 = foundtargetID;
-		int targetdistance2 = targetdistance;
-		struct mob_data * targetmd2 = targetmd;
-		struct block_list * targetbl2 = targetbl;
+		int foundtargetID2;
+		foundtargetID2 = foundtargetID;
+		int targetdistance2;
+		targetdistance2 = targetdistance;
+		struct mob_data * targetmd2;
+		targetmd2 = targetmd;
+		struct block_list * targetbl2;
+		targetbl2 = targetbl;
 
 		// Hunter TRAPS
 		// These don't go into the AOEs because they are melee range and not interruptable
@@ -9279,7 +9286,8 @@ TIMER_FUNC(unit_autopilot_timer)
 		/// Skills to exploit elemental weakness
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		// Estin, Estun, Esma on vulnerable enemy
-		int windelem = 0;
+		int windelem;
+		windelem = 0;
 		if (sd->sc.data[SC_SEVENWIND]) windelem= skill_get_ele(TK_SEVENWIND, sd->sc.data[SC_SEVENWIND]->val1);
 		if (foundtargetID2 > -1) if (canskill(sd))
 			if (elemstrong(targetmd2, windelem)) {
