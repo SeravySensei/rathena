@@ -7903,7 +7903,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			{
 				int idx = -1;
 				for (int i = 0; i < MAX_INVENTORY; i++){
-					if (((dstsd->inventory.u.items_inventory[i].nameid) > 0) && (dstsd->inventory.u.items_inventory[i].attribute != 0)){
+					if (((dstsd->inventory.u.items_inventory[i].nameid) > 0) && (dstsd->inventory.u.items_inventory[i].attribute != 0) && (!itemdb_ishatched_egg(&dstsd->inventory.u.items_inventory[i]))){
 						idx = i; }
 				}
 				//if (!(target_sd = map_id2sd(sd->menuskill_val))) //Failed....
