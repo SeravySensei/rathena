@@ -2561,7 +2561,20 @@ int status_base_amotion_pc(struct map_session_data* sd, struct status_data* stat
 		val -= 50 - 10 * pc_checkskill(sd, KN_CAVALIERMASTERY);
 	else if (pc_isridingdragon(sd))
 		val -= 25 - 5 * pc_checkskill(sd, RK_DRAGONTRAINING);
-	amotion = ((int)(temp_aspd + ((float)(status_calc_aspd(&sd->bl, &sd->sc, true) + val) * status->agi / 200)) - min(amotion, 200));
+	float modifier = status->agi / 200.0; 
+	if (modifier > 1) modifier = 1; // can't get higher than 100% benefit even if excess agi
+	float bonus1 = sqrt(status->agi) - 2; // this much bonus is allowed fully
+	if (bonus1 < 0) bonus1 = 0;
+	float aspd_bonus = status_calc_aspd(&sd->bl, &sd->sc, true) + val;
+	if (bonus1 > aspd_bonus) bonus1 = aspd_bonus; // if we did full bypass it would be this much
+	if (aspd_bonus > bonus1) bonus1 = bonus1 + (aspd_bonus - bonus1) * modifier;
+	float bonus2 = aspd_bonus * modifier; // if we did full official then this
+
+	float modifier2 = (status->agi - 50.0) / 50.0; // 100 AGI+ = go full official, 50 AGI- go full bypass system
+	if (modifier2 > 1) modifier2 = 1;
+	if (modifier2 < 0) modifier2 = 0;
+	aspd_bonus = bonus1 * (1 - modifier2) + bonus2 * modifier2;
+	amotion = ((int)(temp_aspd + aspd_bonus) - min(amotion, 200));
 #else
 	// Angra Manyu disregards aspd_base and similar
 	if (pc_checkequip2(sd, ITEMID_ANGRA_MANYU, EQI_ACC_L, EQI_MAX))
@@ -3144,7 +3157,7 @@ void status_calc_pet_(struct pet_data *pd, enum e_status_calc_opt opt)
 		int lv;
 
 		lv =sd->status.base_level*battle_config.pet_lv_rate/100;
-		if (lv < 0)
+		if (lv <= 0)
 			lv = 1;
 		if (lv != pd->pet.level || opt&SCO_FIRST) {
 			struct status_data *bstat = &pd->db->status, *status = &pd->status;
