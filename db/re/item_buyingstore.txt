@@ -1044,30 +1044,30 @@
 616	//Old_Card_Album
 617	//Old_Violet_Box
 618  // Worn_Out_Scroll
-619	//Unripe_Apple
-620	//Orange_Juice
-621	//Bitter_Herb
-622	//Rainbow_Carrot
-623	//Earthworm_The_Dude
-624	//Rotten_Fish
-625	//Lusty_Iron
-626	//Monster_Juice
-627	//Sweet_Milk
-628	//Well_Dried_Bone
-629	//Singing_Flower
-630	//Dew_Laden_Moss
-631	//Deadly_Noxious_Herb
-632	//Fatty_Chubby_Earthworm
-633	//Baked_Yam
-634	//Tropical_Banana
-635	//Horror_Of_Tribe
-636	//No_Recipient
-637	//Old_Broom
-638	//Silver_Knife_Of_Chaste
-639	//Armlet_Of_Obedience
-640	//Shining_Stone
-641	//Contracts_In_Shadow
-642	//Book_Of_Devil
+619  // Unripe_Apple
+620  // Orange_Juice
+621  // Bitter_Herb
+622  // Rainbow_Carrot
+623  // Earthworm_The_Dude
+624  // Rotten_Fish
+625  // Lusty_Iron
+626  // Monster_Juice
+627  // Sweet_Milk
+628  // Well_Dried_Bone
+629  // Singing_Flower
+630  // Dew_Laden_Moss
+631  // Deadly_Noxious_Herb
+632  // Fatty_Chubby_Earthworm
+633  // Baked_Yam
+634  // Tropical_Banana
+635  // Horror_Of_Tribe
+636  // No_Recipient
+637  // Old_Broom
+638  // Silver_Knife_Of_Chaste
+639  // Armlet_Of_Obedience
+640  // Shining_Stone
+641  // Contracts_In_Shadow
+642  // Book_Of_Devil
 643	//Pet_Incubator
 644	//Gift_Box
 645	//Center_Potion
@@ -1255,20 +1255,20 @@
 12346	//Unripe_Acorn
 12347	//Acorn_Jelly
 12353	//Tiny_Waterbottle
-12358	//Fan_Of_Wind
-12359	//Very_Soft_Plant
-12360	//Very_Red_Juice
-12362	//Kuloren
-12364	//Staff_Of_Leader
-12365	//Charming_Lotus
-12366	//Gril_Doll
-12367	//Luxury_Whisky_Bottle
-12368	//Splendid_Mirror
-12369	//Oilpalm_Coconut
-12371	//Magical_Lithography
-12372	//Hell_Contract
-12373	//Boy's_Naivety
-12374	//Flaming_Ice
+12358  // Fan_Of_Wind
+12359  // Very_Soft_Plant
+12360  // Very_Red_Juice
+12362  // Kuloren
+12364  // Staff_Of_Leader
+12365  // Charming_Lotus
+12366  // Gril_Doll
+12367  // Luxury_Whisky_Bottle
+12368  // Splendid_Mirror
+12369  // Oilpalm_Coconut
+12371  // Magical_Lithography
+12372  // Hell_Contract
+12373  // Boy's_Naivety
+12374  // Flaming_Ice
 12376	//Mysterious_Can2
 12377	//Mysterious_PET_Bottle2
 12379	//Pope's_Cookie

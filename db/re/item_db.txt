@@ -124,30 +124,30 @@
 616,Old_Card_Album,Old Card Album,2,10000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_CardAlbum,1); },{},{}
 617,Old_Violet_Box,Old Purple Box,2,10000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_VioletBox,1); },{},{}
 618,Worn_Out_Scroll,Worn Out Scroll,3,50,,20,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
-619,Unripe_Apple,Unripe Apple,2,1000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1002; },{},{}
-620,Orange_Juice,Orange Juice,2,1500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1113; },{},{}
-621,Bitter_Herb,Bitter Herb,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1031; },{},{}
-622,Rainbow_Carrot,Rainbow Carrot,2,2500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1063; },{},{}
-623,Earthworm_The_Dude,Earthworm the Dude,2,4000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1049; },{},{}
-624,Rotten_Fish,Rotten Fish,2,2500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1011; },{},{}
-625,Lusty_Iron,Rusty Iron,2,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1042; },{},{}
-626,Monster_Juice,Monster Juice,2,1500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1035; },{},{}
-627,Sweet_Milk,Sweet Milk,2,7000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1167; },{},{}
-628,Well_Dried_Bone,Well-Dried Bone,2,10000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1107; },{},{}
-629,Singing_Flower,Singing Flower,2,300,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1052; },{},{}
-630,Dew_Laden_Moss,Dew Laden Moss,2,10,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1014; },{},{}
-631,Deadly_Noxious_Herb,Deadly Noxious Herb,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1077; },{},{}
-632,Fatty_Chubby_Earthworm,Fatty Chubby Earthworm,2,5000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1019; },{},{}
-633,Baked_Yam,Sweet Potato,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1056; },{},{}
-634,Tropical_Banana,Tropical Banana,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1057; },{},{}
-635,Horror_Of_Tribe,Orc Trophy,2,300,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1023; },{},{}
-636,No_Recipient,No Recipient,2,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1026; },{},{}
-637,Old_Broom,Old Broom,2,350,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1110; },{},{}
-638,Silver_Knife_Of_Chaste,Silver Knife of Chastity,2,12000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1170; },{},{}
-639,Armlet_Of_Obedience,Armlet of Obedience,2,18000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1029; },{},{}
-640,Shining_Stone,Shining Stone,2,3000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1155; },{},{}
-641,Contracts_In_Shadow,Contract in Shadow,2,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1109; },{},{}
-642,Book_Of_Devil,Book of the Devil,2,1800,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1101; },{},{}
+619,Unripe_Apple,Unripe Apple,11,1000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1002; },{},{}
+620,Orange_Juice,Orange Juice,11,1500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1113; },{},{}
+621,Bitter_Herb,Bitter Herb,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1031; },{},{}
+622,Rainbow_Carrot,Rainbow Carrot,11,2500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1063; },{},{}
+623,Earthworm_The_Dude,Earthworm the Dude,11,4000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1049; },{},{}
+624,Rotten_Fish,Rotten Fish,11,2500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1011; },{},{}
+625,Lusty_Iron,Rusty Iron,11,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1042; },{},{}
+626,Monster_Juice,Monster Juice,11,1500,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1035; },{},{}
+627,Sweet_Milk,Sweet Milk,11,7000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1167; },{},{}
+628,Well_Dried_Bone,Well-Dried Bone,11,10000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1107; },{},{}
+629,Singing_Flower,Singing Flower,11,300,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1052; },{},{}
+630,Dew_Laden_Moss,Dew Laden Moss,11,10,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1014; },{},{}
+631,Deadly_Noxious_Herb,Deadly Noxious Herb,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1077; },{},{}
+632,Fatty_Chubby_Earthworm,Fatty Chubby Earthworm,11,5000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1019; },{},{}
+633,Baked_Yam,Sweet Potato,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1056; },{},{}
+634,Tropical_Banana,Tropical Banana,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1057; },{},{}
+635,Horror_Of_Tribe,Orc Trophy,11,300,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1023; },{},{}
+636,No_Recipient,No Recipient,11,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1026; },{},{}
+637,Old_Broom,Old Broom,11,350,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1110; },{},{}
+638,Silver_Knife_Of_Chaste,Silver Knife of Chastity,11,12000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1170; },{},{}
+639,Armlet_Of_Obedience,Armlet of Obedience,11,18000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1029; },{},{}
+640,Shining_Stone,Shining Stone,11,3000,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1155; },{},{}
+641,Contracts_In_Shadow,Contract in Shadow,11,100,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1109; },{},{}
+642,Book_Of_Devil,Book of the Devil,11,1800,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1101; },{},{}
 643,Pet_Incubator,Pet Incubator,2,10000,,30,,,,,0xFFFFFFFF,63,2,,,,,,{ bpet; },{},{}
 644,Gift_Box,Gift Box,2,1000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GiftBox,1); },{},{}
 //ASPD in RE they give a fixed +4/+6/+9 ASPD
@@ -6665,24 +6665,24 @@
 12354,Buche_De_Noel,Buche De Noel,2,2,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ specialeffect2 EF_ANGELUS; bonus_script "{ bonus bHPrecovRate,3; bonus bSPrecovRate,3; bonus bHit,3; bonus bCritical,7; }",600,0,0,EFST_BUCHEDENOEL; },{},{}
 12355,Xmas_Gift,Xmas Gift,2,2,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_Xmas_Gift,1); },{},{}
 12356,Louise_Costume_Box,Louise Costume Box,2,2,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_Louise_Costume_Box,1); },{},{}
-12357,Shiny_Wing_Gown,Shiny Wing Gown,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1630; },{},{}
-12358,Fan_Of_Wind,Fan Of Wind,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1513; },{},{}
-12359,Very_Soft_Plant,Very Soft Plant,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1586; },{},{}
-12360,Very_Red_Juice,Very Red Juice,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1505; },{},{}
-12361,Delicious_Shaved_Ice,Delicious Shaved Ice,2,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1143; },{},{}
-12362,Kuloren,Kuloren,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1401; },{},{}
-12363,Fit_Pipe,Fit Pipe,2,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1179; },{},{}
-12364,Staff_Of_Leader,Staff Of Leader,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1299; },{},{}
-12365,Charming_Lotus,Charming Lotus,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1416; },{},{}
-12366,Gril_Doll,Girl's Doll,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1404; },{},{}
-12367,Luxury_Whisky_Bottle,Luxury Whisky Bottle,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1504; },{},{}
-12368,Splendid_Mirror,Splendid Mirror,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1148; },{},{}
-12369,Oilpalm_Coconut,Oilpalm Coconut,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1495; },{},{}
-12370,Gril's_Naivety,Girl's Naivety,2,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1374; },{},{}
-12371,Magical_Lithography,Magical Lithography,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1040; },{},{}
-12372,Hell_Contract,Hell Contract,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1379; },{},{}
-12373,Boy's_Naivety,Boy's Pure Heart,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1370; },{},{}
-12374,Flaming_Ice,Ice Fireworks,2,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1837; },{},{}
+12357,Shiny_Wing_Gown,Shiny Wing Gown,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1630; },{},{}
+12358,Fan_Of_Wind,Fan Of Wind,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1513; },{},{}
+12359,Very_Soft_Plant,Very Soft Plant,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1586; },{},{}
+12360,Very_Red_Juice,Very Red Juice,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1505; },{},{}
+12361,Delicious_Shaved_Ice,Delicious Shaved Ice,11,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1143; },{},{}
+12362,Kuloren,Kuloren,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1401; },{},{}
+12363,Fit_Pipe,Fit Pipe,11,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1179; },{},{}
+12364,Staff_Of_Leader,Staff Of Leader,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1299; },{},{}
+12365,Charming_Lotus,Charming Lotus,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1416; },{},{}
+12366,Gril_Doll,Girl's Doll,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1404; },{},{}
+12367,Luxury_Whisky_Bottle,Luxury Whisky Bottle,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1504; },{},{}
+12368,Splendid_Mirror,Splendid Mirror,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1148; },{},{}
+12369,Oilpalm_Coconut,Oilpalm Coconut,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1495; },{},{}
+12370,Gril's_Naivety,Girl's Naivety,11,0,,0,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1374; },{},{}
+12371,Magical_Lithography,Magical Lithography,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1040; },{},{}
+12372,Hell_Contract,Hell Contract,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1379; },{},{}
+12373,Boy's_Naivety,Boy's Pure Heart,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1370; },{},{}
+12374,Flaming_Ice,Ice Fireworks,11,20,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ pet 1837; },{},{}
 12375,Acaraje,Akaraje,2,0,,80,,,,,0xFFFFFFFF,63,2,,,,,,{ specialeffect2 EF_STEAL; bonus_script "{ bonus bHit,5; bonus bAspdRate,10; }",1200,0,0,EFST_ACARAJE; },{},{}
 12376,Mysterious_Can2,Mysterious Can2,2,10,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ percentheal 3,0; itemskill "PR_GLORIA",2; },{},{}
 12377,Mysterious_PET_Bottle2,Mysterious PET Bottle2,2,10,,100,,,,,0xFFFFFFFF,63,2,,,,,,{ percentheal 0,3; itemskill "PR_MAGNIFICAT",1; },{},{}
