@@ -123,6 +123,11 @@ static inline uint16 server_storage_index( uint16 client_index ){
 	return client_index - 1;
 }
 
+static inline uint32 disguised_bl_id( uint32 bl_id ){
+	// Casting to prevent a compiler warning
+	return -((int32)bl_id);
+}
+
 #if PACKETVER_MAIN_NUM >= 20181121 || PACKETVER_RE_NUM >= 20180704 || PACKETVER_ZERO_NUM >= 20181114
 static inline uint32 client_nameid( uint32 server_nameid ){
 	uint32 view = itemdb_viewid( server_nameid );
@@ -930,7 +935,7 @@ void clif_clearunit_area(struct block_list* bl, clr_type type)
 	clif_send(buf, packet_len(0x80), bl, type == CLR_DEAD ? AREA : AREA_WOS);
 
 	if(disguised(bl)) {
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id( bl->id );
 		clif_send(buf, packet_len(0x80), bl, SELF);
 	}
 }
@@ -1163,12 +1168,12 @@ static void clif_set_unit_idle( struct block_list* bl, bool walking, send_target
 #if PACKETVER >= 20091103
 		p.objecttype = pcdb_checkid( status_get_viewdata( bl )->class_ ) ? 0x0 : 0x5; //PC_TYPE : NPC_MOB_TYPE
 #if PACKETVER >= 20131223
-		p.AID = -bl->id;
+		p.AID = disguised_bl_id( bl->id );
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 	}
 
@@ -1303,12 +1308,12 @@ static void clif_spawn_unit( struct block_list *bl, enum send_target target ){
 #if PACKETVER >= 20091103
 		p.objecttype = pcdb_checkid( status_get_viewdata(bl)->class_ ) ? 0x0 : 0x5; //PC_TYPE : NPC_MOB_TYPE
 #if PACKETVER >= 20131223
-		p.AID = -bl->id;
+		p.AID = disguised_bl_id( bl->id );
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 		clif_send( &p, sizeof( p ), bl, SELF );
 	}else{
@@ -1401,12 +1406,12 @@ static void clif_set_unit_walking( struct block_list *bl, struct map_session_dat
 #if PACKETVER >= 20091103
 		p.objecttype = pcdb_checkid( status_get_viewdata(bl)->class_ ) ? 0x0 : 0x5; //PC_TYPE : NPC_MOB_TYPE
 #if PACKETVER >= 20131223
-		p.AID = -bl->id;
+		p.AID = disguised_bl_id( bl->id );
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 #else
-		p.GID = -bl->id;
+		p.GID = disguised_bl_id( bl->id );
 #endif
 		clif_send(&p,sizeof(p),bl,SELF);
 	}
@@ -1897,7 +1902,7 @@ void clif_move(struct unit_data *ud)
 		// If the player was disguised we still need to update the disguised unit, since the main unit will be updated through clif_walkok
 		if(disguised(bl)) {
 			WBUFW(buf,0)=0x86;
-			WBUFL(buf,2)=-bl->id;
+			WBUFL(buf,2)=disguised_bl_id(bl->id);
 			WBUFPOS2(buf,6,bl->x,bl->y,ud->to_x,ud->to_y,8,8);
 			WBUFL(buf,12)=client_tick(gettick());
 			clif_send(buf, packet_len(0x86), bl, SELF);
@@ -1928,7 +1933,7 @@ void clif_move(struct unit_data *ud)
 	WBUFL(buf,12)=client_tick(gettick());
 	clif_send(buf, packet_len(0x86), bl, AREA_WOS);
 	if (disguised(bl)) {
-		WBUFL(buf,2)=-bl->id;
+		WBUFL(buf,2)=disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x86), bl, SELF);
 	}
 	clif_ally_only = false;
@@ -2034,7 +2039,7 @@ void clif_fixpos(struct block_list *bl)
 	clif_send(buf, packet_len(0x88), bl, AREA);
 
 	if( disguised(bl) ) {
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x88), bl, SELF);
 	}
 }
@@ -3686,7 +3691,7 @@ void clif_changelook(struct block_list *bl, int type, int val) {
 		}
 		if (disguised(bl)) {
 			clif_sprite_change(bl, bl->id, type, val, val2, AREA_WOS);
-			clif_sprite_change(bl, -bl->id, type, val, val2, SELF);
+			clif_sprite_change(bl, disguised_bl_id(bl->id), type, val, val2, SELF);
 		} else
 			clif_sprite_change(bl, bl->id, type, val, val2, target);
 	} else
@@ -4027,9 +4032,9 @@ void clif_changeoption_target( struct block_list* bl, struct block_list* target 
 	if( target == nullptr ){
 		if( disguised( bl ) ){
 			clif_send( &p, sizeof( p ), bl, AREA_WOS );
-			p.AID = -p.AID;
+			p.AID = disguised_bl_id( p.AID );
 			clif_send( &p, sizeof( p ), bl, SELF );
-			p.AID = -p.AID;
+			p.AID = disguised_bl_id( p.AID );
 			p.effectState = OPTION_INVISIBLE;
 			clif_send( &p, sizeof( p ), bl, SELF );
 		}else{
@@ -4045,9 +4050,9 @@ void clif_changeoption_target( struct block_list* bl, struct block_list* target 
 		}
 	}else{
 		if( disguised( bl ) ){
-			p.AID = -p.AID;
+			p.AID = disguised_bl_id( p.AID );
 			clif_send( &p, sizeof( p ), target, SELF );
-			p.AID = -p.AID;
+			p.AID = disguised_bl_id( p.AID );
 			p.effectState = OPTION_INVISIBLE;
 			clif_send( &p, sizeof( p ), target, SELF );
 		}else{
@@ -4074,7 +4079,7 @@ void clif_changeoption2(struct block_list* bl)
 	WBUFL(buf,14) = sc->opt3;
 	if(disguised(bl)) {
 		clif_send(buf,packet_len(0x28a),bl,AREA_WOS);
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id( bl->id );
 		clif_send(buf,packet_len(0x28a),bl,SELF);
 		WBUFL(buf,2) = bl->id;
 		WBUFL(buf,6) = OPTION_INVISIBLE;
@@ -4910,13 +4915,13 @@ int clif_damage(struct block_list* src, struct block_list* dst, t_tick tick, int
 
 	if(disguised(dst)) {
 		clif_send(buf, packet_len(cmd), dst, AREA_WOS);
-		WBUFL(buf,6) = -dst->id;
+		WBUFL(buf,6) = disguised_bl_id( dst->id );
 		clif_send(buf, packet_len(cmd), dst, SELF);
 	} else
 		clif_send(buf, packet_len(cmd), dst, AREA);
 
 	if(disguised(src)) {
-		WBUFL(buf,2) = -src->id;
+		WBUFL(buf,2) = disguised_bl_id( src->id );
 		if (disguised(dst))
 			WBUFL(buf,6) = dst->id;
 #if PACKETVER < 20071113
@@ -4972,7 +4977,7 @@ void clif_sitting(struct block_list* bl)
 	clif_send(buf, packet_len(0x8a), bl, AREA);
 
 	if(disguised(bl)) {
-		WBUFL(buf, 2) = - bl->id;
+		WBUFL(buf, 2) = disguised_bl_id( bl->id );
 		clif_send(buf, packet_len(0x8a), bl, SELF);
 	}
 }
@@ -4991,7 +4996,7 @@ void clif_standing(struct block_list* bl)
 	clif_send(buf, packet_len(0x8a), bl, AREA);
 
 	if(disguised(bl)) {
-		WBUFL(buf, 2) = - bl->id;
+		WBUFL(buf, 2) = disguised_bl_id( bl->id );
 		clif_send(buf, packet_len(0x8a), bl, SELF);
 	}
 }
@@ -5535,7 +5540,7 @@ void clif_skillcasting(struct block_list* bl, int src_id, int dst_id, int dst_x,
 
 	if (disguised(bl)) {
 		clif_send(buf,packet_len(cmd), bl, AREA_WOS);
-		WBUFL(buf,2) = -src_id;
+		WBUFL(buf,2) = disguised_bl_id( src_id );
 		clif_send(buf,packet_len(cmd), bl, SELF);
 	} else
 		clif_send(buf,packet_len(cmd), bl, AREA);
@@ -5672,13 +5677,13 @@ int clif_skill_damage(struct block_list *src,struct block_list *dst,t_tick tick,
 	WBUFB(buf,30)=type;
 	if (disguised(dst)) {
 		clif_send(buf,packet_len(0x114),dst,AREA_WOS);
-		WBUFL(buf,8)=-dst->id;
+		WBUFL(buf,8)=disguised_bl_id(dst->id);
 		clif_send(buf,packet_len(0x114),dst,SELF);
 	} else
 		clif_send(buf,packet_len(0x114),dst,AREA);
 
 	if(disguised(src)) {
-		WBUFL(buf,4)=-src->id;
+		WBUFL(buf,4)=disguised_bl_id(src->id);
 		if (disguised(dst))
 			WBUFL(buf,8)=dst->id;
 		if(damage > 0)
@@ -5711,13 +5716,13 @@ int clif_skill_damage(struct block_list *src,struct block_list *dst,t_tick tick,
 #endif
 	if (disguised(dst)) {
 		clif_send(buf,packet_len(0x1de),dst,AREA_WOS);
-		WBUFL(buf,8)=-dst->id;
+		WBUFL(buf,8)=disguised_bl_id(dst->id);
 		clif_send(buf,packet_len(0x1de),dst,SELF);
 	} else
 		clif_send(buf,packet_len(0x1de),dst,AREA);
 
 	if(disguised(src)) {
-		WBUFL(buf,4)=-src->id;
+		WBUFL(buf,4)=disguised_bl_id(src->id);
 		if (disguised(dst))
 			WBUFL(buf,8)=dst->id;
 		if(damage > 0)
@@ -5770,13 +5775,13 @@ int clif_skill_damage2(struct block_list *src,struct block_list *dst,t_tick tick
 	WBUFB(buf,34)=type;
 	clif_send(buf,packet_len(0x115),src,AREA);
 	if(disguised(src)) {
-		WBUFL(buf,4)=-src->id;
+		WBUFL(buf,4)=disguised_bl_id(src->id);
 		if(damage > 0)
 			WBUFW(buf,28)=-1;
 		clif_send(buf,packet_len(0x115),src,SELF);
 	}
 	if (disguised(dst)) {
-		WBUFL(buf,8)=-dst->id;
+		WBUFL(buf,8)=disguised_bl_id(dst->id);
 		if (disguised(src))
 			WBUFL(buf,4)=src->id;
 		else if(damage > 0)
@@ -5820,13 +5825,13 @@ bool clif_skill_nodamage(struct block_list *src,struct block_list *dst, uint16 s
 
 	if (disguised(dst)) {
 		clif_send(buf, packet_len(cmd), dst, AREA_WOS);
-		WBUFL(buf,6+offset) = -dst->id;
+		WBUFL(buf,6+offset) = disguised_bl_id(dst->id);
 		clif_send(buf, packet_len(cmd), dst, SELF);
 	} else
 		clif_send(buf, packet_len(cmd), dst, AREA);
 
 	if(src && disguised(src)) {
-		WBUFL(buf,10+offset) = -src->id;
+		WBUFL(buf,10+offset) = disguised_bl_id(src->id);
 		if (disguised(dst))
 			WBUFL(buf,6+offset) = dst->id;
 		clif_send(buf, packet_len(cmd), src, SELF);
@@ -5853,7 +5858,7 @@ void clif_skill_poseffect(struct block_list *src,uint16 skill_id,int val,int x,i
 	WBUFL(buf,14)=client_tick(tick);
 	if(disguised(src)) {
 		clif_send(buf,packet_len(0x117),src,AREA_WOS);
-		WBUFL(buf,4)=-src->id;
+		WBUFL(buf,4)=disguised_bl_id(src->id);
 		clif_send(buf,packet_len(0x117),src,SELF);
 	} else
 		clif_send(buf,packet_len(0x117),src,AREA);
@@ -9470,7 +9475,7 @@ void clif_specialeffect(struct block_list* bl, int type, enum send_target target
 	clif_send(buf, packet_len(0x1f3), bl, target);
 
 	if (disguised(bl)) {
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x1f3), bl, SELF);
 	}
 }
@@ -9504,7 +9509,7 @@ void clif_specialeffect_value(struct block_list* bl, int effect_id, int num, sen
 
 	if( disguised(bl) )
 	{
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x284), bl, SELF);
 	}
 }
@@ -9775,7 +9780,7 @@ void clif_slide(struct block_list *bl, int x, int y)
 
 	if( disguised(bl) )
 	{
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x1ff), bl, SELF);
 	}
 }
@@ -11217,7 +11222,7 @@ void clif_changed_dir(struct block_list *bl, enum send_target target)
 	clif_send(buf, packet_len(0x9c), bl, target);
 
 	if (disguised(bl)) {
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		WBUFW(buf,6) = 0;
 		clif_send(buf, packet_len(0x9c), bl, SELF);
 	}
@@ -18826,7 +18831,7 @@ void clif_snap( struct block_list *bl, short x, short y ) {
 	if( disguised(bl) )
 	{
 		clif_send(buf, packet_len(0x8d2), bl, AREA_WOS);
-		WBUFL(buf,2) = -bl->id;
+		WBUFL(buf,2) = disguised_bl_id(bl->id);
 		clif_send(buf, packet_len(0x8d2), bl, SELF);
 	} else
 		clif_send(buf,packet_len(0x8d2),bl, AREA);
