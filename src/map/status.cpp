@@ -10939,8 +10939,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			tick_time = 1000; // [GodLesZ] tick time
 			break;
 		case SC_HALLUCINATIONWALK:
-			val2 = 50 * val1; // Evasion rate of physical attacks. Flee
-			val3 = 10 * val1; // Evasion rate of magical attacks.
+			val2 = 200; // Evasion rate of physical attacks. Flee
+			val3 = 50; // Evasion rate of magical attacks.
 			break;
 		case SC_MARSHOFABYSS:
 			if( bl->type == BL_PC )
@@ -11475,7 +11475,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val2 = 20 * val1 + 20; // atk bonus
 			break;
 		case SC_DARKCROW:
-			val2 = 30 * val1;
+			val2 = 100;
 			break;
 		case SC_UNLIMIT:
 			val2 = 50 * val1;

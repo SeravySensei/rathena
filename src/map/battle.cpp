@@ -3954,8 +3954,8 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(150); // Base level bonus.
 			break;
 		case GC_CROSSIMPACT:
-			skillratio += 900 + 100 * skill_lv;
-			RE_LVL_DMOD(120);
+			skillratio += 1000 + 200 * skill_lv;
+			RE_LVL_DMOD(100);
 			break;
 		case GC_COUNTERSLASH:
 			//ATK [{(Skill Level x 100) + 300} x Caster's Base Level / 120]% + ATK [(AGI x 2) + (Caster's Job Level x 4)]%
@@ -3964,9 +3964,6 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			break;
 		case GC_VENOMPRESSURE:
 			skillratio += 900;
-			break;
-		case GC_PHANTOMMENACE:
-			skillratio += 200;
 			break;
 		case GC_ROLLINGCUTTER:
 			skillratio += -50 + 50 * skill_lv;
@@ -4593,15 +4590,6 @@ static void battle_attack_sc_bonus(struct Damage* wd, struct block_list *src, st
 			switch(skill_id) {
 				case AS_SPLASHER:
 				case ASC_METEORASSAULT:
-				// Pre-Renewal only: Soul Breaker ignores EDP
-				// Renewal only: Grimtooth and Venom Knife ignore EDP
-				// Both: Venom Splasher and Meteor Assault ignore EDP [helvetica]
-#ifndef RENEWAL
-				case ASC_BREAKER:
-#else
-				case AS_GRIMTOOTH:
-				case AS_VENOMKNIFE:
-#endif
 					break; // skills above have no effect with EDP
 
 #ifdef RENEWAL
@@ -4612,11 +4600,11 @@ static void battle_attack_sc_bonus(struct Damage* wd, struct block_list *src, st
 				// * Counter Slash
 				// * Cross Impact
 				case AS_SONICBLOW:
-				case ASC_BREAKER:
+				//case ASC_BREAKER:
 				case GC_COUNTERSLASH:
 				case GC_CROSSIMPACT:
-					ATK_RATE(wd->weaponAtk, wd->weaponAtk2, 50);
-					ATK_RATE(wd->equipAtk, wd->equipAtk2, 50);
+					ATK_RATE(wd->weaponAtk, wd->weaponAtk2, 60);
+					ATK_RATE(wd->equipAtk, wd->equipAtk2, 60);
 				default: // fall through to apply EDP bonuses
 					// Renewal EDP formula [helvetica]
 					// weapon atk * (1 + (edp level * .8))
@@ -6059,6 +6047,9 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					break;
 				case NPC_EARTHQUAKE:
 					skillratio += 100 + 100 * skill_lv + 100 * (skill_lv / 2) + ((skill_lv > 4) ? 100 : 0);
+					break;
+				case GC_PHANTOMMENACE:
+					skillratio += 1400;
 					break;
 #ifdef RENEWAL
 				case WZ_HEAVENDRIVE:

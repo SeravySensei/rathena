@@ -33,7 +33,7 @@ valkyrie,53,56,3	script	Idol#Valkyrie	101,{
 		mes "For me, it's a way of life~";
 		close;
 	}
-	else if (ADVJOB == Job_Idol && Class == Job_Archer_High && JobLevel > 39) {
+	else if (ADVJOB == Job_Gypsy && Class == Job_Archer_High && JobLevel > 39) {
 		mes "[Idol]";
 		mes "The land of Rune-Midgard";
 		mes "is in need of talented women";
@@ -59,7 +59,7 @@ valkyrie,53,56,3	script	Idol#Valkyrie	101,{
 			mes "all of your remaining Skill Points before returning to me.";
 			close;
 		}
-		jobchange Job_Idol;
+		jobchange Job_Gypsy;
 		set ADVJOB,0;
 		mes "[Idol]";
 		mes "Congratulations!";

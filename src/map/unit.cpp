@@ -8122,6 +8122,10 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (!sd->sc.data[SC_POISONREACT]) unit_skilluse_ifable(&sd->bl, SELF, AS_POISONREACT, pc_checkskill(sd, AS_POISONREACT));
 		// Not tanking? Cloak!
 		if ((Dangerdistance <= 3) && (sd->state.autopilotmode > 1)) {
+			// Cloaking Exceed
+			if (canskill(sd)) if ((pc_checkskill(sd, GC_CLOAKINGEXCEED) >= 5) && (dangermd->status.rhw.range <= 3))
+				if ((!((status_get_class_(dangerbl) == CLASS_BOSS))))
+					if (!sd->sc.data[SC_CLOAKINGEXCEED]) unit_skilluse_ifable(&sd->bl, SELF, GC_CLOAKINGEXCEED, pc_checkskill(sd, GC_CLOAKINGEXCEED));
 			// Cloaking
 			if (canskill(sd)) if ((pc_checkskill(sd, AS_CLOAKING) >= 10) && (dangermd->status.rhw.range <= 3))
 				if ((dangermd->status.race != RC_DEMON) && (dangermd->status.race != RC_INSECT) && (!((status_get_class_(dangerbl) == CLASS_BOSS))))
@@ -9708,6 +9712,18 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 			}
 
+			// Dark Illusion
+			// this is not as great as Flying Kick but still can let the tank reach the mob a bit earlier AND has a chance to break weapon
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, GC_DARKILLUSION) >= targetdistance-4)) {
+				// only use in tanking mode, if enemy is not already near! 
+				if (targetdistance2 > 5) if (sd->battle_status.hp > (70 * sd->battle_status.max_hp) / 100)
+					if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
+						if ((sd->battle_status.sp > (50 * sd->battle_status.max_sp) / 100))
+							if ((sd->state.autopilotmode == 1)) {
+								unit_skilluse_ifable(&sd->bl, foundtargetID2, GC_DARKILLUSION, pc_checkskill(sd, GC_DARKILLUSION));
+							}
+			}
+
 			// Shield Boomerang
 			// This is better than Banishing Point if soul linked probably?
 			if (sd->sc.data[SC_SPIRIT]) if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0)) if (sd->status.shield > 0) {
@@ -10439,7 +10455,24 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 				}
 			}
 
-
+			// Dark Claw skill
+			if (canskill(sd)) if (pc_checkskill(sd, GC_DARKCROW) > 0) if (sd->status.weapon == W_KATAR)
+				if (elemallowed(targetmd, skillelem(sd, GC_DARKCROW))) {
+					// Use like other skills, but also always use if EDP enabled, that's not the time to conserve SP
+					if ((checksprate(sd, targetmd, 50)))
+					if (!(targetmd->sc.data[SC_DARKCROW])) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_DARKCROW, pc_checkskill(sd, GC_DARKCROW));
+					}
+				}
+			// Cross Impact
+			if (canskill(sd)) if (pc_checkskill(sd, GC_CROSSIMPACT) > 0) if (sd->status.weapon == W_KATAR)
+				if (elemallowed(targetmd, skillelem(sd, GC_CROSSIMPACT))) {
+					// Use like other skills, but also always use if EDP enabled, that's not the time to conserve SP
+					if ((checksprate(sd, targetmd, 10))
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (sd->sc.data[SC_EDP])) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_CROSSIMPACT, pc_checkskill(sd, GC_CROSSIMPACT));
+					}
+				}
 			// Sonic Blow skill
 			// Note the AI ignores the +50% damage dealt on low health targets. It can't judge when it's worth waiting for other players to deal damage first and save SP.
 			// If you really want to take advantage of that on bosses, the best bet is to simply refill the SinX's SP after the boss drops below 50%.
