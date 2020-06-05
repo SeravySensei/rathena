@@ -13340,11 +13340,11 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 	#endif
 		break;
 	case CG_HERMODE:
-		val1 = (skill_lv + 5) * 7;	//Atk increase
-		val2 = skill_lv * 10;		//Def increase
+		val1 = (skill_lv + 5) * 7;	//Matk increase
+		val2 = skill_lv * 8;		//MDef increase
 		break;
 	case BD_RINGNIBELUNGEN:
-		val1 = rand() % RINGNBL_MAX;	//Atk increase
+		val1 = rand() % RINGNBL_MAX;	//Random effect
 		break;
 	case BD_RICHMANKIM:
 		val1 = 10 + 6*skill_lv; //Exp increase bonus.
