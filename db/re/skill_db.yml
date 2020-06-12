@@ -27824,11 +27824,6 @@ Body:
       ItemCost:
         - Item: MenEater_Plant_Bottle
           Amount: 1
-    Unit:
-      Id: Hells_Plant
-      Range: 2
-      Interval: 500 # !TODO: Confirm interval
-      Target: Enemy
   - Id: 2491
     Name: GN_HELLS_PLANT_ATK
     Description: Hell's Plant Attack
@@ -27839,6 +27834,9 @@ Body:
       IgnoreElement: true
     Hit: Single
     HitCount: 1
+    CopyFlags:
+      Skill:
+        Reproduce: true
     Duration1: 20000
   - Id: 2492
     Name: GN_MANDRAGORA

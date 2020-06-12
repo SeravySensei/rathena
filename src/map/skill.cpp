@@ -1224,7 +1224,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 
 	if( sd )
 	{ // These statuses would be applied anyway even if the damage was blocked by some skills. [Inkfish]
-		if( skill_id != WS_CARTTERMINATION && skill_id != AM_DEMONSTRATION && skill_id != CR_REFLECTSHIELD && skill_id != MS_REFLECTSHIELD && skill_id != ASC_BREAKER ) {
+		if( skill_id != WS_CARTTERMINATION && skill_id != AM_DEMONSTRATION && skill_id != CR_REFLECTSHIELD && skill_id != MS_REFLECTSHIELD && skill_id != ASC_BREAKER && skill_id != GN_HELLS_PLANT_ATK) {
 			// Trigger status effects
 			enum sc_type type;
 			unsigned int time;
@@ -5139,6 +5139,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case GN_CARTCANNON:
 	case GN_DEMONIC_FIRE:
 	case GN_FIRE_EXPANSION_ACID:
+	case GN_HELLS_PLANT_ATK:
 	case KO_HAPPOKUNAI:
 	case KO_HUUMARANKA:
 	case KO_MUCHANAGE:
@@ -6970,6 +6971,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SR_CRESCENTELBOW:
 	case SR_LIGHTNINGWALK:
 	case GN_CARTBOOST:
+	case GN_HELLS_PLANT:
 	case KO_MEIKYOUSISUI:
 	case SC_ENERVATION:
 	case SC_GROOMY:
@@ -12760,12 +12762,6 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 		}
 		break;
 
-	case GN_HELLS_PLANT:
-		status_change_end(src, type, INVALID_TIMER); // Remove previous group
-		if ((sg = skill_unitsetting(src, skill_id, skill_lv, src->x, src->y, 0)) != nullptr)
-			sc_start4(src, src, type, 100, skill_lv, 0, 0, sg->group_id, skill_get_time(skill_id, skill_lv));
-		break;
-
 	case SO_FIREWALK:
 	case SO_ELECTRICWALK:
 		if( sc && sc->data[type] )
@@ -14619,13 +14615,6 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, t_t
 					skill_attack(skill_get_type(skill_id), ss, &unit->bl, bl, sg->skill_id, sg->skill_lv + 10 * sg->val2, tick, 0);
 					break;
 			}
-			break;
-
-		case UNT_HELLS_PLANT:
-			if( battle_check_target(&unit->bl,bl,BCT_ENEMY) > 0 )
-				skill_attack(skill_get_type(GN_HELLS_PLANT_ATK), ss, &unit->bl, bl, GN_HELLS_PLANT_ATK, sg->skill_lv, tick, SCSTART_NONE);
-/*			if (ss != bl) // The caster is the only one who can step on the Plants without destroying them
-				sg->limit = DIFF_TICK(tick, sg->tick) + 100; */
 			break;
 
 		case UNT_ZEPHYR:
