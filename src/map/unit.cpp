@@ -6507,7 +6507,7 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 
 	int party_id, type = 0, i = 0;
 	block_list * leaderbl;
-	int leaderID, leaderdistance;
+	int leaderID, leaderdistance, leaderdistadj;
 	struct map_session_data *leadersd;
 
 	struct map_session_data *mastersd = unit_get_master(bl);
@@ -6521,7 +6521,8 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	if (!p || i == MAX_PARTY) { //leader not found
 		// Follow the master if there is no party
 		leadersd = mastersd; leaderID = mastersd->bl.id; leaderbl = &mastersd->bl;
-		leaderdistance = distance_bl(leaderbl, bl); 
+		leaderdistance = distance_bl(leaderbl, bl);
+		leaderdistadj = sd->state.autopilotdist;
 	}
 	else {
 		targetthis = p->party.member[i].char_id;
@@ -6734,8 +6735,8 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 		else {
 			// If there is a leader and we haven't found a target in their area, stay near them.
 			if ((leaderID > -1) && (leaderID != sd->bl.id)) {
-				int tankdestinationx = leaderbl->x + 2 * dirx[leadersd->ud.dir];
-				int tankdestinationy = leaderbl->y + 2 * diry[leadersd->ud.dir];
+				int tankdestinationx = leaderbl->x + (2+ leaderdistadj) * dirx[leadersd->ud.dir];
+				int tankdestinationy = leaderbl->y + (2 + leaderdistadj) * diry[leadersd->ud.dir];
 				if ((abs(tankdestinationx - sd->bl.x) >= 2) || (abs(tankdestinationy - sd->bl.y) >= 2)) {
 					newwalk(&sd->bl, tankdestinationx + rand() % 3 - 1, tankdestinationy + rand() % 3 - 1, 8);
 				}
@@ -6748,10 +6749,12 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 
 		// If party leader not under attack, get in range of 2
 		if (Dangerdistance >= 900) {
-			if ((abs(sd->bl.x - leaderbl->x) > 2) || abs(sd->bl.y - leaderbl->y) > 2) {
+			int tankdestinationx = leaderbl->x + (leaderdistadj) * dirx[leadersd->ud.dir];
+			int tankdestinationy = leaderbl->y + (leaderdistadj) * diry[leadersd->ud.dir];
+			if ((abs(tankdestinationx - sd->bl.x) > 2) || (abs(tankdestinationy - sd->bl.y) > 2)) {
 				if (!leadersd->ud.walktimer)
-				newwalk(&sd->bl, leaderbl->x + rand() % 5 - 2, leaderbl->y + rand() % 5 - 2, 8);
-				else newwalk(&sd->bl, leaderbl->x, leaderbl->y, 8);
+				newwalk(&sd->bl, leaderbl->x + (leaderdistadj)* dirx[leadersd->ud.dir] + rand() % 5 - 2, leaderbl->y + (leaderdistadj)* diry[leadersd->ud.dir]  + rand() % 5 - 2, 8);
+				else newwalk(&sd->bl, leaderbl->x + (leaderdistadj)* dirx[leadersd->ud.dir], leaderbl->y + (leaderdistadj)* diry[leadersd->ud.dir], 8);
 				return 0;
 			}
 		}
@@ -6820,7 +6823,7 @@ TIMER_FUNC(unit_autopilot_timer)
 
 	int party_id, type = 0, i = 0;
 	block_list * leaderbl;
-	int leaderID, leaderdistance;
+	int leaderID, leaderdistance, leaderdistadj;
 	struct map_session_data *leadersd;
 	partycount = 1;
 
@@ -6842,7 +6845,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		map_foreachinmap(targetthischar, sd->bl.m, BL_PC, sd);
 		leaderID = foundtargetID;  leaderbl = targetbl;
 		leadersd = (struct map_session_data*)targetbl;
-		if (leaderID > -1) { leaderdistance = distance_bl(leaderbl, bl); }
+		if (leaderID > -1) { leaderdistance = distance_bl(leaderbl, bl); leaderdistadj = leadersd->state.autopilotdist;  }
 	}
 
 	// Stand up if sitting and leader isn't
@@ -10827,11 +10830,11 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					if (leaderdistance >= 2) {
 						newwalk(&sd->bl, leaderbl->x + rand() % 3 - 1, leaderbl->y + rand() % 3 - 1, 8);
 					}
-				} // If tanking mode, try to get slightly ahead of leader
+				} // If tanking mode, try to get slightly ahead of everyone
 				else {*/
-					int tankdestinationx = leaderbl->x + 2* dirx[leadersd->ud.dir];
-					int tankdestinationy = leaderbl->y + 2* diry[leadersd->ud.dir];
-					if ((abs(tankdestinationx - sd->bl.x) >= 2) || (abs(tankdestinationy - sd->bl.y) >= 2)) {
+				int tankdestinationx = leaderbl->x + (2 + leaderdistadj) * dirx[leadersd->ud.dir];
+				int tankdestinationy = leaderbl->y + (2 + leaderdistadj) * diry[leadersd->ud.dir];
+				if ((abs(tankdestinationx - sd->bl.x) >= 2) || (abs(tankdestinationy - sd->bl.y) >= 2)) {
 						newwalk(&sd->bl, tankdestinationx + rand() % 3 - 1, tankdestinationy + rand() % 3 - 1, 8);
 					//}
 				}
@@ -10880,10 +10883,12 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 
 			// If party leader not under attack, get in range of 2
 			if (Dangerdistance >= 900) {
-				if ((abs(sd->bl.x - leaderbl->x) > 2) || abs(sd->bl.y - leaderbl->y) > 2) {
+				int tankdestinationx = leaderbl->x + (leaderdistadj) * dirx[leadersd->ud.dir];
+				int tankdestinationy = leaderbl->y + (leaderdistadj) * diry[leadersd->ud.dir];
+				if ((abs(tankdestinationx - sd->bl.x) > 2) || (abs(tankdestinationy - sd->bl.y) > 2)) {
 					if (!leadersd->ud.walktimer)
-					newwalk(&sd->bl, leaderbl->x + rand() % 5 - 2, leaderbl->y + rand() % 5 - 2, 8);
-					else newwalk(&sd->bl, leaderbl->x, leaderbl->y, 8); // ignore the random area if leader is still moving!
+					newwalk(&sd->bl, tankdestinationx + rand() % 5 - 2, tankdestinationy + rand() % 5 - 2, 8);
+					else newwalk(&sd->bl, tankdestinationx, tankdestinationy, 8); // ignore the random area if leader is still moving!
 					// This is necessary because going diagonally is slower so if the random is included the AI will follow slower and gets left behind!
 					return 0;
 				}

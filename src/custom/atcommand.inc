@@ -73,6 +73,15 @@ sd->state.autospgoal = atoi(message); clif_displaymessage(fd, "Will use SP items
 return 0; 
 }
 
+ACMD_FUNC(autopilotdist)
+{
+if (!message || !*message) { clif_displaymessage(fd, "please specify amount!"); }
+else {
+sd->state.autopilotdist = atoi(message); 
+}
+return 0; 
+}
+
 ACMD_FUNC(autosong)
 {
 if (!message || !*message) { clif_displaymessage(fd, "please specify type a song to play :");
