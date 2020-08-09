@@ -4166,6 +4166,7 @@ bool elemallowed(struct mob_data *md, int ele)
 	}
 	if (ele == ELE_FIRE) {
 		if ((md->status.def_ele == ELE_FIRE)) return 0;
+		if ((md->status.def_ele == ELE_WATER) && (md->status.ele_lv >= 1)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
 		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
@@ -4173,6 +4174,7 @@ bool elemallowed(struct mob_data *md, int ele)
 	}
 	if (ele == ELE_WATER) {
 		if ((md->status.def_ele == ELE_WATER)) return 0;
+		if ((md->status.def_ele == ELE_WIND) && (md->status.ele_lv >= 1)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
 		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
@@ -4180,6 +4182,7 @@ bool elemallowed(struct mob_data *md, int ele)
 	}
 	if (ele == ELE_WIND) {
 		if ((md->status.def_ele == ELE_WIND)) return 0;
+		if ((md->status.def_ele == ELE_EARTH) && (md->status.ele_lv >= 1)) return 0;
 		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 0;
 		if ((md->status.def_ele == ELE_DARK) && (md->status.ele_lv >= 3)) return 0;
 		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
