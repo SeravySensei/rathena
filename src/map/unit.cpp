@@ -9767,6 +9767,15 @@ TIMER_FUNC(unit_autopilot_timer)
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, KN_SPEARBOOMERANG, pc_checkskill(sd, KN_SPEARBOOMERANG));
 				}
 			}
+			// **** Note I changed this skill to depend on DEX, if you did not, change it to AGI
+			// Cross Ripper Slasher
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GC_CROSSRIPPERSLASHER) > 0))
+				if (sd->sc.data[SC_ROLLINGCUTTER])
+				if ((sd->status.weapon == W_KATAR)) {
+					if ((rangeddist > 5) || (sd->battle_status.dex >= 100) || (sd->state.autopilotmode == 2)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, GC_CROSSRIPPERSLASHER, pc_checkskill(sd, GC_CROSSRIPPERSLASHER));
+					}
+				}
 			// Pressure
 			// Only use if very low STR or having no equipped shield -> can't use Shield Chain effectively.
 			// Uninterruptable so ok during tanking mode but in that case, don't use up all the SP, keep most of it for tanking skills like healing.
@@ -10390,6 +10399,15 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					unit_skilluse_ifable(&sd->bl, SELF, SR_SKYNETBLOW, pc_checkskill(sd, SR_SKYNETBLOW));
 			}
 
+			// Rolling Cutter
+			if (canskill(sd)) if ((pc_checkskill(sd, GC_ROLLINGCUTTER) > 0)) {
+				// **** Note : I changed this skill to depend on AGI, if you did not, uncommon the line below
+				if (sd->battle_status.agi>=100) 
+					if ((sd->status.weapon == W_KATAR))
+						// At least 3 enemies in range (or 2 if weak to element)
+				if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, GC_ROLLINGCUTTER)) >= 6)
+					unit_skilluse_ifable(&sd->bl, SELF, GC_ROLLINGCUTTER, pc_checkskill(sd, GC_ROLLINGCUTTER));
+			}
 			// Magnum Break
 			if (canskill(sd)) if ((pc_checkskill(sd, SM_MAGNUM) > 0)) {
 					// At least 3 enemies in range (or 2 if weak to element)
