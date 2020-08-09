@@ -27816,7 +27816,6 @@ Body:
     TargetType: Attack
     DamageFlags:
       IgnoreElement: true
-      IgnoreDefCard: true
     Hit: Single
     HitCount: 1
     Duration1: 20000
