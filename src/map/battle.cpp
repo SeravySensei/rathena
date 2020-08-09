@@ -3971,14 +3971,14 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 900;
 			break;
 		case GC_ROLLINGCUTTER:
-			skillratio += -50 + 50 * skill_lv;
+			skillratio += -25 + 10 * skill_lv + 75*status_get_agi(src) /100;
 			RE_LVL_DMOD(100);
 			break;
 		case GC_CROSSRIPPERSLASHER:
 			skillratio += 300 + 80 * skill_lv;
-			RE_LVL_DMOD(100);
 			if (sc && sc->data[SC_ROLLINGCUTTER])
-				skillratio += sc->data[SC_ROLLINGCUTTER]->val1 * status_get_agi(src);
+				skillratio += ((5+sc->data[SC_ROLLINGCUTTER]->val1) * (status_get_dex(src)+ status_get_agi(src)/2))/2;
+			RE_LVL_DMOD(100);
 			break;
 		case GC_DARKCROW:
 			skillratio += 100 * (skill_lv - 1);
