@@ -2071,6 +2071,8 @@ Body:
     TargetType: Attack
     DamageFlags:
       NoDamage: true
+    Flags:
+      IncreaseGloomyDayDamage: true
     Range: -2
     Hit: Single
     HitCount: 1
@@ -6697,6 +6699,8 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Attack
+    Flags:
+      IncreaseGloomyDayDamage: true
     Range:
       - Level: 1
         Size: 3
@@ -10654,6 +10658,7 @@ Body:
       IgnoreDefense: true
     Flags:
       TargetTrap: true
+      IncreaseGloomyDayDamage: true
     Range: 5
     Hit: Multi_Hit
     HitCount: 5
@@ -12829,6 +12834,8 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Attack
+    Flags:
+      IncreaseGloomyDayDamage: true
     Range: 4
     Hit: Multi_Hit
     HitCount: 5
@@ -16840,6 +16847,8 @@ Body:
     MaxLevel: 10
     Type: Weapon
     TargetType: Attack
+    Flags:
+      IncreaseGloomyDayDamage: true
     Range: 5
     Hit: Multi_Hit
     HitCount: -5
@@ -19880,9 +19889,9 @@ Body:
       IgnoreDefCard: true
     Flags:
       AllowOnWarg: true
+      IncreaseDanceWithWugDamage: true
       IgnoreAutoGuard: true
       IgnoreCicada: true
-      IncreaseDanceWithWugDamage: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -19910,9 +19919,9 @@ Body:
       IgnoreDefCard: true
     Flags:
       AlterRangeVulture: true
+      IncreaseDanceWithWugDamage: true
       IgnoreAutoGuard: true
       IgnoreCicada: true
-      IncreaseDanceWithWugDamage: true
     Range: 9
     Hit: Single
     HitCount: 1
@@ -24304,7 +24313,7 @@ Body:
         Reproduce: true
     Requires:
       SpCost: 1
-  - Id: 2417 # Removed on kRO
+  - Id: 2417
     Name: WM_DOMINION_IMPULSE
     Description: Dominion Impulse
     MaxLevel: 1
@@ -24317,7 +24326,6 @@ Body:
     HitCount: 1
     SplashArea: 5
     AfterCastActDelay: 1000
-    FixedCastTime: -1
     Requires:
       SpCost: 10
   - Id: 2418
@@ -32128,6 +32136,8 @@ Body:
     TargetType: Attack
     DamageFlags:
       NoDamage: true
+    Flags:
+      IncreaseGloomyDayDamage: true
     Range: -2
     Hit: Single
     HitCount: 1
@@ -32152,6 +32162,7 @@ Body:
       IgnoreDefense: true
     Flags:
       TargetTrap: true
+      IncreaseGloomyDayDamage: true
     Range: 5
     Hit: Multi_Hit
     HitCount: 5
