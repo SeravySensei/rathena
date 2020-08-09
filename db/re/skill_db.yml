@@ -11335,7 +11335,6 @@ Body:
     TargetType: Self
     DamageFlags:
       Splash: true
-      IgnoreAtkCard: true
     Flags:
       TargetTrap: true
       IgnoreAutoGuard: true
