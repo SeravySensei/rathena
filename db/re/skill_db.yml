@@ -19142,15 +19142,15 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 40
+          Amount: 20
         - Level: 2
-          Amount: 36
+          Amount: 17
         - Level: 3
-          Amount: 32
+          Amount: 14
         - Level: 4
-          Amount: 28
+          Amount: 11
         - Level: 5
-          Amount: 24
+          Amount: 8
   - Id: 2030
     Name: GC_WEAPONCRUSH
     Description: Weapon Crush

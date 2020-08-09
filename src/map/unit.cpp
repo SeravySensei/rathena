@@ -10193,6 +10193,12 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					}
 				}
 
+				// Reject Sword
+				if (pc_checkskill(sd, GC_WEAPONBLOCKING) > 0) {
+					if (!(sd->sc.data[SC_WEAPONBLOCKING])) {
+						unit_skilluse_ifable(&sd->bl, SELF, GC_WEAPONBLOCKING, pc_checkskill(sd, GC_WEAPONBLOCKING));
+					}
+				}
 
 				// Find nearest enemy
 				resettargets();
@@ -10484,6 +10490,17 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_DARKCROW, pc_checkskill(sd, GC_DARKCROW));
 					}
 				}
+
+			// Counter Slash
+			// Note **** I changed this to be a single target skill that deals high damage depeding on LUK and AGI.
+			// if you did not, might want to change to include an AOE condition instead of AGI/LUK.
+			if (canskill(sd)) if (pc_checkskill(sd, GC_COUNTERSLASH) > 0)
+				if (sd->sc.data[SC_COMBO] && (sd->sc.data[SC_COMBO]->val1 == GC_WEAPONBLOCKING))
+					if ((sd->battle_status.agi+ sd->battle_status.luk)>=90)
+				if (elemallowed(targetmd, skillelem(sd, GC_COUNTERSLASH))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_COUNTERSLASH, pc_checkskill(sd, GC_COUNTERSLASH));
+				}
+
 			// Cross Impact
 			if (canskill(sd)) if (pc_checkskill(sd, GC_CROSSIMPACT) > 0) if (sd->status.weapon == W_KATAR)
 				if (elemallowed(targetmd, skillelem(sd, GC_CROSSIMPACT))) {
