@@ -5126,7 +5126,6 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case NC_SELFDESTRUCTION:
 	case NC_AXETORNADO:
 	case GC_ROLLINGCUTTER:
-	case GC_COUNTERSLASH:
 	case LG_MOONSLASHER:
 	case LG_EARTHDRIVE:
 	case SR_RAMPAGEBLASTER:
@@ -5658,6 +5657,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		}
 		break;
 
+	case GC_COUNTERSLASH:
 	case GC_WEAPONCRUSH:
 		if( sc && sc->data[SC_COMBO] && sc->data[SC_COMBO]->val1 == GC_WEAPONBLOCKING )
 			skill_attack(BF_WEAPON,src,src,bl,skill_id,skill_lv,tick,flag);
@@ -7395,7 +7395,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case GS_SPREADATTACK:
 	case RK_STORMBLAST:
 	case NC_AXETORNADO:
-	case GC_COUNTERSLASH:
 	case SR_SKYNETBLOW:
 	case SR_RAMPAGEBLASTER:
 	case SR_HOWLINGOFLION:

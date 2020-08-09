@@ -3962,6 +3962,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 1000 + 200 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
+		case GC_WEAPONCRUSH:
 		case GC_COUNTERSLASH:
 			//ATK [{(Skill Level x 100) + 300} x Caster's Base Level / 120]% + ATK [(AGI x 2) + (Caster's Job Level x 4)]%
 			skillratio += 200 + (100 * skill_lv);
@@ -4516,7 +4517,7 @@ static int64 battle_calc_skill_constant_addition(struct Damage* wd, struct block
 			break;
 #endif
 		case GC_COUNTERSLASH:
-			atk = sstatus->agi * 2 + (sd ? sd->status.job_level * 4 : 0);
+			atk = (sstatus->luk + sstatus->agi) * sd->status.base_level /4;
 			break;
 		case LG_SHIELDPRESS:
 			if (sd) {

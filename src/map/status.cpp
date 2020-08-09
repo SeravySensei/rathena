@@ -10924,7 +10924,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val2 = 10 * val1;
 			break;
 		case SC_WEAPONBLOCKING:
-			val2 = 10 + 2 * val1; // Chance
+			val2 = 2 * val1 + status->luk /7 + status->agi / 10; // Chance
+			if (val2 > 50) val2 = 50;
 			val4 = tick / 5000;
 			tick_time = 5000; // [GodLesZ] tick time
 			break;
