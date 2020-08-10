@@ -3319,7 +3319,7 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 
 			//Decreasing
 			if(sc->data[SC_VENOMBLEED])
-				bonus -= 15;
+				bonus -= 40;
 			if(sc->data[SC_EQC])
 				bonus -= sc->data[SC_EQC]->val3;
 		}
@@ -6822,7 +6822,7 @@ static signed short status_calc_flee(struct block_list *bl, struct status_change
 	if(sc->data[SC_FEAR])
 		flee -= flee * 20 / 100;
 	if(sc->data[SC_PARALYSE])
-		flee -= flee * 10 / 100;
+		flee -= flee * 30 / 100;
 	if(sc->data[SC_INFRAREDSCAN])
 		flee -= 33;
 	if( sc->data[SC_GLOOMYDAY] )
@@ -7435,8 +7435,6 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, b
 			bonus -= 30;
 		if (sc->data[SC_HALLUCINATIONWALK_POSTDELAY])
 			bonus -= 50;
-		if (sc->data[SC_PARALYSE])
-			bonus -= 10;
 		if (sc->data[SC__BODYPAINT])
 			bonus -= 5 * sc->data[SC__BODYPAINT]->val1;
 		if (sc->data[SC__INVISIBILITY])
@@ -7620,8 +7618,6 @@ static short status_calc_aspd_rate(struct block_list *bl, struct status_change *
 		aspd_rate += 300;
 	if( sc->data[SC_HALLUCINATIONWALK_POSTDELAY] )
 		aspd_rate += 500;
-	if( sc->data[SC_PARALYSE] )
-		aspd_rate += 100;
 	if( sc->data[SC__BODYPAINT] )
 		aspd_rate +=  50 * sc->data[SC__BODYPAINT]->val1;
 	if( sc->data[SC__INVISIBILITY] )
@@ -8639,7 +8635,7 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			tick_def2 = (status->vit + status->dex)*50;
 			break;
 		case SC_OBLIVIONCURSE: // 100% - (100 - 0.8 x INT)
-			sc_def = status->int_*80;
+			sc_def = status->int_*66;
 			sc_def = max(sc_def, 500); // minimum of 5% resist
 			tick_def = 0;
 			//Fall through

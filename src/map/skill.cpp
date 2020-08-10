@@ -735,7 +735,7 @@ int skill_calc_heal(struct block_list *src, struct block_list *target, uint16 sk
 		if (tsc->data[SC_CRITICALWOUND])
 			penalty += tsc->data[SC_CRITICALWOUND]->val2;
 		if (tsc->data[SC_DEATHHURT])
-			penalty += 20;
+			penalty += 50;
 		if (tsc->data[SC_NORECOVER_STATE])
 			penalty = 100;
 		if (penalty > 0) {
@@ -8156,7 +8156,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				if (tsc->data[SC_CRITICALWOUND])
 					penalty += tsc->data[SC_CRITICALWOUND]->val2;
 				if (tsc->data[SC_DEATHHURT])
-					penalty += 20;
+					penalty += 50;
 				if (tsc->data[SC_NORECOVER_STATE])
 					penalty = 100;
 				if (penalty > 0) {
@@ -9071,7 +9071,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				if (tsc->data[SC_CRITICALWOUND])
 					penalty += tsc->data[SC_CRITICALWOUND]->val2;
 				if (tsc->data[SC_DEATHHURT])
-					penalty += 20;
+					penalty += 50;
 				if (tsc->data[SC_NORECOVER_STATE])
 					penalty = 100;
 				if (penalty > 0) {
@@ -19874,8 +19874,9 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 				break;
 
 			case GC_CREATENEWPOISON:
-				make_per = 3000 + 500 * pc_checkskill(sd,GC_RESEARCHNEWPOISON);
+				make_per = 3000 + 500 * pc_checkskill(sd,GC_RESEARCHNEWPOISON) + (sd->base_status.luk) /5;
 				qty = 1+rnd()%pc_checkskill(sd,GC_RESEARCHNEWPOISON);
+				if (qty < 1 + sd->base_status.dex / 15) { qty = 1 + sd->base_status.dex / 15; }
 				break;
 			case GN_CHANGEMATERIAL:
 				for (i = 0; i < MAX_SKILL_CHANGEMATERIAL_DB; i++) {
@@ -19978,7 +19979,7 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 				break;
 		}
 	} else { // Weapon Forging - skill bonuses are straight from kRO website, other things from a jRO calculator [DracoRPG]
-		make_per = 5000 + status->dex*17 + status->luk*17; // Base
+		make_per = 5000 + sd->base_status.dex*17 + sd->base_status.luk*17; // Base
 		make_per += pc_checkskill(sd,skill_id)*500; // Smithing skills bonus: +5/+10/+15
 		make_per += pc_checkskill(sd,BS_WEAPONRESEARCH)*100 +((wlv >= 3)? pc_checkskill(sd,BS_ORIDEOCON)*100:0); // Weaponry Research bonus: +1/+2/+3/+4/+5/+6/+7/+8/+9/+10, Oridecon Research bonus (custom): +1/+2/+3/+4/+5
 		make_per -= (ele?2000:0) + sc*1500 + (wlv>1?wlv*1000:0); // Element Stone: -20%, Star Crumb: -15% each, Weapon level malus: -0/-20/-30

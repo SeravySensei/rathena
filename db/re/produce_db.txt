@@ -437,13 +437,13 @@
 //-- Poison Contamination <-- GC_RESEARCHNEWPOISON Lv3, 25 Decayed Nail, 1 Medicine Bowl, 1 Poison Kit, 1 Poison Herb Seratum
 160,12720,25,2024,3,957,25,7134,1,7931,1,7935,1
 //-- Poison Numb <-- GC_RESEARCHNEWPOISON Lv8, 1 Medicine Bowl, 10 Sticky Poison, 1 Poison Kit, 1 Poison Herb Nerium
-161,12721,25,2024,8,7134,1,7565,10,7931,1,7932,1
+//161,12721,25,2024,8,7134,1,7565,10,7931,1,7932,1
 //-- Poison Fever <-- GC_RESEARCHNEWPOISON Lv2, 20 Anolian Skin, 1 Medicine Bowl, 1 Poison Kit, 1 Poison Herb Rantana
 162,12722,25,2024,2,7003,20,7134,1,7931,1,7933,1
 //-- Poison Laughing <-- GC_RESEARCHNEWPOISON Lv7, 10 Poison Spore, 1 Medicine Bowl, 1 Poison Kit, 1 Poison Herb Makulata
-163,12723,25,2024,7,7033,10,7134,1,7931,1,7934,1
+//163,12723,25,2024,7,7033,10,7134,1,7931,1,7934,1
 //-- Poison Fatigue <-- GC_RESEARCHNEWPOISON Lv6, 1 Izidor, 1 Medicine Bowl, 10 Sticky Poison, 1 Poison Kit
-164,12724,25,2024,6,709,1,7134,1,7565,10,7931,1
+164,12724,25,2024,6,7934,1,7134,1,7565,10,7931,1
 //==============================================
 
 //==============================================

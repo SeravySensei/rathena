@@ -9011,7 +9011,7 @@ int pc_itemheal(struct map_session_data *sd, int itemid, int hp, int sp)
 			penalty += sd->sc.data[SC_CRITICALWOUND]->val2;
 
 		if (sd->sc.data[SC_DEATHHURT])
-			penalty += 20;
+			penalty += 50;
 
 		if (sd->sc.data[SC_NORECOVER_STATE])
 			penalty = 100;
