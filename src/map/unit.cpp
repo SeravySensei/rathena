@@ -4136,6 +4136,7 @@ bool elemstrong(struct mob_data *md, int ele)
 	if (ele == ELE_POISON) {
 		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
 		if (md->status.def_ele == ELE_GHOST) return 1;
+		if (md->status.def_ele == ELE_NEUTRAL) return 1;
 		return 0;
 	}
 	if (ele == ELE_UNDEAD) {
@@ -10502,6 +10503,14 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					if ((sd->battle_status.agi+ sd->battle_status.luk)>=90)
 				if (elemallowed(targetmd, skillelem(sd, GC_COUNTERSLASH))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_COUNTERSLASH, pc_checkskill(sd, GC_COUNTERSLASH));
+				}
+			// Venom Impress
+			// Use if enchant poison
+			if (canskill(sd)) if (pc_checkskill(sd, GC_VENOMIMPRESS) > 0)
+				if (!(sd->sc.data[AS_ENCHANTPOISON]))
+					if (!(targetmd->sc.data[SC_VENOMIMPRESS]))
+						if ((checksprate(sd, targetmd, 5)) || (sd->sc.data[SC_EDP])) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, GC_VENOMIMPRESS, pc_checkskill(sd, GC_VENOMIMPRESS));
 				}
 
 			// Cross Impact
