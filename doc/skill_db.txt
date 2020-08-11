@@ -100,8 +100,9 @@ TargetHidden				- Target enemy with OPTION_HIDE.
 IncreaseGloomyDayDamage		- Increase SC_GLOOMYDAY_SK damage.
 IncreaseDanceWithWugDamage	- Increase SC_DANCEWITHWUG damage.
 IgnoreWugBite				- Ignore RA_WUGBITE.
-IgnoreAutoGuard			- Not blocked by SC_AUTOGUARD (When TargetType is Weapon only).
+IgnoreAutoGuard				- Not blocked by SC_AUTOGUARD (When TargetType is Weapon only).
 IgnoreCicada				- Not blocked by SC_UTSUSEMI or SC_BUNSINJYUTSU (When TargetType is Weapon only).
+ShowScale					- Shows AoE area while casting
 
 ---------------------------------------
 
