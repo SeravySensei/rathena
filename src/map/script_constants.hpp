@@ -7527,7 +7527,6 @@
 	export_constant(INF2_IGNOREWUGBITE);
 	export_constant(INF2_IGNOREAUTOGUARD);
 	export_constant(INF2_IGNORECICADA);
-	export_constant(INF2_SHOWSCALE);
 
 	/* skill no near npc flags */
 	export_constant(SKILL_NONEAR_WARPPORTAL);
