@@ -33,12 +33,6 @@
 	#define MAX_HOTKEYS 38
 #endif
 
-#if PACKETVER_MAIN_NUM >= 20190522 || PACKETVER_RE_NUM >= 20190508 || PACKETVER_ZERO_NUM >= 20190605
-	#define MAX_HOTKEYS_DB ((MAX_HOTKEYS) * 2)
-#else
-	#define MAX_HOTKEYS_DB MAX_HOTKEYS
-#endif
-
 #define MAX_MAP_PER_SERVER 1500 /// Maximum amount of maps available on a server
 #define MAX_INVENTORY 100 ///Maximum items in player inventory
 /** Max number of characters per account. Note that changing this setting alone is not enough if the client is not hexed to support more characters as well.
@@ -524,7 +518,7 @@ struct mmo_charstatus {
 
 	struct s_friend friends[MAX_FRIENDS]; //New friend system [Skotlex]
 #ifdef HOTKEY_SAVING
-	struct hotkey hotkeys[MAX_HOTKEYS_DB];
+	struct hotkey hotkeys[MAX_HOTKEYS];
 #endif
 	bool show_equip,allow_party;
 	short rename;
@@ -542,7 +536,6 @@ struct mmo_charstatus {
 	uint32 uniqueitem_counter;
 
 	unsigned char hotkey_rowshift;
-	unsigned char hotkey_rowshift2;
 	unsigned long title_id;
 };
 
