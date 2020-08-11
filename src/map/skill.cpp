@@ -17424,7 +17424,7 @@ void skill_weaponrefine(struct map_session_data *sd, int idx)
 				return;
 			}
 			if( item->refine >= sd->menuskill_val || item->refine >= 20 ) {
-				clif_upgrademessage(sd->fd, 2, item->nameid);
+				clif_upgrademessage(sd, 2, item->nameid);
 				return;
 			}
 			// Default is armor, Elunium
@@ -17441,7 +17441,7 @@ void skill_weaponrefine(struct map_session_data *sd, int idx)
 			}
 			// Do we have the material?
 			if( (i = pc_search_inventory(sd, material[refreq])) < 0 ) {
-				clif_upgrademessage(sd->fd, 3, material[refreq]);
+				clif_upgrademessage(sd, 3, material[refreq]);
 				return;
 			}
 			// Get base chance of success

@@ -6865,15 +6865,15 @@ void clif_item_refine_list( struct map_session_data *sd ){
 			} 
 			if ((refreq>0) && (refine_item[refreq]>=0))
 				{
-				p->items[count].index = client_index(i);
-				p->items[count].itemId = client_nameid(sd->inventory.u.items_inventory[i].nameid);
-				p->items[count].refine = sd->inventory.u.items_inventory[i].refine;
-				clif_addcards(&p->items[count].slot, &sd->inventory.u.items_inventory[i]);
+				p->items[c].index = client_index(i);
+				p->items[c].itemId = client_nameid(sd->inventory.u.items_inventory[i].nameid);
+				p->items[c].refine = sd->inventory.u.items_inventory[i].refine;
+				clif_addcards(&p->items[c].slot, &sd->inventory.u.items_inventory[i]);
 				c++; }
 		}
 	}
 
-	p->packetLength = sizeof( struct PACKET_ZC_NOTIFY_WEAPONITEMLIST ) + sizeof( struct PACKET_ZC_NOTIFY_WEAPONITEMLIST_sub ) * count;
+	p->packetLength = sizeof( struct PACKET_ZC_NOTIFY_WEAPONITEMLIST ) + sizeof( struct PACKET_ZC_NOTIFY_WEAPONITEMLIST_sub ) * c;
 	WFIFOSET( fd, p->packetLength );
 
 	if( c > 0 ){
