@@ -9395,19 +9395,19 @@ Example:
 
 ---------------------------------------
 
-*bg_reserve("<battleground_map_name>"{,<ended>});
+*bg_reserve("<battleground_name>");
 
-Reserves a Battleground map for the Battleground UI System. When a map is booked it prevents another similar
-queue from being created and will allow players to join an active Battlegrounds event.
+Reserves a slot for the given Battleground for the Battleground UI System.
 
-If <ended> is true, then the Battleground is marked as over to prevent new players from joining. This state is meant
-for the period where players can get their Badges.
+Note: 'bg_reserve' and 'bg_unbook' prevent the Battlegrounds queue from joining players in an active Battleground.
 
 ---------------------------------------
 
-*bg_unbook("<battleground_map_name>");
+*bg_unbook("<battleground_name>");
 
-Removes a Battleground map for the Battleground UI System. When a map is unbooked it allows a queue to be created.
+Removes a spot for the given Battleground for the Battleground UI System.
+
+Note: 'bg_reserve' and 'bg_unbook' prevent the Battlegrounds queue from joining players in an active Battleground.
 
 ---------------------------------------
 
