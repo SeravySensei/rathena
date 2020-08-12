@@ -19966,8 +19966,9 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 				}
 
 				if (skill_lv == 1) { qty = 1; make_per = 10000 + (make_per - difficulty) * 10; }
-				else if (make_per >= difficulty) { qty = 10 + ((make_per - difficulty) / 10); make_per = 10000 + (make_per - difficulty) * 10;
-				}
+				else if (make_per >= difficulty) { qty = 10; make_per = 10000;  }
+				else { qty = 10; make_per = 10000 + (make_per - difficulty) * 10; };
+				
 
 			}
 				break;
