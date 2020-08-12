@@ -12761,7 +12761,7 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 		break;
 
 	case GN_HELLS_PLANT:
-		status_change_end(src, type, INVALID_TIMER); // Remove previous group
+		skill_clear_unitgroup(src);
 		if ((sg = skill_unitsetting(src, skill_id, skill_lv, src->x, src->y, 0)) != nullptr)
 			sc_start4(src, src, type, 100, skill_lv, 0, 0, sg->group_id, skill_get_time(skill_id, skill_lv));
 		break;
@@ -18866,7 +18866,7 @@ int skill_delunitgroup_(struct skill_unit_group *group, const char* file, int li
 		case SG_MOON_WARM:
 		case SG_STAR_WARM:
 		case LG_BANDING:
-
+		case GN_HELLS_PLANT:
 			{
 				status_change *sc = status_get_sc(src);
 				sc_type type = status_skill2sc(group->skill_id);
