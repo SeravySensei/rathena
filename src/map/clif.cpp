@@ -1559,6 +1559,26 @@ void clif_weather(int16 m)
 	}
 	mapit_free(iter);
 }
+
+/**
+ * Hide a NPC from the effects of Maya Purple card.
+ * @param bl: Block data
+ * @return True if NPC is disabled or false otherwise
+ */
+static inline bool clif_npc_mayapurple(block_list *bl) {
+	nullpo_retr(false, bl);
+
+	if (bl->type == BL_NPC) {
+		npc_data *nd = map_id2nd(bl->id);
+
+		// TODO: Confirm if waitingroom cause any special cases
+		if (/* nd->chat_id == 0 && */ nd->sc.option & OPTION_INVISIBLE)
+			return true;
+	}
+
+	return false;
+}
+
 /**
  * Main function to spawn a unit on the client (player/mob/pet/etc)
  **/
@@ -1569,10 +1589,8 @@ int clif_spawn( struct block_list *bl, bool walking ){
 	if( !vd || vd->class_ == JT_INVISIBLE )
 		return 0;
 
-	/**
-	* Hide NPC from maya purple card.
-	**/
-	if(bl->type == BL_NPC && !((TBL_NPC*)bl)->chat_id && (((TBL_NPC*)bl)->sc.option&OPTION_INVISIBLE))
+	// Hide NPC from Maya Purple card
+	if (clif_npc_mayapurple(bl))
 		return 0;
 
 	if( bl->type == BL_NPC && !vd->dead_sit ){
@@ -1915,10 +1933,8 @@ void clif_move(struct unit_data *ud)
 		return;
 	}
 
-	/**
-	* Hide NPC from maya purple card.
-	**/
-	if(bl->type == BL_NPC && !((TBL_NPC*)bl)->chat_id && (((TBL_NPC*)bl)->sc.option&OPTION_INVISIBLE))
+	// Hide NPC from Maya Purple card
+	if (clif_npc_mayapurple(bl))
 		return;
 
 	if (ud->state.speed_changed) {
@@ -4716,10 +4732,8 @@ void clif_getareachar_unit( struct map_session_data* sd,struct block_list *bl ){
 	if (!vd || vd->class_ == JT_INVISIBLE)
 		return;
 
-	/**
-	* Hide NPC from maya purple card.
-	**/
-	if(bl->type == BL_NPC && !((TBL_NPC*)bl)->chat_id && (((TBL_NPC*)bl)->sc.option&OPTION_INVISIBLE))
+	// Hide NPC from Maya Purple card
+	if (clif_npc_mayapurple(bl))
 		return;
 
 	ud = unit_bl2ud(bl);
