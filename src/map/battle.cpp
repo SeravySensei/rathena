@@ -1230,21 +1230,20 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 			}
 		}
 
-		if( (sce = sc->data[SC_MILLENNIUMSHIELD]) && sce->val2 > 0 && damage > 0 ) {
-			sce->val3 -= (int)cap_value(damage,INT_MIN,INT_MAX); // absorb damage
+		if ((sce = sc->data[SC_MILLENNIUMSHIELD]) && sce->val2 > 0 && damage > 0) {
+			sce->val3 -= static_cast<int>(cap_value(damage, INT_MIN, INT_MAX)); // absorb damage
 			d->dmg_lv = ATK_BLOCK;
-			if( sce->val3 <= 0 ) { // Shield Down
+			if (sce->val3 <= 0) { // Shield Down
 				sce->val2--;
-				if( sce->val2 >= 0 ) {
-					clif_millenniumshield(bl,sce->val2);
-					if( !sce->val2 )
-						status_change_end(bl,SC_MILLENNIUMSHIELD,INVALID_TIMER); // All shields down
-					else
-						sce->val3 = 1000; // Next shield
+				if (sce->val2 > 0) {
+					clif_millenniumshield(bl, sce->val2);
+					sce->val3 = 1000; // Next shield
 				}
-				status_change_start(src,bl,SC_STUN,10000,0,0,0,0,1000,SCSTART_NOTICKDEF);
+				else
+					status_change_end(bl, SC_MILLENNIUMSHIELD, INVALID_TIMER); // All shields down
+				status_change_start(src, bl, SC_STUN, 10000, 0, 0, 0, 0, 1000, SCSTART_NOTICKDEF);
 			}
-			return 0;
+			return false;
 		}
 
 		// attack blocked by Parrying
