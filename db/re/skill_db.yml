@@ -15705,7 +15705,6 @@ Body:
     DamageFlags:
       Splash: true
       SplashSplit: true
-      IgnoreDefense: true
     Flags:
       IsNpc: true
       TargetTrap: true
