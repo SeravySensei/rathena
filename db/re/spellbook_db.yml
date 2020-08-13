@@ -32,33 +32,54 @@ Header:
   Version: 1
 
 Body:
+  - Skill: MG_COLDBOLT
+    Book: Magic_Book_CB
+    PreservePoints: 7
+  - Skill: MG_FIREBOLT
+    Book: Magic_Book_FB
+    PreservePoints: 7
+  - Skill: MG_LIGHTNINGBOLT
+    Book: Magic_Book_LB
+    PreservePoints: 7
+  - Skill: MG_THUNDERSTORM
+    Book: Magic_Book_TS
+    PreservePoints: 9
   - Skill: WZ_METEOR
-    Book: WL_MB_MS
+    Book: Magic_Book_MS
     PreservePoints: 10
+  - Skill: WZ_JUPITEL
+    Book: Magic_Book_JT
+    PreservePoints: 9
   - Skill: WZ_VERMILION
-    Book: WL_MB_LOV
+    Book: Magic_Book_LOV
     PreservePoints: 10
+  - Skill: WZ_WATERBALL
+    Book: Magic_Book_WB
+    PreservePoints: 9
   - Skill: WZ_STORMGUST
-    Book: WL_MB_SG
+    Book: Magic_Book_SG
     PreservePoints: 10
-  - Skill: WL_JACKFROST
-    Book: WL_MB_JF
-    PreservePoints: 10
+  - Skill: WZ_EARTHSPIKE
+    Book: Magic_Book_ES
+    PreservePoints: 8
+  - Skill: WZ_HEAVENDRIVE
+    Book: Magic_Book_HD
+    PreservePoints: 9
   - Skill: WL_DRAINLIFE
-    Book: WL_MB_DL
+    Book: Magic_Book_DL
     PreservePoints: 8
   - Skill: WL_CRIMSONROCK
-    Book: WL_MB_CR
+    Book: Magic_Book_CR
     PreservePoints: 12
   - Skill: WL_COMET
-    Book: WL_MB_CM
+    Book: Magic_Book_CM
     PreservePoints: 22
   - Skill: WL_CHAINLIGHTNING
-    Book: WL_MB_CL
+    Book: Magic_Book_CL
     PreservePoints: 12
   - Skill: WL_EARTHSTRAIN
-    Book: WL_MB_ES
+    Book: Magic_Book_ES_
     PreservePoints: 12
   - Skill: WL_TETRAVORTEX
-    Book: WL_MB_TV
+    Book: Magic_Book_TV
     PreservePoints: 22
