@@ -3419,7 +3419,7 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 				}
 			}
 #ifndef RENEWAL
-			if(tsd != nullptr & tsd->bonus.crit_def_rate != 0 && !skill_id && is_attack_critical(wd, src, target, skill_id, skill_lv, false)) {
+			if(tsd != nullptr && tsd->bonus.crit_def_rate != 0 && !skill_id && is_attack_critical(wd, src, target, skill_id, skill_lv, false)) {
 				ATK_ADDRATE(wd->damage, wd->damage2, -tsd->bonus.crit_def_rate);
 			}
 #endif
@@ -8759,6 +8759,7 @@ static const struct _battle_data {
 	{ "show_skill_scale",                   &battle_config.show_skill_scale,                1,      0,      1,              },
 	{ "achievement_mob_share",              &battle_config.achievement_mob_share,           0,      0,      1,              },
 	{ "slave_stick_with_master",            &battle_config.slave_stick_with_master,         0,      0,      1,              },
+	{ "at_logout_event",                    &battle_config.at_logout_event,                 1,      0,      1,              },
 
 #include "../custom/battle_config_init.inc"
 };
