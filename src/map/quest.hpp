@@ -16,7 +16,7 @@ struct map_session_data;
 enum e_size : uint8;
 
 struct s_quest_dropitem {
-	t_itemid nameid;
+	uint16 nameid;
 	uint16 count;
 	uint16 rate;
 	uint16 mob_id;
