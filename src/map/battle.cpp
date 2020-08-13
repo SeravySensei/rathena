@@ -3821,7 +3821,10 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			break;
 		case RG_RAID:
 #ifdef RENEWAL
-			skillratio += -100 + 50 + skill_lv * 150;
+			if (status_get_class_(target) == CLASS_BOSS)
+				skillratio += 10 * skill_lv; // !TODO: Did this change as well?
+			else
+				skillratio += 50 + skill_lv * 150;
 #else
 			skillratio += 40 * skill_lv;
 #endif
