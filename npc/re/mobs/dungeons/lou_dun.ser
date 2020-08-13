@@ -29,8 +29,8 @@ lou_dun01,0,0	monster	Shining Plant	1083,5,5000
 //==================================================
 lou_dun02,0,0	monster	Yao Jun	1512,70,5000
 lou_dun02,0,0	monster	Munak	1026,25,5000
-lou_dun02,0,0	monster	Mimic	1191,5,5000
-lou_dun02,0,0	monster	Zhu Po Long	1514,5,5000
+lou_dun02,0,0	monster	Mimic	1191,7,5000
+lou_dun02,0,0	monster	Zhu Po Long	1514,7,5000
 lou_dun02,0,0	monster	Yao Jun Ringleader	2796,2,300000
 
 //==================================================
