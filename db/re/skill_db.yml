@@ -30526,8 +30526,9 @@ Body:
     Hit: Multi_Hit
     HitCount: -2
     Element: Weapon
+    AfterCastActDelay: 500
     Duration1: 3000
-    Cooldown:
+    Cooldown: # !TODO: Confirm cooldown
       - Level: 1
         Time: 4000
       - Level: 2
