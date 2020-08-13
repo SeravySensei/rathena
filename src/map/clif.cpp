@@ -5494,7 +5494,7 @@ void clif_skill_scale( struct block_list *bl, int src_id, int x, int y, uint16 s
 
 	if( disguised( bl ) ){
 		clif_send( &p, sizeof( p ), bl, AREA_WOS );
-		p.AID =  bl->id ;
+		p.AID = disguised_bl_id( bl->id );
 		clif_send( &p, sizeof( p ), bl, SELF );
 	}else{
 		clif_send( &p, sizeof( p ), bl, AREA );
