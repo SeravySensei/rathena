@@ -1,3 +1,6 @@
+# SeraRO
+> SeraRo is an rathena based server that is being optimized for single player offline usage and supports playing multiple characters at once using the command @autopilot. It's a work in progress. If you want to use it, you need my client and database files.
+
 <img src="branding/logo.png" align="right" height="90" />
 
 # rAthena
