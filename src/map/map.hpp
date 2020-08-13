@@ -284,8 +284,7 @@ enum e_race : int8{
 	RC_DEMIHUMAN,
 	RC_ANGEL,
 	RC_DRAGON,
-	RC_PLAYER_HUMAN,
-	RC_PLAYER_DORAM,
+	RC_PLAYER,
 	RC_ALL,
 	RC_MAX //auto upd enum for array size
 };
