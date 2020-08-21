@@ -6106,10 +6106,18 @@ void skillwhenidle(struct map_session_data *sd) {
 		unit_skilluse_ifable(&sd->bl, SELF, CR_DEFENDER, pc_checkskill(sd, CR_DEFENDER));
 	}
 
+	// Rich coin
+	if (canskill(sd))
+		if ((pc_checkskill(sd, RL_RICHS_COIN) > 0)) {
+			if ((sd->spiritball < 6) && (sd->status.zeny>=100)) {
+				unit_skilluse_ifable(&sd->bl, SELF, RL_RICHS_COIN, pc_checkskill(sd, RL_RICHS_COIN));
+			}
+		}
+
 	// Flip Coin
 	if (canskill(sd))
 		if ((pc_checkskill(sd, GS_GLITTERING) > 4)) {
-		if ((sd->spiritball < 10)) {
+		if ((sd->spiritball < 10) && (sd->status.zeny >= 1)) {
 				unit_skilluse_ifable(&sd->bl, SELF, GS_GLITTERING, pc_checkskill(sd, GS_GLITTERING));
 			}
 	}
@@ -6125,6 +6133,17 @@ void skillwhenidle(struct map_session_data *sd) {
 				unit_skilluse_ifable(&sd->bl, SELF, GS_MAGICALBULLET, pc_checkskill(sd, GS_MAGICALBULLET));
 			}
 	}
+
+	// Heat Barrel
+	// **** note, I changed this skill to cancel only on weapon change.
+	// If you did not, disable the AI for it because selecting the correct bullet will cancel the skill.
+	if (canskill(sd))
+		if ((pc_checkskill(sd, RL_HEAT_BARREL) > 0))
+			if (sd->state.enableconc) {
+			if ((sd->spiritball>=10)) {
+				unit_skilluse_ifable(&sd->bl, SELF, RL_HEAT_BARREL, pc_checkskill(sd, RL_HEAT_BARREL));
+			}
+		}
 
 	// Summon Spirit Sphere
 	if (canskill(sd))
@@ -8951,6 +8970,24 @@ TIMER_FUNC(unit_autopilot_timer)
 								}
 							}
 
+							// Shattering Storm
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							if (canskill(sd)) if ((pc_checkskill(sd, RL_S_STORM) > 0))
+								if (sd->status.weapon == W_SHOTGUN) {
+										resettargets();
+										map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+										if (foundtargetID > -1) {
+											int area = 2;
+											ammochange2(sd, targetmd);
+											priority = 2 * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, RL_S_STORM));
+											if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+												spelltocast = RL_S_STORM; bestpriority = priority; IDtarget = foundtargetID;
+										}
+									}
+								}
+
+
+
 							// Throw Huuma
 							if (canskill(sd)) if ((pc_checkskill(sd, NJ_HUUMA) >= 4))
 								if (sd->status.weapon == W_HUUMA) {
@@ -9680,6 +9717,26 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (rangeddist <= 9) if (((sd->status.weapon == W_REVOLVER) && (pc_checkskill(sd, GS_RAPIDSHOWER)*2 <= pc_checkskill(sd, GS_TRACKING))) || (sd->status.weapon == W_RIFLE)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_TRACKING, pc_checkskill(sd, GS_TRACKING));
+				}
+			}
+
+			// Slug Shot
+			// only use on high HP enemies
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_SLUGSHOT) > 0)) if (sd->state.autopilotmode != 3) {
+				if (pc_inventory_count(sd, 25187) >= 1)
+					if (targetRAmd->status.hp < 600 * sd->status.base_level)
+						if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
+					ammochange2(sd, targetRAmd);
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, RL_SLUGSHOT));
+				}
+			}
+
+
+			// Banishing Buster
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_BANISHING_BUSTER) > 0)) if (sd->state.autopilotmode != 3) {
+				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
+					ammochange2(sd, targetRAmd);
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, RL_BANISHING_BUSTER));
 				}
 			}
 
