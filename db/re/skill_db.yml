@@ -28288,7 +28288,6 @@ Body:
       Target: Enemy
       Flag:
         NoReiteration: true
-        NoFootSet: true
   - Id: 2556
     Name: RL_FLICKER
     Description: Flicker

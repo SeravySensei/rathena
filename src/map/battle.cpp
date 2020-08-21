@@ -4421,17 +4421,14 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case RL_BANISHING_BUSTER:
-			skillratio += -100 + 1000 + 200 * skill_lv;
+			skillratio += -100 + 800 + 200 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RL_S_STORM:
-			skillratio += -100 + 1700 + 200 * skill_lv;
+			skillratio += -100 + 1000 + 100 * skill_lv;
 			break;
 		case RL_SLUGSHOT:
-			if (target->type == BL_PC)
-				skillratio += -100 + 1200 * skill_lv;
-			else
-				skillratio += -100 + 2000 * skill_lv;
+			skillratio += -100 + 400 * skill_lv;
 			skillratio *= 2 + tstatus->size;
 			break;
 		case RL_D_TAIL:
@@ -6853,10 +6850,7 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			md.damage = 100 + 200 * skill_lv + status_get_int(src);
 			break;
 		case RL_B_TRAP:
-			// kRO 2014-02-12: Damage: Caster's DEX, Target's current HP, Skill Level
-			md.damage = status_get_dex(src) * 10 + (skill_lv * 3 * status_get_hp(target)) / 100;
-			if (status_bl_has_mode(target, MD_STATUS_IMMUNE))
-				md.damage /= 10;
+			md.damage = status_get_luk(src) * (44 + rnd() % 33) + status_get_int(src) * 33;
 			break;
 		case NPC_MAXPAIN_ATK:
 			if (ssc && ssc->data[SC_MAXPAIN])

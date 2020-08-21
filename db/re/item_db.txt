@@ -12410,7 +12410,7 @@
 25183,Decorated_Archer's_Thimble,Decorated Archer's Thimble,3,0,,0,,,,,,,,,,,,,{},{},{}
 25184,Portable_Sewingbox,Portable Sewingbox,3,0,,0,,,,,,,,,,,,,{},{},{}
 25185,Locket_Pendant,Locket Pendant,3,0,,0,,,,,,,,,,,,,{},{},{}
-25187,Slug_Bullet,Slug Bullet,3,1200,,1200,,,,,,,,,,,,,{},{},{}
+25187,Slug_Bullet,Slug Bullet,3,1200,,600,,,,,,,,,,,,,{},{},{}
 25223,Para_Team_Coin,Eden Group Coin,3,0,,0,,,,,,,,,,,,,{},{},{}
 25231,Suspicious_Bottle,Suspicious Bottle,3,1000,,10,,,,,,,,,,,,,{},{},{}
 25232,Cheap_Lubricant,Cheap Lubricant,3,1000,,10,,,,,,,,,,,,,{},{},{}
