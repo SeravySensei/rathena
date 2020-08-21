@@ -1523,7 +1523,11 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 				status_change_end(bl, SC_KYRIE, INVALID_TIMER);
 		}
 
-		if ((sce = sc->data[SC_P_ALTER]) && damage > 0) {
+		struct mob_data *md = BL_CAST(BL_MOB, src);
+
+		if ((sce = sc->data[SC_P_ALTER]) && damage > 0)
+			if ((!md) || (battle_check_undead(md->status.race, md->status.def_ele) || md->status.race == RC_DEMON))
+		{
 			clif_specialeffect(bl, EF_GUARD, AREA);
 			sce->val3 -= (int)cap_value(damage, INT_MIN, INT_MAX);
 			if (sce->val3 >= 0)

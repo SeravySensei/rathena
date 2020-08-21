@@ -11563,7 +11563,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				//kRO Update 2016-05-25
 				val2 = n * 5; // -fixed casttime
 				val3 = (6 + val1 * 2) * n; // ATK
-				val4 = 25 + val1 * 5; // -hit
+				val4 = 40 + val1 * 10; // -hit
 			}
 			break;
 		case SC_P_ALTER:
@@ -11571,7 +11571,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				uint8 n = 10;
 				if (sd)
 					n = (uint8)sd->spiritball_old;
-				val2 = 10 * n; // +atk
+				val2 = 10 * n + 10 * val1; // +atk
 				val3 = (status->max_hp * (val1 * 5) / 100); // Barrier HP
 			}
 			break;
