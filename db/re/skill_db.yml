@@ -28396,7 +28396,7 @@ Body:
         Gatling: true
         Shotgun: true
         Grenade: true
-      SpiritSphereCost: 1
+      SpiritSphereCost: -1
   - Id: 2559
     Name: RL_QD_SHOT
     Description: Quick Draw Shot
