@@ -2063,7 +2063,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		skill_break_equip(src, bl, EQP_HEAD_TOP, max(skill_lv * 500, (sstatus->dex * skill_lv * 10) - (tstatus->agi * 20)), BCT_ENEMY); //! TODO: Figure out break chance formula
 		break;
 	case RL_AM_BLAST:
-		sc_start(src,bl,SC_ANTI_M_BLAST,20 + 10 * skill_lv,skill_lv,skill_get_time2(skill_id,skill_lv));
+		sc_start(src,bl,SC_ANTI_M_BLAST,7 * skill_lv + status_get_int(src) / 3,skill_lv,skill_get_time2(skill_id,skill_lv));
 		break;
 	case SU_SCRATCH:
 		sc_start2(src, bl, SC_BLEEDING, skill_lv * 10 + 70, skill_lv, src->id, skill_get_time(skill_id, skill_lv));

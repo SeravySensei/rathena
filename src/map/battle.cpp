@@ -3902,7 +3902,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case GS_DESPERADO:
 			skillratio += 50 * (skill_lv - 1);
 			if (sc && sc->data[SC_FALLEN_ANGEL])
-				skillratio *= 2;
+				skillratio += skillratio / 2;
 			break;
 		case GS_DUST:
 			skillratio += 50 * skill_lv;
@@ -4416,8 +4416,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += -100 + 200 * skill_lv;
 			break;
 		case RL_FIREDANCE:
-			skillratio += 100 + 100 * skill_lv;
-			skillratio += (sd ? pc_checkskill(sd, GS_DESPERADO) * 20 : 0);
+			skillratio += 700 + 100 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RL_BANISHING_BUSTER:
@@ -4451,18 +4450,14 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 				skillratio += -100 + 200 + 200 * skill_lv;
 			break;
 		case RL_HAMMER_OF_GOD:
-			skillratio += -100 + 100 * skill_lv;
-			if (sd) {
-				if (wd->miscflag & 8)
-					skillratio += 400 * sd->spiritball_old;
-				else
-					skillratio += 150 * sd->spiritball_old;
-			}
+			skillratio += -100 + 1000 + 150 * skill_lv + 50 * sd->spiritball_old;
 			RE_LVL_DMOD(100);
 			break;
 		case RL_FIRE_RAIN:
-		case RL_AM_BLAST:
 			skillratio += -100 + 3500 + 300 * skill_lv;
+			break;
+		case RL_AM_BLAST:
+			skillratio += -100 + 1500 + 200 * skill_lv;
 			break;
 		case SU_BITE:
 			skillratio += 100;
