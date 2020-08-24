@@ -4431,10 +4431,9 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio *= 2 + tstatus->size;
 			break;
 		case RL_D_TAIL:
-			skillratio += -100 + 500 + 200 * skill_lv;
-			if (sd && (wd->miscflag & 8))
-				skillratio *= 2;
+			skillratio += -100 + 1500 + 200 * skill_lv;
 			RE_LVL_DMOD(100);
+//			if (sd && !(wd->miscflag & 1) && !(wd->miscflag & 8)) skillratio = 0;
 			break;
 		case RL_R_TRIP:
 			skillratio += -100 + 350 * skill_lv;
@@ -4447,7 +4446,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			if (sd && sd->flicker) // Flicker explosion damage: 500 + 300 * SkillLv
 				skillratio += -100 + 500 + 300 * skill_lv;
 			else // 200 + 200 * SkillLv
-				skillratio += -100 + 200 + 200 * skill_lv;
+				skillratio += -100 + 100 * skill_lv;
 			break;
 		case RL_HAMMER_OF_GOD:
 			skillratio += -100 + 1000 + 150 * skill_lv + 50 * sd->spiritball_old;

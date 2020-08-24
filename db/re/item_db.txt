@@ -5641,7 +5641,7 @@
 7651,Mystery_Egg,Mystery Egg,3,10,,10,,,,,,,,,,,,,{},{},{}
 7663,Full_Metal_Jacket,Full Metal Jacket,3,400,,2,10,,,,,,,,,,,,{},{},{}
 7664,Shooting_Mine,Grenade Launcher,3,450,,3,10,,,,,,,,,,,,{},{},{}
-7665,Dragon_Tail_Missile,Dragon Tail Missile,3,1500,,100,10,,,,,,,,,,,,{},{},{}
+7665,Dragon_Tail_Missile,Dragon Tail Missile,3,2500,,100,10,,,,,,,,,,,,{},{},{}
 7666,TimeTravel_Scroll,Time Travel Scroll,3,20,,0,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
 7667,Abandoned_Machine,Abandoned Machine,3,20,,0,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}
 7668,Clean_Bandage,Clean Bandage,3,20,,0,,,,,0xFFFFFFFF,63,2,,,,,,{},{},{}

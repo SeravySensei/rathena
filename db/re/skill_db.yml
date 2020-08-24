@@ -28718,7 +28718,7 @@ Body:
     Range: 11
     Hit: Single
     HitCount: 1
-    SplashArea: 1
+    SplashArea: 11
     CastTime:
       - Level: 1
         Time: 1200
@@ -28741,7 +28741,7 @@ Body:
       - Level: 10
         Time: 3000
     AfterCastActDelay: 1000
-    Cooldown: 3500
+    Cooldown: 12000
     FixedCastTime: -1
     Requires:
       SpCost:
