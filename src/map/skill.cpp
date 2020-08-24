@@ -4157,13 +4157,25 @@ int skill_area_sub_count (struct block_list *src, struct block_list *target, uin
 {
 	switch (skill_id) {
 		case RL_QD_SHOT:
-			{
+		case RL_HAMMER_OF_GOD:
+		case RL_D_TAIL:
+		{
 				if (src->type == BL_PC && BL_CAST(BL_PC,src)) {
 					struct unit_data *ud = unit_bl2ud(src);
 					if (ud && ud->target == target->id)
 						return 1;
 				}
 			}
+/*			if (src->type != BL_PC)
+				return 0;
+			{
+				struct status_change *tsc = status_get_sc(target);
+				// Only counts marked target with SC_C_MARKER
+				if (!tsc || !tsc->data[SC_C_MARKER])
+					return 0;
+			}
+			return 1;
+			*/
 	}
 	return 1;
 }
@@ -6180,33 +6192,20 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		break;
 
 	case RL_QD_SHOT:
-		if (skill_area_temp[1] == bl->id)
+	case RL_HAMMER_OF_GOD:
+	case RL_D_TAIL:
+		if (skill_id == RL_QD_SHOT && skill_area_temp[1] == bl->id)
+			break;
+		if (skill_id != RL_QD_SHOT && (src->id==bl->id))
 			break;
 		if (flag&1 && tsc && tsc->data[SC_C_MARKER])
 			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag|SD_ANIMATION);
 		break;
-	case RL_D_TAIL:
-	case RL_HAMMER_OF_GOD:
-		if (flag&1)
-			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag|SD_ANIMATION);
-		else {
-			if (sd && tsc && tsc->data[SC_C_MARKER]) {
-				int i;
-
-				ARR_FIND(0, MAX_SKILL_CRIMSON_MARKER, i, sd->c_marker[i] == bl->id);
-
-				if (i < MAX_SKILL_CRIMSON_MARKER)
-					flag |= 8;
-			}
-
-			if (skill_id == RL_HAMMER_OF_GOD)
-				clif_skill_poseffect(src, skill_id, 1, bl->x, bl->y, gettick());
-			else
-				clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
-
-			map_foreachinrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag|BCT_ENEMY|SD_SPLASH|1, skill_castend_damage_id);
-		}
-		break;
+/*		if (!sd || (tsc && tsc->data[SC_C_MARKER])) {
+			if (skill_id == RL_QD_SHOT && skill_area_temp[1] == bl->id)
+				break;
+			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag | SD_ANIMATION);
+		}*/
 
 	case SU_SCAROFTAROU:
 	case SU_SV_STEMSPEAR:
@@ -11232,6 +11231,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
 		}
 		break;
+	/*	map_foreachinrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag | BCT_ENEMY | SD_SPLASH | 1, skill_castend_damage_id);
+	break;*/
+	case RL_HAMMER_OF_GOD:
+	case RL_D_TAIL:
 	case RL_QD_SHOT:
 		if (sd) {
 			skill_area_temp[1] = bl->id;
@@ -11241,8 +11244,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				map_foreachinallrange(skill_area_sub, src, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag|BCT_ENEMY|SD_SPLASH|1, skill_castend_damage_id);
 
 			// Main target always receives damage
-			clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
-			skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag|BCT_ENEMY|SD_LEVEL);
+			if (skill_id==RL_QD_SHOT) {
+				clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
+				skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag | BCT_ENEMY | SD_LEVEL);
+			}
 		}
 		else {
 			clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
@@ -11536,6 +11541,21 @@ static int8 skill_castend_id_check(struct block_list *src, struct block_list *ta
 					return USESKILL_FAIL_MAX;				
 				if (skill_get_inf2(su->group->skill_id, INF2_ISTRAP))
 					return USESKILL_FAIL_MAX;
+			}
+			break;
+		case RL_HAMMER_OF_GOD:
+		case RL_D_TAIL:
+			if (src) {
+				int count = 0;
+
+				if (battle_config.skill_wall_check)
+					count = map_foreachinshootrange(skill_area_sub, src, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, gettick(), BCT_ENEMY, skill_area_sub_count);
+				else
+					count = map_foreachinrange(skill_area_sub, src, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, gettick(), BCT_ENEMY, skill_area_sub_count);
+
+				if (!count) {
+					return USESKILL_FAIL_LEVEL;
+				}
 			}
 			break;
 	}

@@ -28711,7 +28711,7 @@ Body:
     Description: Dragon Tail
     MaxLevel: 10
     Type: Weapon
-    TargetType: Attack
+    TargetType: Self
     DamageFlags:
       IgnoreElement: true
       IgnoreDefense: true
@@ -28916,7 +28916,7 @@ Body:
     Description: Hammer of God
     MaxLevel: 5
     Type: Weapon
-    TargetType: Attack
+    TargetType: Self
     DamageFlags:
       Splash: true
     Range: 11
@@ -28924,15 +28924,15 @@ Body:
     HitCount: 1
     SplashArea:
       - Level: 1
-        Area: 3
+        Area: 11
       - Level: 2
-        Area: 3
+        Area: 11
       - Level: 3
-        Area: 3
+        Area: 11
       - Level: 4
-        Area: 3
+        Area: 11
       - Level: 5
-        Area: 3
+        Area: 11
     AfterCastActDelay: 500
     Cooldown: 20000
     FixedCastTime: -1
