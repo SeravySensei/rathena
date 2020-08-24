@@ -4443,11 +4443,11 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 //			if (sd && !(wd->miscflag & 1) && !(wd->miscflag & 8)) skillratio = 0;
 			break;
 		case RL_R_TRIP:
-			skillratio += -100 + 350 * skill_lv;
+			skillratio += -100 + 500 + 100 * skill_lv;
 			RE_LVL_DMOD(100);
 			break;
 		case RL_R_TRIP_PLUSATK:
-			skillratio += -100 + 300 + 300 * skill_lv;
+			skillratio += -100 + 250 + 50 * skill_lv;
 			break;
 		case RL_H_MINE:
 			if (sd && sd->flicker) // Flicker explosion damage: 500 + 300 * SkillLv
@@ -4460,7 +4460,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case RL_FIRE_RAIN:
-			skillratio += -100 + 3500 + 300 * skill_lv;
+			skillratio += -100 + 1200 + 400 * skill_lv;
 			break;
 		case RL_AM_BLAST:
 			skillratio += -100 + 1500 + 200 * skill_lv;
