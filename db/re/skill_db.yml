@@ -28609,6 +28609,7 @@ Body:
         Time: 0
     FixedCastTime: -1
     Requires:
+      SpCost:
         - Level: 1
           Amount: 50
         - Level: 2
