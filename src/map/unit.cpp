@@ -9111,11 +9111,26 @@ TIMER_FUNC(unit_autopilot_timer)
 						// Let's assume we already have some ammo equipped I guess, from using other skills
 						// In worst case it fails and the AI uses the other skills anyway.
 						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
-						if ((priority >= 6) && (priority > bestpriority)) {
-							spelltocast = GS_DESPERADO; bestpriority = priority; IDtarget = sd->bl.id;
+						float pmod = 1;
+						if (sd->sc.data[SC_FALLEN_ANGEL]) pmod = 1.5;
+						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
+							spelltocast = GS_DESPERADO; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
 						}
 					}
 
+					// Fire Dance - always centered on user
+					if (canskill(sd)) if (pc_checkskill(sd, RL_FIREDANCE) > 0) if (sd->status.weapon == W_REVOLVER) {
+						int area = 3;
+						// Ammo? But is AOE we don't have a target to pick an element
+						// Let's assume we already have some ammo equipped I guess, from using other skills
+						// In worst case it fails and the AI uses the other skills anyway.
+						float pmod = 1;
+						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100;
+						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
+						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
+							spelltocast = RL_FIREDANCE; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
+						}
+					}
 
 					// Cast the chosen spell
 					if (spelltocast > -1) {
@@ -9712,14 +9727,6 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 			}
 
-			// Tracking
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GS_TRACKING) > 0)) if (sd->state.autopilotmode != 3) {
-				if (rangeddist <= 9) if (((sd->status.weapon == W_REVOLVER) && (pc_checkskill(sd, GS_RAPIDSHOWER)*2 <= pc_checkskill(sd, GS_TRACKING))) || (sd->status.weapon == W_RIFLE)) {
-					ammochange2(sd, targetRAmd);
-					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_TRACKING, pc_checkskill(sd, GS_TRACKING));
-				}
-			}
-
 			// Slug Shot
 			// only use on high HP enemies
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_SLUGSHOT) > 0)) if (sd->state.autopilotmode != 3) {
@@ -9727,7 +9734,7 @@ TIMER_FUNC(unit_autopilot_timer)
 					if (targetRAmd->status.hp < 600 * sd->status.base_level)
 						if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
 					ammochange2(sd, targetRAmd);
-					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, RL_SLUGSHOT));
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_SLUGSHOT, pc_checkskill(sd, RL_SLUGSHOT));
 				}
 			}
 
@@ -9736,7 +9743,24 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_BANISHING_BUSTER) > 0)) if (sd->state.autopilotmode != 3) {
 				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
 					ammochange2(sd, targetRAmd);
-					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, RL_BANISHING_BUSTER));
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_BANISHING_BUSTER, pc_checkskill(sd, RL_BANISHING_BUSTER));
+				}
+			}
+
+			// Anti-Material blast
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_AM_BLAST) > 0)) if (sd->state.autopilotmode != 3) {
+					if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_RIFLE)) {
+						ammochange2(sd, targetRAmd);
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_AM_BLAST, pc_checkskill(sd, RL_AM_BLAST));
+					}
+			}
+
+			// Mass Spiral
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_MASS_SPIRAL) > 0)) if (sd->state.autopilotmode != 3) {
+				if (pc_inventory_count(sd, 7663) >= 1)
+					if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_RIFLE)) {
+					ammochange2(sd, targetRAmd);
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_MASS_SPIRAL, pc_checkskill(sd, RL_MASS_SPIRAL));
 				}
 			}
 
@@ -9745,6 +9769,14 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, GS_FULLBUSTER));
+				}
+			}
+
+			// Tracking
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GS_TRACKING) > 0)) if (sd->state.autopilotmode != 3) {
+				if (rangeddist <= 9) if (((sd->status.weapon == W_REVOLVER) && (pc_checkskill(sd, GS_RAPIDSHOWER) * 2 <= pc_checkskill(sd, GS_TRACKING))) || (sd->status.weapon == W_RIFLE)) {
+					ammochange2(sd, targetRAmd);
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_TRACKING, pc_checkskill(sd, GS_TRACKING));
 				}
 			}
 
