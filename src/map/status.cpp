@@ -2571,16 +2571,16 @@ int status_base_amotion_pc(struct map_session_data* sd, struct status_data* stat
 		val -= 50 - 10 * pc_checkskill(sd, KN_CAVALIERMASTERY);
 	else if (pc_isridingdragon(sd))
 		val -= 25 - 5 * pc_checkskill(sd, RK_DRAGONTRAINING);
-	float modifier = status->agi / 200.0; 
+	double modifier = status->agi / 200.0; 
 	if (modifier > 1) modifier = 1; // can't get higher than 100% benefit even if excess agi
-	float bonus1 = sqrt(status->agi) - 2; // this much bonus is allowed fully
+	double bonus1 = sqrt(status->agi) - 2; // this much bonus is allowed fully
 	if (bonus1 < 0) bonus1 = 0;
-	float aspd_bonus = status_calc_aspd(&sd->bl, &sd->sc, true) + val;
-	if (bonus1 > aspd_bonus) bonus1 = aspd_bonus; // if we did full bypass it would be this much
+	int aspd_bonus = status_calc_aspd(&sd->bl, &sd->sc, true) + val;
+	if (bonus1 > aspd_bonus) bonus1 = (double)(aspd_bonus); // if we did full bypass it would be this much
 	if (aspd_bonus > bonus1) bonus1 = bonus1 + (aspd_bonus - bonus1) * modifier;
-	float bonus2 = aspd_bonus * modifier; // if we did full official then this
+	double bonus2 = aspd_bonus * modifier; // if we did full official then this
 
-	float modifier2 = (status->agi - 50.0) / 50.0; // 100 AGI+ = go full official, 50 AGI- go full bypass system
+	double modifier2 = (status->agi - 50.0) / 50.0; // 100 AGI+ = go full official, 50 AGI- go full bypass system
 	if (modifier2 > 1) modifier2 = 1;
 	if (modifier2 < 0) modifier2 = 0;
 	aspd_bonus = bonus1 * (1 - modifier2) + bonus2 * modifier2;
@@ -3526,7 +3526,7 @@ static unsigned int status_calc_maxhpsp_pc(struct map_session_data* sd, unsigned
 		dmax += equip_bonus + item_bonus;
 		dmax += (int64)(dmax * status_get_hpbonus(&sd->bl,STATUS_BONUS_RATE) / 100); //Aegis accuracy
 		if (sd->sc.data[SC_BEYONDOFWARCRY])
-			dmax = (int64)(dmax*(100-sd->sc.data[SC_BEYONDOFWARCRY]->val4) /100);
+			dmax = (dmax*(100-sd->sc.data[SC_BEYONDOFWARCRY]->val4) /100);
 
 	}
 	else { //Calculates MaxSP
@@ -7207,7 +7207,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			else if( sc->data[SC_ALL_RIDING] )
 				val = battle_config.rental_mount_speed_boost;
 		}
-		speed_rate = (speed_rate * 100) / (100.0 + val);
+		speed_rate = (int)((speed_rate * 100) / (100.0 + val));
 
 		// GetMoveSlowValue()
 		if( sd && sc->data[SC_HIDING] && pc_checkskill(sd,RG_TUNNELDRIVE) > 0 )
@@ -7332,7 +7332,7 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 		if( sd && sd->bonus.speed_rate + sd->bonus.speed_add_rate < 0 ) // Permanent item-based speedup
 			val += -(sd->bonus.speed_rate + sd->bonus.speed_add_rate);
 
-		speed_rate = (speed_rate *100) / (100.0 + val);
+		speed_rate = (int)((speed_rate *100) / (100.0 + val));
 
 		if (sc->data[SC_BEYONDOFWARCRY])
 			speed_rate = speed_rate*sc->data[SC_BEYONDOFWARCRY]->val3 /100;
@@ -7474,7 +7474,6 @@ static short status_calc_aspd(struct block_list *bl, struct status_change *sc, b
 			bonus += sc->data[SC_STARSTANCE]->val2;
 
 		struct map_session_data* sd = BL_CAST(BL_PC, bl);
-		uint8 skill_lv;
 	}
 
 	return bonus;

@@ -8,7 +8,7 @@
  * rAthena configuration file (http://rathena.org)
  * For detailed guidance on these check http://rathena.org/wiki/SRC/config/
  **/
-
+#pragma warning (disable : 4005)
 #define PACKETVER 20180620
 
 #endif /* CONFIG_CUSTOM_DEFINES_POST_HPP */

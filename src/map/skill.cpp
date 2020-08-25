@@ -1945,7 +1945,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	case RL_BANISHING_BUSTER: {
 			uint16 i, n = 1;
 
-			if (rnd() % 100 > sd->battle_status.int_) { n == 0; }
+			if (rnd() % 100 > sd->battle_status.int_) { n = 0; }
 
 			if (!tsc || !tsc->count)
 				break;
