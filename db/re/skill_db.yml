@@ -30255,7 +30255,7 @@ Body:
     Hit: Single
     HitCount: 1
     Element: Weapon
-    Cooldown: 3000
+    Cooldown: 300
     FixedCastTime: -1
     Requires:
       SpCost:

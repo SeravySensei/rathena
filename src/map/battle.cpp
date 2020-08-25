@@ -4373,22 +4373,16 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			break;
 		case KO_JYUMONJIKIRI:
 			skillratio += -100 + 150 * skill_lv;
-			RE_LVL_DMOD(120);
 			if(tsc && tsc->data[SC_JYUMONJIKIRI])
-				skillratio += skill_lv * status_get_lv(src);
+				skillratio += skill_lv * 150;
+			RE_LVL_DMOD(100);
 			break;
 		case KO_HUUMARANKA:
 			skillratio += -100 + 150 * skill_lv + sstatus->agi + sstatus->dex + (sd ? pc_checkskill(sd,NJ_HUUMA) * 100 : 0);
 			break;
 		case KO_SETSUDAN:
-			skillratio += 100 * (skill_lv - 1);
+			skillratio += -100 + 100 * skill_lv + 3 * tstatus->int_;
 			RE_LVL_DMOD(100);
-			if (tsc) {
-				struct status_change_entry *sce;
-
-				if ((sce = tsc->data[SC_SPIRIT]) || (sce = tsc->data[SC_SOULGOLEM]) || (sce = tsc->data[SC_SOULSHADOW]) || (sce = tsc->data[SC_SOULFALCON]) || (sce = tsc->data[SC_SOULFAIRY])) // Bonus damage added when target is soul linked.
-					skillratio += 200 * sce->val1;
-			}
 			break;
 		case KO_BAKURETSU:
 			skillratio += -100 + (sd ? pc_checkskill(sd,NJ_TOBIDOUGU) : 1) * (50 + sstatus->dex / 4) * skill_lv * 4 / 10;
