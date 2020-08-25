@@ -3771,7 +3771,7 @@ bool isreachabletarget(int64 ID)
 	return false;
 }
 
-int reachabletargetpathlength(int64 ID)
+int64 reachabletargetpathlength(int64 ID)
 {
 	for (int i = 0; i < nofreachabletargets; i++) {
 		if (reachabletargets[i] == ID) return reachabletargetspathlen[i];
@@ -3805,9 +3805,9 @@ int targetnearestwalkto(block_list * bl, va_list ap)
 
 	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
 
-	struct walkpath_data wpd1;
+	//struct walkpath_data wpd1;
 
-	int dist; 
+	int64 dist; 
 	if (isreachabletarget(bl->id)) {
 		dist = reachabletargetpathlength(bl->id);
 		int dist2 = dist + 12;
@@ -3838,7 +3838,7 @@ int targetnearest(block_list * bl, va_list ap)
 
 	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
 
-	struct walkpath_data wpd1;
+	//struct walkpath_data wpd1;
 
 	int dist= distance_bl(&sd2->bl, bl);
 	int dist2 = dist + 12;
@@ -3864,7 +3864,7 @@ int counthp(block_list * bl, va_list ap)
 
 	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
 
-	struct walkpath_data wpd1;
+	//struct walkpath_data wpd1;
 
 	if (isshootabletarget(bl->id)) {
 		targetdistance += md->status.hp;
@@ -4756,6 +4756,8 @@ int targetbless(block_list * bl, va_list ap)
 	return 0;
 }
 
+
+
 int targetenervation(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd = (struct map_session_data*)bl;
@@ -5268,7 +5270,7 @@ int finddanger2(block_list * bl, va_list ap)
 }
 
 // Returns how many tiles the fewest an enemy targeting us has to walk to
-int inDanger(struct map_session_data * sd)
+int64 inDanger(struct map_session_data * sd)
 {
 	// Effectst that prevent damage mean we are not in danger.
 	if (sd->sc.data[SC_KYRIE]) return 999;
@@ -5279,7 +5281,7 @@ int inDanger(struct map_session_data * sd)
 }
 
 // Same as indanger but ignores protection effects. Used to decide if nontanks should move near leader
-int inDangerLeader(struct map_session_data * sd)
+int64 inDangerLeader(struct map_session_data * sd)
 {
 	founddangerID = -1; dangerdistancebest = 999;
 	dangercount = map_foreachinrange(finddanger2, &sd->bl, 14, BL_MOB, sd);
@@ -5332,7 +5334,7 @@ int unit_skilluse_ifable(struct block_list *src, int target_id, uint16 skill_id,
 {
 	struct map_session_data *sd = (struct map_session_data*)src;
 	int inf = skill_get_inf(skill_id);
-	unsigned int tick = gettick();
+	t_tick tick = gettick();
 
 	if (skill_get_sp(skill_id, skill_lv)>sd->battle_status.sp) return 0;
 
@@ -5405,7 +5407,7 @@ int unit_skilluse_ifable(struct block_list *src, int target_id, uint16 skill_id,
 
 void unit_skilluse_ifablexy(struct block_list *src, int target_id, uint16 skill_id, uint16 skill_lv)
 {
-	unsigned int tick = gettick();
+	t_tick tick = gettick();
 	struct map_session_data *sd = (struct map_session_data*)src;
 
 	if (!(skill_get_inf(skill_id)&INF_GROUND_SKILL))
@@ -5457,8 +5459,8 @@ void unit_skilluse_ifablexy(struct block_list *src, int target_id, uint16 skill_
 
 	// Pneuma is special. Always put it on tiles with coordinates divisible by 3 to avoid unintended overlap, target is still in range.
 	if (skill_id == AL_PNEUMA) {
-		tgtx = 3 * trunc((tgtx + 1) / 3);
-		tgty = 3 * trunc((tgty + 1) / 3);
+		tgtx = 3 * ((tgtx + 1) / 3);
+		tgty = 3 * ((tgty + 1) / 3);
 	}
 
 	if (sd->skillitem == skill_id) {
@@ -5480,7 +5482,7 @@ void unit_skilluse_ifablexy(struct block_list *src, int target_id, uint16 skill_
 
 void unit_skilluse_ifablexy2(struct block_list *src, int tgtx, int tgty , uint16 skill_id, uint16 skill_lv)
 {
-	unsigned int tick = gettick();
+	t_tick tick = gettick();
 	struct map_session_data *sd = (struct map_session_data*)src;
 
 	if (!(skill_get_inf(skill_id)&INF_GROUND_SKILL))
@@ -5526,12 +5528,12 @@ void unit_skilluse_ifablexy2(struct block_list *src, int tgtx, int tgty , uint16
 
 
 	//	unit_stop_walking(src, 1); // Important! If trying to skill while walking and out of range, skill gets queued 
-	struct block_list *tgtbl;
+	//	struct block_list *tgtbl;
 	
 	// Pneuma is special. Always put it on tiles with coordinates divisible by 3 to avoid unintended overlap, target is still in range.
 	if (skill_id == AL_PNEUMA) {
-		tgtx = 3 * trunc((tgtx + 1) / 3);
-		tgty = 3 * trunc((tgty + 1) / 3);
+		tgtx = 3 * ((tgtx + 1) / 3);
+		tgty = 3 * ((tgty + 1) / 3);
 	}
 
 	if (sd->skillitem == skill_id) {
@@ -5553,7 +5555,7 @@ void unit_skilluse_ifablexy2(struct block_list *src, int tgtx, int tgty , uint16
 
 void unit_skilluse_ifablebetween(struct block_list *src, int target_id, uint16 skill_id, uint16 skill_lv)
 {
-	unsigned int tick = gettick();
+	t_tick tick = gettick();
 	struct map_session_data *sd = (struct map_session_data*)src;
 
 	if (!(skill_get_inf(skill_id)&INF_GROUND_SKILL))
@@ -5987,13 +5989,46 @@ int ammochange2(map_session_data * sd, mob_data *targetmd) {
 	return 0;
 }
 
+int nofmarks;
+mob_data *markmd;
+
+int targetmarker(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+
+	if (md->sc.data[SC_C_MARKER]) nofmarks++;
+	else {
+		markmd = md;
+		ammochange2(sd2, md);
+	}
+	if ((checksprate(sd2, md, 15)) && isshootabletarget(bl->id)) return 1;
+	return 0;
+}
+
 // Reduce lag - do not try using skills if already decided to use one and started it
-// Checking this ahead of time instead of executing all the logic and targeting for all the skills only do fail them is better
+// Checking this ahead of time instead of executing all the logic and targeting for all the skills only to fail them is better
 bool canskill(struct map_session_data *sd)
 {
 	return ((sd->ud.skilltimer == INVALID_TIMER) && (DIFF_TICK(gettick(), sd->ud.canact_tick) >= 0));
 
 };
+
+bool hasgun(struct map_session_data *sd)
+{
+	if (sd->status.weapon == W_REVOLVER) { return true; }
+	if (sd->status.weapon == W_RIFLE) { return true; }
+	if (sd->status.weapon == W_GATLING) { return true; }
+	if (sd->status.weapon == W_SHOTGUN) { return true; }
+	if (sd->status.weapon == W_GRENADE) { return true; }
+	return false;
+}
 
 int modetolv(int mode)
 {
@@ -6111,6 +6146,15 @@ void skillwhenidle(struct map_session_data *sd) {
 		if ((pc_checkskill(sd, RL_RICHS_COIN) > 0)) {
 			if ((sd->spiritball < 6) && (sd->status.zeny>=100)) {
 				unit_skilluse_ifable(&sd->bl, SELF, RL_RICHS_COIN, pc_checkskill(sd, RL_RICHS_COIN));
+			}
+		}
+
+	// Eternal Chain
+	if (canskill(sd))
+		if ((pc_checkskill(sd, RL_E_CHAIN) > 0))
+			if (hasgun(sd)) if (sd->status.weapon != W_REVOLVER) {
+			if ((sd->spiritball >= pc_checkskill(sd, RL_E_CHAIN))) {
+				unit_skilluse_ifable(&sd->bl, SELF, RL_E_CHAIN, pc_checkskill(sd, RL_E_CHAIN));
 			}
 		}
 
@@ -6474,16 +6518,6 @@ int targetpowerimplant(block_list * bl, va_list ap)
 	return 0;
 }
 
-bool hasgun(struct map_session_data *sd)
-{
-	if (sd->status.weapon == W_REVOLVER) { return true; }
-	if (sd->status.weapon == W_RIFLE) { return true; }
-	if (sd->status.weapon == W_GATLING) { return true; }
-	if (sd->status.weapon == W_SHOTGUN) { return true; }
-	if (sd->status.weapon == W_GRENADE) { return true; }
-	return false;
-}
-
 void usehpitem(struct map_session_data *sd, int hppercentage)
 {
 	// Don't if you are going to throw potions
@@ -6535,7 +6569,7 @@ void usehpitem(struct map_session_data *sd, int hppercentage)
 int homu_skilluse_ifable(struct block_list *src, int target_id, uint16 skill_id, uint16 skill_lv)
 {
 	struct unit_data *ud;
-	unsigned int tick = gettick();
+	t_tick tick = gettick();
 	ud = unit_bl2ud(src);
 
 	if (!ud)
@@ -6839,7 +6873,7 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	}
 	// Not tanking mode
 	else {
-		int Dangerdistance = inDangerLeader(leadersd);
+		int64 Dangerdistance = inDangerLeader(leadersd);
 
 		// If party leader not under attack, get in range of 2
 		if (Dangerdistance >= 900) {
@@ -7024,7 +7058,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		saythis(sd, msg, 100);
 	}
 
-	int Dangerdistance = inDanger(sd);
+	int64 Dangerdistance = inDanger(sd);
 
 	usehpitem(sd, 50);
 
@@ -7655,7 +7689,13 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, BS_OVERTHRUST, pc_checkskill(sd, BS_OVERTHRUST));
 			}
 		}
-
+		// Rich coin
+		if (canskill(sd))
+			if ((pc_checkskill(sd, RL_RICHS_COIN) > 0)) {
+				if ((sd->spiritball < 6) && (sd->status.zeny >= 100)) {
+					unit_skilluse_ifable(&sd->bl, SELF, RL_RICHS_COIN, pc_checkskill(sd, RL_RICHS_COIN));
+				}
+			}
 		/// Wind Walking
 		if (canskill(sd)) if (pc_checkskill(sd, SN_WINDWALK) > 0) {
 			resettargets();
@@ -9047,7 +9087,26 @@ TIMER_FUNC(unit_autopilot_timer)
 							spelltocast = WL_EARTHSTRAIN; bestpriority = priority; IDtarget = 4;
 						}
 					}
-
+					// Fire Rain 4 directions
+					if (canskill(sd)) if (sd->status.weapon == W_GATLING) if (sd->spiritball >= 1)
+						if ((pc_checkskill(sd, RL_FIRE_RAIN) > 0)) {
+							priority = 3 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x - 10, sd->bl.y - 1, sd->bl.x, sd->bl.y + 1, BL_MOB, skillelem(sd, WL_EARTHSTRAIN));
+							if ((priority >= 24) && (priority > bestpriority)) {
+								spelltocast = RL_FIRE_RAIN; bestpriority = priority; IDtarget = 1;
+							}
+							priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x, sd->bl.y - 5, sd->bl.x + 10, sd->bl.y + 5, BL_MOB, skillelem(sd, WL_EARTHSTRAIN));
+							if ((priority >= 24) && (priority > bestpriority)) {
+								spelltocast = RL_FIRE_RAIN; bestpriority = priority; IDtarget = 2;
+							}
+							priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x - 5, sd->bl.y - 10, sd->bl.x + 5, sd->bl.y, BL_MOB, skillelem(sd, WL_EARTHSTRAIN));
+							if ((priority >= 24) && (priority > bestpriority)) {
+								spelltocast = RL_FIRE_RAIN; bestpriority = priority; IDtarget = 3;
+							}
+							priority = 4 * map_foreachinallarea(AOEPriority, sd->bl.m, sd->bl.x - 5, sd->bl.y, sd->bl.x + 5, sd->bl.y + 10, BL_MOB, skillelem(sd, WL_EARTHSTRAIN));
+							if ((priority >= 24) && (priority > bestpriority)) {
+								spelltocast = RL_FIRE_RAIN; bestpriority = priority; IDtarget = 4;
+							}
+					}
 
 					// Meteor Assault - always centered on user
 					// **Note** uncomment below if you didn't make this skill uninterruptable like I did.
@@ -9118,14 +9177,34 @@ TIMER_FUNC(unit_autopilot_timer)
 						}
 					}
 
+					// Round Trip - always centered on user
+					if (canskill(sd)) if (pc_checkskill(sd, RL_R_TRIP) > 0) if (sd->status.weapon == W_GATLING)
+					 if (sd->spiritball >= 1) {
+						int area = 3;
+						if (pc_checkskill(sd, RL_R_TRIP) > 3) area++;
+						if (pc_checkskill(sd, RL_R_TRIP) > 6) area++;
+						if (pc_checkskill(sd, RL_R_TRIP) > 9) area++;
+						// Ammo? But is AOE we don't have a target to pick an element
+						// Let's assume we already have some ammo equipped I guess, from using other skills
+						// In worst case it fails and the AI uses the other skills anyway.
+						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
+						double pmod = 1;
+						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100.0;
+
+						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
+							spelltocast = RL_R_TRIP; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
+						}
+					}
+
 					// Fire Dance - always centered on user
-					if (canskill(sd)) if (pc_checkskill(sd, RL_FIREDANCE) > 0) if (sd->status.weapon == W_REVOLVER) {
+					if (canskill(sd)) if (pc_checkskill(sd, RL_FIREDANCE) > 0) if (sd->status.weapon == W_REVOLVER)
+					 if (sd->spiritball >= 1) {
 						int area = 3;
 						// Ammo? But is AOE we don't have a target to pick an element
 						// Let's assume we already have some ammo equipped I guess, from using other skills
 						// In worst case it fails and the AI uses the other skills anyway.
-						float pmod = 1;
-						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100;
+						double pmod = 1;
+						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100.0;
 						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
 						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
 							spelltocast = RL_FIREDANCE; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
@@ -9134,7 +9213,8 @@ TIMER_FUNC(unit_autopilot_timer)
 
 					// Cast the chosen spell
 					if (spelltocast > -1) {
-						if (spelltocast == WL_EARTHSTRAIN) {
+						if ((spelltocast == WL_EARTHSTRAIN)
+						|| (spelltocast == RL_FIRE_RAIN)) {
 							switch (IDtarget) {
 							case 1: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x-3,sd->bl.y, spelltocast, pc_checkskill(sd, spelltocast));
 							case 2: unit_skilluse_ifablexy2(&sd->bl, sd->bl.x+3, sd->bl.y, spelltocast, pc_checkskill(sd, spelltocast));
@@ -9149,6 +9229,8 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == WL_JACKFROST)
 							|| (spelltocast == ASC_METEORASSAULT)
 							|| (spelltocast == GS_DESPERADO)
+							|| (spelltocast == RL_FIREDANCE)
+							|| (spelltocast == RL_R_TRIP)
 							) unit_skilluse_ifable(&sd->bl, SELF, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 						if ((spelltocast == MG_FIREBALL) // Skills that target a monster, not the ground 
@@ -9214,12 +9296,12 @@ TIMER_FUNC(unit_autopilot_timer)
 		targetRAbl = targetbl;
 		struct mob_data * targetRAmd;
 		targetRAmd = targetmd;
-		int rangeddist = targetdistance;
+		int64 rangeddist = targetdistance;
 		resettargets();
 		map_foreachinrange(targetnearest, &sd->bl, 9, BL_MOB, sd);
 		int foundtargetID2;
 		foundtargetID2 = foundtargetID;
-		int targetdistance2;
+		int64 targetdistance2;
 		targetdistance2 = targetdistance;
 		struct mob_data * targetmd2;
 		targetmd2 = targetmd;
@@ -9738,9 +9820,63 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+			// Hammer of Thor
+			// **** Note : I changed this skill to have a range of 11.
+			// I also changed it to work like the old Dragon Tail Missile, hitting all and only Crimson Marked targets.
+			// You will need to disable this and make your own AI for this skill most likely.
+			if (canskill(sd)) if ((pc_checkskill(sd, RL_HAMMER_OF_GOD) > 0)) if (sd->state.autopilotmode != 3) {
+				if ((pc_checkskill(sd, RL_C_MARKER) > 0)) if (sd->spiritball >= 5) if ((sd->status.weapon == W_RIFLE)) {
+					nofmarks = 0;
+					int noftgts = map_foreachinrange(targetmarker, &sd->bl, 11, BL_MOB, sd);
+					// Need 3 targets to use, otherwise better stick to the single target skills.
+					int sl;
+					ARR_FIND(0, MAX_SKILL_CRIMSON_MARKER, sl, !sd->c_marker[i]);
+					// Already used up all marks
+					if (sl == MAX_SKILL_CRIMSON_MARKER) {
+						// blow up even if there are only 2 in range
+						if (noftgts > 1) {	noftgts = 3; nofmarks = 3;	}
+						// otherwise ignore the whole thing, we are stuck until a marker becomes available.
+						else { noftgts = 0; }
+					}
+					if (noftgts >= 3) {
+						if (nofmarks>=3)
+							unit_skilluse_ifable(&sd->bl, SELF, RL_HAMMER_OF_GOD, pc_checkskill(sd, RL_HAMMER_OF_GOD));
+						else
+							unit_skilluse_ifable(&sd->bl, markmd->bl.id, RL_C_MARKER, pc_checkskill(sd, RL_C_MARKER));
+					}
+					}
+			}
+
+			// Dragon Tail
+			// **** Note : This skill uses the old behavior : only hts targets marked by Crimson Marker.
+			if (canskill(sd)) if ((pc_checkskill(sd, RL_D_TAIL) > 0)) if (sd->state.autopilotmode != 3) {
+				if ((pc_checkskill(sd, RL_C_MARKER) > 0)) if (pc_inventory_count(sd, 7665) >= 1) if ((sd->status.weapon == W_GRENADE)) {
+					nofmarks = 0;
+					int noftgts = map_foreachinrange(targetmarker, &sd->bl, 11, BL_MOB, sd);
+					// Need 3 targets to use, otherwise better stick to the single target skills.
+					int sl;
+					ARR_FIND(0, MAX_SKILL_CRIMSON_MARKER, sl, !sd->c_marker[i]);
+					// Already used up all marks
+					if (sl == MAX_SKILL_CRIMSON_MARKER) {
+						// blow up even if there are only 2 in range
+						if (noftgts > 1) { noftgts = 3; nofmarks = 3; }
+						// otherwise ignore the whole thing, we are stuck until a marker becomes available.
+						else { noftgts = 0; }
+					}
+					if (noftgts >= 3) {
+						if (nofmarks >= 3)
+							unit_skilluse_ifable(&sd->bl, SELF, RL_D_TAIL, pc_checkskill(sd, RL_D_TAIL));
+						else
+							unit_skilluse_ifable(&sd->bl, markmd->bl.id, RL_C_MARKER, pc_checkskill(sd, RL_C_MARKER));
+					}
+				}
+			}
 
 			// Banishing Buster
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_BANISHING_BUSTER) > 0)) if (sd->state.autopilotmode != 3) {
+				if (checksprate(sd, targetRAmd, 15)
+					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3))
+					if (sd->spiritball >= 1)
 				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_BANISHING_BUSTER, pc_checkskill(sd, RL_BANISHING_BUSTER));
@@ -9748,7 +9884,8 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 
 			// Anti-Material blast
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_AM_BLAST) > 0)) if (sd->state.autopilotmode != 3) {
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_AM_BLAST) > 0)) if (sd->state.autopilotmode != 3)
+				if (sd->spiritball >= 1) {
 					if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_RIFLE)) {
 						ammochange2(sd, targetRAmd);
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_AM_BLAST, pc_checkskill(sd, RL_AM_BLAST));
@@ -9757,8 +9894,10 @@ TIMER_FUNC(unit_autopilot_timer)
 
 			// Mass Spiral
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_MASS_SPIRAL) > 0)) if (sd->state.autopilotmode != 3) {
-				if (pc_inventory_count(sd, 7663) >= 1)
-					if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_RIFLE)) {
+				if (pc_inventory_count(sd, 7663) >= 1) if (sd->spiritball >= 1)
+					if (checksprate(sd, targetRAmd, 15)
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3))
+				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_RIFLE)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_MASS_SPIRAL, pc_checkskill(sd, RL_MASS_SPIRAL));
 				}
@@ -9766,7 +9905,9 @@ TIMER_FUNC(unit_autopilot_timer)
 
 			// Full Buster
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GS_FULLBUSTER) > 0)) if (sd->state.autopilotmode != 3) {
-				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN)) {
+				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_SHOTGUN))
+					if (checksprate(sd, targetRAmd, 15)
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_FULLBUSTER, pc_checkskill(sd, GS_FULLBUSTER));
 				}
@@ -9774,7 +9915,9 @@ TIMER_FUNC(unit_autopilot_timer)
 
 			// Tracking
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GS_TRACKING) > 0)) if (sd->state.autopilotmode != 3) {
-				if (rangeddist <= 9) if (((sd->status.weapon == W_REVOLVER) && (pc_checkskill(sd, GS_RAPIDSHOWER) * 2 <= pc_checkskill(sd, GS_TRACKING))) || (sd->status.weapon == W_RIFLE)) {
+				if (rangeddist <= 9) if (((sd->status.weapon == W_REVOLVER) && (pc_checkskill(sd, GS_RAPIDSHOWER) * 2 <= pc_checkskill(sd, GS_TRACKING))) || (sd->status.weapon == W_RIFLE))
+					if (checksprate(sd, targetRAmd, 15)
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_TRACKING, pc_checkskill(sd, GS_TRACKING));
 				}
@@ -9802,9 +9945,37 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+			// Howling Mine
+			// Unlike most skills this doesn't check for conserving MP because grenade normal attacks are too slow to be worth considering.
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RL_H_MINE) > 0)) if (sd->state.autopilotmode != 3)
+				if (pc_inventory_count(sd, 7664) >= 1) if (sd->spiritball >= 1)
+				if ((pc_checkskill(sd, RL_FLICKER) > 0)) {
+				if (rangeddist <= 9 + pc_checkskill(sd, GS_SNAKEEYE)) if ((sd->status.weapon == W_GRENADE)) {
+					ammochange2(sd, targetRAmd);
+					if (!sd->sc.data[SC_H_MINE])
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_H_MINE, pc_checkskill(sd, RL_H_MINE));
+					else
+					unit_skilluse_ifable(&sd->bl, foundtargetRA, RL_FLICKER, pc_checkskill(sd, RL_FLICKER));
+				}
+			}
+
+			// Quick Draw Shot
+			if (canskill(sd)) if ((pc_checkskill(sd, RL_QD_SHOT) > 0)) if (sd->state.autopilotmode != 3)
+				if (sd->sc.data[SC_QD_SHOT_READY]) {
+				if (foundtargetRA > -1) if (rangeddist <= 9) if (hasgun(sd))
+					if (checksprate(sd, targetRAmd, 5)
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+						ammochange2(sd, targetRAmd);
+						unit_skilluse_ifable(&sd->bl, SELF, RL_QD_SHOT, pc_checkskill(sd, RL_QD_SHOT));
+					}
+			}
+
+
 			// Triple Action
 			if (canskill(sd)) if ((pc_checkskill(sd, GS_TRIPLEACTION) > 0)) if (sd->state.autopilotmode != 3) {
-				if (foundtargetRA > -1) if (rangeddist <= 9) if (hasgun(sd)) if (sd->spiritball >= 1) {
+				if (foundtargetRA > -1) if (rangeddist <= 9) if (hasgun(sd)) if (sd->spiritball >= 1)
+					if (checksprate(sd, targetRAmd, 10)
+						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					ammochange2(sd, targetRAmd);
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, GS_TRIPLEACTION, pc_checkskill(sd, GS_TRIPLEACTION));
 				}
@@ -10358,7 +10529,7 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					}
 				}
 
-				// Reject Sword
+				// Weapon Blocking
 				if (pc_checkskill(sd, GC_WEAPONBLOCKING) > 0) {
 					if (!(sd->sc.data[SC_WEAPONBLOCKING])) {
 						unit_skilluse_ifable(&sd->bl, SELF, GC_WEAPONBLOCKING, pc_checkskill(sd, GC_WEAPONBLOCKING));
