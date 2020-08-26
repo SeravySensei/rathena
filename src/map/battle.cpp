@@ -4378,16 +4378,15 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			RE_LVL_DMOD(100);
 			break;
 		case KO_HUUMARANKA:
-			skillratio += -100 + 150 * skill_lv + sstatus->agi + sstatus->dex + (sd ? pc_checkskill(sd,NJ_HUUMA) * 100 : 0);
+			skillratio += -100 + 700+ 200 * skill_lv + 2*sstatus->dex;
 			break;
 		case KO_SETSUDAN:
 			skillratio += -100 + 100 * skill_lv + 3 * tstatus->int_;
 			RE_LVL_DMOD(100);
 			break;
 		case KO_BAKURETSU:
-			skillratio += -100 + (sd ? pc_checkskill(sd,NJ_TOBIDOUGU) : 1) * (50 + sstatus->dex / 4) * skill_lv * 4 / 10;
-			RE_LVL_DMOD(120);
-			skillratio += 10 * (sd ? sd->status.job_level : 1);
+			skillratio += -100 + (sd ? pc_checkskill(sd,NJ_TOBIDOUGU) : 5) * (50 + sstatus->dex / 4) * skill_lv * 4 / 10;
+			RE_LVL_DMOD(100);
 			break;
 		case KO_MAKIBISHI:
 			skillratio += -100 + 20 * skill_lv;
@@ -4596,11 +4595,11 @@ static void battle_attack_sc_bonus(struct Damage* wd, struct block_list *src, st
 	struct status_data *tstatus = status_get_status_data(target);
 	uint8 anger_id = 0; // SLS Anger
 
-	// Kagerou/Oboro Earth Charm effect +15% wATK
+	// Kagerou/Oboro Earth Charm effect +5% wATK
 	if(sd && sd->spiritcharm_type == CHARM_TYPE_LAND && sd->spiritcharm > 0) {
-		ATK_ADDRATE(wd->damage, wd->damage2, 15 * sd->spiritcharm);
+		ATK_ADDRATE(wd->damage, wd->damage2, 5 * sd->spiritcharm);
 #ifdef RENEWAL
-		ATK_ADDRATE(wd->weaponAtk, wd->weaponAtk2, 15 * sd->spiritcharm);
+		ATK_ADDRATE(wd->weaponAtk, wd->weaponAtk2, 5 * sd->spiritcharm);
 #endif
 	}
 
@@ -4799,9 +4798,9 @@ static void battle_calc_defense_reduction(struct Damage* wd, struct block_list *
 			def2 -= def2 * i / 100;
 		}
 
-		//Kagerou/Oboro Earth Charm effect +10% eDEF
+		//Kagerou/Oboro Earth Charm effect +5% eDEF
 		if(sd->spiritcharm_type == CHARM_TYPE_LAND && sd->spiritcharm > 0) {
-			short si = 10 * sd->spiritcharm;
+			short si = 5 * sd->spiritcharm;
 			def1 = (def1 * (100 + si)) / 100;
 		}
 	}
@@ -6073,7 +6072,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				case NJ_KOUENKA:
 					skillratio -= 10;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_FIRE && sd->spiritcharm > 0)
-						skillratio += 20 * sd->spiritcharm;
+						skillratio += 10 * sd->spiritcharm;
 					break;
 				case NJ_KAENSIN:
 					skillratio -= 50;
@@ -6083,7 +6082,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				case NJ_BAKUENRYU:
 					skillratio += 50 + 150 * skill_lv;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_FIRE && sd->spiritcharm > 0)
-						skillratio += 15 * sd->spiritcharm;
+						skillratio += 45 * sd->spiritcharm;
 					break;
 				case NJ_HYOUSENSOU:
 #ifdef RENEWAL
@@ -6092,29 +6091,29 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 2 * skill_lv;
 #endif
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_WATER && sd->spiritcharm > 0)
-						skillratio += 5 * sd->spiritcharm;
+						skillratio += 7 * sd->spiritcharm;
 					break;
 				case NJ_HYOUSYOURAKU:
 					skillratio += 50 * skill_lv;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_WATER && sd->spiritcharm > 0)
-						skillratio += 25 * sd->spiritcharm;
+						skillratio += 70 * sd->spiritcharm;
 					break;
 				case NJ_RAIGEKISAI:
 					skillratio += 100 * skill_lv;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_WIND && sd->spiritcharm > 0)
-						skillratio += 15 * sd->spiritcharm;
+						skillratio += 25 * sd->spiritcharm;
 					break;
 				case NJ_KAMAITACHI:
 					skillratio += 200 * skill_lv;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_WIND && sd->spiritcharm > 0)
-						skillratio += 10 * sd->spiritcharm;
+						skillratio += 50 * sd->spiritcharm;
 					break;
 				case NJ_HUUJIN:
 #ifdef RENEWAL
-					skillratio += 50;
+					skillratio += 20;
 #endif
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_WIND && sd->spiritcharm > 0)
-						skillratio += 20 * sd->spiritcharm;
+						skillratio += 12 * sd->spiritcharm;
 					break;
 				case NPC_ENERGYDRAIN:
 					skillratio += 100 * skill_lv;
@@ -6779,7 +6778,7 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 				md.damage = skill_get_zeny(skill_id, skill_lv);
 				if (!md.damage)
 					md.damage = (skill_id == NJ_ZENYNAGE ? 2 : 10);
-				md.damage = (skill_id == NJ_ZENYNAGE ? rnd()%md.damage + md.damage : md.damage * rnd_value(50,100)) / (skill_id == NJ_ZENYNAGE ? 1 : 100);
+				md.damage = (skill_id == NJ_ZENYNAGE ? rnd()%md.damage + md.damage : md.damage * rnd_value(40,60)) / (skill_id == NJ_ZENYNAGE ? 1 : 100);
 				if (sd && skill_id == KO_MUCHANAGE && !pc_checkskill(sd, NJ_TOBIDOUGU))
 					md.damage = md.damage / 2;
 /*				if (status_get_class_(target) == CLASS_BOSS) // Specific to Boss Class

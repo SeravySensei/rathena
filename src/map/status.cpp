@@ -933,9 +933,10 @@ void initChangeTables(void)
 	add_sc( KO_YAMIKUMO			, SC_HIDING		);
 	set_sc_with_vfx( KO_JYUMONJIKIRI	, SC_JYUMONJIKIRI	, EFST_KO_JYUMONJIKIRI	, SCB_NONE );
 	add_sc( KO_MAKIBISHI			, SC_STUN		);
+	add_sc(KO_MAKIBISHI, SC_ANKLE, EFST_ANKLESNARE, SCB_NONE);
 	set_sc( KO_MEIKYOUSISUI			, SC_MEIKYOUSISUI	, EFST_MEIKYOUSISUI	, SCB_NONE );
-	set_sc( KO_KYOUGAKU			, SC_KYOUGAKU		, EFST_KYOUGAKU		, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK );
-	add_sc( KO_JYUSATSU			, SC_CURSE		);
+/*	set_sc( KO_KYOUGAKU			, SC_KYOUGAKU		, EFST_KYOUGAKU		, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK );
+	add_sc( KO_JYUSATSU			, SC_CURSE		);*/
 	set_sc( KO_ZENKAI			, SC_ZENKAI		, EFST_ZENKAI		, SCB_NONE );
 	set_sc( KO_IZAYOI			, SC_IZAYOI		, EFST_IZAYOI		, SCB_MATK );
 	set_sc( KG_KYOMU			, SC_KYOMU		, EFST_KYOMU		, SCB_NONE );
@@ -943,7 +944,7 @@ void initChangeTables(void)
 	set_sc( KG_KAGEHUMI			, SC_KAGEHUMI		, EFST_KG_KAGEHUMI	, SCB_NONE );
 	set_sc( OB_ZANGETSU			, SC_ZANGETSU		, EFST_ZANGETSU		, SCB_MATK|SCB_BATK );
 	set_sc_with_vfx( OB_AKAITSUKI		, SC_AKAITSUKI		, EFST_AKAITSUKI		, SCB_NONE );
-	set_sc( OB_OBOROGENSOU			, SC_GENSOU		, EFST_GENSOU		, SCB_NONE );
+	set_sc( OB_OBOROGENSOU			, SC_GENSOU		, EFST_GENSOU		, SCB_MAXHP|SCB_MAXSP);
 
 //	set_sc( ALL_FULL_THROTTLE		, SC_FULL_THROTTLE	, EFST_FULL_THROTTLE	, SCB_SPEED|SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK );
 
@@ -2662,15 +2663,20 @@ unsigned short status_base_atk(const struct block_list *bl, const struct status_
 			str += dstr*dstr;
 #endif
 			break;
-		case BL_PC:
+		case BL_PC: {
 #ifdef RENEWAL
 			str = (dstr * 10 + dex * 10 / 5 + status->luk * 10 / 3 + level * 10 / 4) / 10;
+			TBL_PC *sd = NULL;
+			sd = BL_CAST(BL_PC, bl);
+			if ((pc_checkskill(sd, KO_JYUSATSU)) > 0)
+				str += dex * pc_checkskill(sd, KO_JYUSATSU) / 20;
+
 #else
 			dstr = str / 10;
-			str += dstr*dstr;
+			str += dstr * dstr;
 			str += dex / 5 + status->luk / 5;
 #endif
-			break;
+			break; }
 		default:// Others
 #ifdef RENEWAL
 			str = dstr + level;
@@ -2763,7 +2769,13 @@ unsigned short status_base_matk_min(struct block_list *bl, const struct status_d
 			return status_get_homint(bl) + level + (status_get_homint(bl) + status_get_homdex(bl)) / 5;
 		case BL_PC:
 		default:
-			return status->int_ + (status->int_ / 2) + (status->dex / 5) + (status->luk / 3) + (level / 4);
+			int matk = status->int_ + (status->int_ / 2) + (status->dex / 5) + (status->luk / 3) + (level / 4);
+			TBL_PC *sd = NULL;
+			sd = BL_CAST(BL_PC, bl);
+			if ((pc_checkskill(sd, KO_KYOUGAKU)) > 0)
+				matk += status->agi * pc_checkskill(sd, KO_KYOUGAKU) / 10;
+
+			return matk;
 	}
 }
 
@@ -2782,7 +2794,13 @@ unsigned short status_base_matk_max(struct block_list *bl, const struct status_d
 			return status_get_homint(bl) + level + (status_get_homluk(bl) + status_get_homint(bl) + status_get_homdex(bl)) / 3;
 		case BL_PC:
 		default:
-			return status->int_ + (status->int_ / 2) + (status->dex / 5) + (status->luk / 3) + (level / 4);
+			int matk = status->int_ + (status->int_ / 2) + (status->dex / 5) + (status->luk / 3) + (level / 4);
+			TBL_PC *sd = NULL;
+			sd = BL_CAST(BL_PC, bl);
+			if ((pc_checkskill(sd, KO_KYOUGAKU)) > 0)
+				matk += status->agi * pc_checkskill(sd, KO_KYOUGAKU) / 10;
+
+			return matk;
 	}
 }
 #endif
@@ -3326,6 +3344,8 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 			//Decreasing
 			if(sc->data[SC_VENOMBLEED])
 				bonus -= 40;
+			if (sc->data[SC_GENSOU])
+				bonus -= 5* sc->data[SC_GENSOU]->val1;
 			if(sc->data[SC_EQC])
 				bonus -= sc->data[SC_EQC]->val3;
 		}
@@ -3456,6 +3476,8 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 				bonus += sc->data[SC_SERVICE4U]->val2;
 			if(sc->data[SC_MERC_SPUP])
 				bonus += sc->data[SC_MERC_SPUP]->val2;
+			if (sc->data[SC_GENSOU])
+				bonus += 5 * sc->data[SC_GENSOU]->val1;
 		}
 		// Max rate reduce is -100%
 		bonus = cap_value(bonus,-100,INT_MAX);
@@ -11354,34 +11376,10 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			tick_time = 1000;
 			break;
 		case SC_ZANGETSU:
-			if( status_get_hp(bl) % 2 == 0 )
-				val2 = (status_get_lv(bl) / 3) + (20 * val1); //+Watk
-			else
-				val2 -= (status_get_lv(bl) / 3) + (30 * val1); //-Watk
-
-			if( status_get_sp(bl) % 2 == 0 )
-				val3 = (status_get_lv(bl) / 3) + (20 * val1); //+Matk
-			else
-				val3 -= (status_get_lv(bl) / 3) + (30 * val1); //-Matk
+			val2 -= 10 * val1; //-Batk
+			val3 = 20 * val1; // +Matk
 			break;
 		case SC_GENSOU:
-			{
-				int hp = status_get_hp(bl), lv = 5;
-				short per = 100 / (status_get_max_hp(bl) / hp);
-
-				if( per <= 15 )
-					lv = 1;
-				else if( per <= 30 )
-					lv = 2;
-				else if( per <= 50 )
-					lv = 3;
-				else if( per <= 75 )
-					lv = 4;
-				if( hp % 2 == 0)
-					status_heal(bl, hp * (6-lv) * 4 / 100, status_get_sp(bl) * (6-lv) * 3 / 100, 1);
-				else
-					status_zap(bl, hp * (lv*4) / 100, status_get_sp(bl) * (lv*3) / 100);
-			}
 			break;
 		case SC_ANGRIFFS_MODUS:
 			val2 = 50 + 20 * val1; // atk bonus

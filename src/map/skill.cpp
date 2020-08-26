@@ -1902,6 +1902,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		break;
 	case KO_MAKIBISHI:
 		sc_start(src,bl, SC_STUN, 10 * skill_lv, skill_lv, skill_get_time2(skill_id,skill_lv));
+		sc_start(src, bl, SC_ANKLE, 10 * skill_lv, skill_lv, skill_get_time2(skill_id, skill_lv));
 		break;
 	case MH_EQC:
 		{
@@ -11001,7 +11002,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			}
 		}
 		break;
-	case KO_KYOUGAKU:
+/*	case KO_KYOUGAKU:
 		if( dstsd && tsc && !tsc->data[type] && rnd()%100 < tstatus->int_/2 ){
 			clif_skill_nodamage(src,bl,skill_id,skill_lv,
 				sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
@@ -11018,7 +11019,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				status_change_start(src,bl,SC_COMA,10,skill_lv,0,src->id,0,0,SCSTART_NONE);
 		}else if( sd )
 			clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
-		break;
+		break;*/
 	case KO_GENWAKU:
 		if ((dstsd || dstmd) && !status_has_mode(tstatus,MD_IGNOREMELEE|MD_IGNOREMAGIC|MD_IGNORERANGED|MD_IGNOREMISC) && battle_check_target(src,bl,BCT_ENEMY) > 0) {
 			int x = src->x, y = src->y;
@@ -12832,7 +12833,7 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 
 			sstatus = status_get_status_data(src);
 			i = skill_get_splash(skill_id,skill_lv);
-			rate = (100 - (1000 / (sstatus->dex + sstatus->luk) * 5)) * (skill_lv / 2 + 5) / 10;
+			rate = (100 - (1000 / (sstatus->dex + sstatus->luk))) * (skill_lv / 2 + 5) / 10;
 			if( rate < 0 )
 				rate = 0;
 			skill_area_temp[0] = map_foreachinarea(skill_area_sub,src->m,x-i,y-i,x+i,y+i,BL_CHAR,src,skill_id,skill_lv,tick,BCT_ENEMY,skill_area_sub_count);
