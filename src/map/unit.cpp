@@ -4755,6 +4755,15 @@ int targetbless(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetgensou(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (!sd->sc.data[SC_GENSOU]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
 
 
 int targetenervation(block_list * bl, va_list ap)
@@ -4789,6 +4798,17 @@ int targetgroomy(block_list * bl, va_list ap)
 	if (sd->base_status.vit <= 30)
 		if (sd->base_status.int_ >= 70)
 			if (!sd->sc.data[SC__GROOMY]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetcrescent(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (pc_rightside_atk(sd) < pc_rightside_matk(sd))
+			if (!sd->sc.data[SC_ZANGETSU]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 
 	return 0;
 }
@@ -5824,7 +5844,7 @@ int ammochange(map_session_data * sd, mob_data *targetmd)
 	int16 index = -1;
 	int i, j;
 	int best = -1; int bestprio = -1;
-	bool eqp = false;
+	bool eqp = false; int bestelem = -1;
 
 	for (i = 0; i < ARRAYLENGTH(arrows); i++) {
 		if ((index = pc_search_inventory(sd, arrows[i])) >= 0) {
@@ -5832,12 +5852,13 @@ int ammochange(map_session_data * sd, mob_data *targetmd)
 			if (elemstrong(targetmd, arrowelem[i])) j += 500;
 			if (elemallowed(targetmd, arrowelem[i])) if (j > bestprio) if (sd->status.base_level >= arrowlvl[i])  {
 				bestprio = j; best = index;  eqp = pc_checkequip2(sd, arrows[i], EQI_AMMO, EQI_AMMO + 1);
+				bestelem = arrowelem[i];
 			}
 		}
 	}
 	if (best > -1) {
 		if (!eqp) pc_equipitem(sd, best, EQP_AMMO);
-		return 1;
+		return bestelem;
 	}
 	else {
 		char* msg = "I have no bullets to shoot my target!";
@@ -5864,7 +5885,7 @@ int kunaichange(map_session_data * sd, mob_data *targetmd)
 	int16 index = -1;
 	int i, j;
 	int best = -1; int bestprio = -1;
-	bool eqp = false;
+	bool eqp = false; int bestelem = -1;
 
 	for (i = 0; i < ARRAYLENGTH(arrows); i++) {
 		if ((index = pc_search_inventory(sd, arrows[i])) >= 0) {
@@ -5874,12 +5895,13 @@ int kunaichange(map_session_data * sd, mob_data *targetmd)
 				// Explosive Kunai has a level requirement
 				if ((arrows[i]!=13294) || (sd->status.base_level>=100)){
 				bestprio = j; best = index; eqp = pc_checkequip2(sd, arrows[i], EQI_AMMO, EQI_AMMO + 1);
+				bestelem = arrowelem[i];
 			}
 		}
 	}
 	if (best > -1) {
 		if (!eqp) pc_equipitem(sd, best, EQP_AMMO);
-		return 1;
+		return bestelem;
 	}
 	else {
 		char* msg = "I have no kunai left to throw!";
@@ -6053,6 +6075,24 @@ void skillwhenidle(struct map_session_data *sd) {
 			unit_skilluse_ifable(&sd->bl, sd->bl.id, SO_WARMER, pc_checkskill(sd, SO_WARMER));
 		}
 	}
+
+	if ((sd->battle_status.sp<200) ||
+		(sd->battle_status.hp < 0.5* sd->battle_status.max_hp) ||
+		(sd->battle_status.hp < 0.5* sd->battle_status.max_hp))
+		if (canskill(sd))
+			if ((pc_checkskill(sd, KO_MEIKYOUSISUI) > 0)) {
+				if (!(sd->sc.data[SC_MEIKYOUSISUI])) {
+					unit_skilluse_ifable(&sd->bl, SELF, KO_MEIKYOUSISUI, pc_checkskill(sd, KO_MEIKYOUSISUI));
+				}
+			}
+
+	// 16th Night
+	if (canskill(sd))
+		if ((pc_checkskill(sd, KO_IZAYOI) > 0)) {
+			if (!(sd->sc.data[SC_IZAYOI])) {
+				unit_skilluse_ifable(&sd->bl, SELF, KO_IZAYOI, pc_checkskill(sd, KO_IZAYOI));
+			}
+		}
 
 	// Sorcerer, summon elemental
 	if (canskill(sd))
@@ -7734,6 +7774,15 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, foundtargetID, AL_BLESSING, pc_checkskill(sd, AL_BLESSING));
 			}
 		}
+		/// Moonlight Fantasy
+		if (sd->state.enableconc)
+		if (canskill(sd)) if (pc_checkskill(sd, OB_OBOROGENSOU) > 0) {
+			resettargets();
+			map_foreachinrange(targetbless, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, OB_OBOROGENSOU, pc_checkskill(sd, OB_OBOROGENSOU));
+			}
+		}
 		/// Masquarades
 		/// **** Note, I changed these skills to debuff one stat in exchange for raising another.
 		// Remove these if you use the default skills.
@@ -7789,6 +7838,17 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 
 			}
+
+		// **** Note : I changed this skill to be a + MATK for - ATK buff.
+		// If you did not, you have to replace "targetcrescent" function with your preferred targeting condition that matches your version of the skill.
+		if (canskill(sd)) if (pc_checkskill(sd, OB_ZANGETSU) >= 1) {
+			resettargets();
+			map_foreachinrange(targetcrescent, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, OB_ZANGETSU, pc_checkskill(sd, OB_ZANGETSU));
+			}
+		}
+
 		/// Berserk Pitcher
 		if (canskill(sd)) if (pc_checkskill(sd, AM_BERSERKPITCHER) > 0) if (pc_inventory_count(sd, 657)>=2) {
 			resettargets();
@@ -7958,6 +8018,42 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, TK_SEVENWIND, 7);
 			}
 		}
+		// Ninja Charms
+		if ((sd->spiritcharm_type == CHARM_TYPE_NONE) || (sd->spiritcharm < MAX_SPIRITCHARM)) {
+			/// Fire
+			if (canskill(sd)) if (pc_checkskill(sd, KO_KAHU_ENTEN) > 0) if (pc_search_inventory(sd, 6512) >= 0)
+			{
+				resettargets();
+				if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_FIRE) > 0) {
+					unit_skilluse_ifable(&sd->bl, SELF, KO_KAHU_ENTEN, pc_checkskill(sd, KO_KAHU_ENTEN));
+				}
+			}
+				/// Wind
+				if (canskill(sd)) if (pc_checkskill(sd, KO_KAZEHU_SEIRAN) > 0) if (pc_search_inventory(sd, 6514) >= 0)
+				{
+					resettargets();
+					if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_WIND) > 0) {
+						unit_skilluse_ifable(&sd->bl, SELF, KO_KAZEHU_SEIRAN, pc_checkskill(sd, KO_KAZEHU_SEIRAN));
+					}
+				}
+				/// Ice
+				if (canskill(sd)) if (pc_checkskill(sd, KO_HYOUHU_HUBUKI) > 0) if (pc_search_inventory(sd, 6513) >= 0)
+				{
+					resettargets();
+					if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_WATER) > 0) {
+						unit_skilluse_ifable(&sd->bl, SELF, KO_HYOUHU_HUBUKI, pc_checkskill(sd, KO_HYOUHU_HUBUKI));
+					}
+				}
+				/// Earth
+				if (canskill(sd)) if (pc_checkskill(sd, KO_DOHU_KOUKAI) > 0) if (pc_search_inventory(sd, 6515) >= 0)
+				{
+					resettargets();
+					// These boost ATK and DEF so also use if no endow was needed but only 1 below max level to avoid getting the endow.
+					if ((map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_EARTH) > 0) || (sd->spiritcharm < MAX_SPIRITCHARM - 1)) {
+						unit_skilluse_ifable(&sd->bl, SELF, KO_DOHU_KOUKAI, pc_checkskill(sd, KO_DOHU_KOUKAI));
+					}
+				}
+			}
 
 		/// Assumptio
 		if (canskill(sd)) if ((pc_checkskill(sd, HP_ASSUMPTIO)>0) && ((Dangerdistance >900) || (sd->special_state.no_castcancel))) {
@@ -8375,9 +8471,13 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 				}
 			}
-		
 
-
+		// Illusion Shadow
+		// Use when being targeted and not tanking
+		if (canskill(sd)) if (pc_checkskill(sd, KO_ZANZOU) >= 1) if (sd->state.autopilotmode != 1)
+			if (Dangerdistance <= 3) {
+				unit_skilluse_ifable(&sd->bl, SELF, KO_ZANZOU, pc_checkskill(sd, KO_ZANZOU));
+			}
 
 		// Don't bother with these suboptimal spells if casting is uninterruptable (note, they can be still cast as a damage spell, but not as an emergency reaction when fast cast time is needed)
 		if (!(sd->special_state.no_castcancel)) {
@@ -8621,6 +8721,27 @@ TIMER_FUNC(unit_autopilot_timer)
 									spelltocast = WZ_VERMILION; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
+
+							// Kunai Explosion
+							if (canskill(sd)) if ((pc_checkskill(sd, KO_BAKURETSU) > 0))
+								if (pc_inventory_count(sd, 13294) > 0) {
+								int area = 2;
+								priority = 2 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, ELE_NEUTRAL);
+								if ((priority >= 12) && (priority > bestpriority)) {
+									spelltocast = KO_BAKURETSU; bestpriority = priority; IDtarget = foundtargetID2;
+								}
+							}
+
+							// Swirling Petal
+								if (canskill(sd)) if ((pc_checkskill(sd, KO_HUUMARANKA) > 0))
+									if (sd->status.weapon == W_HUUMA) {
+										int area = 3;
+										priority = 3 * map_foreachinrange(AOEPriority, targetbl2, area, BL_MOB, skillelem(sd, KO_HUUMARANKA));
+										if ((priority >= 18) && (priority > bestpriority)) {
+											spelltocast = KO_HUUMARANKA; bestpriority = priority; IDtarget = foundtargetID2;
+										}
+									}
+
 							// Meteor Storm
 							if (canskill(sd)) if ((pc_checkskill(sd, WZ_METEOR) > 0) && (Dangerdistance > 900)) {
 								int area = 3;
@@ -8629,6 +8750,7 @@ TIMER_FUNC(unit_autopilot_timer)
 									spelltocast = WZ_METEOR; bestpriority = priority; IDtarget = foundtargetID2;
 								}
 							}
+
 							// Psychic Wave
 							if (canskill(sd)) if ((pc_checkskill(sd, SO_PSYCHIC_WAVE) > 0) && (Dangerdistance > 900)) {
 								int area = 3;
@@ -9165,14 +9287,30 @@ TIMER_FUNC(unit_autopilot_timer)
 					// Desperado - always centered on user
 					if (canskill(sd)) if (pc_checkskill(sd, GS_DESPERADO) > 0) if (sd->status.weapon == W_REVOLVER) {
 						int area = 3;
-						// Ammo? But is AOE we don't have a target to pick an element
-						// Let's assume we already have some ammo equipped I guess, from using other skills
-						// In worst case it fails and the AI uses the other skills anyway.
-						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
+
+						resettargets();
+						map_foreachinrange(targetnearest, &sd->bl, area, BL_MOB, sd);
+						int ele = ammochange2(sd, targetmd);
+
+						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ele); 
 						float pmod = 1;
 						if (sd->sc.data[SC_FALLEN_ANGEL]) pmod = 1.5;
 						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
 							spelltocast = GS_DESPERADO; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
+						}
+					}
+
+					// Kunai Splash
+					if (canskill(sd)) if (pc_checkskill(sd, KO_HAPPOKUNAI) > 0){
+						int area = 5;
+
+						resettargets();
+						map_foreachinrange(targetnearest, &sd->bl, area, BL_MOB, sd);
+						int ele = kunaichange(sd, targetmd);
+
+						priority = 2*map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ele); 
+						if ((priority >= 12) && (priority > bestpriority)) {
+							spelltocast = KO_HAPPOKUNAI; bestpriority = priority; IDtarget = sd->bl.id;
 						}
 					}
 
@@ -9183,10 +9321,12 @@ TIMER_FUNC(unit_autopilot_timer)
 						if (pc_checkskill(sd, RL_R_TRIP) > 3) area++;
 						if (pc_checkskill(sd, RL_R_TRIP) > 6) area++;
 						if (pc_checkskill(sd, RL_R_TRIP) > 9) area++;
-						// Ammo? But is AOE we don't have a target to pick an element
-						// Let's assume we already have some ammo equipped I guess, from using other skills
-						// In worst case it fails and the AI uses the other skills anyway.
-						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
+
+						resettargets();
+						map_foreachinrange(targetnearest, &sd->bl, area, BL_MOB, sd);
+						int ele = ammochange2(sd, targetmd);
+
+						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ele);
 						double pmod = 1;
 						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100.0;
 
@@ -9199,12 +9339,14 @@ TIMER_FUNC(unit_autopilot_timer)
 					if (canskill(sd)) if (pc_checkskill(sd, RL_FIREDANCE) > 0) if (sd->status.weapon == W_REVOLVER)
 					 if (sd->spiritball >= 1) {
 						int area = 3;
-						// Ammo? But is AOE we don't have a target to pick an element
-						// Let's assume we already have some ammo equipped I guess, from using other skills
-						// In worst case it fails and the AI uses the other skills anyway.
+
+						resettargets();
+						map_foreachinrange(targetnearest, &sd->bl, area, BL_MOB, sd);
+						int ele = ammochange2(sd, targetmd);
+
 						double pmod = 1;
 						if (sd->status.base_level > 100) pmod = sd->status.base_level / 100.0;
-						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ELE_NONE); // TODO should be ammo element
+						priority = map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, ele); 
 						if ((priority >= 6) && ((int)(priority*pmod) > bestpriority)) {
 							spelltocast = RL_FIREDANCE; bestpriority = (int)(priority*pmod); IDtarget = sd->bl.id;
 						}
@@ -9230,6 +9372,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == GS_DESPERADO)
 							|| (spelltocast == RL_FIREDANCE)
 							|| (spelltocast == RL_R_TRIP)
+							|| (spelltocast == KO_HAPPOKUNAI)
 							) unit_skilluse_ifable(&sd->bl, SELF, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 						if ((spelltocast == MG_FIREBALL) // Skills that target a monster, not the ground 
@@ -9437,7 +9580,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SC_FEINTBOMB)) >= 6)
 				unit_skilluse_ifable(&sd->bl, SELF, SC_FEINTBOMB, pc_checkskill(sd, SC_FEINTBOMB));
 		}
-		
+
 		// Rogue - use while hiding type skills
 		// Don't even think about it without maxed Tunnel Drive or if in tanking mode
 		if (pc_checkskill(sd, RG_TUNNELDRIVE) >= 5) if (foundtargetID2 > -1)
@@ -10032,6 +10175,15 @@ TIMER_FUNC(unit_autopilot_timer)
 				if ((sd->state.autopilotmode == 1)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID2, TK_JUMPKICK, pc_checkskill(sd, TK_JUMPKICK));
 				}
+			}
+
+			// Cross Slash
+			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, KO_JYUMONJIKIRI) > 0)) {
+				// only use in tanking mode! Also don't rush in if already wounded, wait to receive heals first...
+				if (sd->battle_status.hp > (70 * sd->battle_status.max_hp) / 100)
+					if ((sd->state.autopilotmode == 1)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, KO_JYUMONJIKIRI, pc_checkskill(sd, KO_JYUMONJIKIRI));
+					}
 			}
 
 			// Pinpoint Attack
@@ -10865,6 +11017,17 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 				}
 			}
 
+			// Soul Cutter skill
+			if (canskill(sd)) if (pc_checkskill(sd, KO_SETSUDAN) > 0)
+					if (elemallowed(targetmd, skillelem(sd, KO_SETSUDAN))) {
+						// Use like other skills, but also always use if EDP enabled, that's not the time to conserve SP
+						if ((checksprate(sd, targetmd, 10))
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID, KO_SETSUDAN, pc_checkskill(sd, KO_SETSUDAN));
+						}
+					}
+
+
 			// Envenom skill
 			if (canskill(sd)) if (pc_checkskill(sd, TF_POISON)>0) {
 				// Not if already poisoned
@@ -11156,7 +11319,6 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					unit_skilluse_ifable(&sd->bl, foundtargetID, RG_BACKSTAP, pc_checkskill(sd, RG_BACKSTAP));
 				}
 			}
-
 
 			// Bash skill
 			if (canskill(sd)) if (pc_checkskill(sd, SM_BASH)>0) if (pc_checkskill(sd, KN_BOWLINGBASH)<pc_checkskill(sd, SM_BASH)) {
