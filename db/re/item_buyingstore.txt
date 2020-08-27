@@ -917,7 +917,7 @@
 6469	//Will_Of_Warrior
 6470	//Blood_Thirst
 6471	//Goast_Chill
-6493	//Makibishi
+6493  // Makibishi
 6496	//Tikbalang_Thick_Spine
 6497	//Lesser_Agimat
 6498	//Jejellopy
@@ -926,10 +926,10 @@
 6509	//Mysterious_Flower
 6510	//Elegant_Flower
 6511	//Beautiful_Flower
-6512	//Charm_Fire
-6513	//Charm_Ice
-6514	//Charm_Wind
-6515	//Charm_Earth
+6512  // Charm_Fire
+6513  // Charm_Ice
+6514  // Charm_Wind
+6515  // Charm_Earth
 6516	//Bakonawa_Doll
 6517	//Bangungot_Doll
 6518	//Buwaya_Doll
