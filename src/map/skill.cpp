@@ -17130,7 +17130,7 @@ int skill_castfix_sc(struct block_list *bl, double time, uint8 flag)
 			if (sc->data[SC_PARALYSIS])
 				time += sc->data[SC_PARALYSIS]->val3;
 			if (sc->data[SC_IZAYOI])
-				time -= time * 50 / 100;
+				time -= time * sc->data[SC_IZAYOI]->val1 / 40;
 		}
 		if (sc->data[SC_SUFFRAGIUM]) {
 			if(!(flag&2))
@@ -17239,7 +17239,7 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 			fixcast_r += sc->data[SC_HUMMING]->val2;
 		}
 		if (sc->data[SC_IZAYOI])
-			VARCAST_REDUCTION(50);
+			VARCAST_REDUCTION(sc->data[SC_IZAYOI]->val1 / 40.0);
 		if (sc->data[SC_WATER_INSIGNIA] && sc->data[SC_WATER_INSIGNIA]->val1 == 3 && skill_get_type(skill_id) == BF_MAGIC && skill_get_ele(skill_id, skill_lv) == ELE_WATER)
 			VARCAST_REDUCTION(30); //Reduces 30% Variable Cast Time of magic Water spells.
 		if (sc->data[SC_TELEKINESIS_INTENSE])

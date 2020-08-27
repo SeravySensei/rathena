@@ -6577,7 +6577,7 @@ static unsigned short status_calc_ematk(struct block_list *bl, struct status_cha
 	if(sc->data[SC_MOONLITSERENADE])
 		matk += sc->data[SC_MOONLITSERENADE]->val3;
 	if(sc->data[SC_IZAYOI])
-		matk += 25 * sc->data[SC_IZAYOI]->val1;
+		matk += 5 * sc->data[SC_IZAYOI]->val1;
 	if(sc->data[SC_ZANGETSU])
 		matk += sc->data[SC_ZANGETSU]->val3;
 	if(sc->data[SC_QUEST_BUFF1])
