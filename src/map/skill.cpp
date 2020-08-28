@@ -1640,6 +1640,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 			status_change_end(bl, SC_SOULSHADOW, INVALID_TIMER);
 			status_change_end(bl, SC_SOULFALCON, INVALID_TIMER);
 			status_change_end(bl, SC_SOULFAIRY, INVALID_TIMER);
+			status_change_end(bl, SC_SOULDIVISION, INVALID_TIMER);
 		}
 		break;
 	case TK_TURNKICK:
@@ -1899,6 +1900,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 		status_change_end(bl, SC_SOULSHADOW, INVALID_TIMER);
 		status_change_end(bl, SC_SOULFALCON, INVALID_TIMER);
 		status_change_end(bl, SC_SOULFAIRY, INVALID_TIMER);
+		status_change_end(bl, SC_SOULDIVISION, INVALID_TIMER);
 		break;
 	case KO_MAKIBISHI:
 		sc_start(src,bl, SC_STUN, 10 * skill_lv, skill_lv, skill_get_time2(skill_id,skill_lv));
@@ -2014,7 +2016,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 					case SC_NEWMOON:		case SC_FLASHKICK:		case SC_NOVAEXPLOSING:
 					case SC_SOULUNITY:		case SC_SOULSHADOW:		case SC_SOULFAIRY:
 					case SC_SOULFALCON:		case SC_SOULGOLEM:		case SC_USE_SKILL_SP_SPA:
-					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:
+					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:		case SC_SOULDIVISION:
 #ifdef RENEWAL
 					case SC_EXTREMITYFIST2:
 #endif
@@ -8318,7 +8320,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_NEWMOON:		case SC_FLASHKICK:		case SC_NOVAEXPLOSING:
 					case SC_SOULUNITY:		case SC_SOULSHADOW:		case SC_SOULFAIRY:
 					case SC_SOULFALCON:		case SC_SOULGOLEM:		case SC_USE_SKILL_SP_SPA:
-					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:
+					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:		case SC_SOULDIVISION:
 #ifdef RENEWAL
 					case SC_EXTREMITYFIST2:
 #endif
@@ -9171,10 +9173,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SL_STAR:
 	case SL_SUPERNOVICE:
 	case SL_WIZARD:
-		if (sd && tsc && (tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY])) { // Soul links from Soul Linker and Soul Reaper skills don't stack.
-			clif_skill_fail(sd, skill_id, USESKILL_FAIL,0);
-			break;
-		}
 		//NOTE: here, 'type' has the value of the associated MAPID, not of the SC_SPIRIT constant.
 		if (sd && dstsd && !((dstsd->class_&MAPID_UPPERMASK) == type)) {
 			clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
@@ -9191,10 +9189,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		sc_start(src,src,SC_SMA,100,skill_lv,skill_get_time(SL_SMA,skill_lv));
 		break;
 	case SL_HIGH:
-		if (sd && tsc && (tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY])) { // Soul links from Soul Linker and Soul Reaper skills don't stack.
-			clif_skill_fail(sd, skill_id, USESKILL_FAIL,0);
-			break;
-		}
 		if (sd && !(dstsd && (dstsd->class_&JOBL_UPPER) && !(dstsd->class_&JOBL_2) && dstsd->status.base_level < 70)) {
 			clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 			break;
@@ -9207,6 +9201,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SP_SOULSHADOW:
 	case SP_SOULFALCON:
 	case SP_SOULFAIRY:
+	case SP_SOULDIVISION:
 		if (sd && !dstsd) { // Only player's can be soul linked.
 			clif_skill_fail(sd, skill_id, USESKILL_FAIL,0);
 			break;
@@ -9215,14 +9210,13 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			if (tsc->data[status_skill2sc(skill_id)]) { // Allow refreshing an already active soul link.
 				clif_skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 				break;
-			} else break;
-			
+			}
 		}
 		clif_skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 		break;
 
 	case SP_SOULREVOLVE:
-		if (!(tsc && (tsc->data[SC_SPIRIT] || tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY]))) {
+		if (!(tsc && (tsc->data[SC_SPIRIT] || tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY] || tsc->data[SC_SOULDIVISION]))) {
 			if (sd)
 				clif_skill_fail(sd, skill_id, USESKILL_FAIL, 0);
 			break;
@@ -9233,6 +9227,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		status_change_end(bl, SC_SOULSHADOW, INVALID_TIMER);
 		status_change_end(bl, SC_SOULFALCON, INVALID_TIMER);
 		status_change_end(bl, SC_SOULFAIRY, INVALID_TIMER);
+		status_change_end(bl, SC_SOULDIVISION, INVALID_TIMER);
 		break;
 
 	case SL_SWOO:
@@ -9895,7 +9890,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					case SC_NOVAEXPLOSING:
 					case SC_SOULUNITY:		case SC_SOULSHADOW:		case SC_SOULFAIRY:
 					case SC_SOULFALCON:		case SC_SOULGOLEM:		case SC_USE_SKILL_SP_SPA:
-					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:
+					case SC_USE_SKILL_SP_SHA:	case SC_SP_SHA:		case SC_SOULDIVISION:
 					case SC_STRANGELIGHTS:		case SC_DECORATION_OF_MUSIC:	case SC_GN_CARTBOOST:
 					case SC_RECOGNIZEDSPELL:	case SC_CHASEWALK2: case SC_ACTIVE_MONSTER_TRANSFORM:
 #ifdef RENEWAL
@@ -11057,14 +11052,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case OB_ZANGETSU:
 	case KG_KYOMU:
 	case KG_KAGEMUSYA:
-	case SP_SOULDIVISION:
-		if (skill_id == SP_SOULDIVISION) { // Usable only on other players.
-			if (bl->type != BL_PC) {
-				clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
-				break;
-			}
-		}
-
 		clif_skill_nodamage(src,bl,skill_id,skill_lv,
 			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
 		clif_skill_damage(src,bl,tick, status_get_amotion(src), 0, -30000, 1, skill_id, skill_lv, DMG_SINGLE);
@@ -16099,7 +16086,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 				return false;
 			}
 			break;
-		case SJ_STAREMPEROR:
+/*		case SJ_STAREMPEROR:
 		case SJ_NOVAEXPLOSING:
 		case SJ_GRAVITYCONTROL:
 		case SJ_BOOKOFDIMENSION:
@@ -16110,7 +16097,7 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 				clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
 				return false;
 			}
-			break;
+			break;*/
 		case SP_SWHOO:
 			if (!(sc && sc->data[SC_USE_SKILL_SP_SPA]))
 				return false;

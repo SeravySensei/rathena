@@ -30000,30 +30000,37 @@ Body:
     Description: Soul Division
     MaxLevel: 5
     Type: Magic
-    TargetType: Attack
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 9
     Hit: Single
     HitCount: 1
     CastCancel: true
-    CastTime: 500
     AfterCastActDelay: 500
-    Duration1: 5000
-    Cooldown: 3000
-    FixedCastTime: 1500
+    Duration1:
+      - Level: 1
+        Time: 60000
+      - Level: 2
+        Time: 120000
+      - Level: 3
+        Time: 180000
+      - Level: 4
+        Time: 240000
+      - Level: 5
+        Time: 300000
     Requires:
       SpCost:
         - Level: 1
-          Amount: 36
+          Amount: 250
         - Level: 2
-          Amount: 40
+          Amount: 200
         - Level: 3
-          Amount: 44
+          Amount: 150
         - Level: 4
-          Amount: 48
+          Amount: 100
         - Level: 5
-          Amount: 52
+          Amount: 50
       SpiritSphereCost: 1
   - Id: 2607
     Name: SP_SOULREAPER

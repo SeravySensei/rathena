@@ -2156,6 +2156,7 @@ int map_quit(struct map_session_data *sd) {
 			status_change_end(&sd->bl, SC_SOULSHADOW, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_SOULFALCON, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_SOULFAIRY, INVALID_TIMER);
+			status_change_end(&sd->bl, SC_SOULDIVISION, INVALID_TIMER);
 		}
 	}
 

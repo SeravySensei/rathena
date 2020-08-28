@@ -1029,7 +1029,7 @@ void initChangeTables(void)
 	set_sc(SP_SOULCURSE, SC_CURSE, EFST_BLANK, SCB_LUK | SCB_BATK | SCB_WATK | SCB_SPEED);
 	set_sc( SP_SHA			, SC_SP_SHA			, EFST_SP_SHA		, SCB_SPEED );
 	set_sc( SP_SOULUNITY	, SC_SOULUNITY		, EFST_SOULUNITY	, SCB_NONE );
-	set_sc( SP_SOULDIVISION	, SC_SOULDIVISION	, EFST_SOULDIVISION	, SCB_NONE );
+	set_sc( SP_SOULDIVISION	, SC_SOULDIVISION	, EFST_SOULDIVISION	, SCB_STR | SCB_AGI | SCB_VIT | SCB_INT | SCB_DEX | SCB_LUK);
 	set_sc( SP_SOULREAPER	, SC_SOULREAPER		, EFST_SOULREAPER	, SCB_NONE );
 	set_sc( SP_SOULCOLLECT	, SC_SOULCOLLECT	, EFST_SOULCOLLECT	, SCB_NONE );
 
@@ -5865,6 +5865,8 @@ static unsigned short status_calc_str(struct block_list *bl, struct status_chang
 		str += sc->data[SC__IGNORANCE]->val2;
 	if(sc->data[SC_HARMONIZE])
 		str += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		str += sc->data[SC_SOULDIVISION]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		str += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_CHASEWALK2])
@@ -5956,6 +5958,8 @@ static unsigned short status_calc_agi(struct block_list *bl, struct status_chang
 		agi += sc->data[SC__WEAKNESS]->val2;
 	if(sc->data[SC_HARMONIZE])
 		agi += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		agi += sc->data[SC_SOULDIVISION]->val2;
 	if(sc->data[SC_CONCENTRATE] && !sc->data[SC_QUAGMIRE])
 		agi += (agi-sc->data[SC_CONCENTRATE]->val3)*sc->data[SC_CONCENTRATE]->val2/100;
 	if(sc->data[SC_INCALLSTATUS])
@@ -6045,6 +6049,8 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 		vit += sc->data[SC_FRIGG_SONG]->val3;
 	if(sc->data[SC_HARMONIZE])
 		vit += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		vit += sc->data[SC_SOULDIVISION]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		vit += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_INCVIT])
@@ -6126,6 +6132,8 @@ static unsigned short status_calc_int(struct block_list *bl, struct status_chang
 		int_ += sc->data[SC__GROOMY]->val2;
 	if(sc->data[SC_HARMONIZE])
 		int_ += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		int_ += sc->data[SC_SOULDIVISION]->val2;
 	if(sc->data[SC_INCALLSTATUS])
 		int_ += sc->data[SC_INCALLSTATUS]->val1;
 	if(sc->data[SC_INCINT])
@@ -6214,6 +6222,8 @@ static unsigned short status_calc_dex(struct block_list *bl, struct status_chang
 	if (dex < 0) dex = 0;
 	if(sc->data[SC_HARMONIZE])
 		dex += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		dex += sc->data[SC_SOULDIVISION]->val2;
 	if (sc->data[SC__ENERVATION])
 		dex += sc->data[SC__ENERVATION]->val2;
 	if(sc->data[SC_CONCENTRATE] && !sc->data[SC_QUAGMIRE])
@@ -6305,6 +6315,8 @@ static unsigned short status_calc_luk(struct block_list *bl, struct status_chang
 	if (luk < 0) luk = 0;
 	if(sc->data[SC_HARMONIZE])
 		luk += sc->data[SC_HARMONIZE]->val2;
+	if (sc->data[SC_SOULDIVISION])
+		luk += sc->data[SC_SOULDIVISION]->val2;
 	if(sc->data[SC_CURSE])
 		return 0;
 	if(sc->data[SC_INCALLSTATUS])
@@ -11766,9 +11778,25 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			tick_time = 3000;
 			val4 = tick / tick_time;
 			break;
-		case SC_SOULDIVISION:
-			val2 = 10 * val1; // Skill Aftercast Increase
+		case SC_SOULDIVISION: {
+			val2 = 10 + 2 * val1; // All stats bonus
+			int max = 0;
+			int min = 999;
+			if (sd->base_status.str > max) max = sd->base_status.str;
+			if (sd->base_status.dex > max) max = sd->base_status.dex;
+			if (sd->base_status.agi > max) max = sd->base_status.agi;
+			if (sd->base_status.vit > max) max = sd->base_status.vit;
+			if (sd->base_status.luk > max) max = sd->base_status.luk;
+			if (sd->base_status.int_ > max) max = sd->base_status.int_;
+			if (sd->base_status.str < min) min = sd->base_status.str;
+			if (sd->base_status.dex < min) min = sd->base_status.dex;
+			if (sd->base_status.agi < min) min = sd->base_status.agi;
+			if (sd->base_status.vit < min) min = sd->base_status.vit;
+			if (sd->base_status.luk < min) min = sd->base_status.luk;
+			if (sd->base_status.int_ < min) min = sd->base_status.int_;
+			val2 -= (max - min) / 5;
 			break;
+		}
 		case SC_SOULREAPER:
 			val2 = 10 + 5 * val1; // Chance of Getting A Soul Sphere.
 			break;
