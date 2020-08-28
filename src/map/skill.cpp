@@ -6586,8 +6586,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		break;
 
 	case SP_SOULCURSE:
-		if (flag&1)
-			sc_start(src, bl, type, 30 + 10 * skill_lv, skill_lv, skill_get_time(skill_id, skill_lv));
+		if (flag & 1) {
+			sc_start(src, bl, SC_SOULCURSE, 10 * skill_lv, skill_lv, skill_get_time(skill_id, skill_lv));
+			sc_start(src, bl, SC_CURSE, 30 + 14 * skill_lv, skill_lv, skill_get_time(skill_id, skill_lv));
+		}
 		else {
 			map_foreachinrange(skill_area_sub, bl, skill_get_splash(skill_id, skill_lv), BL_CHAR, src, skill_id, skill_lv, tick, flag|BCT_ENEMY|1, skill_castend_nodamage_id);
 			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
@@ -9213,10 +9215,8 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			if (tsc->data[status_skill2sc(skill_id)]) { // Allow refreshing an already active soul link.
 				clif_skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 				break;
-			} else if (tsc->data[SC_SPIRIT] || tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY]) { // Soul links from Soul Linker and Soul Reaper skills don't stack.
-				clif_skill_fail(sd, skill_id, USESKILL_FAIL, 0);
-				break;
-			}
+			} else break;
+			
 		}
 		clif_skill_nodamage(src, bl, skill_id, skill_lv, sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv)));
 		break;

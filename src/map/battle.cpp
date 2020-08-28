@@ -581,17 +581,10 @@ int64 battle_attr_fix(struct block_list *src, struct block_list *target, int64 d
 				break;
 			case ELE_DARK:
 				if (tsc->data[SC_SOULCURSE]) {
-					if (status_get_class_(target) == CLASS_BOSS)
 #ifdef RENEWAL
-						ratio += 20;
+						ratio += 25;
 #else
-						damage += (int64)(damage * 20 / 100);
-#endif
-					else
-#ifdef RENEWAL
-						ratio += 100;
-#else
-						damage *= 2;
+						damage += (int64)(damage * 25 / 100);
 #endif
 				}
 				break;
@@ -6382,20 +6375,21 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 900;
 						break;
 					case SP_CURSEEXPLOSION:
-						if (tsc && tsc->data[SC_SOULCURSE])
-							skillratio += 1400 + 200 * skill_lv;
+						if ((tsc && tsc->data[SC_SOULCURSE])
+							|| (tsc && tsc->data[SC_CURSE]))
+							skillratio += 1400 + 100 * skill_lv;
 						else
 							skillratio += 300 + 100 * skill_lv;
 						break;
 					case SP_SPA:
-						skillratio += 400 + 250 * skill_lv;
+						skillratio += 700 + 100 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 					case SP_SHA:
 						skillratio += -100 + 5 * skill_lv;
 						break;
 					case SP_SWHOO:
-						skillratio += 1000 + 200 * skill_lv;
+						skillratio += -100 + 200 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
 				}

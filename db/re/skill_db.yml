@@ -29688,25 +29688,25 @@ Body:
     Requires:
       SpCost:
         - Level: 1
-          Amount: 50
+          Amount: 30
         - Level: 2
-          Amount: 55
+          Amount: 32
         - Level: 3
-          Amount: 60
+          Amount: 34
         - Level: 4
-          Amount: 65
+          Amount: 36
         - Level: 5
-          Amount: 70
+          Amount: 38
         - Level: 6
-          Amount: 75
+          Amount: 40
         - Level: 7
-          Amount: 80
+          Amount: 42
         - Level: 8
-          Amount: 85
+          Amount: 44
         - Level: 9
-          Amount: 90
+          Amount: 46
         - Level: 10
-          Amount: 95
+          Amount: 48
   - Id: 2601
     Name: SP_SOULCURSE
     Description: Soul Curse
@@ -29719,7 +29719,7 @@ Body:
     Range: 9
     Hit: Single
     HitCount: 1
-    SplashArea: 3
+    SplashArea: 4
     CastCancel: true
     CastTime: 1000
     AfterCastActDelay: 500
@@ -29728,7 +29728,7 @@ Body:
     FixedCastTime: 1000
     Requires:
       SpCost: 70
-      SpiritSphereCost: 3
+      SpiritSphereCost: 1
   - Id: 2602
     Name: SP_SPA
     Description: Espa
@@ -29740,7 +29740,7 @@ Body:
     HitCount: 1
     Element: Endowed
     CastCancel: true
-    CastTime: 500
+    CastTime: 1500
     Duration1: 5000
     FixedCastTime: 1000
     Requires:
@@ -29810,22 +29810,22 @@ Body:
       - Level: 5
         Area: 2
     CastCancel: true
-    CastTime: 500
+    CastTime: 1000
     AfterCastActDelay: 500
     Duration1:
       - Level: 1
-        Time: 3000
-      - Level: 2
-        Time: 4000
-      - Level: 3
         Time: 5000
-      - Level: 4
-        Time: 6000
-      - Level: 5
+      - Level: 2
         Time: 7000
+      - Level: 3
+        Time: 9000
+      - Level: 4
+        Time: 11000
+      - Level: 5
+        Time: 13000
     Duration2: 5000
     Cooldown: 3000
-    FixedCastTime: 1000
+    FixedCastTime: 200
     Requires:
       SpCost:
         - Level: 1
@@ -29838,7 +29838,6 @@ Body:
           Amount: 24
         - Level: 5
           Amount: 26
-      SpiritSphereCost: 1
   - Id: 2604
     Name: SP_SWHOO
     Description: Eswhoo
@@ -29873,11 +29872,11 @@ Body:
       - Level: 10
         Area: 4
     CastCancel: true
-    CastTime: 500
+    CastTime: 1800
     AfterCastActDelay: 500
     Duration1: 5000
     Cooldown: 2000
-    FixedCastTime: 1000
+    FixedCastTime: 1200
     Requires:
       SpCost:
         - Level: 1
@@ -29920,7 +29919,7 @@ Body:
         - Level: 9
           Amount: 2
         - Level: 10
-          Amount: 1
+          Amount: 2
   - Id: 2605
     Name: SP_SOULUNITY
     Description: Soul Unity
@@ -30096,9 +30095,9 @@ Body:
         - Level: 1
           Amount: 50
         - Level: 2
-          Amount: 100
+          Amount: 50
         - Level: 3
-          Amount: 150
+          Amount: 50
   - Id: 2609
     Name: SP_SOULCOLLECT
     Description: Soul Collect
