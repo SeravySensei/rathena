@@ -11737,9 +11737,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val4 = tick / tick_time;
 			break;
 		case SC_FALLINGSTAR:
-			val2 = 8 + 2 * (1 + val1) / 2; // Autocast Chance
+			val2 = 8 + (1 + val1);  // Autocast Chance
 			if (val1 >= 7)
-				val2 += 1; // Make it 15% at level 7.
+				val2 += 1; // Make it 17% at level 7.
 			break;
 		case SC_CREATINGSTAR:
 			tick_time = 500;

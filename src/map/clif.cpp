@@ -10872,7 +10872,7 @@ void clif_parse_LoadEndAck(int fd,struct map_session_data *sd)
 	if(!sd->state.autotrade && mapdata->flag[MF_LOADEVENT]) // Lance
 		npc_script_event(sd, NPCE_LOADMAP);
 
-	if (pc_checkskill(sd, SG_DEVIL) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)))
+	if (pc_checkskill(sd, SG_DEVIL) && !pc_checkskill(sd, SJ_PURIFY) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)))
 		clif_status_load(&sd->bl, EFST_DEVIL1, 1);  //blindness [Komurka]
 
 	if (sd->sc.opt2) //Client loses these on warp.

@@ -7125,7 +7125,7 @@ int pc_checkjoblevelup(struct map_session_data *sd)
 	clif_updatestatus(sd,SP_SKILLPOINT);
 	status_calc_pc(sd,SCO_FORCE);
 	clif_misceffect(&sd->bl,1);
-	if (pc_checkskill(sd, SG_DEVIL) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)) )
+	if (pc_checkskill(sd, SG_DEVIL) && !pc_checkskill(sd, SJ_PURIFY) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)) )
 		clif_status_change(&sd->bl, EFST_DEVIL1, 1, 0, 0, 0, 1); //Permanent blind effect from SG_DEVIL.
 
 	npc_script_event(sd, NPCE_JOBLVUP);
@@ -7677,8 +7677,10 @@ void pc_skillup(struct map_session_data *sd,uint16 skill_id)
 			clif_updatestatus(sd,SP_SKILLPOINT);
 			if( skill_id == GN_REMODELING_CART ) /* cart weight info was updated by status_calc_pc */
 				clif_updatestatus(sd,SP_CARTINFO);
-			if (pc_checkskill(sd, SG_DEVIL) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)))
+			if (pc_checkskill(sd, SG_DEVIL) && !pc_checkskill(sd, SJ_PURIFY) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)))
 				clif_status_change(&sd->bl, EFST_DEVIL1, 1, 0, 0, 0, 1); //Permanent blind effect from SG_DEVIL.
+			if (pc_checkskill(sd, SG_DEVIL) && pc_checkskill(sd, SJ_PURIFY) && ((sd->class_&MAPID_THIRDMASK) == MAPID_STAR_EMPEROR || pc_is_maxjoblv(sd)))
+				clif_status_load(&sd->bl, EFST_DEVIL1, 0); //Remove perma blindness due to skill-reset. [Skotlex]
 			if (!pc_has_permission(sd, PC_PERM_ALL_SKILL)) // may skill everything at any time anyways, and this would cause a huge slowdown
 				clif_skillinfoblock(sd);
 		}

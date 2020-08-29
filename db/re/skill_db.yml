@@ -29122,17 +29122,17 @@ Body:
       - Level: 1
         Time: 4000
       - Level: 2
-        Time: 5000
-      - Level: 3
         Time: 6000
-      - Level: 4
-        Time: 7000
-      - Level: 5
+      - Level: 3
         Time: 8000
-      - Level: 6
-        Time: 9000
-      - Level: 7
+      - Level: 4
         Time: 10000
+      - Level: 5
+        Time: 13000
+      - Level: 6
+        Time: 16000
+      - Level: 7
+        Time: 20000
     Requires:
       SpCost:
         - Level: 1
@@ -29196,7 +29196,7 @@ Body:
     CastCancel: true
     CastTime: 5000
     AfterCastActDelay: 1000
-    Duration1: 2000
+    Duration1: 5000
     Cooldown: 20000
     FixedCastTime: 1000
     Requires:

@@ -6860,10 +6860,7 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			break;
 		case SJ_NOVAEXPLOSING:
 			// (Base ATK + Weapon ATK) * Ratio
-			md.damage = (sstatus->batk + sstatus->rhw.atk) * (200 + 100 * skill_lv) / 100;
-
-			// Additional Damage
-			md.damage += sstatus->max_hp / (6 - min(5, skill_lv)) + status_get_max_sp(src) * (2 * skill_lv);
+			md.damage = (pc_rightside_atk(sd)+pc_leftside_atk(sd)) * (200 + 200 * skill_lv) / 100;
 			break;
 	}
 
