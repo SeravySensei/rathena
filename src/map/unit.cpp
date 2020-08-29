@@ -3906,6 +3906,115 @@ int targetsoulexchange(block_list * bl, va_list ap)
 	return 1;
 }
 
+int targetkaute(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+	struct map_session_data *sd = (struct map_session_data*)bl;
+
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+
+	if (pc_isdead(sd)) return 0;
+	// Must be self or soul unity 
+	if (!(sd->sc.data[SC_SOULUNITY]) && (sd->bl.id!=sd2->bl.id)) return 0;
+	if (sd->sc.data[SC_NORECOVER_STATE]) return 0;
+	// Must recover at least 20% SP
+	if (sd->battle_status.sp > 0.8*sd->battle_status.max_sp) return 0;
+
+	int dist = min(sd2->battle_status.sp, sd->battle_status.max_sp) - sd->battle_status.sp;
+	if (sd->state.asurapreparation) dist = 500;
+	if ((dist > targetdistance) && (path_search(NULL, sd2->bl.m, sd2->bl.x, sd2->bl.y, bl->x, bl->y, 0, CELL_CHKNOPASS, 9))) { targetdistance = dist; foundtargetID = bl->id; targetbl = bl; };
+
+	return 1;
+}
+
+int soulbuffskill;
+
+int targetsoulbuff(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+	struct map_session_data *sd = (struct map_session_data*)bl;
+
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+
+	if (pc_isdead(sd)) return 0;
+	if (!path_search(NULL, sd2->bl.m, sd2->bl.x, sd2->bl.y, bl->x, bl->y, 0, CELL_CHKNOPASS, 9)) return 0;
+	if (sd->sc.data[SC_SOULGOLEM]) return 0;
+	if (sd->sc.data[SC_SOULFAIRY]) return 0;
+	if (sd->sc.data[SC_SOULSHADOW]) return 0;
+	if (sd->sc.data[SC_SOULFALCON]) return 0;
+	//**** Note : I changed Soul Division to be a buff. You will need to remove it from here.
+	if (sd->sc.data[SC_SOULDIVISION]) return 0;
+	//**** Note : I removed the restriction of these not being cumulative with normal Soul Links.
+	// If you did not, you'll have to add a condition for that here and/or on the soul links themselves
+	// depending on which do you want the AI to avoid using in favor of the other.
+
+	int thisprio, bestprio = 0;
+	if (pc_checkskill(sd2, SP_SOULGOLEM) > 0) {
+		// Support mode wants the defense
+		if (sd->state.autopilotmode == 3) thisprio = 10* pc_checkskill(sd2, SP_SOULGOLEM);
+		// Tanking mode also wants the defense
+		if (sd->state.autopilotmode == 1) thisprio = 10 * pc_checkskill(sd2, SP_SOULGOLEM);
+		// Skill mode does not want the defense unless there isn't any better
+		if (sd->state.autopilotmode == 2) thisprio = 2 * pc_checkskill(sd2, SP_SOULGOLEM);
+	}
+	if (thisprio > bestprio) { bestprio = thisprio; foundtargetID = bl->id; targetbl = bl; soulbuffskill = SP_SOULGOLEM; };
+
+	thisprio = 0;
+	if (pc_checkskill(sd2, SP_SOULFAIRY) > 0) {
+		// MATK chars prefer this
+		if (pc_rightside_atk(sd) <= pc_rightside_matk(sd)) thisprio = 10 * pc_checkskill(sd2, SP_SOULFAIRY);
+		else thisprio = 1 * pc_checkskill(sd2, SP_SOULFAIRY);
+	}
+
+	if (thisprio > bestprio) { bestprio = thisprio; foundtargetID = bl->id; targetbl = bl; soulbuffskill = SP_SOULFAIRY; };
+
+	thisprio = 0;
+	if (pc_checkskill(sd2, SP_SOULFALCON) > 0) {
+		// ATK chars prefer this
+		if (pc_rightside_atk(sd) > pc_rightside_matk(sd)) thisprio = 10 * pc_checkskill(sd2, SP_SOULFALCON);
+		else thisprio = 1 * pc_checkskill(sd2, SP_SOULFALCON);
+	}
+
+	if (thisprio > bestprio) { bestprio = thisprio; foundtargetID = bl->id; targetbl = bl; soulbuffskill = SP_SOULFALCON; };
+
+	thisprio = 0;
+	if (pc_checkskill(sd2, SP_SOULSHADOW) > 0) {
+		// ATK chars prefer this
+		if (sd->state.shadowwant) thisprio = 12 * pc_checkskill(sd2, SP_SOULSHADOW);
+		if (pc_rightside_atk(sd) > pc_rightside_matk(sd)) thisprio = 5 * pc_checkskill(sd2, SP_SOULSHADOW);
+		else thisprio = 1 * pc_checkskill(sd2, SP_SOULSHADOW);
+	}
+
+	if (thisprio > bestprio) { bestprio = thisprio; foundtargetID = bl->id; targetbl = bl; soulbuffskill = SP_SOULSHADOW; };
+
+	//**** Note : I changed Soul Division to be a buff. You will need to remove it from here.
+	thisprio = 0;
+	if (pc_checkskill(sd2, SP_SOULDIVISION) > 0) {
+		thisprio = 10 + 2 * pc_checkskill(sd2, SP_SOULDIVISION);
+		int max = 0;
+		int min = 999;
+		if (sd->base_status.str > max) max = sd->base_status.str;
+		if (sd->base_status.dex > max) max = sd->base_status.dex;
+		if (sd->base_status.agi > max) max = sd->base_status.agi;
+		if (sd->base_status.vit > max) max = sd->base_status.vit;
+		if (sd->base_status.luk > max) max = sd->base_status.luk;
+		if (sd->base_status.int_ > max) max = sd->base_status.int_;
+		if (sd->base_status.str < min) min = sd->base_status.str;
+		if (sd->base_status.dex < min) min = sd->base_status.dex;
+		if (sd->base_status.agi < min) min = sd->base_status.agi;
+		if (sd->base_status.vit < min) min = sd->base_status.vit;
+		if (sd->base_status.luk < min) min = sd->base_status.luk;
+		if (sd->base_status.int_ < min) min = sd->base_status.int_;
+		thisprio -= (max - min) / 5;
+		thisprio = 3 + 4 * thisprio;
+	}
+
+	if (thisprio > bestprio) { bestprio = thisprio; foundtargetID = bl->id; targetbl = bl; soulbuffskill = SP_SOULDIVISION; };
+
+	return 1;
+}
+
+
 int warplocation(block_list * bl, va_list ap)
 {
 
@@ -4069,6 +4178,29 @@ int targetturnundead(block_list * bl, va_list ap)
 	if ((dist > targetdistance) && (isreachabletarget(bl->id))) { targetdistance = dist; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
 
 	return 1;
+}
+
+bool soulexpvalid(map_session_data *sd)
+{
+	struct party_data *p;
+	p = party_search(sd->status.party_id);
+	if (!p) {
+		return false;
+	}
+
+	int classes[] =
+	{ MAPID_ALCHEMIST, MAPID_MONK, MAPID_STAR_GLADIATOR, MAPID_SAGE, MAPID_CRUSADER,
+	 MAPID_SUPER_NOVICE,MAPID_KNIGHT, MAPID_WIZARD, MAPID_PRIEST, MAPID_BARDDANCER,
+		MAPID_ROGUE,MAPID_ASSASSIN,MAPID_BLACKSMITH,MAPID_HUNTER,MAPID_SOUL_LINKER,
+		MAPID_REBELLION, MAPID_KAGEROUOBORO };
+
+	for (int j = 0; j < 17; j++) {
+
+		int i = party_foreachsamemap(party_sub_count_class, sd, 0, MAPID_UPPERMASK, classes[j]);
+		if (i > 1) return false;
+	}
+
+	return true;
 }
 
 int targeteska(block_list * bl, va_list ap)
@@ -4751,6 +4883,16 @@ int targetbless(block_list * bl, va_list ap)
 	if (!ispartymember(sd)) return 0;
 	if (!sd->sc.data[SC_BLESSING]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 	if (sd->sc.data[SC_CURSE]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
+int targetsu(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (!sd->sc.data[SC_SOULUNITY]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
 
 	return 0;
 }
@@ -6061,21 +6203,35 @@ int modetolv(int mode)
 
 void skillwhenidle(struct map_session_data *sd) {
 
+	/// Soul Unity
+	if (canskill(sd)) if (pc_checkskill(sd, SP_SOULUNITY) > 0) if (sd->soulball >= 10) {
+		resettargets();
+		int area = 1;
+		if (pc_checkskill(sd, SP_SOULUNITY) >= 3) area++;
+		if (pc_checkskill(sd, SP_SOULUNITY) >= 5) area++;
+		if (pc_checkskill(sd, SP_SOULUNITY) >= 7) area++;
+		// wait until everyone is in the AOE!
+		if (map_foreachinrange(targetsu, &sd->bl, area, BL_PC, sd) >= partycount) {
+			if (!duplicateskill(p, SP_SOULUNITY)) unit_skilluse_ifable(&sd->bl, SELF, SP_SOULUNITY, pc_checkskill(sd, SP_SOULUNITY));
+		}
+	}
+
 	// Deep Sleep Lullaby
 	// **** Note I changed this to cause the effect on the party so it is basically a recovery spell that is useful outside battle.
 	// Remove this block if you use the original DSL.
-	if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
+	if (canskill(sd)) if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
 		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(DeepSleepPriority, targetbl, 9, BL_PC) >= 150 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
 		}
 	}
 	// Warmer - also heals mobs so only use when idle
-	if (pc_checkskill(sd, SO_WARMER) > 0) {
+	if (canskill(sd)) if (pc_checkskill(sd, SO_WARMER) > 0) {
 		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, targetbl, 9, BL_PC) >= 50 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, sd->bl.id, SO_WARMER, pc_checkskill(sd, SO_WARMER));
 		}
 	}
 
+	// Pure Soul
 	if ((sd->battle_status.sp<200) ||
 		(sd->battle_status.hp < 0.5* sd->battle_status.max_hp) ||
 		(sd->battle_status.hp < 0.5* sd->battle_status.max_hp))
@@ -6091,6 +6247,23 @@ void skillwhenidle(struct map_session_data *sd) {
 		if ((pc_checkskill(sd, KO_IZAYOI) > 0)) {
 			if (!(sd->sc.data[SC_IZAYOI])) {
 				unit_skilluse_ifable(&sd->bl, SELF, KO_IZAYOI, pc_checkskill(sd, KO_IZAYOI));
+			}
+		}
+
+	// Soul Collect
+	if (canskill(sd))
+		if ((pc_checkskill(sd, SP_SOULCOLLECT) > 0)) {
+			if (!(sd->sc.data[SC_SOULCOLLECT])) {
+				unit_skilluse_ifable(&sd->bl, SELF, SP_SOULCOLLECT, pc_checkskill(sd, SP_SOULCOLLECT));
+			}
+		}
+
+	// Soul Reap
+	if (canskill(sd))
+		if ((sd->soulball >= 2) && (sd->state.autopilotmode != 3))
+		if ((pc_checkskill(sd, SP_SOULREAPER) > 0)) {
+			if (!(sd->sc.data[SC_SOULREAPER])) {
+				unit_skilluse_ifable(&sd->bl, SELF, SP_SOULREAPER, pc_checkskill(sd, SP_SOULREAPER));
 			}
 		}
 
@@ -7325,6 +7498,16 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, foundtargetID, PF_SOULCHANGE, pc_checkskill(sd, PF_SOULCHANGE));
 			}
 		}
+		// Kaute
+		if (canskill(sd)) if ((pc_checkskill(sd, SP_KAUTE) > 0))
+			if (sd->soulball >=5) if (sd->battle_status.hp > sd->battle_status.max_hp*0.6) {
+			resettargets2();
+			map_foreachinrange(targetkaute, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				unit_skilluse_ifable(&sd->bl, foundtargetID, SP_KAUTE, pc_checkskill(sd, SP_KAUTE));
+			}
+		}
+
 		/// Potion Pitcher Blue
 		if (canskill(sd)) if (pc_checkskill(sd, AM_POTIONPITCHER) >= 5) {
 			resettargets();
@@ -7759,6 +7942,23 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (!duplicateskill(p, AL_INCAGI)) unit_skilluse_ifable(&sd->bl, foundtargetID, AL_INCAGI, pc_checkskill(sd, AL_INCAGI));
 			}
 		}
+		// Soul buffs
+		if (canskill(sd))
+			if (sd->soulball > 0)
+			if (pc_checkskill(sd, SP_SOULGOLEM)
+				+ pc_checkskill(sd, SP_SOULFAIRY)
+				+ pc_checkskill(sd, SP_SOULSHADOW)
+				+ pc_checkskill(sd, SP_SOULFALCON)
+				// *** NOTE : remove the line below
+				+ pc_checkskill(sd, SP_SOULDIVISION)
+			> 0) {
+			resettargets();
+			map_foreachinrange(targetsoulbuff, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				if (!duplicateskill(p, soulbuffskill)) unit_skilluse_ifable(&sd->bl, foundtargetID, soulbuffskill, pc_checkskill(sd, soulbuffskill));
+			}
+		}
+
 		/// Clementia
 		if (canskill(sd)) if (pc_checkskill(sd, AB_CLEMENTIA) > 0) {
 			resettargets();
@@ -8920,6 +9120,45 @@ TIMER_FUNC(unit_autopilot_timer)
 									}
 								}
 							}
+							// Esha
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							// *** NOTE : I changed this to not consume a soul ball. If it does on yours, add that condition.
+							if (canskill(sd)) if ((pc_checkskill(sd, SP_SHA) > 0))
+								// this deals bad damage, use it only to trigger soul reaper for more souls
+								if (sd->sc.data[SC_SOULREAPER]) {
+								resettargets();
+								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+								if (foundtargetID > -1) {
+									int area = 2;
+									priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, SP_SHA));
+									if (sd->soulball < 5) priority *= 2;
+									if (sd->soulball < 10) priority *= 2;
+									if (sd->soulball > 15) priority = 0;
+									if (((priority >= 6) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+										spelltocast = SP_SHA; bestpriority = priority; IDtarget = foundtargetID;
+									}
+								}
+							}
+							// Eswhoo
+							// This is special - it targets a monster despite having AOE, not a ground skill
+							if (canskill(sd)) if ((pc_checkskill(sd, SP_SWHOO) > 0))
+								// requires combo
+								if (sd->sc.data[SC_USE_SKILL_SP_SPA]) {
+									resettargets();
+									map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
+									if (foundtargetID > -1) {
+										int area = 1;
+										if (pc_checkskill(sd, SP_SWHOO) >= 4) area++;
+										if (pc_checkskill(sd, SP_SWHOO) >= 7) area++;
+										if (pc_checkskill(sd, SP_SWHOO) >= 10) area++;										priority = map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, SP_SWHOO));
+										priority = 2*map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd, SP_SHA));
+
+										if (((priority >= 12) && (priority > bestpriority)) && (distance_bl(targetbl, &sd->bl) <= 9)) {
+											spelltocast = SP_SWHOO; bestpriority = priority; IDtarget = foundtargetID;
+										}
+									}
+								}
+
 							// Spore Explosion
 							// This is special - it targets a monster despite having AOE, not a ground skill
 							// **** Note, I changed this skill to be a sinple AOE with no time delay. If you did not, you might want different AI.
@@ -9391,6 +9630,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == WL_SOULEXPANSION)
 							|| (spelltocast == LG_CANNONSPEAR)
 							|| (spelltocast == NC_FLAMELAUNCHER)
+							|| (spelltocast == SP_SHA)
 							) unit_skilluse_ifable(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
 						else
 							unit_skilluse_ifablexy(&sd->bl, IDtarget, spelltocast, pc_checkskill(sd, spelltocast));
@@ -9643,6 +9883,17 @@ TIMER_FUNC(unit_autopilot_timer)
 		///////////////////////////////////////////////////////////////////////////////////////////////
 		/// Skills to exploit elemental weakness
 		///////////////////////////////////////////////////////////////////////////////////////////////
+		// Soul Explosion
+		// **** Note : I changed this skill to be a PVM damage spell that scales with number of different classes in party and is Ghost element.
+		// if you did not, you have to disable this block.
+		if (pc_checkskill(sd, SP_SOULEXPLOSION) > 0) {
+			if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+				if (elemstrong(targetmd2, skillelem(sd, SP_SOULEXPLOSION)))
+				if (soulexpvalid(sd)) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SOULEXPLOSION, pc_checkskill(sd, SP_SOULEXPLOSION));
+				}
+		}
+
 		// Estin, Estun, Esma on vulnerable enemy
 		int windelem;
 		windelem = 0;
@@ -9650,11 +9901,27 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (foundtargetID2 > -1) if (canskill(sd))
 			if (elemstrong(targetmd2, windelem)) {
 
+				// max level SPA costs no ball
+				if (pc_checkskill(sd, SP_SPA) >= 10) {
+					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SPA, pc_checkskill(sd, SP_SPA));
+					}
+				}
+
 				if (sd->sc.data[SC_SMA]) if (pc_checkskill(sd, SL_SMA) > 0) {
 					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_SMA, pc_checkskill(sd, SL_SMA));
 					}
 				}
+
+				// not maxed costs ball so prefer SMA whenever available.
+				if (pc_checkskill(sd, SP_SPA) > 0)  if (pc_checkskill(sd, SP_SPA) < 10) {
+					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+						if (sd->soulball > 0) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SPA, pc_checkskill(sd, SP_SPA));
+						}
+				}
+
 				if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd2->status.size == SZ_SMALL) {
 					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_STIN, pc_checkskill(sd, SL_STIN));
@@ -10298,17 +10565,44 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 			}
 
+			// Soul Explosion
+			// **** Note : I changed this skill to be a PVM damage spell that scales with number of different classes in party and is Ghost element.
+			// if you did not, you have to disable this block.
+			if (pc_checkskill(sd, SP_SOULEXPLOSION) > 0) {
+				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+					if (elemallowed(targetmd2, skillelem(sd, SP_SOULEXPLOSION)))
+						if (soulexpvalid(sd)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SOULEXPLOSION, pc_checkskill(sd, SP_SOULEXPLOSION));
+						}
+			}
+
 			// Estin, Estun, Esma
 			windelem = 0;
 			if (sd->sc.data[SC_SEVENWIND]) windelem = skill_get_ele(TK_SEVENWIND, sd->sc.data[SC_SEVENWIND]->val1);
 			if (foundtargetID2 > -1) if (canskill(sd))
 				if (elemallowed(targetmd2, windelem)) {
 
+					// max level SPA costs no ball
+					if (pc_checkskill(sd, SP_SPA) >= 10) {
+						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SPA, pc_checkskill(sd, SP_SPA));
+						}
+					}
+
 					if (sd->sc.data[SC_SMA]) if (pc_checkskill(sd, SL_SMA) > 0) {
 						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_SMA, pc_checkskill(sd, SL_SMA));
 						}
 					}
+
+					// not maxed costs ball so prefer SMA whenever available.
+					if (pc_checkskill(sd, SP_SPA) > 0)  if (pc_checkskill(sd, SP_SPA) < 10) {
+						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+						if (sd->soulball>0) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SP_SPA, pc_checkskill(sd, SP_SPA));
+						}
+					}
+
 					if (pc_checkskill(sd, SL_STIN) > 0) if (targetmd2->status.size == SZ_SMALL) {
 						if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
 							unit_skilluse_ifable(&sd->bl, foundtargetID2, SL_STIN, pc_checkskill(sd, SL_STIN));

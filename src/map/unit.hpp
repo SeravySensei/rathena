@@ -186,4 +186,6 @@ int endowneed(block_list * bl, va_list ap);
 
 int sgn(int x);
 
+bool soulexpvalid(map_session_data *sd);
+
 #endif /* UNIT_HPP */

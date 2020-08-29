@@ -120,6 +120,12 @@ sd->state.enableconc=!sd->state.enableconc;
 return 0;
 }
 
+ACMD_FUNC(autosoulshadow)
+{
+sd->state.shadowwant=!sd->state.shadowwant;
+return 0;
+}
+
 ACMD_FUNC(autosong2)
 {
 if (!message || !*message) { clif_displaymessage(fd, "please specify type a song to play :");
