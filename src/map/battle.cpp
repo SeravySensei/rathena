@@ -1147,7 +1147,6 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 	switch (skill_id) {
     case PA_PRESSURE:
 		case HW_GRAVITATION:
-		case SP_SOULEXPLOSION:
 			return damage; //These skills bypass everything else.
   }
 
@@ -6385,6 +6384,16 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 700 + 100 * skill_lv;
 						RE_LVL_DMOD(100);
 						break;
+					case SP_SOULEXPLOSION:
+						skillratio += -100 + 100 * skill_lv; // todo
+						struct party_data *p;
+						p = party_search(sd->status.party_id);
+						if (p) {
+							skillratio += 30 * (p->party.count) * (p->party.count);
+						}
+
+						RE_LVL_DMOD(100);
+						break;
 					case SP_SHA:
 						skillratio += -100 + 5 * skill_lv;
 						break;
@@ -6848,9 +6857,6 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			break;
 		case SU_SV_ROOTTWIST_ATK:
 			md.damage = 100;
-			break;
-		case SP_SOULEXPLOSION:
-			md.damage = tstatus->hp * (20 + 10 * skill_lv) / 100;
 			break;
 		case SJ_NOVAEXPLOSING:
 			// (Base ATK + Weapon ATK) * Ratio

@@ -1893,7 +1893,6 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 	case KO_JYUMONJIKIRI:
 		sc_start(src,bl,SC_JYUMONJIKIRI,100,skill_lv,skill_get_time(skill_id,skill_lv));
 		break;
-	case SP_SOULEXPLOSION:
 	case KO_SETSUDAN: // Remove soul link when hit.
 		status_change_end(bl, SC_SPIRIT, INVALID_TIMER);
 		status_change_end(bl, SC_SOULGOLEM, INVALID_TIMER);
@@ -3721,7 +3720,7 @@ int64 skill_attack (int attack_type, struct block_list* src, struct block_list *
 			battle_delay_damage(tick, dmg.amotion,src,bl,dmg.flag,skill_id,skill_lv,damage,dmg.dmg_lv,dmg.dmotion, additional_effects, false);
 	}
 
-	if (tsc  && skill_id != NPC_EVILLAND && skill_id != SP_SOULEXPLOSION && skill_id != SJ_NOVAEXPLOSING
+	if (tsc  && skill_id != NPC_EVILLAND  && skill_id != SJ_NOVAEXPLOSING
 #ifndef RENEWAL
 		&& skill_id != PA_PRESSURE && skill_id != HW_GRAVITATION
 		#endif
@@ -5491,18 +5490,16 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 			sc_start(src, &sd->bl, SC_NOVAEXPLOSING, 100, skill_lv, skill_get_time(skill_id, skill_lv));
 		break;
 		
-	case SP_SOULEXPLOSION:
-		if (!(tsc && (tsc->data[SC_SPIRIT] || tsc->data[SC_SOULGOLEM] || tsc->data[SC_SOULSHADOW] || tsc->data[SC_SOULFALCON] || tsc->data[SC_SOULFAIRY])) || tstatus->hp < 10 * tstatus->max_hp / 100) { // Requires target to have a soul link and more then 10% of MaxHP.
-			// With this skill requiring a soul link, and the target to have more then 10% if MaxHP, I wonder
-			// if the cooldown still happens after it fails. Need a confirm. [Rytech] 
-			if (sd)
-				clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
+	case SP_SOULEXPLOSION: {
+		// requires party
+		if (!soulexpvalid(sd)) {
+			clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
 			break;
 		}
 
-		skill_attack(BF_MISC, src, src, bl, skill_id, skill_lv, tick, flag);
+		skill_attack(BF_MAGIC, src, src, bl, skill_id, skill_lv, tick, flag);
 		break;
-
+	}
 	case SL_SMA:
 		status_change_end(src, SC_SMA, INVALID_TIMER);
 	case SL_STIN:

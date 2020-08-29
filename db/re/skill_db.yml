@@ -30133,34 +30133,59 @@ Body:
   - Id: 2610
     Name: SP_SOULEXPLOSION
     Description: Soul Explosion
-    MaxLevel: 5
-    Type: Misc
+    MaxLevel: 10
+    Type: Magic
     TargetType: Attack
-    DamageFlags:
-      IgnoreElement: true
-      IgnoreFlee: true
-      IgnoreDefCard: true
-    Range: 7
+    Range: 9
     Hit: Single
     HitCount: 1
+    Element: Ghost
     CastCancel: true
-    CastTime: 2000
-    AfterCastActDelay: 500
-    Cooldown: 60000
+    CastTime: 2500
     FixedCastTime: 1000
     Requires:
       SpCost:
         - Level: 1
-          Amount: 30
+          Amount: 52
         - Level: 2
-          Amount: 60
+          Amount: 56
         - Level: 3
-          Amount: 90
+          Amount: 60
         - Level: 4
-          Amount: 120
+          Amount: 64
         - Level: 5
-          Amount: 150
-      SpiritSphereCost: 10
+          Amount: 68
+        - Level: 6
+          Amount: 72
+        - Level: 7
+          Amount: 76
+        - Level: 8
+          Amount: 80
+        - Level: 9
+          Amount: 84
+        - Level: 10
+          Amount: 88
+      SpiritSphereCost:
+        - Level: 1
+          Amount: 1
+        - Level: 2
+          Amount: 1
+        - Level: 3
+          Amount: 1
+        - Level: 4
+          Amount: 1
+        - Level: 5
+          Amount: 1
+        - Level: 6
+          Amount: 1
+        - Level: 7
+          Amount: 1
+        - Level: 8
+          Amount: 1
+        - Level: 9
+          Amount: 1
+        - Level: 10
+          Amount: 0
   - Id: 2611
     Name: SP_SOULENERGY
     Description: Soul Energy Research

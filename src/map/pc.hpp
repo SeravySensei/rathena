@@ -318,6 +318,7 @@ struct map_session_data {
 		unsigned int autoreadingbook;
 		bool specialtanking;
 		bool enableconc;
+		bool shadowwant;
 		bool asurapreparation;
 		unsigned int autospgoal;
 		unsigned int autosong;
