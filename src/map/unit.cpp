@@ -7386,6 +7386,7 @@ TIMER_FUNC(unit_autopilot_timer)
 						if (lud->skill_id == MO_EXTREMITYFIST) lextarget = lud->skilltarget; 
 						if (lud->skill_id == CR_ACIDDEMONSTRATION) lextarget = lud->skilltarget;
 						if (lud->skill_id == NJ_ISSEN) lextarget = lud->skilltarget;
+						if (lud->skill_id == KO_MUCHANAGE) lextarget = lud->skilltarget;
 					}
 				}
 			}
