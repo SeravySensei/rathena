@@ -1014,7 +1014,7 @@ void initChangeTables(void)
 	set_sc( SJ_NOVAEXPLOSING		, SC_NOVAEXPLOSING	, EFST_NOVAEXPLOSING	, SCB_NONE );
 	set_sc( SJ_UNIVERSESTANCE		, SC_UNIVERSESTANCE	, EFST_UNIVERSESTANCE	, SCB_STR|SCB_AGI|SCB_VIT|SCB_INT|SCB_DEX|SCB_LUK );
 	set_sc( SJ_FALLINGSTAR			, SC_FALLINGSTAR	, EFST_FALLINGSTAR		, SCB_NONE );
-	set_sc( SJ_GRAVITYCONTROL		, SC_GRAVITYCONTROL	, EFST_GRAVITYCONTROL	, SCB_NONE );
+	set_sc( SJ_GRAVITYCONTROL		, SC_GRAVITYCONTROL	, EFST_BLANK, SCB_SPEED );
 	set_sc( SJ_BOOKOFDIMENSION		, SC_DIMENSION		, EFST_DIMENSION		, SCB_NONE );
 	set_sc( SJ_BOOKOFCREATINGSTAR	, SC_CREATINGSTAR	, EFST_CREATINGSTAR		, SCB_SPEED );
 	set_sc( SJ_LIGHTOFSUN			, SC_LIGHTOFSUN		, EFST_LIGHTOFSUN		, SCB_NONE );
@@ -1590,7 +1590,6 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_VACUUM_EXTREME]		|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_SUHIDE]				|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_SV_ROOTTWIST]			|= SCS_NOMOVE;
-	StatusChangeStateTable[SC_GRAVITYCONTROL]		|= SCS_NOMOVE;
 
 	/* StatusChangeState (SCS_) NOPICKUPITEMS */
 	StatusChangeStateTable[SC_HIDING]				|= SCS_NOPICKITEM;
@@ -1622,7 +1621,6 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC_CURSEDCIRCLE_TARGET]	|= SCS_NOCAST;
 	StatusChangeStateTable[SC_KINGS_GRACE]			|= SCS_NOCAST;
-	StatusChangeStateTable[SC_GRAVITYCONTROL]		|= SCS_NOCAST;
 
 	/* StatusChangeState (SCS_) NOCHAT (skills) */
 	StatusChangeStateTable[SC_BERSERK]				|= SCS_NOCHAT;
@@ -2373,7 +2371,6 @@ bool status_check_skilluse(struct block_list *src, struct block_list *target, ui
 				(sc->data[SC_STASIS] && skill_block_check(src, SC_STASIS, skill_id)) ||
 				(sc->data[SC_BITE] && skill_block_check(src, SC_BITE, skill_id)) ||
 				(sc->data[SC_NOVAEXPLOSING] && skill_block_check(src, SC_NOVAEXPLOSING, skill_id)) ||
-				(sc->data[SC_GRAVITYCONTROL] && skill_block_check(src, SC_GRAVITYCONTROL, skill_id)) ||
 				(sc->data[SC_KAGEHUMI] && skill_block_check(src, SC_KAGEHUMI, skill_id))
 			))
 				return false;
@@ -4875,6 +4872,9 @@ void status_calc_regen(struct block_list *bl, struct status_data *status, struct
 		val = 0;
 		if( (skill=pc_checkskill(sd,SM_RECOVERY)) > 0 )
 			val += skill*5 + skill*status->max_hp/500;
+		if ((skill = pc_checkskill(sd, SJ_BOOKOFCREATINGSTAR)) > 0)
+			if (sc->data[SC_UNIVERSESTANCE])
+			val += skill * 100;
 
 		if (sc && sc->count) {
 			if (sc->data[SC_INCREASE_MAXHP])
@@ -4886,6 +4886,9 @@ void status_calc_regen(struct block_list *bl, struct status_data *status, struct
 		val = 0;
 		if( (skill=pc_checkskill(sd,MG_SRECOVERY)) > 0 )
 			val += skill*3 + skill*status->max_sp/500;
+		if ((skill = pc_checkskill(sd, SJ_BOOKOFCREATINGSTAR)) > 0)
+			if (sc->data[SC_UNIVERSESTANCE])
+				val += skill * 7;
 		if( (skill=pc_checkskill(sd,NJ_NINPOU)) > 0 )
 			val += skill*3 + skill*status->max_sp/500;
 		if( (skill=pc_checkskill(sd,WM_LESSON)) > 0 )
@@ -7366,6 +7369,8 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 			val += sc->data[SC_SPEEDUP0]->val1 ;
 		if( sd && sd->bonus.speed_rate + sd->bonus.speed_add_rate < 0 ) // Permanent item-based speedup
 			val += -(sd->bonus.speed_rate + sd->bonus.speed_add_rate);
+		if (sc->data[SC_GRAVITYCONTROL])
+			val += 20;
 
 		speed_rate = (int)((speed_rate *100) / (100.0 + val));
 
@@ -8997,9 +9002,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 
 	if (status_change_isDisabledOnMap(type, map_getmapdata(bl->m)))
 		return 0;
-
-	if (sc->data[SC_GRAVITYCONTROL])
-		return 0; // !TODO: Confirm what statuses/conditions (if not all) are blocked.
 
 	// Uncomment to prevent status adding hp to gvg mob (like bloodylust=hp*3 etc...
 //	if (bl->type == BL_MOB)
@@ -11962,9 +11964,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				pc_setstand(sd, true);
 		case SC_FREEZE:
 		case SC_STUN:
-		case SC_GRAVITYCONTROL:
-			if (sc->data[SC_DANCING])
-				unit_stop_walking(bl, 1);
 		case SC_TRICKDEAD:
 			status_change_end(bl, SC_DANCING, INVALID_TIMER);
 		case SC_SLEEP:
@@ -12214,6 +12213,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			sc->option |= OPTION_ORCISH;
 			break;
 		case SC_FUSION:
+		case SC_GRAVITYCONTROL:
 			sc->option |= OPTION_FLYING;
 			break;
 		default:
@@ -12444,6 +12444,7 @@ int status_change_clear(struct block_list* bl, int type)
 			case SC_DRESSUP:
 			case SC_NOCHAT:
 			case SC_FUSION:
+			case SC_GRAVITYCONTROL:
 			case SC_EARTHSCROLL:
 			case SC_READYSTORM:
 			case SC_READYDOWN:
@@ -13118,9 +13119,9 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 			status_change_end(bl, SC_DIMENSION, INVALID_TIMER);
 			break;
 		case SC_GRAVITYCONTROL:
-			status_fix_damage(bl, bl, sce->val2, clif_damage(bl, bl, gettick(), 0, 0, sce->val2, 0, DMG_NORMAL, 0, false), 0);
+/*			status_fix_damage(bl, bl, sce->val2, clif_damage(bl, bl, gettick(), 0, 0, sce->val2, 0, DMG_NORMAL, 0, false), 0);
 			clif_specialeffect(bl, 223, AREA);
-			clif_specialeffect(bl, 330, AREA);
+			clif_specialeffect(bl, 330, AREA);*/
 			break;
 			
 		case SC_OVERED_BOOST:
@@ -13282,6 +13283,7 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 	case SC_RUWACH:
 		sc->option &= ~OPTION_RUWACH;
 		break;
+	case SC_GRAVITYCONTROL:
 	case SC_FUSION:
 		sc->option &= ~OPTION_FLYING;
 		break;

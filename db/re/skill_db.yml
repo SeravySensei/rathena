@@ -29153,7 +29153,7 @@ Body:
   - Id: 2581
     Name: SJ_STAREMPEROR
     Description: Star Emperor Advent
-    MaxLevel: 5
+    MaxLevel: 10
     Type: Weapon
     TargetType: Self
     DamageFlags:
@@ -29162,23 +29162,32 @@ Body:
     HitCount: 1
     Element: Weapon
     SplashArea: 3
-    CastCancel: true
-    AfterCastActDelay: 1000
+    AfterCastActDelay: 2000
+    CastTime: 1000
     Duration1: 7000
-    Cooldown: 10000
-    FixedCastTime: 1000
+    Cooldown: 60000
     Requires:
       SpCost:
         - Level: 1
-          Amount: 70
+          Amount: 150
         - Level: 2
-          Amount: 75
+          Amount: 170
         - Level: 3
-          Amount: 80
+          Amount: 190
         - Level: 4
-          Amount: 85
+          Amount: 210
         - Level: 5
-          Amount: 90
+          Amount: 230
+        - Level: 6
+          Amount: 250
+        - Level: 7
+          Amount: 270
+        - Level: 8
+          Amount: 290
+        - Level: 9
+          Amount: 310
+        - Level: 10
+          Amount: 330
       State: Universestance
   - Id: 2582
     Name: SJ_NOVAEXPLOSING
@@ -29284,19 +29293,40 @@ Body:
     Name: SJ_GRAVITYCONTROL
     Description: Gravity Control
     MaxLevel: 1
-    TargetType: Attack
+    Type: Magic
+    TargetType: Support
     DamageFlags:
       NoDamage: true
     Range: 9
     Hit: Single
     HitCount: 1
     CastCancel: true
-    CastTime: 2000
-    AfterCastActDelay: 500
-    Duration1: 5000
-    Cooldown: 20000
+    CastTime: 800
+    AfterCastActDelay: 200
+    Duration1:
+      - Level: 1
+        Time: 60000
+      - Level: 2
+        Time: 80000
+      - Level: 3
+        Time: 100000
+      - Level: 4
+        Time: 120000
+      - Level: 5
+        Time: 140000
+      - Level: 6
+        Time: 160000
+      - Level: 7
+        Time: 180000
+      - Level: 8
+        Time: 200000
+      - Level: 9
+        Time: 220000
+      - Level: 10
+        Time: 240000
+    FixedCastTime: 200
     Requires:
-      SpCost: 80
+      SpCost: 40
       State: Universestance
   - Id: 2586
     Name: SJ_BOOKOFDIMENSION
@@ -29328,50 +29358,6 @@ Body:
     Name: SJ_BOOKOFCREATINGSTAR
     Description: Book of Creating Star
     MaxLevel: 5
-    Type: Weapon
-    TargetType: Ground
-    Range: 7
-    Hit: Single
-    HitCount: 1
-    Element: Weapon
-    CastCancel: true
-    CastTime: 2000
-    AfterCastActDelay: 500
-    Duration1:
-      - Level: 1
-        Time: 6000
-      - Level: 2
-        Time: 7000
-      - Level: 3
-        Time: 8000
-      - Level: 4
-        Time: 9000
-      - Level: 5
-        Time: 10000
-    Cooldown: 15000
-    FixedCastTime: 1000
-    Requires:
-      SpCost:
-        - Level: 1
-          Amount: 50
-        - Level: 2
-          Amount: 55
-        - Level: 3
-          Amount: 60
-        - Level: 4
-          Amount: 65
-        - Level: 5
-          Amount: 70
-      State: Universestance
-    Unit:
-      Id: Creatingstar
-      Layout: 2
-      Interval: -1
-      Target: Enemy
-      Flag:
-        NoOverlap: true
-        PathCheck: true
-        NoKnockback: true
   - Id: 2588
     Name: SJ_DOCUMENT
     Description: Document of Sun Moon and Star

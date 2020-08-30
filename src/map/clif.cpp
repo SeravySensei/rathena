@@ -11434,8 +11434,7 @@ void clif_parse_ActionRequest_sub(struct map_session_data *sd, int action_type, 
 		(sd->sc.data[SC_AUTOCOUNTER] && action_type != 0x07) ||
 		 sd->sc.data[SC_BLADESTOP] ||
 		 sd->sc.data[SC__MANHOLE] ||
-		 sd->sc.data[SC_SUHIDE] ||
-		 sd->sc.data[SC_GRAVITYCONTROL]))
+		 sd->sc.data[SC_SUHIDE] ))
 		return;
 
 	if(action_type != 0x00 && action_type != 0x07)

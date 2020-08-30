@@ -5483,10 +5483,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 	case SJ_NOVAEXPLOSING:
 		skill_attack(BF_MISC, src, src, bl, skill_id, skill_lv, tick, flag);
 
-		// We can end Dimension here since the cooldown code is processed before this point.
-		if (sc && sc->data[SC_DIMENSION])
-			status_change_end(src, SC_DIMENSION, INVALID_TIMER);
-		else // Dimension not active? Activate the 2 second skill block penalty.
+		if (!(sc && sc->data[SC_DIMENSION]))
 			sc_start(src, &sd->bl, SC_NOVAEXPLOSING, 100, skill_lv, skill_get_time(skill_id, skill_lv));
 		break;
 		
@@ -6995,22 +6992,9 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SJ_FALLINGSTAR:
 	case SJ_LIGHTOFSUN:
 	case SJ_BOOKOFDIMENSION:
+	case SJ_GRAVITYCONTROL:
 		clif_skill_nodamage(src,bl,skill_id,skill_lv,
 			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv)));
-		break;
-
-	case SJ_GRAVITYCONTROL: {
-			int fall_damage = sstatus->batk + sstatus->rhw.atk - tstatus->def2;
-
-			if (bl->type == BL_PC)
-				fall_damage += dstsd->weight / 10 - tstatus->def;
-			else // Monster's don't have weight. Put something in its place.
-				fall_damage += 50 * status_get_lv(src) - tstatus->def;
-
-			fall_damage = max(1, fall_damage);
-
-			clif_skill_nodamage(src, bl, skill_id, skill_lv, sc_start2(src, bl, type, 100, skill_lv, fall_damage, skill_get_time(skill_id, skill_lv)));
-		}
 		break;
 	case NPC_HALLUCINATION:
 	case NPC_HELLPOWER:
@@ -7431,7 +7415,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					sc_start2(src, bl, static_cast<sc_type>(SC_DIMENSION1 + i), 100, skill_lv, status_get_max_sp(src), skill_get_time2(SJ_BOOKOFDIMENSION, 1));
 				}
 			}
-			status_change_end(src, SC_DIMENSION, INVALID_TIMER);
 		}
 
 		skill_area_temp[1] = 0;

@@ -1185,7 +1185,7 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 		if (!battle_check_sc(src, bl, sc, d, damage, skill_id, skill_lv))
 			return 0;
 
-		if (sc->data[SC__MANHOLE] || (src->type == BL_PC && sc->data[SC_KINGS_GRACE]) || sc->data[SC_GRAVITYCONTROL]) {
+		if (sc->data[SC__MANHOLE] || (src->type == BL_PC && sc->data[SC_KINGS_GRACE])) {
 			d->dmg_lv = ATK_BLOCK;
 			return 0;
 		}
@@ -4490,7 +4490,8 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 600 + 100 * skill_lv;
 			break;
 		case SJ_STAREMPEROR:
-			skillratio += 700 + 200 * skill_lv;
+			skillratio += 900 + 200 * skill_lv;
+			RE_LVL_DMOD(100);
 			break;
 		case SJ_SOLARBURST:
 			skillratio += 900 + 220 * skill_lv;
