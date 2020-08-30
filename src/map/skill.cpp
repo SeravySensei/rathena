@@ -9294,8 +9294,19 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case SG_FEEL:
 		//AuronX reported you CAN memorize the same map as all three. [Skotlex]
 		if (sd) {
-			if(!sd->feel_map[skill_lv-1].index)
-				clif_feel_req(sd->fd,sd, skill_lv);
+			if (!sd->feel_map[skill_lv - 1].index)
+			{ if (sd->state.autopilotmode == 0)
+				clif_feel_req(sd->fd, sd, skill_lv);
+			else {
+				sd->feel_map[i].index = map_id2index(sd->bl.m);
+				sd->feel_map[i].m = sd->bl.m;
+				pc_setglobalreg(sd, add_str(sg_info[i].feel_var), sd->feel_map[i].index);
+
+				clif_feel_info(sd, i, 0);
+				clif_menuskill_clear(sd);
+
+			}
+			}
 			else
 				clif_feel_info(sd, skill_lv-1, 1);
 		}
@@ -9321,6 +9332,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				case 3:
 					pc_resetfeel(sd);
 					pc_resethate(sd);
+					sd->state.autofeelhate = 1;
 					break;
 			}
 		}

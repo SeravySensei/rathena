@@ -5913,6 +5913,7 @@ enum e_setpos pc_setpos(struct map_session_data* sd, unsigned short mapindex, in
 	status_change *sc = status_get_sc(&sd->bl);
 
 	sd->state.changemap = (sd->mapindex != mapindex);
+	if (sd->mapindex != mapindex) sd->state.autofeelhate = 0;
 	sd->state.warping = 1;
 	sd->state.workinprogress = WIP_DISABLE_NONE;
 	sd->state.mail_writing = false;

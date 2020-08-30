@@ -329,6 +329,11 @@ struct map_session_data {
 		unsigned int autoelemmode;
 		unsigned int autoelemreqitem;
 		unsigned int autoelemreqitemnum;
+		unsigned int autofeelhate;
+		unsigned int chosenfeel;
+		int sunmob;
+		int moonmob;
+		int starmob;
 		int autopilotdist = 0;
 		unsigned disable_atcommand_on_npc : 1; //Prevent to use atcommand while talking with NPC [Kichi]
 		uint8 isBoundTrading; // Player is currently add bound item to trade list [Cydh]

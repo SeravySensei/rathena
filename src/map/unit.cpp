@@ -4180,6 +4180,38 @@ int targetstellarmark(block_list * bl, va_list ap)
 	return 1;
 }
 
+int hatmobid[100];
+int hatmobcount[100];
+int nofhatmobs;
+int hatmobsize[100];
+int hatmobhp[100];
+
+void resetmobsforhatred()
+{
+	nofhatmobs = 0;
+}
+
+int mobsforhatred(block_list * bl, va_list ap)
+{
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	int i = 0;
+	while ((i < nofhatmobs) && (md->mob_id != hatmobid[i])) { i++; };
+
+	if (i < nofhatmobs) hatmobcount[i]++;
+	else {
+		hatmobcount[nofhatmobs] = 1;
+		hatmobid[nofhatmobs] = md->mob_id;
+		hatmobhp[nofhatmobs] = md->base_status->max_hp;
+		hatmobsize[nofhatmobs] = md->base_status->size;
+		nofhatmobs++;
+	}
+	return 0;
+}
+
 int targetturnundead(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd2;
@@ -4197,6 +4229,20 @@ int targetturnundead(block_list * bl, va_list ap)
 	// target the highest hp, not the nearest enemy
 	int dist = md->status.hp;
 	if ((dist > targetdistance) && (isreachabletarget(bl->id))) { targetdistance = dist; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
+
+	return 1;
+}
+
+int targethate(block_list * bl, va_list ap)
+{
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	int mobid = va_arg(ap, int); // we want to target any instance of this mob
+
+	if ((md->mob_id== mobid) && (isreachabletarget(bl->id))) { targetdistance = 1; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
 
 	return 1;
 }
@@ -6007,9 +6053,9 @@ int emperormode(map_session_data * sd)
 	if (pc_checkskill(sd, SJ_FLASHKICK) < 1) starprio = 0;
 	if (pc_checkskill(sd, SJ_FALLINGSTAR) < 1) starprio = 0;
 	starprio = (starprio * (pc_checkskill(sd, SJ_FLASHKICK)+ pc_checkskill(sd, SJ_FALLINGSTAR)))/2;
-	sunprio = sunprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSUN));
-	moonprio = moonprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFMOON));
-	starprio = starprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSTAR));
+	sunprio = (int) (sunprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSUN)));
+	moonprio = (int) (moonprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFMOON)));
+	starprio = (int) (starprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSTAR)));
 	if (sd->state.autopilotmode == 1) { moonprio = 0; } // Don't use MOON skills in tanking mode because hide = fail to tank.
 	if (sd->state.autopilotmode != 1) { starprio = 0; sunprio = 0; } // These require doing melee range attacks though so they are no good for nontanking modes.
 	if ((sunprio > moonprio) && (sunprio > starprio) && (sunprio>0)) return PREFERSUN;
@@ -7212,6 +7258,11 @@ TIMER_FUNC(unit_autopilot_timer)
 		return 0;
 	}
 
+	if (sd->state.warping == 1) {
+
+		return 0;
+	}
+
 	if (bl->type != BL_PC) 
 	{
 		ShowError("Nonplayer set to autopilot!");
@@ -7753,6 +7804,126 @@ TIMER_FUNC(unit_autopilot_timer)
 						if ((pc_checkskill(sd, SJ_BOOKOFDIMENSION) > 0))
 								unit_skilluse_ifable(&sd->bl, SELF, SJ_BOOKOFDIMENSION, pc_checkskill(sd, SJ_BOOKOFDIMENSION));
 					}
+			// 5. Set Feel/Hate if necessary
+			// Only allowed if we have Document to reset!
+			if (canskill(sd))
+				if ((pc_checkskill(sd, SJ_DOCUMENT) >= 3)) {
+					// a. use the reset skill
+					if (sd->state.autofeelhate == 0)
+						if ((Dangerdistance > 900) || (sd->special_state.no_castcancel)) {
+							unit_skilluse_ifable(&sd->bl, SELF, SJ_DOCUMENT, 3);
+						}
+					// b. decide on a feel and 3 mobs to hate
+					if (sd->state.autofeelhate == 1)
+					{
+						sd->state.chosenfeel = 0;
+
+						resetmobsforhatred();
+						map_foreachinmap(mobsforhatred, sd->mapindex, BL_MOB, sd);
+
+						if (nofhatmobs > 0) {
+							// Pick the best feel available
+							int suntotal = pc_checkskill(sd, SG_SUN_WARM) + pc_checkskill(sd, SG_SUN_COMFORT);
+							int moontotal = pc_checkskill(sd, SG_MOON_WARM) + pc_checkskill(sd, SG_MOON_COMFORT);
+							int startotal = pc_checkskill(sd, SG_STAR_WARM) + pc_checkskill(sd, SG_STAR_COMFORT);
+
+							if ((suntotal > 0) && (suntotal > moontotal) && (suntotal > startotal))
+								sd->state.chosenfeel = 1;
+							if ((moontotal > 0) && (moontotal >= suntotal) && (moontotal > startotal))
+								sd->state.chosenfeel = 2;
+							if ((startotal > 0) && (startotal >= moontotal) && (suntotal <= startotal))
+								sd->state.chosenfeel = 3;
+							// Stellar hate
+							int i=0;
+							int best = 0;
+							while (i < nofhatmobs) {
+								if (hatmobsize[i]=SZ_BIG)
+									if (hatmobhp[i]>=5000)
+										if (hatmobhp[i] * hatmobcount[i] > best) {
+											best = hatmobhp[i] * hatmobcount[i];
+											sd->state.starmob = hatmobid[i];
+										}
+
+
+								i++;
+							}
+							// Lunar hate
+							i = 0;
+							best = 0;
+							while (i < nofhatmobs) {
+								if (hatmobsize[i] = SZ_MEDIUM)
+									if (hatmobhp[i] >= 3000)
+										if (hatmobhp[i] * hatmobcount[i] > best) {
+											best = hatmobhp[i] * hatmobcount[i];
+											sd->state.moonmob = hatmobid[i];
+										}
+
+
+								i++;
+							}
+							// Solar hate
+							i = 0;
+							best = 0;
+							while (i < nofhatmobs) {
+								if (hatmobsize[i] = SZ_SMALL)
+										if (hatmobhp[i] * hatmobcount[i] > best) {
+											best = hatmobhp[i] * hatmobcount[i];
+											sd->state.sunmob = hatmobid[i];
+										}
+
+
+								i++;
+							}
+						}
+
+						sd->state.autofeelhate = 2;
+					}
+					if (sd->state.autofeelhate == 2) {
+					// c. use feel
+						if (canskill(sd))
+							if (sd->state.chosenfeel > 0)
+								if ((pc_checkskill(sd, SG_FEEL) >= sd->state.chosenfeel))
+								{
+									unit_skilluse_ifable(&sd->bl, SELF, SG_FEEL, sd->state.chosenfeel);
+								}
+					// d. use hate (do this at mob targeting insetad)
+
+					// Solar Hate
+					if (canskill(sd))
+						if (pc_checkskill(sd, SG_FEEL) >=1)
+						if (sd->hate_mob[0] == -1) {
+							resettargets(); targetdistance = 0;
+							map_foreachinrange(targethate, &sd->bl, 9, BL_MOB, sd->state.sunmob);
+							if (foundtargetID > -1) {
+								unit_skilluse_ifable(&sd->bl, foundtargetID, SG_HATE, 1);
+							}
+						}
+					// Lunar Hate
+					if (canskill(sd))
+						if (pc_checkskill(sd, SG_FEEL) >= 2)
+							if (sd->hate_mob[1] == -1) {
+								resettargets(); targetdistance = 0;
+								map_foreachinrange(targethate, &sd->bl, 9, BL_MOB, sd->state.moonmob);
+								if (foundtargetID > -1) {
+									unit_skilluse_ifable(&sd->bl, foundtargetID, SG_HATE, 2);
+								}
+							}
+					// Stellar Hate
+					if (canskill(sd))
+						if (pc_checkskill(sd, SG_FEEL) >= 3)
+							if (sd->hate_mob[2] == -1) {
+								resettargets(); targetdistance = 0;
+								map_foreachinrange(targethate, &sd->bl, 9, BL_MOB, sd->state.starmob);
+								if (foundtargetID > -1) {
+									unit_skilluse_ifable(&sd->bl, foundtargetID, SG_HATE, 3);
+								}
+							}
+
+
+
+					}
+
+				}
 		}
 
 		// Stellar Mark - Flash Kick
