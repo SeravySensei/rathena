@@ -4159,6 +4159,27 @@ int finaltarget(block_list * bl, va_list ap)
 	return 1;
 }
 
+int targetstellarmark(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+	struct map_session_data *sd = (struct map_session_data*)bl;
+
+	struct mob_data *md;
+
+	nullpo_ret(bl);
+	nullpo_ret(md = (struct mob_data *)bl);
+
+	// Mark each enemy at most once
+	if (sd->sc.data[SC_FLASHKICK]) return 0;
+
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+	// This is a melee skill with a range of 1 only
+	if (distance_bl(bl, &sd2->bl) > 1) return 0;
+	targetdistance = 1; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md;
+
+	return 1;
+}
+
 int targetturnundead(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd2;
@@ -5958,6 +5979,35 @@ int skillelem(map_session_data * sd, int skill)
 	return el;
 }
 
+int PREFERSTAR = 3;
+int PREFERMOON = 2;
+int PREFERSUN = 1;
+
+// pick the preferred mode for Star Emperor : Lunar, Solar or Stellar attacks
+int emperormode(map_session_data * sd)
+{
+	// High ASPD wants to use STAR
+	int starprio = 500 - sd->battle_status.amotion;
+	int moonprio = (1000 - (skill_castfix(&sd->bl, SJ_NEWMOONKICK, 7))) / 2;
+	int sunprio = (1000 - (skill_delayfix(&sd->bl, SJ_PROMINENCEKICK, 7))) / 2;
+	if (pc_checkskill(sd, SJ_PROMINENCEKICK) < 1) sunprio = 0;
+	sunprio = sunprio * pc_checkskill(sd, SJ_SOLARBURST);
+	if (pc_checkskill(sd, SJ_NEWMOONKICK) < 1) moonprio = 0;
+	moonprio = moonprio * pc_checkskill(sd, SJ_FULLMOONKICK);
+	if (pc_checkskill(sd, SJ_FLASHKICK) < 1) starprio = 0;
+	if (pc_checkskill(sd, SJ_FALLINGSTAR) < 1) starprio = 0;
+	starprio = (starprio * (pc_checkskill(sd, SJ_FLASHKICK)+ pc_checkskill(sd, SJ_FALLINGSTAR)))/2;
+	sunprio = sunprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSUN));
+	moonprio = moonprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFMOON));
+	starprio = starprio * (1 + 0.05*pc_checkskill(sd, SJ_LIGHTOFSTAR));
+	if (sd->state.autopilotmode == 1) { moonprio = 0; } // Don't use MOON skills in tanking mode because hide = fail to tank.
+	if (sd->state.autopilotmode != 1) { starprio = 0; sunprio = 0; } // These require doing melee range attacks though so they are no good for nontanking modes.
+	if ((sunprio > moonprio) && (sunprio > starprio) && (sunprio>0)) return PREFERSUN;
+	if ((starprio >= moonprio) && (sunprio <= starprio) && (starprio>0)) return PREFERSTAR;
+	if (moonprio > 0) return PREFERMOON;
+	return 0;
+}
+
 int ammochange(map_session_data * sd, mob_data *targetmd)
 {
 	unsigned short arrows[] = {
@@ -7631,6 +7681,77 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 
+		// Star Emperor, select preferred stance/ skillset
+		int prefer = 0;
+		if (sd->class_ == MAPID_STAR_EMPEROR) {
+			prefer = emperormode(sd);
+
+			// 1. Activate Stance
+			if (canskill(sd))
+				if ((!sd->sc.data[SC_LUNARSTANCE])
+					&& (!sd->sc.data[SC_UNIVERSESTANCE])
+					&& (!sd->sc.data[SC_SUNSTANCE])
+					&& (!sd->sc.data[SC_STARSTANCE])
+					) {
+					if ((pc_checkskill(sd, SJ_UNIVERSESTANCE) > 0))
+						unit_skilluse_ifable(&sd->bl, SELF, SJ_UNIVERSESTANCE, pc_checkskill(sd, SJ_UNIVERSESTANCE));
+					if (canskill(sd))
+						if ((pc_checkskill(sd, SJ_SUNSTANCE) > 0) && (prefer == PREFERSUN))
+							unit_skilluse_ifable(&sd->bl, SELF, SJ_SUNSTANCE, pc_checkskill(sd, SJ_SUNSTANCE));
+					if (canskill(sd))
+						if ((pc_checkskill(sd, SJ_LUNARSTANCE) > 0) && (prefer == PREFERMOON))
+							unit_skilluse_ifable(&sd->bl, SELF, SJ_LUNARSTANCE, pc_checkskill(sd, SJ_LUNARSTANCE));
+					if (canskill(sd))
+						if ((pc_checkskill(sd, SJ_STARSTANCE) > 0) && (prefer == PREFERSTAR))
+							unit_skilluse_ifable(&sd->bl, SELF, SJ_STARSTANCE, pc_checkskill(sd, SJ_STARSTANCE));
+				}
+
+			// 2. Activate Light
+			if (canskill(sd))
+				if ((!sd->sc.data[SC_LIGHTOFMOON])
+					&& (!sd->sc.data[SC_LIGHTOFSUN])
+					&& (!sd->sc.data[SC_LIGHTOFSTAR])
+					) {
+					if (canskill(sd))
+						if ((sd->sc.data[SC_UNIVERSESTANCE])
+							|| (sd->sc.data[SC_SUNSTANCE]))
+							if ((pc_checkskill(sd, SJ_LIGHTOFSUN) > 0) && (prefer == PREFERSUN))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_LIGHTOFSUN, pc_checkskill(sd, SJ_LIGHTOFSUN));
+					if (canskill(sd))
+						if ((sd->sc.data[SC_UNIVERSESTANCE])
+							|| (sd->sc.data[SC_LUNARSTANCE]))
+							if ((pc_checkskill(sd, SJ_LIGHTOFMOON) > 0) && (prefer == PREFERMOON))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_LIGHTOFMOON, pc_checkskill(sd, SJ_LIGHTOFMOON));
+					if (canskill(sd))
+						if ((sd->sc.data[SC_UNIVERSESTANCE])
+							|| (sd->sc.data[SC_STARSTANCE]))
+							if ((pc_checkskill(sd, SJ_LIGHTOFSTAR) > 0) && (prefer == PREFERSTAR))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_LIGHTOFSTAR, pc_checkskill(sd, SJ_LIGHTOFSTAR));
+				}
+			// 3. If STAR mode, also enable Falling Star
+			if (prefer == PREFERSTAR)
+				if (!sd->sc.data[SC_FALLINGSTAR])
+					if ((sd->sc.data[SC_UNIVERSESTANCE])
+						|| (sd->sc.data[SC_STARSTANCE])) {
+						if ((pc_checkskill(sd, SJ_FALLINGSTAR) > 0))
+							if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_FALLINGSTAR, pc_checkskill(sd, SJ_FALLINGSTAR));
+					}
+		}
+
+		// Stellar Mark - Flash Kick
+		if (canskill(sd)) if (pc_checkskill(sd, SJ_FLASHKICK) > 0) if (prefer == PREFERSTAR) {
+			// Must have a free slot to mark more things
+			ARR_FIND(0, MAX_STELLAR_MARKS, i, sd->stellar_mark[i] == 0);
+			if (i != MAX_STELLAR_MARKS) {
+				resettargets(); targetdistance = 0;
+				map_foreachinrange(targetstellarmark, &sd->bl, 9, BL_MOB, sd);
+				if (foundtargetID > -1) {
+					unit_skilluse_ifable(&sd->bl, foundtargetID, SJ_FLASHKICK, pc_checkskill(sd, SJ_FLASHKICK));
+				}
+			}
+				}
+
 
 		if (pc_ismadogear(sd)) if (canskill(sd)) if (pc_checkskill(sd, NC_EMERGENCYCOOL) >= 5)
 			if (sd->sc.data[SC_OVERHEAT_LIMITPOINT])
@@ -8174,6 +8295,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 		}
+
 		//
 		// Mild Wind
 		//
@@ -9822,6 +9944,32 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, SC_FEINTBOMB, pc_checkskill(sd, SC_FEINTBOMB));
 		}
 
+		if (sd->class_ == MAPID_STAR_EMPEROR)
+			if (sd->state.autopilotmode == 2) {
+			// Lunar branch skills are not for tanking
+			if (prefer == PREFERMOON)
+				if ((sd->sc.data[SC_UNIVERSESTANCE])
+					|| (sd->sc.data[SC_LUNARSTANCE])) {
+					if (pc_checkskill(sd, SJ_NEWMOONKICK) > 0) if (canskill(sd))
+						if (leaderdistance < 8) if ((Dangerdistance <= 3) || (targetdistance2<=3)) if (!sd->sc.data[SC_NEWMOON])
+							unit_skilluse_ifable(&sd->bl, SELF, SJ_NEWMOONKICK, pc_checkskill(sd, SJ_NEWMOONKICK));
+					if (sd->sc.data[SC_NEWMOON]) {
+						// Move to enemy while hidden
+						if (targetdistance2 > 1) {
+							struct walkpath_data wpd1;
+							if (path_search(&wpd1, sd->bl.m, bl->x, bl->y, targetbl2->x, targetbl2->y, 0, CELL_CHKNOPASS, MAX_WALKPATH))
+								newwalk(&sd->bl, bl->x + dirx[wpd1.path[0]], bl->y + diry[wpd1.path[0]], 8);
+							return 0;
+						}
+						// Full Moon Kick
+						if (canskill(sd)) if (pc_checkskill(sd, SJ_FULLMOONKICK) > 0)
+							if (6 <= map_foreachinrange(AOEPriority, &sd->bl, 3, BL_MOB, skill_get_ele(SJ_FULLMOONKICK, pc_checkskill(sd, SJ_FULLMOONKICK))))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_FULLMOONKICK, pc_checkskill(sd, SJ_FULLMOONKICK));
+					}
+				}
+
+				}
+
 		// Rogue - use while hiding type skills
 		// Don't even think about it without maxed Tunnel Drive or if in tanking mode
 		if (pc_checkskill(sd, RG_TUNNELDRIVE) >= 5) if (foundtargetID2 > -1)
@@ -11105,6 +11253,25 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 							}
 					}
 				}
+			}
+
+			if (sd->class_ == MAPID_STAR_EMPEROR) {
+				// Solar Branch is for tanking
+				if (prefer = PREFERSUN)
+				if ((sd->sc.data[SC_UNIVERSESTANCE])
+				|| (sd->sc.data[SC_SUNSTANCE])) {
+					// Solar kick if able
+					if (canskill(sd)) if ((pc_checkskill(sd, SJ_SOLARBURST) > 0))
+					if ((sd->sc.data[SC_COMBO] && sd->sc.data[SC_COMBO]->val1 == SJ_PROMINENCEKICK))
+						unit_skilluse_ifable(&sd->bl, foundtargetID, SJ_SOLARBURST, pc_checkskill(sd, SJ_SOLARBURST));
+					// Prominence Kick
+					if (canskill(sd)) if ((pc_checkskill(sd, SJ_PROMINENCEKICK) > 0))
+						if ((checksprate(sd, targetmd, 20))
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID, SJ_PROMINENCEKICK, pc_checkskill(sd, SJ_PROMINENCEKICK));
+					}
+				}
+
 			}
 
 
