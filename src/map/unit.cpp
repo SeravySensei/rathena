@@ -4885,6 +4885,16 @@ int targetincagi(block_list * bl, va_list ap)
 	return 0;
 }
 
+int targetgravity(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (!ispartymember(sd)) return 0;
+	if (!sd->sc.data[SC_GRAVITYCONTROL]) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
+
+	return 0;
+}
+
 int targetexpiatio(block_list * bl, va_list ap)
 {
 	struct map_session_data *sd = (struct map_session_data*)bl;
@@ -7737,6 +7747,12 @@ TIMER_FUNC(unit_autopilot_timer)
 							if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
 								unit_skilluse_ifable(&sd->bl, SELF, SJ_FALLINGSTAR, pc_checkskill(sd, SJ_FALLINGSTAR));
 					}
+			// 4. In SPACE mode, enable book of dimensions
+				if (!sd->sc.data[SC_DIMENSION])
+					if (sd->sc.data[SC_UNIVERSESTANCE])						 {
+						if ((pc_checkskill(sd, SJ_BOOKOFDIMENSION) > 0))
+								unit_skilluse_ifable(&sd->bl, SELF, SJ_BOOKOFDIMENSION, pc_checkskill(sd, SJ_BOOKOFDIMENSION));
+					}
 		}
 
 		// Stellar Mark - Flash Kick
@@ -8064,6 +8080,18 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (!duplicateskill(p, AL_INCAGI)) unit_skilluse_ifable(&sd->bl, foundtargetID, AL_INCAGI, pc_checkskill(sd, AL_INCAGI));
 			}
 		}
+		// Gravity Control
+		if (canskill(sd)) if (sd->sc.data[SC_UNIVERSESTANCE]) if (pc_checkskill(sd, SJ_GRAVITYCONTROL) > 0)
+		{
+			resettargets();
+			map_foreachinrange(targetgravity, &sd->bl, 9, BL_PC, sd);
+			if (foundtargetID > -1) {
+				if (!duplicateskill(p, SJ_GRAVITYCONTROL)) unit_skilluse_ifable(&sd->bl, foundtargetID, SJ_GRAVITYCONTROL, pc_checkskill(sd, SJ_GRAVITYCONTROL));
+			}
+		}
+		
+
+
 		// Soul buffs
 		if (canskill(sd))
 			if (sd->soulball > 0)
@@ -10083,6 +10111,18 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 
+			// Nova Explosion
+			// Use when enemy has high DEF or we are not using anything else and are in skill mode.
+			if (foundtargetID2 > -1)
+				if (sd->sc.data[SC_UNIVERSESTANCE])
+					if (canskill(sd)) if (pc_checkskill(sd, SJ_NOVAEXPLOSING) > 0)
+						if ((prefer == 0) || (targetmd->status.def>=700))
+					if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
+						if (elemallowed(targetmd2, skillelem(sd, SJ_NOVAEXPLOSING))) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, SJ_NOVAEXPLOSING, pc_checkskill(sd, SJ_NOVAEXPLOSING));
+						}
+			}
+
 		// Life Drain counts as exploiting weakness and is top priority if we need health!
 		if (!havehealer)
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WL_DRAINLIFE) > 0) {
@@ -11256,6 +11296,14 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			}
 
 			if (sd->class_ == MAPID_STAR_EMPEROR) {
+				// Star Emperor Advent
+				if (sd->sc.data[SC_UNIVERSESTANCE])
+				if (canskill(sd)) if ((pc_checkskill(sd, SJ_STAREMPEROR) > 0)) {
+					// At least 3 enemies in range (or 2 if weak to element)
+					if (map_foreachinrange(AOEPriority, bl, 2, BL_MOB, skillelem(sd, SJ_STAREMPEROR)) >= 6)
+						unit_skilluse_ifable(&sd->bl, SELF, SJ_STAREMPEROR, pc_checkskill(sd, SJ_STAREMPEROR));
+				}
+
 				// Solar Branch is for tanking
 				if (prefer = PREFERSUN)
 				if ((sd->sc.data[SC_UNIVERSESTANCE])
