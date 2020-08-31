@@ -4310,11 +4310,11 @@ int status_calc_pc_sub(struct map_session_data* sd, enum e_status_calc_opt opt)
 		base_status->hit += skill*2;
 #endif
 	if((skill=pc_checkskill(sd,AC_VULTURE))>0) {
-#ifndef RENEWAL
-		base_status->hit += skill;
-#endif
-		if(sd->status.weapon == W_BOW)
+		if (sd->status.weapon == W_BOW)
+		{
 			base_status->rhw.range += skill;
+			base_status->hit += skill;
+		}
 	}
 	if(sd->status.weapon >= W_REVOLVER && sd->status.weapon <= W_GRENADE) {
 		if((skill=pc_checkskill(sd,GS_SINGLEACTION))>0)

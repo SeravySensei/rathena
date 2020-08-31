@@ -2692,10 +2692,10 @@ static bool is_attack_hitting(struct Damage* wd, struct block_list *src, struct 
 	if(sd && is_skill_using_arrow(src, skill_id))
 		hitrate += sd->bonus.arrow_hit;
 
-#ifdef RENEWAL
+/*#ifdef RENEWAL
 	if (sd) //in Renewal hit bonus from Vultures Eye is not anymore shown in status window
 		hitrate += pc_checkskill(sd,AC_VULTURE);
-#endif
+#endif*/
 
 	if(skill_id) {
 		switch(skill_id) { //Hit skill modifiers
@@ -6901,10 +6901,10 @@ struct Damage battle_calc_misc_attack(struct block_list *src,struct block_list *
 			}
 
 			hitrate += sstatus->hit - flee;
-#ifdef RENEWAL
+/*#ifdef RENEWAL
 			if( sd ) //in Renewal hit bonus from Vultures Eye is not shown anymore in status window
 				hitrate += pc_checkskill(sd,AC_VULTURE);
-#endif
+#endif*/
 			hitrate = cap_value(hitrate, battle_config.min_hitrate, battle_config.max_hitrate);
 
 			if(rnd()%100 < hitrate)

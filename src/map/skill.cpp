@@ -13184,7 +13184,7 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		break;
 	case MG_SAFETYWALL:
 #ifdef RENEWAL
-		val2 = status_get_max_hp(src) * 3;
+		val2 = 30 * sd->status.base_level + 60 * sd->status.int_;
 #else
 		val2 = skill_lv+1;
 #endif
