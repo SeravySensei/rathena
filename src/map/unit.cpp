@@ -7496,8 +7496,9 @@ TIMER_FUNC(unit_autopilot_timer)
 					{
 						if (lud->skill_id == MO_EXTREMITYFIST) lextarget = lud->skilltarget; 
 						if (lud->skill_id == CR_ACIDDEMONSTRATION) lextarget = lud->skilltarget;
-						if (lud->skill_id == NJ_ISSEN) lextarget = lud->skilltarget;
-						if (lud->skill_id == KO_MUCHANAGE) lextarget = lud->skilltarget;
+						// **** Note these don't work because the skills are instant (AI can't react) or AOE (there is no target)
+						/*if (lud->skill_id == NJ_ISSEN) lextarget = lud->skilltarget;
+						if (lud->skill_id == KO_MUCHANAGE) lextarget = lud->skilltarget;*/
 					}
 				}
 			}
@@ -8742,6 +8743,18 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (pc_checkskill(sd, LK_CONCENTRATION) > 0) if (sd->state.enableconc) {
 			if (!(sd->sc.data[SC_CONCENTRATION])) {
 				unit_skilluse_ifable(&sd->bl, SELF, LK_CONCENTRATION, pc_checkskill(sd, LK_CONCENTRATION));
+			}
+		}
+		// Auto - Berserk
+		if (pc_checkskill(sd, SM_AUTOBERSERK) > 0) if (sd->state.enableconc) {
+			if (!(sd->sc.data[SC_AUTOBERSERK])) {
+				unit_skilluse_ifable(&sd->bl, SELF, SM_AUTOBERSERK, pc_checkskill(sd, SM_AUTOBERSERK));
+			}
+		}
+		// Toggle off
+		if (pc_checkskill(sd, SM_AUTOBERSERK) > 0) if (!sd->state.enableconc) {
+			if ((sd->sc.data[SC_AUTOBERSERK])) {
+				unit_skilluse_ifable(&sd->bl, SELF, SM_AUTOBERSERK, pc_checkskill(sd, SM_AUTOBERSERK));
 			}
 		}
 

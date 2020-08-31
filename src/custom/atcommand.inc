@@ -25,9 +25,9 @@ clif_displaymessage(fd, "Tank : Character engages enemy in melee combat and uses
 clif_displaymessage(fd, "Skill : Character will use long range attacks, long range DPS skills and support skills."); 
 clif_displaymessage(fd, "Support : Character uses support skills only and will not attack enemies."); 
 clif_displaymessage(fd, "Tank+ : Same as above but character will also do the following :"); 
-clif_displaymessage(fd, "Monk : Will use Steel Body regardless of enemy strength."); 
-clif_displaymessage(fd, "Merchant classes : Will use skills that cost zeny to eliminate enemies."); 
-clif_displaymessage(fd, "Lord Knight : Will use Berserk, or if not available then Concentration."); 
+clif_displaymessage(fd, " Monk : Will use Steel Body regardless of enemy strength."); 
+clif_displaymessage(fd, " Merchant classes : Will use skills that cost zeny to eliminate enemies."); 
+clif_displaymessage(fd, " Lord Knight : Will use Berserk."); 
 }
 else {
 sd->state.autopilotmode = 0; clif_displaymessage(fd, message);
@@ -114,9 +114,12 @@ if (!strcmp(message,"Hermode")) {sd->state.autosong = CG_HERMODE; };
 return 0; 
 }
 
-ACMD_FUNC(autoconc)
+ACMD_FUNC(autospec)
 {
 sd->state.enableconc=!sd->state.enableconc;
+clif_displaymessage(fd, "Toggled conditional skill usage :"); 
+clif_displaymessage(fd, "Concentration, Heat Barrel, Moonlight Fantasy, Auto Berserk, "); 
+
 return 0;
 }
 
