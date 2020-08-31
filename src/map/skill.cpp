@@ -49,7 +49,7 @@
 using namespace rathena;
 
 #define SKILLUNITTIMER_INTERVAL	100
-#define TIMERSKILL_INTERVAL	150
+#define JT_INTERVAL 150
 
 // ranges reserved for mapping skill ids to skilldb offsets
 #define HM_SKILLRANGEMIN 700
@@ -4293,20 +4293,24 @@ static TIMER_FUNC(skill_timerskill){
 						ud->canact_tick = i64max(tick + status_get_amotion(src), ud->canact_tick);
 						skill_attack(BF_MAGIC, src, src, target, skl->skill_id, skl->skill_lv, tick, skl->flag);
 					}
-					if (unit && !status_isdead(target) && !status_isdead(src)) {
-						skill_delunit(unit); // Consume unit for next waterball
-						//Timer will continue and walkdelay set until target is dead, even if there is currently no line of sight
-						unit_set_walkdelay(src, tick, TIMERSKILL_INTERVAL, 1);
-						skill_addtimerskill(src,tick+TIMERSKILL_INTERVAL,target->id,skl->x,skl->y,skl->skill_id,skl->skill_lv,skl->type+1,skl->flag);
-					} else {
-						struct status_change *sc = status_get_sc(src);
-						if(sc) {
-							if(sc->data[SC_SPIRIT] &&
-								sc->data[SC_SPIRIT]->val2 == SL_WIZARD &&
-								sc->data[SC_SPIRIT]->val3 == skl->skill_id)
-								sc->data[SC_SPIRIT]->val3 = 0; //Clear bounced spell check.
+					{
+						int interval = JT_INTERVAL;
+						if ((skl->skill_id == WZ_WATERBALL) && (src && src->type == BL_PC)) interval = 75;
+						if (unit && !status_isdead(target) && !status_isdead(src)) {
+							skill_delunit(unit); // Consume unit for next waterball
+							//Timer will continue and walkdelay set until target is dead, even if there is currently no line of sight
+							unit_set_walkdelay(src, tick, interval, 1);
+							skill_addtimerskill(src, tick + interval, target->id, skl->x, skl->y, skl->skill_id, skl->skill_lv, skl->type + 1, skl->flag);
 						}
-					}
+						else {
+							struct status_change *sc = status_get_sc(src);
+							if (sc) {
+								if (sc->data[SC_SPIRIT] &&
+									sc->data[SC_SPIRIT]->val2 == SL_WIZARD &&
+									sc->data[SC_SPIRIT]->val3 == skl->skill_id)
+									sc->data[SC_SPIRIT]->val3 = 0; //Clear bounced spell check.
+							}
+						}}
 					break;
 				case WL_CHAINLIGHTNING_ATK: {
 						if( skl->type < (4 + skl->skill_lv - 1) && skl->x < 3  )
@@ -5471,7 +5475,7 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		break;
 	case WZ_JUPITEL:
 		//Jupitel Thunder is delayed by 150ms, you can cast another spell before the knockback
-		skill_addtimerskill(src, tick+TIMERSKILL_INTERVAL, bl->id, 0, 0, skill_id, skill_lv, 1, flag);
+		skill_addtimerskill(src, tick+JT_INTERVAL, bl->id, 0, 0, skill_id, skill_lv, 1, flag);
 		break;
 
 	case PR_BENEDICTIO:
