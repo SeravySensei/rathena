@@ -4366,60 +4366,6 @@ int signumcount(block_list * bl, va_list ap)
 	return 0;
 }
 
-// Elemental property decisions for picking an attack spell. 50% or below = not allowed, 125% or more = good
-bool elemstrong(struct mob_data *md, int ele)
-{
-	if (ele == ELE_GHOST) {
-		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
-		if (md->status.def_ele == ELE_GHOST) return 1;
-		return 0;
-	}
-	if (ele == ELE_FIRE) {
-		if (md->status.def_ele == ELE_UNDEAD) return 1;
-		if (md->status.def_ele == ELE_EARTH) return 1;
-		return 0;
-	}
-	if (ele == ELE_WATER) {
-		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 3)) return 1;
-		if (md->status.def_ele == ELE_FIRE) return 1;
-		return 0;
-	}
-
-	if (ele == ELE_WIND) {
-		if (md->status.def_ele == ELE_WATER) return 1;
-		return 0;
-	}
-	if (ele == ELE_EARTH) {
-		if (md->status.def_ele == ELE_WIND) return 1;
-		return 0;
-	}
-	if (ele == ELE_HOLY) {
-		if ((md->status.def_ele == ELE_POISON) && (md->status.ele_lv >= 3)) return 1;
-		if (md->status.def_ele == ELE_DARK) return 1;
-		if (md->status.def_ele == ELE_UNDEAD) return 1;
-		return 0;
-	}
-	if (ele == ELE_DARK) {
-		if (md->status.def_ele == ELE_HOLY) return 1;
-		return 0;
-	}
-	if (ele == ELE_POISON) {
-		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
-		if (md->status.def_ele == ELE_GHOST) return 1;
-		if (md->status.def_ele == ELE_NEUTRAL) return 1;
-		return 0;
-	}
-	if (ele == ELE_UNDEAD) {
-		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 1;
-		return 0;
-	}
-	if (ele == ELE_NEUTRAL) {
-		return 0;
-	}
-	return 0;
-}
-
-
 bool elemallowed(struct mob_data *md, int ele)
 {
 	if (ele == ELE_GHOST) {
@@ -4516,6 +4462,59 @@ bool elemallowed(struct mob_data *md, int ele)
 
 }
 
+// Elemental property decisions for picking an attack spell. 50% or below = not allowed, 125% or more = good
+bool elemstrong(struct mob_data *md, int ele)
+{
+	if (ele == ELE_GHOST) {
+		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
+		if (md->status.def_ele == ELE_GHOST) return 1;
+		return 0;
+	}
+	if (ele == ELE_FIRE) {
+		if (md->status.def_ele == ELE_UNDEAD) return 1;
+		if (md->status.def_ele == ELE_EARTH) return 1;
+		if ((md->sc.data[SC_SPIDERWEB]) && elemallowed(md, ele)) return 1;
+		return 0;
+	}
+	if (ele == ELE_WATER) {
+		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 3)) return 1;
+		if (md->status.def_ele == ELE_FIRE) return 1;
+		return 0;
+	}
+
+	if (ele == ELE_WIND) {
+		if (md->status.def_ele == ELE_WATER) return 1;
+		return 0;
+	}
+	if (ele == ELE_EARTH) {
+		if (md->status.def_ele == ELE_WIND) return 1;
+		return 0;
+	}
+	if (ele == ELE_HOLY) {
+		if ((md->status.def_ele == ELE_POISON) && (md->status.ele_lv >= 3)) return 1;
+		if (md->status.def_ele == ELE_DARK) return 1;
+		if (md->status.def_ele == ELE_UNDEAD) return 1;
+		return 0;
+	}
+	if (ele == ELE_DARK) {
+		if (md->status.def_ele == ELE_HOLY) return 1;
+		return 0;
+	}
+	if (ele == ELE_POISON) {
+		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
+		if (md->status.def_ele == ELE_GHOST) return 1;
+		if (md->status.def_ele == ELE_NEUTRAL) return 1;
+		return 0;
+	}
+	if (ele == ELE_UNDEAD) {
+		if ((md->status.def_ele == ELE_HOLY) && (md->status.ele_lv >= 2)) return 1;
+		return 0;
+	}
+	if (ele == ELE_NEUTRAL) {
+		return 0;
+	}
+	return 0;
+}
 
 int endowneed(block_list * bl, va_list ap)
 {
@@ -4558,8 +4557,8 @@ int AOEPriority(block_list * bl, va_list ap)
 
 	uint16 elem = va_arg(ap, int); // the element
 
-	if ((status_get_class_(bl) == CLASS_BOSS)) { if (elemstrong(md, elem)) return 50; else return 30; }; // Bosses, prioritize AOE and pick element based on boss alone, ignore slaves
 	if (!elemallowed(md, elem)) return 0; // This target won't be hurt by this element enough to care
+	if ((status_get_class_(bl) == CLASS_BOSS)) { if (elemstrong(md, elem)) return 50; else return 30; }; // Bosses, prioritize AOE and pick element based on boss alone, ignore slaves
 	if (elemstrong(md, elem)) return 3; // This target is weak to it so it's worth 50% more
 	return 2; // Default
 }
@@ -5424,7 +5423,7 @@ int targetprovidence(block_list * bl, va_list ap)
 	if (pc_isdead(sd)) return 0;
 	// Crusaders are invalid targets
 	if ((sd->class_&MAPID_UPPERMASK) == MAPID_CRUSADER) return 0;
-		// Must have at least 3 appropriate enemies neabry to cast
+		// Must have at least 3 appropriate enemies nearby to cast
 	if (map_foreachinrange(countprovidence, &sd->bl, 25, BL_MOB, sd) < 3) return 0;
 
 	if ((!sd->sc.data[SC_PROVIDENCE])) { targetbl = bl; foundtargetID = sd->bl.id; return 1; };
@@ -9207,7 +9206,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							// This assumes skill is updated to allow free moving and do good damage otherwise it's a suicide for AI
 							// **Note** It also assumes it was modded to still ignore MDEF despite that update removing that property
 							// Gravitational Field
-							// Same priority as the big wizard spells minus one. So use only if those are resisted or subptimal
+							// Same priority as the big wizard spells minus one. So use only if those are resisted or suboptimal
 							if (canskill(sd)) if ((pc_checkskill(sd, HW_GRAVITATION) > 0) && (Dangerdistance > 900) && (pc_search_inventory(sd, ITEMID_BLUE_GEMSTONE)>0)) {
 							int area = 2; // priority scale up by MDEf in AOEPriorityGrav
 							priority = 3 * map_foreachinrange(AOEPriorityGrav, targetbl2, area, BL_MOB, ELE_NONE) -1;
@@ -10374,6 +10373,18 @@ TIMER_FUNC(unit_autopilot_timer)
 						}
 					}
 		}
+		// Waterball on vulnerable enemy
+			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_WATERBALL) >= 3) {
+				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+					if (map_getcell(sd->bl.m, sd->bl.x, sd->bl.y, CELL_CHKWATER)
+						|| ((map_find_skill_unit_oncell(&sd->bl, sd->bl.x, sd->bl.y, SA_DELUGE, NULL, 1)) != NULL) || ((map_find_skill_unit_oncell(&sd->bl, sd->bl.x, sd->bl.y, NJ_SUITON, NULL, 1)) != NULL))
+					{
+					if (elemstrong(targetmd2, skillelem(sd, WZ_WATERBALL))) {
+						unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_WATERBALL, pc_checkskill(sd, WZ_WATERBALL));
+					}
+				}
+			}
+
 		// Jupitel Thunder on vulnerable enemy
 		if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_JUPITEL) > 0) {
 				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900)) {
@@ -10872,6 +10883,14 @@ TIMER_FUNC(unit_autopilot_timer)
 				}
 			}
 			
+			// Shield Chain
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, PA_SHIELDCHAIN) > 0)) if (sd->status.shield > 0) {
+				// casting time is interruptable so bad for tanking mode. Tanking mode should preserve sp for healing anyway.
+				if (elemallowed(targetRAmd, ELE_NEUTRAL))
+					if (rangeddist <= 4) if ((sd->state.autopilotmode == 2)) {
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, PA_SHIELDCHAIN, pc_checkskill(sd, PA_SHIELDCHAIN));
+					}
+			}
 			// Shield Boomerang
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, CR_SHIELDBOOMERANG) > 0)) if (sd->status.shield > 0) {
 				// not really strong enough to use if aleady engaged in melee in tanking mode
@@ -10911,14 +10930,6 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, PA_PRESSURE) > 1)) if ((sd->status.shield <= 0) || (sd->battle_status.str<30) || (targetmd->status.def+targetmd->status.def2>=500))
 				if ((sd->state.autopilotmode == 2) || ((sd->state.autopilotmode == 1) && (sd->battle_status.sp >= 0.6*sd->battle_status.max_sp))){
 				unit_skilluse_ifable(&sd->bl, foundtargetID2, PA_PRESSURE, pc_checkskill(sd, PA_PRESSURE));
-			}
-			// Shield Chain
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, PA_SHIELDCHAIN) > 0)) if (sd->status.shield > 0) {
-				// casting time is interruptable so bad for tanking mode. Tanking mode should preserve sp for healing anyway.
-				if (elemallowed(targetRAmd, ELE_NEUTRAL))
-					if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, PA_SHIELDCHAIN, pc_checkskill(sd, PA_SHIELDCHAIN));
-				}
 			}
 			// Hundred Spear
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_HUNDREDSPEAR) > 0)) {
@@ -11043,6 +11054,17 @@ TIMER_FUNC(unit_autopilot_timer)
 						unit_skilluse_ifable(&sd->bl, foundtargetID2, SO_VARETYR_SPEAR, pc_checkskill(sd, SO_VARETYR_SPEAR));
 					}
 				}
+			}
+			// Waterball
+			if (foundtargetID2 > -1) if (canskill(sd)) if (pc_checkskill(sd, WZ_WATERBALL) >= 3) {
+				if (((sd->state.autopilotmode == 2)) && (Dangerdistance > 900))
+					if (map_getcell(sd->bl.m, sd->bl.x, sd->bl.y, CELL_CHKWATER)
+						|| ((map_find_skill_unit_oncell(&sd->bl, sd->bl.x, sd->bl.y, SA_DELUGE, NULL, 1)) != NULL) || ((map_find_skill_unit_oncell(&sd->bl, sd->bl.x, sd->bl.y, NJ_SUITON, NULL, 1)) != NULL))
+					{
+						if (elemallowed(targetmd2, skillelem(sd, WZ_WATERBALL))) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID2, WZ_WATERBALL, pc_checkskill(sd, WZ_WATERBALL));
+						}
+					}
 			}
 			// Jupitel Thunder
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, WZ_JUPITEL) > 0)) {
@@ -11849,8 +11871,8 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 
 
 			// Investigate skill
-			// Avoid if combo skill requiring sphere is available, combo is better.
-			if (canskill(sd)) if (pc_checkskill(sd, MO_INVESTIGATE)>0) if ((sd->spiritball>0) && (pc_checkskill(sd, MO_COMBOFINISH) < 3)) {
+			// Avoid if combo skill requiring sphere is available, combo is better. But use it if the target has high DEF!
+			if (canskill(sd)) if (pc_checkskill(sd, MO_INVESTIGATE)>0) if (((sd->spiritball>0) && (pc_checkskill(sd, MO_COMBOFINISH) < 3)) || (targetmd->status.def>=400)) {
 				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
 				if (elemallowed(targetmd, skillelem(sd, MO_INVESTIGATE)))
 					if ((checksprate(sd, targetmd, 10))
