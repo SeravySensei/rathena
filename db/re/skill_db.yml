@@ -3711,7 +3711,7 @@ Body:
       - Level: 9
         Time: 384
       - Level: 10
-        Time: 384
+        Time: 324
     AfterCastActDelay: 200
     Duration2:
       - Level: 1
@@ -3754,7 +3754,7 @@ Body:
       - Level: 9
         Time: 96
       - Level: 10
-        Time: 96
+        Time: 76
     Requires:
       SpCost:
         - Level: 1

@@ -3667,6 +3667,9 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 		case AS_GRIMTOOTH:
 			skillratio += 20 * skill_lv;
 			break;
+		case CR_GRANDCROSS:
+			skillratio += 40 * skill_lv;
+			break;
 		case AS_POISONREACT:
 			skillratio += 30 * skill_lv;
 			break;
@@ -6294,6 +6297,9 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 					if (sc && sc->data[SC_CURSED_SOIL_OPTION])
 						skillratio += 500;
 					break;
+				case CR_GRANDCROSS:
+					skillratio += 40 * skill_lv;
+					break;
 				case SO_PSYCHIC_WAVE:
 					skillratio += -100 + 50 * skill_lv + 2 * sstatus->int_;
 					RE_LVL_DMOD(100);
@@ -6526,10 +6532,10 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 			case NPC_GRANDDARKNESS: {
 					struct Damage wd = battle_calc_weapon_attack(src,target,skill_id,skill_lv,mflag);
 
-					ad.damage = battle_attr_fix(src, target, wd.damage + ad.damage, s_ele, tstatus->def_ele, tstatus->ele_lv) * (100 + 40 * skill_lv) / 100;
+					ad.damage = battle_attr_fix(src, target, ad.damage+wd.damage, s_ele, tstatus->def_ele, tstatus->ele_lv);
 					if(src == target) {
 						if(src->type == BL_PC)
-							ad.damage = ad.damage / 2;
+							ad.damage = ad.damage / 4;
 						else
 							ad.damage = 0;
 					}

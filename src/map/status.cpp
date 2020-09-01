@@ -6719,10 +6719,10 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 		critical += critical;
 	if (sc->data[SC_STRIKING])
 		critical += sc->data[SC_STRIKING]->val1*10;
-#ifdef RENEWAL
+/*#ifdef RENEWAL
 	if (sc->data[SC_SPEARQUICKEN])
 		critical += 3*sc->data[SC_SPEARQUICKEN]->val1*10;
-#endif
+#endif*/
 	if (sc->data[SC__INVISIBILITY])
 		critical += sc->data[SC__INVISIBILITY]->val3 * 10;
 	if (sc->data[SC_SOULSHADOW])
@@ -6848,10 +6848,10 @@ static signed short status_calc_flee(struct block_list *bl, struct status_change
 		flee -= sc->data[SC_WATER_BARRIER]->val2;
 	if( sc->data[SC_C_MARKER] )
 		flee -= sc->data[SC_C_MARKER]->val3;
-#ifdef RENEWAL
+/*#ifdef RENEWAL
 	if( sc->data[SC_SPEARQUICKEN] )
 		flee += 2 * sc->data[SC_SPEARQUICKEN]->val1;
-#endif
+#endif*/
 
 	// Rate value
 	if(sc->data[SC_INCFLEERATE])
@@ -10431,8 +10431,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		case SC_DEFENDER:
 			if (!(flag&SCSTART_NOAVOID)) {
 				val2 = 5 + 15*val1; // Damage reduction
-				val3 = 0; // Unused, previously speed adjustment
-				val4 = 250 - 50*val1; // Aspd adjustment
+				val3 = 50 - 10*val1; // speed adjustment
+				val4 = 250 - 40*val1; // Aspd adjustment
 
 				if (sd) {
 					struct map_session_data *tsd;
@@ -10733,7 +10733,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			val2 = (status_get_lv(bl) + status->dex + status->luk); // Aspd increase
 			break;
 		case SC_QUAGMIRE:
-			val2 = (sd?5:10)*val1; // Agi/Dex decrease.
+			val2 = 10*val1; // Agi/Dex decrease.
 			break;
 
 		// gs_something1 [Vicious]
