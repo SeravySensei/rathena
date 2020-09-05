@@ -5116,6 +5116,23 @@ static void clif_graffiti(struct block_list *bl, struct skill_unit *unit, enum s
 	clif_send(buf,packet_len(0x1c9),bl,target);
 }
 
+/*==========================================
+ * Server tells client to remove unit of id 'unit->bl.id'
+ *------------------------------------------*/
+static void clif_clearchar_skillunit(struct skill_unit *unit, int fd)
+{
+	nullpo_retv(unit);
+
+	WFIFOHEAD(fd, packet_len(0x120));
+	WFIFOW(fd, 0) = 0x120;
+	WFIFOL(fd, 2) = unit->bl.id;
+	WFIFOSET(fd, packet_len(0x120));
+
+	if (unit->group && unit->group->skill_id == WZ_ICEWALL)
+		clif_changemapcell(fd, unit->bl.m, unit->bl.x, unit->bl.y, unit->val2, SELF);
+}
+
+
 /// Notifies the client of a skill unit.
 /// 011f <id>.L <creator id>.L <x>.W <y>.W <unit id>.B <visible>.B (ZC_SKILL_ENTRY)
 /// 08c7 <lenght>.W <id> L <creator id>.L <x>.W <y>.W <unit id>.B <range>.W <visible>.B (ZC_SKILL_ENTRY3)
@@ -5200,24 +5217,6 @@ void clif_getareachar_skillunit(struct block_list *bl, struct skill_unit *unit, 
 	if (unit->group->skill_id == WZ_ICEWALL)
 		clif_changemapcell(fd, unit->bl.m, unit->bl.x, unit->bl.y, 5, SELF);
 }
-
-
-/*==========================================
- * Server tells client to remove unit of id 'unit->bl.id'
- *------------------------------------------*/
-static void clif_clearchar_skillunit(struct skill_unit *unit, int fd)
-{
-	nullpo_retv(unit);
-
-	WFIFOHEAD(fd,packet_len(0x120));
-	WFIFOW(fd, 0)=0x120;
-	WFIFOL(fd, 2)=unit->bl.id;
-	WFIFOSET(fd,packet_len(0x120));
-
-	if(unit->group && unit->group->skill_id == WZ_ICEWALL)
-		clif_changemapcell(fd,unit->bl.m,unit->bl.x,unit->bl.y,unit->val2,SELF);
-}
-
 
 /// Removes a skill unit (ZC_SKILL_DISAPPEAR).
 /// 0120 <id>.L

@@ -118,7 +118,7 @@ ACMD_FUNC(autospec)
 {
 sd->state.enableconc=!sd->state.enableconc;
 clif_displaymessage(fd, "Toggled conditional skill usage :"); 
-clif_displaymessage(fd, "Concentration, Heat Barrel, Moonlight Fantasy, Auto Berserk, "); 
+clif_displaymessage(fd, "Concentration, Heat Barrel, Moonlight Fantasy, Auto Berserk, Meltdown "); 
 
 return 0;
 }

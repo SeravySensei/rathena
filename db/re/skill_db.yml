@@ -13431,7 +13431,7 @@ Body:
     TargetType: Attack
     Flags:
       AllowOnMado: true
-    Range: -2
+    Range: -1
     Hit: Single
     HitCount: 1
     Element: Weapon

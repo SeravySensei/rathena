@@ -13177,6 +13177,7 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 	layout = skill_get_unit_layout(skill_id,skill_lv,src,x,y);
 
 	sd = BL_CAST(BL_PC, src);
+
 	status = status_get_status_data(src);
 	sc = status_get_sc(src);	// for traps, firewall and fogwall - celest
 	hidden = (skill->unit_flag[UF_HIDDENTRAP] && (battle_config.traps_setting == 2 || (battle_config.traps_setting == 1 && map_flag_vs(src->m))));
@@ -13188,7 +13189,7 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 		break;
 	case MG_SAFETYWALL:
 #ifdef RENEWAL
-		val2 = 30 * sd->status.base_level + 60 * sd->status.int_;
+		val2 = 30 * status_get_lv(src) + 60 * status_get_int(src);
 #else
 		val2 = skill_lv+1;
 #endif
@@ -13323,10 +13324,10 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 	case BA_POEMBRAGI:
 		val1 = 3 * skill_lv + status->dex / 10; // Casting time reduction
 		//For some reason at level 10 the base delay reduction is 50%.
-		val2 = (skill_lv < 10 ? 3 * skill_lv : 50) + status->int_ / 5; // After-cast delay reduction
+		val2 = 2 * skill_lv + status->int_ / 2; // After-cast delay reduction
 		if (sd) {
 			val1 += pc_checkskill(sd, BA_MUSICALLESSON);
-			val2 += 2 * pc_checkskill(sd, BA_MUSICALLESSON);
+			val2 += pc_checkskill(sd, BA_MUSICALLESSON);
 		}
 		break;
 	case DC_DONTFORGETME:
@@ -17222,7 +17223,7 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 			fixcast_r += sc->data[SC_HUMMING]->val2;
 		}
 		if (sc->data[SC_IZAYOI])
-			VARCAST_REDUCTION(sc->data[SC_IZAYOI]->val1 / 40.0);
+			VARCAST_REDUCTION((int)(sc->data[SC_IZAYOI]->val1 / 40.0));
 		if (sc->data[SC_WATER_INSIGNIA] && sc->data[SC_WATER_INSIGNIA]->val1 == 3 && skill_get_type(skill_id) == BF_MAGIC && skill_get_ele(skill_id, skill_lv) == ELE_WATER)
 			VARCAST_REDUCTION(30); //Reduces 30% Variable Cast Time of magic Water spells.
 		if (sc->data[SC_TELEKINESIS_INTENSE])

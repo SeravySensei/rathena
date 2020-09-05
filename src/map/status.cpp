@@ -491,7 +491,7 @@ void initChangeTables(void)
 #else
 		SCB_ALL );
 #endif
-	set_sc( BD_ROKISWEIL		, SC_ROKISWEIL	, EFST_ROKISWEIL	, SCB_ALL );
+	set_sc( BD_ROKISWEIL		, SC_ROKISWEIL	, EFST_ROKISWEIL, SCB_ALL );
 	set_sc( BD_INTOABYSS		, SC_INTOABYSS	, EFST_INTOABYSS	, SCB_NONE );
 	set_sc( BD_SIEGFRIED		, SC_SIEGFRIED		, EFST_SIEGFRIED	, SCB_ALL );
 	add_sc( BA_FROSTJOKER		, SC_FREEZE		);
@@ -9468,7 +9468,6 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			case SC_STRIPSHIELD:
 			case SC_STRIPHELM:
 			case SC_RICHMANKIM:
-			case SC_ROKISWEIL:
 			case SC_FOGWALL:
 			case SC_WHITEIMPRISON:
 			case SC_FEAR:
