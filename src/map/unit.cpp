@@ -4096,6 +4096,8 @@ int asuratarget(block_list * bl, va_list ap)
 	if (!(status_get_class_(bl) == CLASS_BOSS)) return 0; // Boss monsters only
 	if (md->status.hp < 600 * sd2->status.base_level) return 0; // Must be strong enough monster
 	if (targetdistance > md->status.hp) return 0; // target strongest first
+	if ((sd2->class_ & MAPID_UPPERMASK) == MAPID_ALCHEMIST) // for acid demo the target must have VIT!
+		if (md->status.vit < 60) return 0;
 	if (isreachabletarget(bl->id)) { targetdistance = md->status.hp; foundtargetID = bl->id; targetbl = &md->bl; targetmd = md; };
 
 	return 1;
@@ -4445,7 +4447,7 @@ bool elemallowed(struct mob_data *md, int ele)
 		if ((md->status.def_ele == ELE_FIRE) && (md->status.ele_lv >= 3)) return 0;
 		if ((md->status.def_ele == ELE_WIND) && (md->status.ele_lv >= 3)) return 0;
 		if ((md->status.def_ele == ELE_EARTH) && (md->status.ele_lv >= 3)) return 0;
-		if ((md->status.def_ele == ELE_POISON) && (md->status.ele_lv >= 2)) return 0;
+		if ((md->status.def_ele == ELE_POISON) && (md->status.ele_lv >= 1)) return 0;
 		if ((md->status.def_ele == ELE_UNDEAD)) return 0;
 		if ((md->status.def_ele == ELE_DARK)) return 0;
 		if (md->sc.data[SC_WHITEIMPRISON]) return 0;
@@ -4501,8 +4503,9 @@ bool elemstrong(struct mob_data *md, int ele)
 		return 0;
 	}
 	if (ele == ELE_POISON) {
-		if ((md->status.def_ele == ELE_UNDEAD) && (md->status.ele_lv >= 2)) return 1;
-		if (md->status.def_ele == ELE_GHOST) return 1;
+		if ((md->status.def_ele == ELE_WIND) && (md->status.ele_lv <= 2)) return 1;
+		if ((md->status.def_ele == ELE_EARTH) && (md->status.ele_lv <= 2)) return 1;
+		if ((md->status.def_ele == ELE_FIRE) && (md->status.ele_lv <= 2)) return 1;
 		if (md->status.def_ele == ELE_NEUTRAL) return 1;
 		return 0;
 	}
@@ -4805,6 +4808,40 @@ int epiclesispriority(block_list * bl, va_list ap)
 	return abc;
 
 }
+
+int targetslimhealing2(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+	if (pc_ismadogear(sd)) return 0;
+	// Always heal below 40% hp or if a final strike ninja
+	if ((sd->battle_status.hp < sd->battle_status.max_hp*0.40)
+		|| ((sd->battle_status.hp < sd->battle_status.max_hp*0.85) && (pc_checkskill(sd, NJ_ISSEN) >= 10))
+		)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+
+int bestslimplayers, slimtargetID;
+
+int targetslimhealing(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+
+//	if (sd2->bl.id == foundtargetID) return 0; // If can heal self, prioritize that
+
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
+
+	resettargets();
+
+	int dist = map_foreachinrange(targetslimhealing2, &sd->bl, 3, BL_PC, sd);
+	if (dist > bestslimplayers) { slimtargetID = sd->bl.id; bestslimplayers = dist; }
+	}
 
 
 int targethealing(block_list * bl, va_list ap)
@@ -5473,11 +5510,10 @@ int finddanger(block_list * bl, va_list ap)
 
 	int dist = distance_bl(&sd2->bl, bl) - md->status.rhw.range;
 	if ((dist < dangerdistancebest)) { 
-		dangerdistancebest = dist; founddangerID = bl->id; dangerbl = &md->bl; dangermd = md; 
-		return 1;
+		dangerdistancebest = dist; founddangerID = bl->id; dangerbl = &md->bl; dangermd = md;
 	};
 
-	return 0;
+	return 1;
 }
 
 // for deciding if safe to go near leader or there are enemies
@@ -5500,10 +5536,9 @@ int finddanger2(block_list * bl, va_list ap)
 	int dist = distance_bl(&sd2->bl, bl) - md->status.rhw.range;
 	if ((dist < dangerdistancebest)) {
 		dangerdistancebest = dist; founddangerID = bl->id; dangerbl = &md->bl; dangermd = md;
-		return 1;
 	};
 
-	return 0;
+	return 1;
 }
 
 // Returns how many tiles the fewest an enemy targeting us has to walk to
@@ -6605,16 +6640,6 @@ void skillwhenidle(struct map_session_data *sd) {
 
 	// Cart Boost
 	if (canskill(sd))
-		if (pc_checkskill(sd, WS_CARTBOOST) > 0) {
-		if (!(sd->sc.data[SC_CARTBOOST]))
-			if (!pc_ismadogear(sd))
-			if  (pc_iscarton(sd)) {
-			unit_skilluse_ifable(&sd->bl, SELF, WS_CARTBOOST, pc_checkskill(sd, WS_CARTBOOST));
-		}
-	}
-
-	// Cart Boost
-	if (canskill(sd))
 		if (pc_checkskill(sd, GN_CARTBOOST) > 0) {
 		if (!(sd->sc.data[SC_GN_CARTBOOST]))
 				if (pc_iscarton(sd)) {
@@ -7388,11 +7413,14 @@ TIMER_FUNC(unit_autopilot_timer)
 	// Skills that aren't tanking mode exclusive (nonmelee skills generally)
 	/////////////////////////////////////////////////////////////////////////////////////
 		/// Acid Demonstration
-		if (canskill(sd)) if (pc_checkskill(sd, CR_ACIDDEMONSTRATION)>0) if (sd->state.autopilotmode == 2) {
+		if (canskill(sd)) if (pc_checkskill(sd, CR_ACIDDEMONSTRATION)>0) if (sd->state.autopilotmode == 2)
+			if (pc_search_inventory(sd, 7136) >= 0)
+				if (pc_search_inventory(sd, 7135) >= 0) {
 			resettargets2();
 			map_foreachinrange(asuratarget, &sd->bl, 12, BL_MOB, sd);
-			if (!targetmd->sc.data[SC_PNEUMA])
-				if (foundtargetID > -1) {
+				if (foundtargetID > -1)
+					if (!targetmd->sc.data[SC_PNEUMA])
+					{
 					unit_skilluse_ifable(&sd->bl, foundtargetID, CR_ACIDDEMONSTRATION, pc_checkskill(sd, CR_ACIDDEMONSTRATION));
 				}
 		}
@@ -7622,11 +7650,10 @@ TIMER_FUNC(unit_autopilot_timer)
 
 		/// Potion Pitcher Blue
 		if (canskill(sd)) if (pc_checkskill(sd, AM_POTIONPITCHER) >= 5) {
-			resettargets();
+			resettargets2();
 			map_foreachinrange(targetbluepitcher, &sd->bl, 9, BL_PC, sd);
-			// HP must be below 40% to ensure we don't waste items when other ways to heal are available
 			if (foundtargetID > -1) {
-				if (pc_search_inventory(sd, 504) >= 0)	unit_skilluse_ifable(&sd->bl, foundtargetID, AM_POTIONPITCHER, 5);
+				if (pc_search_inventory(sd, 505) >= 0)	unit_skilluse_ifable(&sd->bl, foundtargetID, AM_POTIONPITCHER, 5);
 			}
 		}
 
@@ -7991,15 +8018,14 @@ TIMER_FUNC(unit_autopilot_timer)
 					unit_skilluse_ifable(&sd->bl, SELF, SO_EL_CURE, 1);
 
 		/// Slim Potion Pitcher
-		// Note : used as if it was single target, wasteful. This should be improved!
 		if (canskill(sd)) if (pc_checkskill(sd, CR_SLIMPITCHER) >=10) {
-			resettargets();
-			map_foreachinrange(targethealing, &sd->bl, 9, BL_PC, sd);
+			bestslimplayers = 1; slimtargetID = -1; // must have at least 2 targets
+			map_foreachinrange(targetslimhealing, &sd->bl, 9, BL_PC, sd);
 			// HP must be below 40% to ensure we don't waste items when other ways to heal are available
-			if (foundtargetID > -1) if (targetdistance<40) {
-				if (pc_search_inventory(sd, 547) >= 0)	unit_skilluse_ifablexy(&sd->bl, foundtargetID, CR_SLIMPITCHER, 10); else
-					if (pc_search_inventory(sd, 546) >= 0)	unit_skilluse_ifablexy(&sd->bl, foundtargetID, CR_SLIMPITCHER, 9); else
-						if (pc_search_inventory(sd, 545) >= 0)	unit_skilluse_ifablexy(&sd->bl, foundtargetID, CR_SLIMPITCHER, 5); 
+			if (slimtargetID > -1) {
+				if (pc_search_inventory(sd, 547) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 10); else
+					if (pc_search_inventory(sd, 546) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 9); else
+						if (pc_search_inventory(sd, 545) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 5);
 			}
 		}
 		/// Potion Pitcher
@@ -8012,6 +8038,16 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (pc_search_inventory(sd, 503) >= 0)	unit_skilluse_ifable(&sd->bl, foundtargetID, AM_POTIONPITCHER, 3); else
 				if (pc_search_inventory(sd, 502) >= 0)	unit_skilluse_ifable(&sd->bl, foundtargetID, AM_POTIONPITCHER, 2); else
 				if (pc_search_inventory(sd, 501) >= 0)	unit_skilluse_ifable(&sd->bl, foundtargetID, AM_POTIONPITCHER, 1); 
+			}
+		}
+		/// Slim Potion Pitcher
+		if (canskill(sd)) if (pc_checkskill(sd, CR_SLIMPITCHER) >= 10) {
+			bestslimplayers = 0; slimtargetID = -1; // 1 target is fine if we ran out of normal potions
+			map_foreachinrange(targetslimhealing, &sd->bl, 9, BL_PC, sd);
+			if (slimtargetID > -1) {
+				if (pc_search_inventory(sd, 547) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 10); else
+					if (pc_search_inventory(sd, 546) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 9); else
+						if (pc_search_inventory(sd, 545) >= 0)	unit_skilluse_ifablexy(&sd->bl, slimtargetID, CR_SLIMPITCHER, 5);
 			}
 		}
 		/// Status Recovery
@@ -8088,6 +8124,26 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, NJ_UTSUSEMI, pc_checkskill(sd, NJ_UTSUSEMI));
 			}
 		}
+
+		// Cart Boost
+		if (canskill(sd))
+			if (pc_checkskill(sd, WS_CARTBOOST) > 0) {
+				if (!(sd->sc.data[SC_CARTBOOST]))
+					if (!pc_ismadogear(sd))
+						if (pc_iscarton(sd)) {
+							unit_skilluse_ifable(&sd->bl, SELF, WS_CARTBOOST, pc_checkskill(sd, WS_CARTBOOST));
+						}
+			}
+
+		// Meltdown
+		if (canskill(sd))
+			if (pc_checkskill(sd, WS_MELTDOWN) > 0) {
+				if (sd->state.autopilotmode == 1)
+					if (sd->state.enableconc)
+					if (!(sd->sc.data[SC_MELTDOWN])) {
+						unit_skilluse_ifable(&sd->bl, SELF, WS_MELTDOWN, pc_checkskill(sd, WS_MELTDOWN));
+					}
+			}
 
 		// Star Gladiator Protections
 		if (pc_checkskill(sd, SG_SUN_COMFORT) > 0) {
@@ -8717,7 +8773,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (pc_checkskill(sd, KN_TWOHANDQUICKEN) > 0) {
 			if ((sd->status.weapon == W_2HSWORD))
 				if (sd->state.autopilotmode == 1)
-					if (!(sd->sc.data[KN_TWOHANDQUICKEN])) {
+					if (!(sd->sc.data[SC_TWOHANDQUICKEN])) {
 						unit_skilluse_ifable(&sd->bl, SELF, KN_TWOHANDQUICKEN, pc_checkskill(sd, KN_TWOHANDQUICKEN));
 					}
 		}
@@ -8727,14 +8783,14 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (pc_checkskill(sd, KN_ONEHAND) > 0) {
 			if ((sd->status.weapon == W_1HSWORD))
 				if (sd->state.autopilotmode == 1)
-					if (!(sd->sc.data[KN_ONEHAND])) {
+					if (!(sd->sc.data[SC_ONEHAND])) {
 						unit_skilluse_ifable(&sd->bl, SELF, KN_ONEHAND, pc_checkskill(sd, KN_ONEHAND));
 					}
 		}
 		// Parrying
 		if (pc_checkskill(sd, LK_PARRYING) > 0) {
 			if ((sd->status.weapon == W_2HSWORD))
-				if (!(sd->sc.data[LK_PARRYING])) {
+				if (!(sd->sc.data[SC_PARRYING])) {
 					unit_skilluse_ifable(&sd->bl, SELF, LK_PARRYING, pc_checkskill(sd, LK_PARRYING));
 				}
 		}
@@ -10905,10 +10961,27 @@ TIMER_FUNC(unit_autopilot_timer)
 						if (elemallowed(targetRAmd, skillelem(sd, RK_SONICWAVE))) {
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_SONICWAVE, pc_checkskill(sd, RK_SONICWAVE));
 				}
+			// Hundred Spear
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_HUNDREDSPEAR) > 0)) {
+				if (rangeddist <= 9) if (elemallowed(targetRAmd, skillelem(sd, RK_HUNDREDSPEAR)))
+					if (sd->state.autopilotmode != 3)
+					{
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_HUNDREDSPEAR, pc_checkskill(sd, RK_HUNDREDSPEAR));
+					}
+			}
+			// Spiral Pierce
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, LK_SPIRALPIERCE) > 0)) {
+				// Unlike Paladin, this class can't heal so ok to use up SP even if in tanking mode, but skill is interruptable so be careful of that
+				if (rangeddist <= 5) if (elemallowed(targetRAmd, ELE_NEUTRAL))
+					if ((sd->state.autopilotmode == 2) || ((Dangerdistance > 900) || (sd->special_state.no_castcancel)))
+					{
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, LK_SPIRALPIERCE, pc_checkskill(sd, LK_SPIRALPIERCE));
+					}
+			}
 			// Spear Boomerang
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, KN_SPEARBOOMERANG) > 0))
 				if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR)) {
-				// not really strong enough to use if aleady engaged in melee in tanking mode
+				// not really strong enough to use if already engaged in melee in tanking mode
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetRA, KN_SPEARBOOMERANG, pc_checkskill(sd, KN_SPEARBOOMERANG));
 				}
@@ -10930,23 +11003,6 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (foundtargetID2 > -1) if (canskill(sd)) if ((pc_checkskill(sd, PA_PRESSURE) > 1)) if ((sd->status.shield <= 0) || (sd->battle_status.str<30) || (targetmd->status.def+targetmd->status.def2>=500))
 				if ((sd->state.autopilotmode == 2) || ((sd->state.autopilotmode == 1) && (sd->battle_status.sp >= 0.6*sd->battle_status.max_sp))){
 				unit_skilluse_ifable(&sd->bl, foundtargetID2, PA_PRESSURE, pc_checkskill(sd, PA_PRESSURE));
-			}
-			// Hundred Spear
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RK_HUNDREDSPEAR) > 0)) {
-				if (rangeddist <= 9) if (elemallowed(targetRAmd, skillelem(sd, RK_HUNDREDSPEAR)))
-					if (sd->state.autopilotmode != 3)
-					{
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, RK_HUNDREDSPEAR, pc_checkskill(sd, RK_HUNDREDSPEAR));
-					}
-			}
-			// Spiral Pierce
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, LK_SPIRALPIERCE) > 0))  {
-				// Unlike Paladin, this class can't heal so ok to use up SP even if in tanking mode, but skill is interruptable so be careful of that
-				if (rangeddist <= 9) if (elemallowed(targetRAmd, ELE_NEUTRAL))
-					if ((sd->state.autopilotmode == 2) || ((Dangerdistance > 900) || (sd->special_state.no_castcancel)))
-					{
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, LK_SPIRALPIERCE, pc_checkskill(sd, LK_SPIRALPIERCE));
-					}
 			}
 
 			// Soul Explosion
@@ -11908,6 +11964,27 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 						unit_skilluse_ifable(&sd->bl, foundtargetID, GN_CART_TORNADO, pc_checkskill(sd, GN_CART_TORNADO));
 					}
 			}
+			// Cart Termination skill
+			if (canskill(sd)) if (pc_checkskill(sd, WS_CARTTERMINATION) > 0) if (sd->state.specialtanking)
+				if (sd->sc.data[SC_CARTBOOST]) {
+					// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
+					if (sd->status.zeny >= 1500)
+						if (elemallowed(targetmd, skillelem(sd, WS_CARTTERMINATION)))
+							if ((checksprate(sd, targetmd, 10))
+								|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+								unit_skilluse_ifable(&sd->bl, foundtargetID, WS_CARTTERMINATION, pc_checkskill(sd, WS_CARTTERMINATION));
+							}
+				}
+			// Mammonite skill
+			if (canskill(sd)) if (pc_checkskill(sd, MC_MAMMONITE) > 0) if (sd->state.specialtanking) {
+				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
+				if (sd->status.zeny >= 1000)
+					if (elemallowed(targetmd, skillelem(sd, MC_MAMMONITE)))
+						if ((checksprate(sd, targetmd, 10))
+							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
+							unit_skilluse_ifable(&sd->bl, foundtargetID, MC_MAMMONITE, pc_checkskill(sd, MC_MAMMONITE));
+						}
+			}
 			// Cart Revolution skill
 			if (canskill(sd)) if (pc_checkskill(sd, MC_CARTREVOLUTION)>0) if (pc_iscarton(sd)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
@@ -11917,16 +11994,6 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					unit_skilluse_ifable(&sd->bl, foundtargetID, MC_CARTREVOLUTION, pc_checkskill(sd, MC_CARTREVOLUTION));
 				}
 			}
-			// Cart Termination skill
-			if (canskill(sd)) if (pc_checkskill(sd, WS_CARTTERMINATION)>0) if (sd->state.specialtanking)
-				if (sd->sc.data[SC_CARTBOOST]) {
-					// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-					if (elemallowed(targetmd, skillelem(sd, WS_CARTTERMINATION)))
-						if ((checksprate(sd, targetmd, 10))
-						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
-						unit_skilluse_ifable(&sd->bl, foundtargetID, WS_CARTTERMINATION, pc_checkskill(sd, WS_CARTTERMINATION));
-					}
-				}
 			// Power Swing skill
 			// lower priority than CT, if we are willing to spend the zeny CT is much higher DPS.
 			if (canskill(sd)) if (pc_checkskill(sd, NC_POWERSWING) > 0)
@@ -11935,15 +12002,6 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, NC_POWERSWING, pc_checkskill(sd, NC_POWERSWING));
 				}
-			// Mammonite skill
-			if (canskill(sd)) if (pc_checkskill(sd, MC_MAMMONITE)>0) if (sd->state.specialtanking) {
-				// Always use if critically wounded otherwise use on mobs that will take longer to kill only if sp is lower
-				if (elemallowed(targetmd, skillelem(sd, MC_MAMMONITE)))
-					if ((checksprate(sd, targetmd, 10))
-					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)){
-					unit_skilluse_ifable(&sd->bl, foundtargetID, MC_MAMMONITE, pc_checkskill(sd, MC_MAMMONITE));
-				}
-			}
 
 			// Holy Cross skill
 			if (canskill(sd)) if (pc_checkskill(sd, CR_HOLYCROSS)>0) {
@@ -11956,7 +12014,7 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			}
 
 			// Pierce skill
-			if (canskill(sd)) if (pc_checkskill(sd, KN_PIERCE)>0) if ((dangercount<3) || ((pc_checkskill(sd, KN_BOWLINGBASH) == 0) && (pc_checkskill(sd, KN_BRANDISHSPEAR))))
+			if (canskill(sd)) if (pc_checkskill(sd, KN_PIERCE)>0) if ((dangercount<3) || ((pc_checkskill(sd, KN_BOWLINGBASH) == 0) && (pc_checkskill(sd, KN_BRANDISHSPEAR) == 0)))
 				if ((sd->status.weapon == W_1HSPEAR) || (sd->status.weapon == W_2HSPEAR))
 				// Use on LARGE enemies only, otherwise bash/bowling bash is more cost effective.
 					if (targetmd->status.size==SZ_BIG)
@@ -11978,8 +12036,8 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			// then you need to add a check here for ranged attacks to be valid (no pneuma on target)
 			if (canskill(sd)) if (pc_checkskill(sd, KN_BRANDISHSPEAR) > 0) if (pc_isriding(sd))
 				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR)) {
-				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-					if (elemallowed(targetmd, skillelem(sd, KN_BRANDISHSPEAR)))
+					if (sd->battle_status.str >= 50) // Formula highly depends on STR
+						if (elemallowed(targetmd, skillelem(sd, KN_BRANDISHSPEAR)))
 				if ((checksprate(sd, targetmd, 10))
 					|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount >= 3)) {
 					unit_skilluse_ifable(&sd->bl, foundtargetID, KN_BRANDISHSPEAR, pc_checkskill(sd, KN_BRANDISHSPEAR));
@@ -12017,7 +12075,8 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			}
 
 			// Bowling Bash skill
-			if (canskill(sd)) if (pc_checkskill(sd, KN_BOWLINGBASH)>0) {
+			if (canskill(sd)) if (pc_checkskill(sd, KN_BOWLINGBASH)>0)
+				if (pc_checkskill(sd, KN_BOWLINGBASH) >= pc_checkskill(sd, SM_BASH)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
 				if (elemallowed(targetmd, skillelem(sd, KN_BOWLINGBASH)))
 					if ((checksprate(sd, targetmd, 10))
