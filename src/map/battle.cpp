@@ -3913,11 +3913,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			skillratio += 100 * (skill_lv + 2);
 			break;
 		case GS_SPREADATTACK:
-#ifdef RENEWAL
-			skillratio += 30 * skill_lv;
-#else
 			skillratio += 20 * (skill_lv - 1);
-#endif
 			break;
 #ifdef RENEWAL
 		case GS_GROUNDDRIFT:
@@ -6076,7 +6072,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						skillratio += 10 * sd->spiritcharm;
 					break;
 				case NJ_BAKUENRYU:
-					skillratio += 50 + 150 * skill_lv;
+					skillratio += 150 + 150 * skill_lv;
 					if (sd && sd->spiritcharm_type == CHARM_TYPE_FIRE && sd->spiritcharm > 0)
 						skillratio += 45 * sd->spiritcharm;
 					break;
@@ -6213,12 +6209,11 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 						c = (c > 1 ? rnd() % c : 0);
 
 						if ((psd = map_id2sd(p_sd[c])) && pc_checkskill(psd, WL_COMET) > 0) {
-							skillratio = skill_lv * 400; //MATK [{( Skill Level x 400 ) x ( Caster's Base Level / 120 )} + 2500 ] %
-							RE_LVL_DMOD(120);
-							skillratio += 2500;
+							skillratio = 2400 + 500 * skill_lv;
 							status_zap(&psd->bl, 0, skill_get_sp(skill_id, skill_lv) / 2);
 						}
 					}
+					RE_LVL_DMOD(100);
 					break;
 				case WL_CHAINLIGHTNING_ATK:
 					skillratio += 330;
@@ -6235,6 +6230,7 @@ struct Damage battle_calc_magic_attack(struct block_list *src,struct block_list 
 				case WL_TETRAVORTEX_WIND:
 				case WL_TETRAVORTEX_GROUND:
 					skillratio += 400 + 500 * skill_lv;
+					RE_LVL_DMOD(100);
 					break;
 				case WL_SUMMON_ATK_FIRE:
 				case WL_SUMMON_ATK_WATER:

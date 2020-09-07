@@ -1565,6 +1565,7 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_GOSPEL]				|= SCS_NOMOVE|SCS_NOMOVECOND;
 /*	StatusChangeStateTable[SC_BASILICA]				|= SCS_NOMOVE|SCS_NOMOVECOND;*/
 	StatusChangeStateTable[SC_STOP]					|= SCS_NOMOVE;
+	StatusChangeStateTable[SC_STASIS] |= SCS_NOMOVE;
 	StatusChangeStateTable[SC_CLOSECONFINE]			|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_CLOSECONFINE2]		|= SCS_NOMOVE;
 	StatusChangeStateTable[SC_MADNESSCANCEL]		|= SCS_NOMOVE;
@@ -1596,6 +1597,7 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_CLOAKING]				|= SCS_NOPICKITEM;
 	StatusChangeStateTable[SC_TRICKDEAD]			|= SCS_NOPICKITEM;
 	StatusChangeStateTable[SC_BLADESTOP]			|= SCS_NOPICKITEM;
+	StatusChangeStateTable[SC_STASIS] |= SCS_NOPICKITEM;
 	StatusChangeStateTable[SC_CLOAKINGEXCEED]		|= SCS_NOPICKITEM;
 	StatusChangeStateTable[SC__FEINTBOMB]			|= SCS_NOPICKITEM;
 	StatusChangeStateTable[SC_NOCHAT]				|= SCS_NOPICKITEM|SCS_NOPICKITEMCOND;
@@ -1606,6 +1608,7 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_AUTOCOUNTER]			|= SCS_NODROPITEM;
 	StatusChangeStateTable[SC_BLADESTOP]			|= SCS_NODROPITEM;
 	StatusChangeStateTable[SC_NOCHAT]				|= SCS_NODROPITEM|SCS_NODROPITEMCOND;
+	StatusChangeStateTable[SC_STASIS] |= SCS_NODROPITEM | SCS_NODROPITEMCOND;
 
 	/* StatusChangeState (SCS_) NOCAST (skills) */
 	StatusChangeStateTable[SC_SILENCE]				|= SCS_NOCAST;
@@ -1621,11 +1624,13 @@ void initChangeTables(void)
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOCAST;
 	StatusChangeStateTable[SC_CURSEDCIRCLE_TARGET]	|= SCS_NOCAST;
 	StatusChangeStateTable[SC_KINGS_GRACE]			|= SCS_NOCAST;
+	StatusChangeStateTable[SC_STASIS] |= SCS_NOCAST;
 
 	/* StatusChangeState (SCS_) NOCHAT (skills) */
 	StatusChangeStateTable[SC_BERSERK]				|= SCS_NOCHAT;
 	StatusChangeStateTable[SC_DEEPSLEEP]			|= SCS_NOCHAT;
 	StatusChangeStateTable[SC_NOCHAT]				|= SCS_NOCHAT|SCS_NOCHATCOND;
+	StatusChangeStateTable[SC_STASIS] |= SCS_NOCHAT;
 }
 
 static void initDummyData(void)
@@ -2380,8 +2385,9 @@ bool status_check_skilluse(struct block_list *src, struct block_list *target, ui
 				(sc->data[SC_VOLCANO] && skill_id == WZ_ICEWALL) ||
 //				(sc->data[SC_ROKISWEIL] && skill_id != BD_ADAPTATION) ||
 //				(sc->data[SC_HERMODE] && skill_get_inf(skill_id) & INF_SUPPORT_SKILL) ||
-				(sc->data[SC_NOCHAT] && sc->data[SC_NOCHAT]->val1&MANNER_NOSKILL)
-			)
+				(sc->data[SC_NOCHAT] && sc->data[SC_NOCHAT]->val1&MANNER_NOSKILL) ||
+				(sc->data[SC_STASIS])
+				)
 				return false;
 		}
 
@@ -7051,7 +7057,7 @@ static signed short status_calc_def2(struct block_list *bl, struct status_change
 		def2 += sc->data[SC_SUN_COMFORT]->val2;
 #ifdef RENEWAL
 	if (sc->data[SC_SKA])
-		def2 += 80;
+		def2 += 120;
 #endif
 	if(sc->data[SC_ANGELUS])
 #ifdef RENEWAL /// The VIT stat bonus is boosted by angelus [RENEWAL]
@@ -8535,6 +8541,7 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			case SC_MAGICROD:
 			case SC_HALLUCINATION:
 			case SC_STONE:
+			case SC_STASIS:
 			case SC_QUAGMIRE:
 			case SC_SUITON:
 			case SC_SWINGDANCE:
@@ -8662,7 +8669,8 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			break;
 		case SC_STASIS:
 			// 10 second (fixed) + { Stasis Skill level * 10 - (Target's VIT + DEX) / 20 }
-			tick_def2 = (status->vit + status->dex) * 50;
+			tick_def2 = 0;
+			if (status_get_class_(bl) == CLASS_BOSS) tick_def = 100;
 			break;
 		case SC_WHITEIMPRISON:
 			if( tick == 5000 ) // 100% on caster
@@ -8818,7 +8826,6 @@ t_tick status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_
 			// NEED AEGIS CHECK: might need to be 10s (http://ro.gnjoy.com/news/notice/View.asp?seq=5352)
 			break;
 		case SC_BURNING:
-		case SC_STASIS:
 		case SC_VOICEOFSIREN:
 			tick = i64max(tick, 10000); // Minimum duration 10s
 			break;
@@ -11978,6 +11985,7 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				break;
 		// Fall through
 		case SC_STOP:
+		case SC_STASIS:
 		case SC_CONFUSION:
 		case SC_CLOSECONFINE:
 		case SC_CLOSECONFINE2:

@@ -2734,8 +2734,8 @@ bool skill_strip_equip(struct block_list *src, struct block_list *target, uint16
 			break;
 		}
 		case GS_DISARM:
-			rate = sstatus->dex / (4 * (7 - skill_lv)) + sstatus->luk / (4 * (6 - skill_lv));
-			rate = rate + status_get_lv(src) - (tstatus->agi * rate / 100) - tstatus->luk - status_get_lv(target);
+			rate = sstatus->dex / (3 * (7 - skill_lv)) + sstatus->luk / (3 * (6 - skill_lv));
+			rate = rate + status_get_lv(src) - (tstatus->agi * rate / 125) - tstatus->luk / 2 - status_get_lv(target);
 			break;
 		case WL_EARTHSTRAIN: {
 			int job_lv = 0;
@@ -9935,12 +9935,14 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		break;
 
 	case WL_STASIS:
-		if (flag&1)
-			sc_start(src,bl,type,100,skill_lv,skill_get_time(skill_id,skill_lv));
+		if (flag & 1) {
+			if (src->id != bl->id)
+			sc_start(src, bl, type, 100, skill_lv, skill_get_time(skill_id, skill_lv));
+		}
 		else {
 			struct map_data *mapdata = map_getmapdata(src->m);
 
-			map_foreachinallrange(skill_area_sub,src,skill_get_splash(skill_id, skill_lv),BL_CHAR,src,skill_id,skill_lv,tick,(mapdata_flag_vs(mapdata)?BCT_ALL:BCT_ENEMY|BCT_SELF)|flag|1,skill_castend_nodamage_id);
+			map_foreachinallrange(skill_area_sub,src,skill_get_splash(skill_id, skill_lv),BL_CHAR|BL_MOB,src,skill_id,skill_lv,tick,BCT_ALL|flag|1,skill_castend_nodamage_id);
 			clif_skill_nodamage(src, bl, skill_id, skill_lv, 1);
 		}
 		break;
@@ -17202,7 +17204,7 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 		}
 		for (const auto &it : sd->skillfixcastrate) {
 			if (it.id == skill_id) { // bonus2 bFixedCastrate
-				fixcast_r = max(fixcast_r, it.val);
+				fixcast_r += it.val;
 				break;
 			}
 		}
@@ -17230,13 +17232,13 @@ int skill_vfcastfix(struct block_list *bl, double time, uint16 skill_id, uint16 
 			VARCAST_REDUCTION(sc->data[SC_TELEKINESIS_INTENSE]->val2);
 		if (sc->data[SC_SOULFAIRY])
 			VARCAST_REDUCTION(sc->data[SC_SOULFAIRY]->val3);
+		if (sd && (skill_lv = pc_checkskill(sd, WL_RADIUS) ) && skill_id >= WL_WHITEIMPRISON && skill_id <= WL_FREEZE_SP)
+			fixcast_r += skill_lv * 3;
+		if (sc->data[SC_HEAT_BARREL])
+			fixcast_r += sc->data[SC_HEAT_BARREL]->val2;
 		// Multiplicative Fixed CastTime values
 		if (sc->data[SC_SECRAMENT])
 			fixcast_r = max(fixcast_r, sc->data[SC_SECRAMENT]->val2);
-		if (sd && (skill_lv = pc_checkskill(sd, WL_RADIUS) ) && skill_id >= WL_WHITEIMPRISON && skill_id <= WL_FREEZE_SP)
-			fixcast_r = max(fixcast_r, ((status_get_int(bl) + status_get_lv(bl)) / 15 + skill_lv * 5));
-		if (sc->data[SC_HEAT_BARREL])
-			fixcast_r = max(fixcast_r, sc->data[SC_HEAT_BARREL]->val2);
 		if (sc->data[SC_FREEZING])
 			fixcast_r -= 50;
 		// Additive Fixed CastTime values

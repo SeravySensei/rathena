@@ -18357,31 +18357,31 @@ Body:
       - Level: 5
         Area: 13
     CastCancel: true
-    CastTime: 3000
+    CastTime: 0
     AfterCastActDelay: 2000
     Duration1:
       - Level: 1
-        Time: 20000
+        Time: 10000
       - Level: 2
-        Time: 30000
+        Time: 12000
       - Level: 3
-        Time: 40000
+        Time: 14000
       - Level: 4
-        Time: 50000
+        Time: 16000
       - Level: 5
-        Time: 60000
+        Time: 18000
     Cooldown:
       - Level: 1
-        Time: 180000
+        Time: 3600000
       - Level: 2
-        Time: 190000
+        Time: 3200000
       - Level: 3
-        Time: 200000
+        Time: 2800000
       - Level: 4
-        Time: 210000
+        Time: 2400000
       - Level: 5
-        Time: 220000
-    FixedCastTime: 1000
+        Time: 1800000
+    FixedCastTime: 0
     Requires:
       SpCost:
         - Level: 1
