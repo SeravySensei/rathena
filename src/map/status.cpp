@@ -5517,6 +5517,8 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 				status->matk_min += status->matk_buff;
 				status->matk_max = status_calc_ematk(bl, sc, status->matk_max);
 
+				int matk_mid = status->matk_min;
+
 				// This is the only portion in MATK that varies depending on the weapon level and refinement rate.
 				if (b_status->lhw.matk) {
 					if (sd) {
@@ -5544,6 +5546,16 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 
 				status->matk_min += wMatk - variance;
 				status->matk_max += wMatk + variance;
+
+				// We want to see the percentage bonus in the client, but not the variance
+				// so let's pretend our matk is the amount before the split of min/max by variance for displaying the percentage bonus amount
+				matk_mid+= wMatk;
+				int matk_mid2 = matk_mid;
+				if (bl->type&BL_PC && sd->matk_rate != 100) {
+					matk_mid = (matk_mid * sd->matk_rate) / 100;
+				}
+				status->matk_buff += status_calc_matk(bl, sc, matk_mid) - matk_mid2;
+
 				}
 				break;
 		}
@@ -6470,6 +6482,29 @@ static unsigned short status_calc_batk(struct block_list *bl, struct status_chan
  */
 static unsigned short status_calc_watk(struct block_list *bl, struct status_change *sc, int watk)
 {
+
+	if (bl->type == BL_PC) {
+		TBL_PC *sd = NULL;
+		sd = BL_CAST(BL_PC, bl);
+
+		if (pc_checkskill(sd, LG_SHIELDSPELL) > 0) {
+			int opt = 0;
+			short index = sd->equip_index[EQI_HAND_L], shield_def = 0, shield_mdef = 0, shield_refine = 0;
+			struct item_data *shield_data = NULL;
+
+			if (index >= 0 && sd->inventory_data[index] && sd->inventory_data[index]->type == IT_ARMOR)
+				shield_data = sd->inventory_data[index];
+			if (!shield_data || shield_data->type != IT_ARMOR) // Group with 'skill_unconditional' gets these as default
+				shield_def = shield_mdef = shield_refine = 0;
+			else {
+				shield_def = shield_data->def;
+				shield_mdef = sd->bonus.shieldmdef;
+				shield_refine = sd->inventory.u.items_inventory[sd->equip_index[EQI_HAND_L]].refine;
+			}
+			watk += (shield_def * pc_checkskill(sd, LG_SHIELDSPELL)) / 50;
+		}
+	}
+
 	if(!sc || !sc->count)
 		return cap_value(watk,0,USHRT_MAX);
 
@@ -6518,10 +6553,11 @@ static unsigned short status_calc_watk(struct block_list *bl, struct status_chan
 		watk -= watk * sc->data[SC_SIGNUMCRUCIS]->val2/250;
 	if (sc->data[SC_FIGHTINGSPIRIT])
 		watk += sc->data[SC_FIGHTINGSPIRIT]->val1;
-	if(sc->data[SC_SHIELDSPELL_DEF] && sc->data[SC_SHIELDSPELL_DEF]->val1 == 3)
-		watk += sc->data[SC_SHIELDSPELL_DEF]->val2;
+
+/*	if(sc->data[SC_SHIELDSPELL_DEF] && sc->data[SC_SHIELDSPELL_DEF]->val1 == 3)
+		watk += sc->data[SC_SHIELDSPELL_DEF]->val2;*/
 	if(sc->data[SC_BANDING] && sc->data[SC_BANDING]->val2 > 1)
-		watk += (10 + 10 * sc->data[SC_BANDING]->val1) * sc->data[SC_BANDING]->val2;
+		watk += (10 + 10 * sc->data[SC_BANDING]->val1) * sc->data[SC_BANDING]->val2 / 2;
 	if(sc->data[SC_INSPIRATION])
 		watk += 40 * sc->data[SC_INSPIRATION]->val1 + 3 * sc->data[SC_INSPIRATION]->val2;
 	if(sc->data[SC_GT_CHANGE])
@@ -6573,8 +6609,33 @@ static unsigned short status_calc_watk(struct block_list *bl, struct status_chan
  * @param matk: Initial matk
  * @return modified matk with cap_value(matk,0,USHRT_MAX)
  */
+ // This is MATK that applies before min/max matk is split and percentage bonuses are applied
+ // Most matk bonus should be here
 static unsigned short status_calc_ematk(struct block_list *bl, struct status_change *sc, int matk)
 {
+
+	if (bl->type == BL_PC) {
+		TBL_PC *sd = NULL;
+		sd = BL_CAST(BL_PC, bl);
+
+		if (pc_checkskill(sd, LG_SHIELDSPELL) > 0) {
+			int opt = 0;
+			short index = sd->equip_index[EQI_HAND_L], shield_def = 0, shield_mdef = 0, shield_refine = 0;
+			struct item_data *shield_data = NULL;
+
+			if (index >= 0 && sd->inventory_data[index] && sd->inventory_data[index]->type == IT_ARMOR)
+				shield_data = sd->inventory_data[index];
+			if (!shield_data || shield_data->type != IT_ARMOR) // Group with 'skill_unconditional' gets these as default
+				shield_def = shield_mdef = shield_refine = 0;
+			else {
+				shield_def = shield_data->def;
+				shield_mdef = sd->bonus.shieldmdef;
+				shield_refine = sd->inventory.u.items_inventory[sd->equip_index[EQI_HAND_L]].refine;
+			}
+			matk += (shield_mdef * pc_checkskill(sd, LG_SHIELDSPELL) * 3) / 10;
+		}
+	}
+
 	if (!sc || !sc->count)
 		return cap_value(matk,0,USHRT_MAX);
 
@@ -6638,9 +6699,12 @@ static unsigned short status_calc_ematk(struct block_list *bl, struct status_cha
  * @param matk: Initial matk
  * @return modified matk with cap_value(matk,0,USHRT_MAX)
  */
+ // This is matk that is applied after weapon variance
+ // Percentage bonus that also multiplies weapon variance should be here
 static unsigned short status_calc_matk(struct block_list *bl, struct status_change *sc, int matk)
 {
-	if(!sc || !sc->count)
+
+		if(!sc || !sc->count)
 		return cap_value(matk,0,USHRT_MAX);
 #ifndef RENEWAL
 	/// Take note fixed value first before % modifiers [PRE-RENEWAL]
@@ -6667,26 +6731,14 @@ static unsigned short status_calc_matk(struct block_list *bl, struct status_chan
 	if (sc->data[SC_2011RWC_SCROLL])
 		matk += 30;
 #endif
-	if (sc->data[SC_ZANGETSU])
-		matk += sc->data[SC_ZANGETSU]->val3;
-	if (sc->data[SC_QUEST_BUFF1])
-		matk += sc->data[SC_QUEST_BUFF1]->val1;
-	if (sc->data[SC_QUEST_BUFF2])
-		matk += sc->data[SC_QUEST_BUFF2]->val1;
-	if (sc->data[SC_QUEST_BUFF3])
-		matk += sc->data[SC_QUEST_BUFF3]->val1;
 	if (sc->data[SC_MAGICPOWER] && sc->data[SC_MAGICPOWER]->val4)
 		matk += matk * sc->data[SC_MAGICPOWER]->val3/100;
 	if (sc->data[SC_MINDBREAKER])
 		matk += matk * sc->data[SC_MINDBREAKER]->val2/100;
 	if (sc->data[SC_INCMATKRATE])
 		matk += matk * sc->data[SC_INCMATKRATE]->val1/100;
-	if (sc->data[SC_MOONLITSERENADE])
-		matk += sc->data[SC_MOONLITSERENADE]->val3/100;
 	if (sc->data[SC_MTF_MATK])
 		matk += matk * sc->data[SC_MTF_MATK]->val1 / 100;
-	if(sc->data[SC_2011RWC_SCROLL])
-		matk += 30;
 	if (sc->data[SC_SHRIMP])
 		matk += matk * sc->data[SC_SHRIMP]->val2 / 100;
 #ifdef RENEWAL
@@ -6935,6 +6987,29 @@ static signed short status_calc_flee2(struct block_list *bl, struct status_chang
  */
 static defType status_calc_def(struct block_list *bl, struct status_change *sc, int def)
 {
+
+	if (bl->type == BL_PC) {
+		TBL_PC *sd = NULL;
+		sd = BL_CAST(BL_PC, bl);
+
+		if (pc_checkskill(sd, LG_SHIELDSPELL) > 0) {
+			int opt = 0;
+			short index = sd->equip_index[EQI_HAND_L], shield_def = 0, shield_mdef = 0, shield_refine = 0;
+			struct item_data *shield_data = NULL;
+
+			if (index >= 0 && sd->inventory_data[index] && sd->inventory_data[index]->type == IT_ARMOR)
+				shield_data = sd->inventory_data[index];
+			if (!shield_data || shield_data->type != IT_ARMOR) // Group with 'skill_unconditional' gets these as default
+				shield_def = shield_mdef = shield_refine = 0;
+			else {
+				shield_def = shield_data->def;
+				shield_mdef = sd->bonus.shieldmdef;
+				shield_refine = sd->inventory.u.items_inventory[sd->equip_index[EQI_HAND_L]].refine;
+			}
+			def += (shield_refine * pc_checkskill(sd, LG_SHIELDSPELL) *2) / 10;
+		}
+	}
+
 	if(!sc || !sc->count)
 		return (defType)cap_value(def,DEFTYPE_MIN,DEFTYPE_MAX);
 
@@ -7000,7 +7075,7 @@ static defType status_calc_def(struct block_list *bl, struct status_change *sc, 
 	if( sc->data[SC_PRESTIGE] )
 		def += sc->data[SC_PRESTIGE]->val3 /2;
 	if( sc->data[SC_BANDING] && sc->data[SC_BANDING]->val2 > 1 )
-		def += (5 + sc->data[SC_BANDING]->val1) * sc->data[SC_BANDING]->val2 / 10;
+		def += (5 + sc->data[SC_BANDING]->val1) * sc->data[SC_BANDING]->val2;
 	if( sc->data[SC_ECHOSONG] )
 		def += def * sc->data[SC_ECHOSONG]->val3 / 100;
 	if( sc->data[SC_SATURDAYNIGHTFEVER] )
@@ -11200,7 +11275,8 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 				short index = sd->equip_index[EQI_HAND_R];
 
 				if (index >= 0 && sd->inventory_data[index] && sd->inventory_data[index]->type == IT_WEAPON)
-					val2 += 15 * sd->status.job_level + sd->inventory_data[index]->weight / 10 * sd->inventory_data[index]->wlv * status_get_lv(bl) / 100;
+					val2 += sd->inventory_data[index]->weight /2 * sd->inventory_data[index]->wlv ;
+				val2 = val2 * status_get_lv(bl) / 100;
 			} else // Monster
 				val2 += 750;
 			break;

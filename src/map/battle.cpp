@@ -3303,7 +3303,7 @@ static void battle_calc_skill_base_damage(struct Damage* wd, struct block_list *
 			{
 				int damagevalue = (sstatus->hp / 50 + status_get_max_sp(src) / 4) * skill_lv;
 
-				if(status_get_lv(src) > 100)
+				if(status_get_lv(src) >= 1)
 					damagevalue = damagevalue * status_get_lv(src) / 150;
 				if(sd)
 					damagevalue = damagevalue * (100 + 5 * (pc_checkskill(sd,RK_DRAGONTRAINING) - 1)) / 100;
@@ -4005,7 +4005,7 @@ static int battle_calc_attack_skill_ratio(struct Damage* wd, struct block_list *
 			break;
 		case RK_PHANTOMTHRUST: // ATK = [{(Skill Level x 50) + (Spear Master Level x 10)} x Caster's Base Level / 150] %
 			skillratio += -100 + 50 * skill_lv + 10 * (sd ? pc_checkskill(sd,KN_SPEARMASTERY) : 5);
-			RE_LVL_DMOD(150); // Base level bonus.
+			RE_LVL_DMOD(100); // Base level bonus.
 			break;
 		case GC_CROSSIMPACT:
 			skillratio += 1000 + 200 * skill_lv;
