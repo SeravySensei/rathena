@@ -7371,7 +7371,9 @@ TIMER_FUNC(unit_autopilot_timer)
 	}
 
 	if pc_issit(sd) { return 0; }
+
 	recoversp(sd, sd->state.autospgoal);
+
 	sd->state.asurapreparation = false;
 
 	// Say in party chat if something is wrong!
@@ -7537,10 +7539,18 @@ TIMER_FUNC(unit_autopilot_timer)
 
 		bool havepriest = false;
 		bool havehealer = false;
+		bool havestarec = false;
+		int nofrgs = 0;
+		int nofbandingrg = 0;
 		int64 partymagicratio = 0;
 		if (p) for (i = 0; i < MAX_PARTY; i++) if (p->data[i].sd) if (!status_isdead(&p->data[i].sd->bl)) {
 			if (pc_checkskill(p->data[i].sd, ALL_RESURRECTION) >= 4) havepriest = true;
 			if (pc_checkskill(p->data[i].sd, AL_HEAL) >= 1) havehealer = true;
+			if (pc_checkskill(p->data[i].sd, PR_STRECOVERY) >= 1) havestarec = true;
+			if ((p->data[i].sd->class_ & MAPID_THIRDMASK) == MAPID_ROYAL_GUARD) {
+				nofrgs++;
+				if (sd->sc.data[SC_BANDING]) nofbandingrg++;
+			}
 			if (p->data[i].sd->state.autopilotmode != 3) { // add matk, subtract atk. Might not be exact but should give a rough impression on which type of damage the party relies on most. 
 				partymagicratio += p->data[i].sd->battle_status.matk_min
 					- p->data[i].sd->battle_status.rhw.atk - p->data[i].sd->battle_status.batk;
@@ -7594,15 +7604,15 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Reflect Damage
 		// is top priority when mobbed!
 		if (Dangerdistance < 900) if (dangercount>=7) if (canskill(sd)) if ((pc_checkskill(sd, LG_REFLECTDAMAGE) > 0) &&
-			!(sd->sc.data[LG_REFLECTDAMAGE])) if (sd->status.shield > 0)
+			!(sd->sc.data[SC_REFLECTDAMAGE])) if (sd->status.shield > 0)
 		{
 			unit_skilluse_ifable(&sd->bl, SELF, LG_REFLECTDAMAGE, pc_checkskill(sd, LG_REFLECTDAMAGE));
 		}
-		// turn off if mob is dead to avoid wasting SP
-		if (dangercount < 3) if (canskill(sd)) if ((pc_checkskill(sd, LG_REFLECTDAMAGE) > 0) &&
-			(sd->sc.data[LG_REFLECTDAMAGE]))
+		// turn off if mob is dead to avoid wasting SP, use shield reflect to turn it off because it costs less SP
+		if (dangercount < 3) if (canskill(sd)) if ((pc_checkskill(sd, CR_REFLECTSHIELD) > 0) &&
+			(sd->sc.data[SC_REFLECTDAMAGE]))
 		{
-			unit_skilluse_ifable(&sd->bl, SELF, LG_REFLECTDAMAGE, pc_checkskill(sd, LG_REFLECTDAMAGE));
+			unit_skilluse_ifable(&sd->bl, SELF, CR_REFLECTSHIELD, pc_checkskill(sd, CR_REFLECTSHIELD));
 		}
 
 		/// Dispell
@@ -8729,6 +8739,53 @@ TIMER_FUNC(unit_autopilot_timer)
 				unit_skilluse_ifable(&sd->bl, SELF, LK_AURABLADE, pc_checkskill(sd, LK_AURABLADE));
 			}
 		}
+
+		int index;
+		// Abundance
+		if (!(sd->sc.data[SC_ABUNDANCE]))
+			if (sd->state.autorune)
+				if (sd->battle_status.sp < (sd->state.autospgoal+10)*sd->battle_status.max_sp / 100)
+				if ((index = pc_search_inventory(sd, 12730)) >= 0)
+					pc_useitem(sd, index);
+
+		// Giant Growth
+		if (!(sd->sc.data[SC_GIANTGROWTH]))
+			if (sd->state.autorune)
+				if ((index = pc_search_inventory(sd, 12731)) >= 0)
+						pc_useitem(sd, index);
+		// Stone Skin
+		if (!(sd->sc.data[SC_STONEHARDSKIN]))
+			if (sd->state.autopilotmode == 1)
+				if (sd->state.autorune)
+				if ((index = pc_search_inventory(sd, 12733)) >= 0)
+					pc_useitem(sd, index);
+		// Determination
+		if (!(sd->sc.data[SC_FIGHTINGSPIRIT]))
+			if (sd->state.autorune)
+				if ((index = pc_search_inventory(sd, 12729)) >= 0)
+					if (partycount>=8)
+					pc_useitem(sd, index);
+		// Nosiege - refresh
+		if ((sd->sc.data[SC_FREEZE])
+			|| (sd->sc.data[SC_SLEEP])
+			|| (sd->sc.data[SC_STONE])
+			)
+			if (sd->state.autorune)
+				if ((index = pc_search_inventory(sd, 12725)) >= 0)
+					if (!havestarec)
+						pc_useitem(sd, index);
+
+		// Vitality Activation
+		if (!(sd->sc.data[SC_VITALITYACTIVATION]))
+			if (!(sd->sc.data[SC_BERSERK]))
+				if (sd->state.autorune)
+				if (sd->state.autopilotmode==1)
+				if ((sd->battle_status.hp < sd->battle_status.max_hp*0.3) && (havehealer))
+					if (sd->battle_status.sp > sd->battle_status.max_sp*0.5)
+				if ((index = pc_search_inventory(sd, 12728)) >= 0)
+					pc_useitem(sd, index);
+
+
 		// Maximize Power
 		// **Note** : I have changed this skill to not disable SP regen.
 		// If you did not, you should probably restrict usage to high SP levels and make the AI turn it off below a certain amount.
@@ -8754,6 +8811,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		// Reflect Shield
 		if (pc_checkskill(sd, CR_REFLECTSHIELD) > 0) {
 			if (!(sd->sc.data[SC_REFLECTSHIELD]))
+			if (!(sd->sc.data[SC_REFLECTDAMAGE]))
 				if (sd->status.shield > 0) {
 					unit_skilluse_ifable(&sd->bl, SELF, CR_REFLECTSHIELD, pc_checkskill(sd, CR_REFLECTSHIELD));
 				}
@@ -8824,6 +8882,14 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (pc_checkskill(sd, SN_SIGHT) > 0) {
 			if (!(sd->sc.data[SC_TRUESIGHT])) {
 				unit_skilluse_ifable(&sd->bl, SELF, SN_SIGHT, pc_checkskill(sd, SN_SIGHT));
+			}
+		}
+
+		// Banding
+		if (pc_checkskill(sd, LG_BANDING) > 0) {
+			if (!(sd->sc.data[SC_BANDING]))
+			if (nofrgs>=2) {
+				unit_skilluse_ifable(&sd->bl, SELF, LG_BANDING, pc_checkskill(sd, LG_BANDING));
 			}
 		}
 
@@ -8922,7 +8988,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		if (Dangerdistance < 900) if (canskill(sd)) if ((pc_checkskill(sd, GS_ADJUSTMENT) > 0) && (dangermd->status.rhw.range > 3))
 			if (!sd->sc.data[SC_MADNESSCANCEL]) if (!sd->sc.data[SC_ADJUSTMENT]) if (sd->spiritball >= 2)
 		{
-			unit_skilluse_ifablexy(&sd->bl, sd->bl.id, GS_ADJUSTMENT, pc_checkskill(sd, GS_ADJUSTMENT));
+			unit_skilluse_ifable(&sd->bl, SELF, GS_ADJUSTMENT, pc_checkskill(sd, GS_ADJUSTMENT));
 		}
 
 		// No matter which mode if we are too far from leader, prioritize returning!
@@ -9075,8 +9141,15 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Do this if there is a stored spell and there are multiple enemies or we don't know white imprison
 			if ((Dangerdistance <= 4))
 				if (canskill(sd)) if (pc_checkskill(sd, WL_RELEASE) > 1) if ((pc_checkskill(sd, WL_WHITEIMPRISON) == 0) || (dangercount>=2))
-				if ((sd->sc.data[SC_SPELLBOOK1]) || (nofballs(&sd->bl))) {
-					unit_skilluse_ifable(&sd->bl, founddangerID, WL_RELEASE, pc_checkskill(sd, WL_RELEASE));
+				if ((sd->sc.data[SC_SPELLBOOK1]) ||
+					(sd->sc.data[SC_SPELLBOOK2]) ||
+					(sd->sc.data[SC_SPELLBOOK3]) ||
+					(sd->sc.data[SC_SPELLBOOK4]) ||
+					(sd->sc.data[SC_SPELLBOOK5]) ||
+					(sd->sc.data[SC_SPELLBOOK6]) ||
+					(sd->sc.data[SC_MAXSPELLBOOK]) 
+					|| (nofballs(&sd->bl) > 0))  {
+					unit_skilluse_ifable(&sd->bl, founddangerID, WL_RELEASE, 2);
 				}
 
 			/// White Imprison
@@ -9883,6 +9956,21 @@ TIMER_FUNC(unit_autopilot_timer)
 							}
 						}
 					}
+
+					// Genesis Ray
+					// **Note** : I modded this skill to be uninterruptable - a self targeted crowd control AOE is useless if it is interrupted. If yours is not modded, uncomment this line!
+					if (canskill(sd)) if ((pc_checkskill(sd, LG_RAYOFGENESIS) >= 1)
+											 &&	((Dangerdistance > 900) || (sd->special_state.no_castcancel)) 
+						) {
+						if (nofbandingrg>=2) {
+							int area = 5;
+							priority = 3 * map_foreachinrange(AOEPriority, &sd->bl, area, BL_MOB, skillelem(sd, LG_RAYOFGENESIS));
+							if ((priority >= 18) && (priority > bestpriority)) {
+								spelltocast = LG_RAYOFGENESIS; bestpriority = priority; IDtarget = sd->bl.id;
+							}
+						}
+					}
+
 					// Sura - Lion Howl
 					if (canskill(sd)) if ((pc_checkskill(sd, SR_HOWLINGOFLION) >= 5)
 						//					 &&	((Dangerdistance > 900) || (sd->special_state.no_castcancel)) 
@@ -10004,6 +10092,9 @@ TIMER_FUNC(unit_autopilot_timer)
 							|| (spelltocast == KO_HAPPOKUNAI)
 							) unit_skilluse_ifable(&sd->bl, SELF, spelltocast, pc_checkskill(sd, spelltocast));
 						else
+							if (spelltocast == LG_RAYOFGENESIS)
+								unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, spelltocast, pc_checkskill(sd, spelltocast));
+
 						if ((spelltocast == MG_FIREBALL) // Skills that target a monster, not the ground 
 							|| (spelltocast == NJ_HUUMA)
 							|| (spelltocast == GN_SPORE_EXPLOSION)
@@ -11617,7 +11708,7 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			if (canskill(sd)) if ((pc_checkskill(sd, RK_IGNITIONBREAK) > 0)) {
 				// At least 3 enemies in range (or 2 if weak to element)
 				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skillelem(sd, RK_IGNITIONBREAK)) >= 6)
-					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK));
+					unit_skilluse_ifable(&sd->bl, SELF, RK_IGNITIONBREAK, pc_checkskill(sd, RK_IGNITIONBREAK));
 			}
 			// Moon Slasher
 			if (canskill(sd)) if ((pc_checkskill(sd, LG_MOONSLASHER) > 0))
@@ -11625,7 +11716,7 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					{
 				// At least 3 enemies in range (or 2 if weak to element)
 				if (map_foreachinrange(AOEPriority, bl, 4, BL_MOB, skillelem(sd, LG_MOONSLASHER)) >= 6)
-					unit_skilluse_ifablexy2(&sd->bl, sd->bl.x, sd->bl.y, LG_MOONSLASHER, pc_checkskill(sd, LG_MOONSLASHER));
+					unit_skilluse_ifable(&sd->bl, SELF, LG_MOONSLASHER, pc_checkskill(sd, LG_MOONSLASHER));
 			}
 			// Earth Drive, this is interrutpable so need uninterruptable cast effect to use safely
 			// prioritized lower than Moon Slasher because it's less spammable and also less reliable (light shield or enemies resistant to earth make it do less dmg)
@@ -11739,7 +11830,17 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 					unit_skilluse_ifable(&sd->bl, foundtargetID, RK_DRAGONHOWLING, pc_checkskill(sd, RK_DRAGONHOWLING));
 				}
 			}
-
+			// Hesperus Lit
+			if (canskill(sd)) if (pc_checkskill(sd, LG_HESPERUSLIT) > 0) 
+				if (elemallowed(targetmd, skillelem(sd, LG_HESPERUSLIT)))
+					if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
+				if (nofbandingrg>=3) {
+					// Use like other skills, but also always use if EDP enabled, that's not the time to conserve SP
+					if (checksprate(sd, targetmd, 10))
+						 {
+						unit_skilluse_ifable(&sd->bl, foundtargetID, LG_HESPERUSLIT, pc_checkskill(sd, LG_HESPERUSLIT));
+					}
+				}
 			// Dark Claw skill
 			if (canskill(sd)) if (pc_checkskill(sd, GC_DARKCROW) > 0) if (sd->status.weapon == W_KATAR)
 				if (elemallowed(targetmd, skillelem(sd, GC_DARKCROW))) {
@@ -12045,7 +12146,7 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			}
 			// Over Brand skill
 			// Use only on bosses where knockback isn't an issue and high DPS is useful. Knocking away the minions might even help with tanking.
-			if (canskill(sd)) if (status_get_class_(bl) == CLASS_BOSS) if (pc_checkskill(sd, LG_OVERBRAND) > 0)
+			if (canskill(sd)) if (status_get_class_(targetbl) == CLASS_BOSS) if (pc_checkskill(sd, LG_OVERBRAND) > 0)
 				if ((sd->status.weapon == W_2HSPEAR) || (sd->status.weapon == W_1HSPEAR))
 					if (elemallowed(targetmd, skillelem(sd, LG_OVERBRAND)))
 					{

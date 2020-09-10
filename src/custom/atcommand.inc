@@ -123,6 +123,14 @@ clif_displaymessage(fd, "Concentration, Heat Barrel, Moonlight Fantasy, Auto Ber
 return 0;
 }
 
+ACMD_FUNC(autorune)
+{
+sd->state.autorune=!sd->state.autorune;
+clif_displaymessage(fd, "Toggled runestone usage"); 
+
+return 0;
+}
+
 ACMD_FUNC(autosoulshadow)
 {
 sd->state.shadowwant=!sd->state.shadowwant;
