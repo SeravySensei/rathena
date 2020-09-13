@@ -3882,6 +3882,7 @@ int targetnearestusingranged(block_list * bl, va_list ap)
 	nullpo_ret(md = (struct mob_data *)bl);
 
 	if (md->sc.data[SC_PNEUMA]) return 0;
+	if (md->sc.data[SC_NEUTRALBARRIER]) return 0;
 
 	return targetnearest(bl,ap);
 }
@@ -4571,8 +4572,8 @@ int DeepSleepPriority(block_list * bl, va_list ap)
 	struct map_session_data *sd = (struct map_session_data*)bl;
 
 	int result = 0;
-	result += 100 * (1 - (sd->battle_status.hp / sd->battle_status.max_hp));
-	result += 200 * (1 - (sd->battle_status.sp / sd->battle_status.max_sp));
+	result += (100 - ((100 * sd->battle_status.hp) / sd->battle_status.max_hp));
+	result += (200 - ((200 * sd->battle_status.sp) / sd->battle_status.max_sp));
 
 	return result;
 }
@@ -4607,6 +4608,9 @@ bool isdisabled(mob_data* md)
 {
 	if ((md->sc.data[SC_FREEZE])) return true;
 	if ((md->sc.data[SC_STONE])) return true;
+	if ((md->sc.data[SC_ANKLE])) return true;
+	if ((md->sc.data[SC_BITE])) return true;
+	if ((md->sc.data[SC_ELECTRICSHOCKER])) return true;
 	if ((md->sc.data[SC_SPIDERWEB])) return true;
 	return false;
 }
@@ -4802,6 +4806,19 @@ int epiclesispriority(block_list * bl, va_list ap)
 	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
 	struct map_session_data *sd = (struct map_session_data*)bl;
 	if (pc_isdead(sd)) return 4;
+	int abc = 0;
+	if ((sd->battle_status.hp < sd->battle_status.max_hp*0.55)) abc++;
+	if ((sd->battle_status.sp < sd->battle_status.max_sp*0.55)) abc++;
+	return abc;
+
+}
+
+int helpangelpriority(block_list * bl, va_list ap)
+{
+	struct map_session_data *sd2;
+	sd2 = va_arg(ap, struct map_session_data *); // the player autopiloting
+	struct map_session_data *sd = (struct map_session_data*)bl;
+	if (pc_isdead(sd)) return 0;
 	int abc = 0;
 	if ((sd->battle_status.hp < sd->battle_status.max_hp*0.55)) abc++;
 	if ((sd->battle_status.sp < sd->battle_status.max_sp*0.55)) abc++;
@@ -5168,7 +5185,7 @@ int targetgloomy(block_list * bl, va_list ap)
 					if (pc_checkskill(sd, LG_SHIELDPRESS) < 5) return 0;
 	if ((sd->battle_status.sp < (40 * sd->battle_status.max_sp) / 100)) return 0; // if target is low on sp don't bother they won't be able to skill much
 	
-	if (!sd->sc.data[SC_GLOOMYDAY]) { targetbl = bl; foundtargetID = sd->bl.id; };
+	if (!sd->sc.data[SC_GLOOMYDAY_SK]) { targetbl = bl; foundtargetID = sd->bl.id; };
 
 	return 0;
 }
@@ -6224,6 +6241,7 @@ int cannonballchange(map_session_data * sd, mob_data *targetmd)
 	}
 	if (best > -1) {
 		if (!eqp) pc_equipitem(sd, best, EQP_AMMO);
+		if (bestprio > 500) return 2;
 		return 1;
 	}
 	else {
@@ -6359,14 +6377,14 @@ void skillwhenidle(struct map_session_data *sd) {
 	// Deep Sleep Lullaby
 	// **** Note I changed this to cause the effect on the party so it is basically a recovery spell that is useful outside battle.
 	// Remove this block if you use the original DSL.
-	if (canskill(sd)) if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 0) {
-		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(DeepSleepPriority, targetbl, 9, BL_PC) >= 150 * partycount)) {
+	if (canskill(sd)) if (pc_checkskill(sd, WM_LULLABY_DEEPSLEEP) > 1) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(DeepSleepPriority, &sd->bl, 9, BL_PC) >= 150 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, SELF, WM_LULLABY_DEEPSLEEP, pc_checkskill(sd, WM_LULLABY_DEEPSLEEP));
 		}
 	}
 	// Warmer - also heals mobs so only use when idle
 	if (canskill(sd)) if (pc_checkskill(sd, SO_WARMER) > 0) {
-		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, targetbl, 9, BL_PC) >= 50 * partycount)) {
+		if ((map_foreachinrange(AOEPriority, &sd->bl, 20, BL_MOB) <= 0) && (map_foreachinrange(WarmerPriority, &sd->bl, 9, BL_PC) >= 50 * partycount)) {
 			unit_skilluse_ifable(&sd->bl, sd->bl.id, SO_WARMER, pc_checkskill(sd, SO_WARMER));
 		}
 	}
@@ -6558,6 +6576,15 @@ void skillwhenidle(struct map_session_data *sd) {
 		}
 	}
 
+	// Fear Breeze
+	if (canskill(sd))
+		if (pc_checkskill(sd, RA_FEARBREEZE) > 0) {
+			if (!(sd->sc.data[SC_FEARBREEZE])) {
+				unit_skilluse_ifable(&sd->bl, SELF, RA_FEARBREEZE, pc_checkskill(sd, RA_FEARBREEZE));
+			}
+		}
+	
+
 	// Pick Stone
 	if (canskill(sd))
 		if (pc_checkskill(sd, TF_PICKSTONE) > 0) {
@@ -6663,7 +6690,7 @@ void skillwhenidle(struct map_session_data *sd) {
 		if (pc_checkskill(sd, NC_HOVERING) > 0) {
 			if (!(sd->sc.data[SC_HOVERING]))
 				if (pc_ismadogear(sd))
-					pc_checkequip2(sd,2801, EQI_ACC_L, EQI_MAX);
+					if (pc_checkequip2(sd,2801, EQI_ACC_L, EQI_MAX))
 						if (pc_search_inventory(sd, 6146) >= 0) {
 							unit_skilluse_ifable(&sd->bl, SELF, NC_HOVERING, pc_checkskill(sd, NC_HOVERING));
 						}
@@ -7305,7 +7332,7 @@ TIMER_FUNC(unit_autopilot_timer)
 	party_id = sd->status.party_id;
 	p = party_search(party_id);
 
-	if (p) partycount = p->party.count;
+	if (p) partycount = p->party.count +1;
 
 	if (p) //Search leader
 		for (i = 0; i < MAX_PARTY && !p->party.member[i].leader; i++);
@@ -7336,7 +7363,7 @@ TIMER_FUNC(unit_autopilot_timer)
 		((!sd->sc.data[SC_ALL_RIDING]) && !pc_isridingwug(sd) && !pc_isriding(sd) &&
 			!pc_isridingdragon(sd)))
 	{
-		// Warg Rider skill is better than reins because you can also attack if necesary
+		// Warg Rider skill is better than reins because you can also attack if necessary
 		if (canskill(sd)) if (pc_checkskill(sd, RA_WUGRIDER) >= 3)
 			unit_skilluse_ifable(&sd->bl, SELF, RA_WUGRIDER, pc_checkskill(sd, RA_WUGRIDER));
 		else {
@@ -7675,7 +7702,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			map_foreachinrange(targetpneuma, &sd->bl, 12, BL_MOB, sd);
 			if (foundtargetID > -1) if (!sd->sc.data[SC_NEUTRALBARRIER_MASTER])
 			if (distance_bl(targetbl,&sd->bl)<3){
-					unit_skilluse_ifablexy(&sd->bl, foundtargetID, NC_NEUTRALBARRIER, pc_checkskill(sd, NC_NEUTRALBARRIER));
+					unit_skilluse_ifable(&sd->bl, SELF, NC_NEUTRALBARRIER, pc_checkskill(sd, NC_NEUTRALBARRIER));
 			}
 		}
 		
@@ -7714,6 +7741,11 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (!duplicateskill(p, PR_REDEMPTIO)) unit_skilluse_ifable(&sd->bl, foundtargetID, PR_REDEMPTIO, pc_checkskill(sd, PR_REDEMPTIO));
 			}
 		}
+
+		// Helping Angel
+		if (canskill(sd)) if (pc_checkskill(sd, NV_HELPANGEL) > 0)
+			if (map_foreachinrange(helpangelpriority, &sd->bl, 7, BL_PC, sd) >= 5)
+				unit_skilluse_ifable(&sd->bl, SELF, NV_HELPANGEL, pc_checkskill(sd, NV_HELPANGEL));
 
 		/// Epiclesis
 		if (canskill(sd)) if (pc_checkskill(sd, AB_EPICLESIS) > 0) if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
@@ -7976,7 +8008,7 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 				}
 
-
+		// Emergency Cooling
 		if (pc_ismadogear(sd)) if (canskill(sd)) if (pc_checkskill(sd, NC_EMERGENCYCOOL) >= 5)
 			if (sd->sc.data[SC_OVERHEAT_LIMITPOINT])
 				if (sd->sc.data[SC_OVERHEAT_LIMITPOINT]->val1 > 100)
@@ -7991,8 +8023,9 @@ TIMER_FUNC(unit_autopilot_timer)
 			if (canskill(sd)) if (pc_checkskill(sd, NC_REPAIR) >= 5)
 				if (sd->battle_status.hp < sd->battle_status.max_hp*0.70)
 				if (pc_search_inventory(sd, 12394) >= 0)
-					if (pc_search_inventory(sd, 6146) >= 0)
-						unit_skilluse_ifable(&sd->bl, SELF, NC_REPAIR, pc_checkskill(sd, NC_REPAIR));
+//					if (pc_search_inventory(sd, 6146) >= 0)
+						if (pc_search_inventory(sd, 2807) >= 0)
+							unit_skilluse_ifable(&sd->bl, sd->bl.id, NC_REPAIR, pc_checkskill(sd, NC_REPAIR));
 
 		/// Coluceo Heal
 		if (canskill(sd)) if ((pc_checkskill(sd, AB_CHEAL) > 0) && ((Dangerdistance > 900) || (sd->special_state.no_castcancel))) {
@@ -8221,7 +8254,8 @@ TIMER_FUNC(unit_autopilot_timer)
 		// ****Note : I've modded Harmonize to be a self party buff like the other 5.
 		// If you did not, you should remove it from the atcommand autosong2.
 		if (sd->state.autosong2>0)
-		if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong2) > 0) {
+			if ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))
+				if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong2) > 0) {
 			resettargets();
 			map_foreachinrange(targetsong2, &sd->bl, 11, BL_PC, sd);
 			if (foundtargetID > -1) {
@@ -8230,7 +8264,8 @@ TIMER_FUNC(unit_autopilot_timer)
 		}
 		/// Wanderer/Minstrel Songs Group B
 		if (sd->state.autosong3 > 0)
-			if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong3) > 0) {
+			if ((sd->status.weapon == W_WHIP) || (sd->status.weapon == W_MUSICAL))
+				if (canskill(sd)) if (pc_checkskill(sd, sd->state.autosong3) > 0) {
 				resettargets();
 				map_foreachinrange(targetsong3, &sd->bl, 11, BL_PC, sd);
 				if (foundtargetID > -1) {
@@ -9037,13 +9072,13 @@ TIMER_FUNC(unit_autopilot_timer)
 			}
 		}
 		// Wall of Thron
-		if ((Dangerdistance <= 3)) {
+		if ((Dangerdistance <= 7)) {
 			if (canskill(sd)) if ((pc_checkskill(sd, GN_WALLOFTHORN) > 0) && (dangermd->status.rhw.range <= 3)
 				&& ((dangermd->status.rhw.atk2 > sd->battle_status.hp / 5) || (dangercount >= 3) && (dangermd->status.rhw.atk2 > sd->battle_status.hp / 12))
 				&& (pc_search_inventory(sd, 6210) >= 0))
-				// If we are in tanking mode, distance must be 1, we will otherwise move towards monster!
+				// Enemy must be still far enough to block with the wall.
 			{
-				if ((sd->state.autopilotmode != 1) || (Dangerdistance <= 1))
+				if ((sd->state.autopilotmode != 1) && (Dangerdistance > 3))
 					unit_skilluse_ifablexy(&sd->bl, sd->bl.id, GN_WALLOFTHORN, pc_checkskill(sd, GN_WALLOFTHORN));
 			}
 		}
@@ -9624,8 +9659,10 @@ TIMER_FUNC(unit_autopilot_timer)
 
 							// Spore Explosion
 							// This is special - it targets a monster despite having AOE, not a ground skill
-							// **** Note, I changed this skill to be a sinple AOE with no time delay. If you did not, you might want different AI.
-							if (canskill(sd)) if ((pc_checkskill(sd, GN_SPORE_EXPLOSION) > 0)) {
+							// **** Note, I changed this skill to be a simple AOE with no time delay. If you did not, you might want different AI.
+							if (canskill(sd)) if ((pc_checkskill(sd, GN_SPORE_EXPLOSION) > 0))
+								if (pc_search_inventory(sd, 6212) >= 0)
+								{
 								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9, BL_MOB, sd);
 								if (foundtargetID > -1) {
@@ -9752,7 +9789,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							}
 
 							// Arrow Shower
-							if (canskill(sd)) if ((pc_checkskill(sd, AC_SHOWER) > 0)) if (sd->status.weapon == W_BOW)
+							if (canskill(sd)) if ((pc_checkskill(sd, AC_SHOWER) > 0)) if ((sd->status.weapon == W_BOW))
 							{
 								resettargets();
 								map_foreachinrange(targetnearest, targetbl2,9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
@@ -9768,7 +9805,7 @@ TIMER_FUNC(unit_autopilot_timer)
 							}
 
 							// Arrow Storm
-							if (canskill(sd)) if ((pc_checkskill(sd, RA_ARROWSTORM) > 0)) if (sd->status.weapon == W_BOW)
+							if (canskill(sd)) if ((pc_checkskill(sd, RA_ARROWSTORM) > 0)) if ((sd->status.weapon == W_BOW) && (Dangerdistance > 900))
 							{
 								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
@@ -9790,7 +9827,7 @@ TIMER_FUNC(unit_autopilot_timer)
 								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9 , BL_MOB, sd);
 								if (foundtargetID > -1) {
-									int area = 1; if (pc_checkskill(sd, WM_GREAT_ECHO) >= 6) area++;
+									int area = 4; if (pc_checkskill(sd, WM_GREAT_ECHO) >= 6) area++;
 									arrowchange(sd, targetmd);
 									// *** NOTE *** I modified the "chorusbonus" function to return the number of performers (1 for solo 2 for two etc), so you might want to change priority here
 									priority = battle_calc_chorusbonus(sd) * map_foreachinrange(AOEPriority, targetbl, area, BL_MOB, skillelem(sd,WM_GREAT_ECHO));
@@ -9802,6 +9839,7 @@ TIMER_FUNC(unit_autopilot_timer)
 
 							// Severe Rainstorm
 							if (canskill(sd)) if ((pc_checkskill(sd, WM_SEVERE_RAINSTORM) > 0)) if (sd->status.weapon == W_BOW)
+								if ((Dangerdistance > 900) || (sd->special_state.no_castcancel))
 							{
 								resettargets();
 								map_foreachinrange(targetnearest, targetbl2, 9 + pc_checkskill(sd, AC_VULTURE), BL_MOB, sd);
@@ -10635,9 +10673,9 @@ TIMER_FUNC(unit_autopilot_timer)
 			// Not worth it except for the immobilization effect  -the skill delay makes it useless for DPS.
 			if pc_iswug(sd)
 				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_WUGBITE) > 0)) if (sd->state.autopilotmode != 3)
-					if (rangeddist <= 9) 
+					if (rangeddist <= 9) if ((Dangerdistance<=9) && (Dangerdistance >= 4))
 					if ((founddangerID=foundtargetRA) && (dangermd->status.rhw.range <= 3)
-					&& (rangeddist >=4) && (!(status_get_class_(bl) == CLASS_BOSS))) if (!isdisabled(dangermd))
+					 && (!(status_get_class_(bl) == CLASS_BOSS))) if (!isdisabled(dangermd))
 					{
 						if ((checksprate(sd, targetRAmd, 10))
 							|| (status_get_hp(bl) < status_get_max_hp(bl) / 3)) {
@@ -10646,9 +10684,8 @@ TIMER_FUNC(unit_autopilot_timer)
 					}
 			// Aimed Bolt
 			// Use on immobile target
-			if pc_iswug(sd)
 				if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, RA_AIMEDBOLT) > 0)) if (sd->state.autopilotmode != 3)
-					if ((sd->sc.data[SC_BITE] || sd->sc.data[SC_ANKLE] || sd->sc.data[SC_ELECTRICSHOCKER]))
+					if ((targetRAmd->sc.data[SC_BITE] || targetRAmd->sc.data[SC_ANKLE] || targetRAmd->sc.data[SC_ELECTRICSHOCKER]))
 						if (rangeddist <= 9 + pc_checkskill(sd, AC_VULTURE)) {
 							arrowchange(sd, targetRAmd);
 							if (elemallowed(targetRAmd,arrowelement))
@@ -10728,6 +10765,30 @@ TIMER_FUNC(unit_autopilot_timer)
 						unit_skilluse_ifable(&sd->bl, foundtargetRA, AC_DOUBLE, pc_checkskill(sd, AC_DOUBLE));
 					}
 			}
+			// Arm Cannon
+// ignoring the AOE because it's not reliable anyway only range of 1 and mobs will move during cast time.
+// Yes, lower levels have better AOE but that really isn't the mechanic's job and those levels deal much worse damage.
+// Delay might be an issue on the highest level but then the player can deal with it (bragi/kiel etc)
+			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_ARMSCANNON) >= 3)) if (sd->state.autopilotmode != 3)
+				if (rangeddist <= 13) {
+					if (elemallowed(targetRAmd, ELE_NEUTRAL)) // Counts as neutral even if it is not
+						if (pc_ismadogear(sd))
+							if (pc_search_inventory(sd, 6146) >= 0)
+								if ((checksprate(sd, targetRAmd, 10))
+									|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
+									int cball = cannonballchange(sd, targetRAmd);
+									if (cball > 0)
+										// prefer this over knuckle boost if
+										// kb is not learned or dex is low, or enemy is weak to cannonball
+										// or enemy is small size or we have delay reduction
+										if ((cball == 2)
+											|| (skill_delayfix(&sd->bl, NC_ARMSCANNON, 3)<=500)
+											|| (pc_checkskill(sd, NC_BOOSTKNUCKLE) <5)
+											|| (status_get_dex(bl)<60)
+											|| (targetmd->status.size == SZ_SMALL))
+										unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_ARMSCANNON, pc_checkskill(sd, NC_ARMSCANNON));
+								}
+				}
 			// Knuckle Boost
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_BOOSTKNUCKLE) > 0)) if (sd->state.autopilotmode != 3)
 				if (pc_ismadogear(sd))
@@ -10942,27 +11003,13 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (kunaichange(sd, targetRAmd)==1) unit_skilluse_ifable(&sd->bl, foundtargetRA, NJ_KUNAI, pc_checkskill(sd, NJ_KUNAI));
 			}
 
-			// Arm Cannon
-// ignoring the AOE because it's not reliable anyway only range of 1 and mobs will move during cast time.
-// Yes, lower levels have better AOE but that really isn't the mechanic's job and those levels deal much worse damage.
-// Delay might be an issue on the highest level but then the player can deal with it (bragi/kiel etc)
-			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, NC_ARMSCANNON) >= 3))
-				if (rangeddist <= 13) {
-					if (elemallowed(targetRAmd, ELE_NEUTRAL)) // Counts as neutral even if it is not
-						if (pc_ismadogear(sd))
-							if (pc_search_inventory(sd, 6146) >= 0)
-								if ((checksprate(sd, targetRAmd, 10))
-									|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
-									if (cannonballchange(sd, targetRAmd) == 1) unit_skilluse_ifable(&sd->bl, foundtargetRA, NC_ARMSCANNON, pc_checkskill(sd, NC_ARMSCANNON));
-								}
-				}
 			// Cart Cannon
 			if (foundtargetRA > -1) if (canskill(sd)) if ((pc_checkskill(sd, GN_CARTCANNON) >= 3))
 				if (rangeddist <= 11) {
 						if (pc_iscarton(sd))
 								if ((checksprate(sd, targetRAmd, 10))
 									|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
-									if (cannonballchange(sd, targetRAmd) == 1) unit_skilluse_ifable(&sd->bl, foundtargetRA, GN_CARTCANNON, pc_checkskill(sd, GN_CARTCANNON));
+									if (cannonballchange(sd, targetRAmd) > 0) unit_skilluse_ifable(&sd->bl, foundtargetRA, GN_CARTCANNON, pc_checkskill(sd, GN_CARTCANNON));
 								}
 				}
 
@@ -11350,7 +11397,7 @@ TIMER_FUNC(unit_autopilot_timer)
 				if (rangeddist <= 9) if ((sd->state.autopilotmode == 2) && (Dangerdistance > 900))
 					if (sd->battle_status.matk_min>= pc_rightside_atk(sd)*0.42) { // Don't bother unless we have at least some MATK, even then lower priority than the other skills
 					if (elemallowed(targetRAmd, ELE_NEUTRAL)) {
-						unit_skilluse_ifable(&sd->bl, foundtargetRA, CG_ARROWVULCAN, pc_checkskill(sd, CG_ARROWVULCAN));
+						unit_skilluse_ifable(&sd->bl, foundtargetRA, WM_METALICSOUND, pc_checkskill(sd, WM_METALICSOUND));
 					}
 				}
 			}
@@ -12047,9 +12094,10 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			}
 
 			// Axe Tornado
-			if (canskill(sd)) if (pc_checkskill(sd, NC_AXETORNADO) > 0) if (pc_iscarton(sd)) {
+			if (canskill(sd)) if (pc_checkskill(sd, NC_AXETORNADO) > 0) {
 					// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
 					if ((sd->status.weapon == W_1HAXE) || (sd->status.weapon == W_2HAXE))
+						if (targetdistance<=2)
 						if (elemallowed(targetmd, skillelem(sd, NC_AXETORNADO)))
 						if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
@@ -12059,7 +12107,8 @@ if (!((targetmd2->status.def_ele == ELE_HOLY) || (targetmd2->status.def_ele < 4)
 			// Cart Tornado
 			if (canskill(sd)) if (pc_checkskill(sd, GN_CART_TORNADO) > 0) if (pc_iscarton(sd)) {
 				// Always use if critically wounded or mobbed otherwise use on mobs that will take longer to kill only if sp is lower
-				if (elemallowed(targetmd, skillelem(sd, GN_CART_TORNADO)))
+				if (targetdistance <= 3)
+					if (elemallowed(targetmd, skillelem(sd, GN_CART_TORNADO)))
 					if ((checksprate(sd, targetmd, 10))
 						|| (status_get_hp(bl) < status_get_max_hp(bl) / 3) || (dangercount > 3)) {
 						unit_skilluse_ifable(&sd->bl, foundtargetID, GN_CART_TORNADO, pc_checkskill(sd, GN_CART_TORNADO));
