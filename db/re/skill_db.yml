@@ -25677,33 +25677,43 @@ Body:
       - Level: 5
         Area: 7
     CastCancel: true
-    CastTime: 1000
+    CastTime:
+      - Level: 1
+        Time: 1500
+      - Level: 2
+        Time: 2000
+      - Level: 3
+        Time: 2500
+      - Level: 4
+        Time: 3000
+      - Level: 5
+        Time: 3500
     AfterCastActDelay: 1000
     Duration1:
       - Level: 1
-        Time: 20000
-      - Level: 2
         Time: 30000
-      - Level: 3
-        Time: 40000
-      - Level: 4
-        Time: 50000
-      - Level: 5
+      - Level: 2
         Time: 60000
-    Cooldown: 180000
+      - Level: 3
+        Time: 90000
+      - Level: 4
+        Time: 120000
+      - Level: 5
+        Time: 150000
+    Cooldown: 90000
     FixedCastTime: 500
     Requires:
       SpCost:
         - Level: 1
           Amount: 120
         - Level: 2
-          Amount: 130
-        - Level: 3
           Amount: 140
-        - Level: 4
-          Amount: 150
-        - Level: 5
+        - Level: 3
           Amount: 160
+        - Level: 4
+          Amount: 180
+        - Level: 5
+          Amount: 200
       Weapon:
         Musical: true
         Whip: true
@@ -32917,11 +32927,11 @@ Body:
     FixedCastTime: 2000
     Requires:
       SpCost: 70
-  - Id: 5075
+  - Id: 3350
     Name: NV_BREAKTHROUGH
     Description: Break Through
     MaxLevel: 5
-  - Id: 5076
+  - Id: 3351
     Name: NV_HELPANGEL
     Description: Help Angel
     MaxLevel: 1
@@ -32935,10 +32945,10 @@ Body:
     CastCancel: true
     AfterCastActDelay: 500
     Duration1: 20000
-    Cooldown: 300000
+    Cooldown: 180000
     Requires:
       SpCost: 1
-  - Id: 5077
+  - Id: 3352
     Name: NV_TRANSCENDENCE
     Description: Transcendence
     MaxLevel: 5

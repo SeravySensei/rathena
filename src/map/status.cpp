@@ -3259,10 +3259,8 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 				if (pc_checkskill_summoner(sd, SUMMONER_POWER_SEA) >= 20)
 					bonus += 3000;
 			}
-			if ((skill_lv = pc_checkskill(sd, NV_BREAKTHROUGH)) > 0)
-				bonus += 350 * skill_lv + (skill_lv > 4 ? 250 : 0);
-			if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
-				bonus += 350 * skill_lv + (skill_lv > 4 ? 250 : 0);
+			if (pc_checkskill(sd, NV_BREAKTHROUGH) > 0)
+				bonus += pc_checkskill(sd, NV_BREAKTHROUGH) * 2 * sd->status.base_level;
 #ifndef HP_SP_TABLES
 			if ((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE && sd->status.base_level >= 99)
 				bonus += 2000; // Supernovice lvl99 hp bonus.
@@ -3427,10 +3425,8 @@ static int status_get_spbonus(struct block_list *bl, enum e_status_bonus type) {
 				if (pc_checkskill_summoner(sd, SUMMONER_POWER_SEA) >= 20)
 					bonus += 300;
 			}
-			if ((skill_lv = pc_checkskill(sd, NV_BREAKTHROUGH)) > 0)
-				bonus += 30 * skill_lv + (skill_lv > 4 ? 50 : 0);
-			if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
-				bonus += 30 * skill_lv + (skill_lv > 4 ? 50 : 0);
+			if (pc_checkskill(sd, NV_TRANSCENDENCE) > 0)
+				bonus += pc_checkskill(sd, NV_TRANSCENDENCE) * 0.4 * sd->status.base_level;
 		}
 
 		//Bonus by SC
@@ -5509,8 +5505,6 @@ void status_calc_bl_main(struct block_list *bl, /*enum scb_flag*/int flag)
 						status->matk_min += sd->bonus.ematk;
 					if (pc_checkskill(sd, SU_POWEROFLAND) > 0 && pc_checkskill_summoner(sd, SUMMONER_POWER_LAND) >= 20)
 						status->matk_min += status->matk_min * 20 / 100;
-					if ((skill_lv = pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
-						status->matk_min += 15 * skill_lv + (skill_lv > 4 ? 25 : 0);
 				}
 
 				status->matk_buff = status_calc_ematk(bl, sc, status->matk_min) - status->matk_min;
@@ -6403,6 +6397,14 @@ static unsigned short status_calc_luk(struct block_list *bl, struct status_chang
  */
 static unsigned short status_calc_batk(struct block_list *bl, struct status_change *sc, int batk)
 {
+	if (bl->type == BL_PC) {
+		TBL_PC *sd = NULL;
+		sd = BL_CAST(BL_PC, bl);
+		if (pc_checkskill(sd, NV_BREAKTHROUGH) > 0)
+			if (pc_checkskill(sd, NV_TRANSCENDENCE) <= 0)
+				batk += 10 * pc_checkskill(sd, NV_BREAKTHROUGH);
+	}
+
 	if(!sc || !sc->count)
 		return cap_value(batk,0,USHRT_MAX);
 
@@ -6618,6 +6620,10 @@ static unsigned short status_calc_ematk(struct block_list *bl, struct status_cha
 		TBL_PC *sd = NULL;
 		sd = BL_CAST(BL_PC, bl);
 
+		if ((pc_checkskill(sd, NV_TRANSCENDENCE)) > 0)
+			if (pc_checkskill(sd, NV_BREAKTHROUGH) <= 0)
+				matk += 20 * pc_checkskill(sd, NV_TRANSCENDENCE);
+
 		if (pc_checkskill(sd, LG_SHIELDSPELL) > 0) {
 			int opt = 0;
 			short index = sd->equip_index[EQI_HAND_L], shield_def = 0, shield_mdef = 0, shield_refine = 0;
@@ -6762,7 +6768,7 @@ static signed short status_calc_critical(struct block_list *bl, struct status_ch
 		return cap_value(critical,10,SHRT_MAX);
 
 	if (sc->data[SC_HARMONIZE]) 
-		critical += sc->data[SC_HARMONIZE]->val2;
+		critical += 10 * sc->data[SC_HARMONIZE]->val2;
 	if (sc->data[SC_INCCRI])
 		critical += sc->data[SC_INCCRI]->val2;
 	if (sc->data[SC_CRIFOOD])
@@ -14495,7 +14501,7 @@ TIMER_FUNC(status_change_timer){
 		break;
 	case SC_HELPANGEL:
 		if (--(sce->val4) >= 0) {
-			status_heal(bl, 1000, 350, 2);
+			status_heal(bl, 300, 30, 2);
 			sc_timer_next(1000 + tick);
 			return 0;
 		}
