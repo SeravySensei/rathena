@@ -19052,7 +19052,7 @@ Body:
     MaxLevel: 5
     Type: Weapon
     TargetType: Attack
-    Range: 3
+    Range: 2
     Hit: Multi_Hit
     HitCount: -7
     Element: Weapon

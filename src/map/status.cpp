@@ -9889,8 +9889,14 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		break;
 	case SC_GT_CHANGE:
 		status_change_end(bl, SC_GT_REVITALIZE, INVALID_TIMER);
+		status_change_end(bl, SC_GT_ENERGYGAIN, INVALID_TIMER);
 		break;
 	case SC_GT_REVITALIZE:
+		status_change_end(bl, SC_GT_CHANGE, INVALID_TIMER);
+		status_change_end(bl, SC_GT_ENERGYGAIN, INVALID_TIMER);
+		break;
+	case SC_GT_ENERGYGAIN:
+		status_change_end(bl, SC_GT_REVITALIZE, INVALID_TIMER);
 		status_change_end(bl, SC_GT_CHANGE, INVALID_TIMER);
 		break;
 	case SC_WARMER:
