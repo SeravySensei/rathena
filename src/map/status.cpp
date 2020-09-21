@@ -2669,7 +2669,7 @@ unsigned short status_base_atk(const struct block_list *bl, const struct status_
 			break;
 		case BL_PC: {
 #ifdef RENEWAL
-			str = (dstr * 10 + dex * 10 / 5 + status->luk * 10 / 3 + level * 10 / 4) / 10;
+			str = (dstr * 10 + dex * 10 / 5 + status->luk * 5 / 3 + level * 5 / 4) / 10;
 			TBL_PC *sd = NULL;
 			sd = BL_CAST(BL_PC, bl);
 			if ((pc_checkskill(sd, KO_JYUSATSU)) > 0)
@@ -2773,7 +2773,7 @@ unsigned short status_base_matk_min(struct block_list *bl, const struct status_d
 			return status_get_homint(bl) + level + (status_get_homint(bl) + status_get_homdex(bl)) / 5;
 		case BL_PC:
 		default:
-			int matk = status->int_ + (status->int_ / 2) + (status->dex / 5) + (status->luk / 3) + (level / 4);
+			int matk = status->int_ * 2 + (status->dex / 5) + (status->luk / 2) + (level / 4);
 			TBL_PC *sd = NULL;
 			sd = BL_CAST(BL_PC, bl);
 			if ((pc_checkskill(sd, KO_KYOUGAKU)) > 0)
