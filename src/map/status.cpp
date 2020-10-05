@@ -12823,6 +12823,8 @@ int status_change_end_(struct block_list* bl, enum sc_type type, int tid, const 
 				status_damage(NULL,bl,damage,0,0,1,0);
 			}
 			break;
+		case SC_LONGING:
+			break;
 		case SC_RUN:
 		{
 			struct unit_data *ud = unit_bl2ud(bl);
