@@ -527,7 +527,7 @@ void initChangeTables(void)
 #ifndef RENEWAL
 			EFST_ASSUMPTIO		, SCB_NONE );
 #else
-			EFST_ASSUMPTIO2		, SCB_DEF || SCB_MDEF );
+			EFST_ASSUMPTIO2		, SCB_DEF|SCB_MDEF );
 #endif
 /*	add_sc( HP_BASILICA		, SC_BASILICA		);*/
 	set_sc(HP_BASILICA, SC_BASILICA, EFST_BASILICA, SCB_STR | SCB_AGI | SCB_VIT | SCB_INT | SCB_DEX | SCB_LUK);
