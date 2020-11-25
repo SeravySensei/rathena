@@ -3250,9 +3250,9 @@
 5062,Straw_Hat,Straw Hat,4,20,,200,,6,,1,0xFFFFFFFF,63,2,256,,50,1,146,{ bonus bAgi,1; },{},{}
 5063,Plaster,Giant Band Aid,4,7500,,100,,1,,0,0xFFFFFFFE,63,2,256,,0,1,147,{},{},{}
 5064,Leaf_Headgear,Smokie Leaf,4,15000,,100,,1,,1,0xFFFFFFFF,63,2,256,,0,1,148,{},{},{}
-5065,Fish_On_Head,Blue Fish,4,10000,,500,,4,,0,0xFFFFFFFF,63,2,256,,50,1,149,{ bonus2 bAddRace,RC_Fish,10; },{},{}
+5065,Fish_On_Head,Blue Fish,4,10000,,500,,4,,0,0xFFFFFFFF,63,2,256,,20,1,149,{ bonus2 bAddRace,RC_Fish,10; },{},{}
 5066,Horn_Of_Succubus,Succubus Horn,4,30000,,800,,7,,0,0xFFFFFFFE,63,2,256,,70,1,150,{ bonus bInt,1; bonus bMdef,20; },{},{}
-5067,Sombrero,Sombrero,4,20,,350,,8,,1,0xFFFFFFFE,63,2,256,,0,1,151,{ bonus bAgi,1; },{},{}
+5067,Sombrero,Sombrero,4,20,,350,,9,,1,0xFFFFFFFE,63,2,256,,0,1,151,{ bonus bAgi,1; },{},{}
 5068,Ear_Of_Devil's_Wing,Evil Wing Ears,4,75000,,100,,3,,1,0xFFFFFFFF,63,2,512,,70,0,152,{ bonus bStr,1; },{},{}
 5069,Mask_Of_Fox,Kitsune Mask,4,30000,,300,,2,,1,0xFFFFFFFE,63,2,256,,0,1,153,{ bonus bAgi,1; bonus bLuk,1; },{},{}
 5070,Headband_Of_Power,Hot-blooded Headband,4,30000,,100,,3,,0,0xFFFFFFFE,63,2,256,,0,1,154,{ bonus bStr,2; },{},{}
@@ -3300,7 +3300,7 @@
 5112,Super_Novice_Hat,Super Novice Hat,4,8500,,400,,8,,0,0x00000001,63,2,256,,40,1,193,{ bonus bAllStats,1; },{},{}
 5113,Angry_Mouth,Angry Snarl,4,40000,,50,,0,,0,0xFFFFFFFF,63,2,1,,0,0,194,{},{},{}
 5114,Fedora,Bucket Hat,4,6000,,300,,6,,0,0xFFFFFFFF,63,2,256,,0,1,195,{},{},{}
-5115,Winter_Hat,Winter Hat,4,20,,500,,5,,1,0xFFFFFFFF,63,2,256,,0,1,196,{ bonus2 bResEff,Eff_Freeze,1000; },{},{}
+5115,Winter_Hat,Winter Hat,4,20,,500,,5,,1,0xFFFFFFFF,63,2,256,,0,1,196,{ bonus2 bResEff,Eff_Freeze,5000; },{},{}
 5116,Banana_Hat,Banana Hat,4,20,,200,,3,,1,0xFFFFFFFF,63,2,256,,0,1,197,{ bonus3 bAutoSpell,"SM_PROVOKE",3,30; },{},{}
 5117,Mistic_Rose,Mystic Rose,4,20,,100,,0,,1,0xFFFFFFFF,63,2,256,,0,1,198,{ bonus2 bSubRace,RC_Plant,2; },{},{}
 5118,Ear_Of_Puppy,Puppy Headband,4,20,,100,,3,,1,0xFFFFFFFF,63,2,256,,0,1,199,{},{},{}
@@ -3359,7 +3359,7 @@
 5172,Beret,Beret,4,30000,,700,,0,,0,0xFFFFFFFF,63,2,256,,0,0,226,{ bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; },{},{}
 5173,Satto_Hat,Magistrate Hat,4,30000,,400,,6,,1,0xFFFFFFFF,63,2,256,,60,1,227,{ if(BaseClass==Job_Taekwon){ bonus bAgi,1; bonus bHPrecovRate,3; } },{},{}
 5174,Ayam,Ayam,4,30000,,400,,6,,1,0xFFFFFFFF,63,2,256,,60,1,228,{ if(BaseClass==Job_Taekwon){ bonus bInt,1; bonus bSPrecovRate,3; } },{},{}
-5175,Censor_Bar,Censor Bar,4,30000,,100,,0,,0,0xFFFFFFFF,63,2,512,,0,0,229,{ bonus2 bResEff,Eff_Curse,500; bonus bMdef,3; bonus bHit,-5; },{},{}
+5175,Censor_Bar,Censor Bar,4,30000,,100,,0,,0,0xFFFFFFFF,63,2,512,,0,0,229,{ bonus2 bResEff,Eff_Curse,500; bonus bMdef,5; bonus bHit,-5;  bonus bFlee,5; },{},{}
 5176,Hahoe_Mask,Hahoe Mask,4,30000,,100,,2,,0,0xFFFFFFFF,63,2,513,,30,0,230,{ if(BaseClass==Job_Taekwon){ bonus bLuk,1; bonus bFlee2,2; } },{},{}
 5177,Guardian_Lion_Mask,Mythical Lion Mask,4,30000,,500,,5,,1,0xFFFFFFFF,63,2,768,,40,1,231,{ if(BaseClass==Job_Taekwon){ bonus bDex,2; bonus bBaseAtk,2*getrefine(); bonus3 bAddEff,Eff_Stun,1000,ATF_SHORT; } },{},{}
 5178,Candle_,Candle,4,20,,150,,0,,0,0xFFFFFFFF,63,2,256,,0,1,113,{ bonus bAllStats,1; },{},{}
@@ -13601,7 +13601,7 @@
 31602,C_Midgarts_Glory,C Rune Midgarts Glory,4,0,,,,0,,0,0xFFFFFFFF,63,2,1024,,1,0,1807,{ hateffect(HAT_EF_MIDGARTS_GLORY,true); },{},{ hateffect(HAT_EF_MIDGARTS_GLORY,false); }
 31840,Dep_Pikeru,Drooping Pikeru,4,1250000,,500,,10,,1,0xFFFFFFFE,63,2,256,,70,1,1966,{ bonus bDelayRate,-25; bonus bInt,5; },{},{}
 31841,Dep_Chinastu,Drooping Chinatsu,4,1250000,,500,,10,,1,0xFFFFFFFE,63,2,256,,70,1,1965,{ bonus bFixedCastrate,-45; bonus bInt,5; },{},{}
-31842,LegLoliS,Legendary Loli Shoes,4,700000,,200,,10,,1,0xFFFFFFFF,63,2,64,,0,1,0,{ bonus bDelayRate,-25; },{},{}
+31842,LegLoliS,Magical Girl Shoes,4,700000,,200,,10,,1,0xFFFFFFFF,63,2,64,,0,1,0,{ bonus bDelayRate,-25; },{},{}
 31850,Red_Box_Weapon,Wooden Excalibur Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GoodWeapon,1); },{},{}
 31851,Red_Box_Armor,Paper Armor Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GoodArmor,1); },{},{}
 31852,Red_Box_Headgear,Cute Ribbon Box,2,50000,,200,,,,,0xFFFFFFFF,63,2,,,,,,{ getrandgroupitem(IG_GoodHeadgear,1); },{},{}

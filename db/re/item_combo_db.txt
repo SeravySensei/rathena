@@ -651,6 +651,7 @@
 5074:18827,{ autobonus "{ bonus2 bHPLossRate,30,1000; bonus bHit,-10; bonus bSplashRange,1; }",10+getequiprefinerycnt(EQI_HEAD_TOP),5000,BF_WEAPON,"{ transform 1765,5000; }"; }
 5086:18527,{ bonus2 bAddItemHealRate,12192,200; }
 5086:18656,{ bonus2 bAddItemHealRate,538,100; bonus2 bAddItemHealRate,12192,100; bonus2 bAddMonsterDropItem,538,400; bonus2 bAddMonsterDropItem,12192,400; }
+5108:2268,{ bonus bInt,2; }
 5170:19024,{ .@r = getequiprefinerycnt(EQI_HEAD_TOP); if (.@r >= 7) bonus bAspdRate,5; if (.@r >= 9) bonus bMaxHPRate,5; }
 5176:18527,{ bonus bAspdRate,5; }
 5176:18656,{ bonus bAspd,1; autobonus "{ bonus bBaseAtk,50; }",20,10000,0,"{ specialeffect2 EF_POTION_BERSERK; }"; }

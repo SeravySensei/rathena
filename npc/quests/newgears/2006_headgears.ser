@@ -435,7 +435,7 @@ hugel,147,103,3	script	Ghenirhemin	897,{
 			mes "I suggest you to write down, and memorize them.";
 			next;
 			mes "Please bring me";
-			mes "^FF00001 Sage Worm Card, 1Argiope Card,";
+			mes "^FF00001 Sage Worm Card, 1 Argiope Card,";
 			mes "1 Dryad Card, 1 Wooden Golem Card,";
 			mes "1 Bongun Card, 1 Pirate Skeleton Card,";
 			mes "1 Marduk Card, 1 Hode Card,";
@@ -798,7 +798,7 @@ S_MakeMask:
 		mes "I hope that you will wear it with pride, hahaha!";
 		next;
 		mes "[Chungwolmang]";
-		mes "Aright, I need to take a rest";
+		mes "Alright, I need to take a rest";
 		mes "until I have next customer. Hahaha, bye!";
 		close;
 	}

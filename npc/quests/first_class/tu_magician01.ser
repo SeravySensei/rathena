@@ -199,15 +199,14 @@ geffen,67,180,4	script	New Mage Manager#M	8_F,{
 				mes "[Mana]";
 				mes "Fire Wall is very distinctive";
 				mes "in that it can be used up to";
-				mes "3 times on one screen. Any";
+				mes "3 times simultaneously. Any";
 				mes "monsters that run into it will";
-				mes "get damaged, then move away";
-				mes "in the opposite direction.";
+				mes "get damaged.";
 				next;
 				mes "[Mana]";
 				mes "But if an Undead monster";
 				mes "runs into a Fire Wall, it's ";
-				mes "only slightly injured and the";
+				mes "much more injured but the";
 				mes "Fire Wall won't necessarily";
 				mes "block its approach. So beware!";
 				.@eread_1 = 1;
@@ -542,7 +541,7 @@ geffen,67,180,4	script	New Mage Manager#M	8_F,{
 				mes "However, Safety Wall";
 				mes "has a time duration and";
 				mes "can only protect from a";
-				mes "certain number of attacks,";
+				mes "certain amount of damage,";
 				mes "depending on the level of the";
 				mes "Safety Wall skill that you use.";
 				.@skill_e2 = 1;
@@ -629,7 +628,7 @@ geffen,67,180,4	script	New Mage Manager#M	8_F,{
 				next;
 				mes "[Mana]";
 				mes "So if you can use";
-				mes "Fire Well strategically";
+				mes "Fire Wall strategically";
 				mes "and effectively, it can";
 				mes "be a very powerful skill~";
 				.@skill_e6 = 1;

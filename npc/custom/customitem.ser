@@ -1,0 +1,91 @@
+veins,207,163,3	script	Parara#1	72,{
+	disable_items;
+	if (countitem(7166) >= 250 && countitem(969) >= 12 && countitem(7020) > 0) {
+		mes "[Parara]";
+		mes "Oh, you have everything!";
+		mes "Here is your doll!";
+		delitem 7166,250; //Soft Silk
+		delitem 969,12; //Gold
+		delitem 7020,1; //Mother's Nightmare
+		getitem 31840,1; //Drooping Pikeru
+		next;
+		mes "[Parara]";
+		mes "...these gold bars are heavy. ";
+		mes "But I have to hide them or";
+		mes "mom will confiscate them and spend them on drinks!";
+		close;
+	}
+	if (countitem(7166) >= 250 && countitem(969) >= 12 && countitem(7018) > 0) {
+		mes "[Parara]";
+		mes "Oh, you have everything!";
+		mes "Here is your doll!";
+		delitem 7166,250; //Soft Silk
+		delitem 969,12; //Gold
+		delitem 7018,1; //Mother's Nightmare
+		getitem 31841,1; //Drooping Chinatsu
+		next;
+		mes "[Parara]";
+		mes "...these gold bars are heavy. ";
+		mes "But I have to hide them or";
+		mes "mom will confiscate them and spend them on drinks!";
+		close;
+	}
+		mes "[Parara]";
+		mes "I heard rumours that pink hair";
+		mes "makes magic more powerful.";
+		next;
+		mes "[Parara]";
+		mes "Unfortunately, I'm not a magician.";
+		mes "Hey, I have an idea!";
+		next;
+		mes "[Parara]";
+		mes "I can make a very special doll for you";
+		mes "that you can wear on your head using my own hair!";
+		next;
+		mes "[Parara]";
+		mes "I'm sure that will make you a very powerful wizard!";
+		mes "I am going to need 250 Soft Silks and a special ingredient";
+		mes "Mother's Nightmare or Young Twig.";
+		mes "Oh, and if I succeed, can I have 12 bars or gold? please~";
+		mes "Mom says adventurers are rich...";
+		close;
+}
+
+yuno,194,223,3	script	Researcher::MGShoes	616,{
+	disable_items;
+	if (countitem(31904) >= 1 && countitem(2450) >= 1 && countitem(714) >= 7) {
+		mes "[Researcher]";
+		mes "I didn't expect you to obtain the elusive favor of gods!";
+		mes "Time to get to work!";
+		delitem 714,7; //Emperium
+		delitem 2450,1; //Vital Tree Shoes
+		delitem 31904,1; //God's Favor
+		next;
+		mes "[Researcher]";
+		mes "...all done!";
+		mes "Enjoy your new shoes!";
+		mes "They might not be so comfortable for your feet, but it'll be much easier to use magic!";
+		getitem 31842,1; // Magical Girl Shoes
+		close;
+	}
+		mes "[Researcher]";
+		mes "Have you ever wondered why magical girls wear";
+		mes "all those cure dresses and shoes when they are";
+		mes "not practical for battle or adventuring?";
+		next;
+		mes "[Researcher]";
+		mes "While researching that, I made a discovery.";
+		mes "Those are worn because they conduct magic!";
+		next;
+		mes "[Researcher]";
+		mes "Wearing a pair of those shoes can let them";
+		mes "reduce the burden casting a spell causes";
+		mes "by an unbelieveable amount!";
+		next;
+		mes "[Researcher]";
+		mes "I can make those shoes for you for a small price of";
+		mes "7 Emperiums.";
+		mes "Of course you need to provide the materials as well.";
+		mes "God's Favor for the magic power and Vital Tree Shoes.";
+		close;
+}

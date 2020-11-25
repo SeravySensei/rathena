@@ -957,3 +957,4 @@ IG_VioletBox,18759,1 // Wood Goblin Nose
 IG_VioletBox,20084,1 // Costume
 IG_VioletBox,20085,1 // Costume
 IG_VioletBox,20437,1 // Costume
+IG_VioletBox,5108,1 // Renown detective Hat
