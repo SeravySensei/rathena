@@ -7045,7 +7045,7 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	// Support skills
 	// Lif - Urgent Escape
 	if (canskill(sd)) if (hom_checkskill(hd, HLIF_AVOID) > 0) if (masterdistance <= 2) // seems to have limited range? Not sure how much?
-		if (!(sd->sc.data[SC_AVOID])) {
+		if (!(mastersd->sc.data[SC_AVOID])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HLIF_AVOID, hom_checkskill(hd, HLIF_AVOID));
 		}
 	// Eira - Overed Boost
@@ -7061,18 +7061,18 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 			}
 	// Dieter - Magma Flow
 	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_MAGMA_FLOW) > 0)
-		if (!(sd->sc.data[SC_MAGMA_FLOW])) {
+		if (!(hd->sc.data[SC_MAGMA_FLOW])) {
 			homu_skilluse_ifable(&sd->bl, SELF, MH_MAGMA_FLOW, hom_checkskill(hd, MH_MAGMA_FLOW));
 		}
 	// Dieter - Granitic Armor
 	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_GRANITIC_ARMOR) > 0)
-		if (!(sd->sc.data[SC_GRANITIC_ARMOR])) {
+		if (!(hd->sc.data[SC_GRANITIC_ARMOR])) {
 			homu_skilluse_ifable(&sd->bl, SELF, MH_GRANITIC_ARMOR, hom_checkskill(hd, MH_GRANITIC_ARMOR));
 		}
 	// Bayeri self-buffs
 	if (foundtargetID > -1)	if (canskill(sd))
-		if (!(sd->sc.data[SC_GOLDENE_FERSE]))
-			if (!(sd->sc.data[SC_ANGRIFFS_MODUS])) {
+		if (!(hd->sc.data[SC_GOLDENE_FERSE]))
+			if (!(hd->sc.data[SC_ANGRIFFS_MODUS])) {
 				if (hom_checkskill(hd, MH_GOLDENE_FERSE) > 0)
 					if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_HOLY) > 0) // must need a holy endow
 						homu_skilluse_ifable(&sd->bl, SELF, MH_GOLDENE_FERSE, hom_checkskill(hd, MH_GOLDENE_FERSE));
@@ -7084,23 +7084,23 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 		if (map_foreachinmap(endowneed, sd->bl.m, BL_MOB, ELE_FIRE) > 0) // must need a fire endow
 			if ((mastersd->status.weapon == W_1HAXE) || (mastersd->status.weapon == W_2HAXE) // must use unbreakable weapon
 				|| (mastersd->status.weapon == W_MACE))
-		if (!(sd->sc.data[SC_PYROCLASTIC])) {
+		if (!(hd->sc.data[SC_PYROCLASTIC])) {
 			homu_skilluse_ifable(&sd->bl, SELF, MH_PYROCLASTIC, hom_checkskill(hd, MH_PYROCLASTIC));
 		}
 	// Sera - Pain Killer
 	if (canskill(sd)) if (hom_checkskill(hd, MH_PAIN_KILLER) > 0) if (masterdistance <= 2)
-		if (!(sd->sc.data[SC_PAIN_KILLER])) {
+		if (!(hd->sc.data[SC_PAIN_KILLER])) {
 			homu_skilluse_ifable(&sd->bl, mastersd->bl.id, MH_PAIN_KILLER, hom_checkskill(hd, MH_PAIN_KILLER));
 		}
 	// Amistr - Bulwark
 	if (canskill(sd)) if (hom_checkskill(hd, HAMI_DEFENCE) > 0) if (masterdistance <= 2)
-		if (!(sd->sc.data[SC_DEFENCE])) {
+		if (!(hd->sc.data[SC_DEFENCE])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HAMI_DEFENCE, hom_checkskill(hd, HAMI_DEFENCE));
 		}
 	// Amistr - Bloodlust
 	// It won't be activated unless an enemy is nearby - due to the cooldown that would be wasteful.
 	if (foundtargetID > -1) if (canskill(sd)) if (hom_checkskill(hd, HAMI_BLOODLUST) > 0)
-		if (!(sd->sc.data[SC_BLOODLUST])) {
+		if (!(hd->sc.data[SC_BLOODLUST])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HAMI_BLOODLUST, hom_checkskill(hd, HAMI_BLOODLUST));
 		}
 	// Lif - Mental Change
@@ -7108,17 +7108,17 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	// You might want to disable it for the AI and activate it manually instead.
 	// Also it won't be activated unless an enemy is nearby - due to the cooldown that would be wasteful.
 	if (foundtargetID>-1) if (canskill(sd)) if (hom_checkskill(hd, HLIF_CHANGE) > 0)
-		if (!(sd->sc.data[SC_CHANGE])) {
+		if (!(hd->sc.data[SC_CHANGE])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HLIF_CHANGE, hom_checkskill(hd, HLIF_CHANGE));
 		}
 	// Filir Flitting
 	if (foundtargetID > -1) if (canskill(sd)) if (hom_checkskill(hd, HFLI_FLEET) > 0)
-		if (!(sd->sc.data[SC_FLEET])) {
+		if (!(hd->sc.data[SC_FLEET])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HFLI_FLEET, hom_checkskill(hd, HFLI_FLEET));
 		}
 	// Filir Accelerated Flight
 	if (foundtargetID > -1) if (canskill(sd)) if (hom_checkskill(hd, HFLI_SPEED) > 0)
-		if (!(sd->sc.data[SC_SPEED])) {
+		if (!(hd->sc.data[SC_SPEED])) {
 			homu_skilluse_ifable(&sd->bl, SELF, HFLI_SPEED, hom_checkskill(hd, HFLI_SPEED));
 		}
 	// Eira - Silent Breeze
@@ -7136,7 +7136,7 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 	// Bayeri - safety wall
 	if (foundtargetID > -1)	if (canskill(sd)) if (hom_checkskill(hd, MH_STEINWAND) > 0)
 		if (targetdistance<=1) // must be tanking the enemy
-		if (!(sd->sc.data[SC_SAFETYWALL])) {
+		if (!(hd->sc.data[SC_SAFETYWALL])) {
 			homu_skilluse_ifable(&sd->bl, SELF, MH_STEINWAND, hom_checkskill(hd, MH_STEINWAND));
 		}
 	// Attack skills
@@ -7195,7 +7195,7 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 		if (hd->autopilotmode != 3) if (canskill(sd))
 			if (hom_checkskill(hd, MH_SONIC_CRAW) > 0)
 				if (hd->homunculus.spiritball >= 3)
-					if ((sd->sc.data[SC_STYLE_CHANGE] && sd->sc.data[SC_STYLE_CHANGE]->val1 == MH_MD_FIGHTING))
+					if ((hd->sc.data[SC_STYLE_CHANGE] && hd->sc.data[SC_STYLE_CHANGE]->val1 == MH_MD_FIGHTING))
 						homu_skilluse_ifable(&sd->bl, foundtargetID, MH_SONIC_CRAW, hom_checkskill(hd, MH_SONIC_CRAW));
 	}
 	// Vanil Chaotic Blessings
