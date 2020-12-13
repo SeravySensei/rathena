@@ -14,7 +14,7 @@
 //= 1.0 First Version. [Masao]
 //============================================================
 
-gef_fild05,80,149,3	script	Myu#08_hat	877,{
+ve_fild05,153,137,3	script	Myu#08_hat	877,{
 	mes "[Myu]";
 	mes "Meow...";
 	emotion ET_HUK;
@@ -760,7 +760,7 @@ OnTouch:
 	mes "["+strcharinfo(0)+"]";
 	mes "Should I talk to her?...Uh..Do we even understand eachother?";
 	next;
-	mes "THe Orc Lady suddenly turns around looking surprised.";
+	mes "The Orc Lady suddenly turns around looking surprised.";
 	mes "A Maneater Blossom fell on the ground out of her hands.";
 	next;
 	switch(select("Pick up the flowers for Orc Lady.:Run away!")) {

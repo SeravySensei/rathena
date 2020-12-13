@@ -1212,10 +1212,10 @@
 12115	//Elemental_Water
 12116	//Elemental_Earth
 12117	//Elemental_Wind
-12118	//Resist_Fire
-12119	//Resist_Water
-12120	//Resist_Earth
-12121	//Resist_Wind
+12118  // Resist_Fire
+12119  // Resist_Water
+12120  // Resist_Earth
+12121  // Resist_Wind
 12122	//Sesame_Pastry
 12123	//Honey_Pastry
 12124	//Rainbow_Cake

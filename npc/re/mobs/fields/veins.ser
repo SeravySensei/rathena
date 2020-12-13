@@ -72,6 +72,7 @@ ve_fild04,288,273,4,4	monster	Blue Plant	1079,3,660000
 ve_fild05,0,0	monster	Kobold Archer	1282,120,5000
 ve_fild05,0,0	monster	Drosera	1781,40,5000
 ve_fild05,0,0	monster	Galion	1783,18,5000
+ve_fild05,0,0	monster	Wild Rose	1261,3,5000
 
 //==================================================
 // ve_fild06 - Veins Field - town entry, low spawns

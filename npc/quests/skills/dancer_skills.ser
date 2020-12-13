@@ -343,7 +343,7 @@ comodo,204,172,5	script	Canell#qsk_dan01	724,{
 		else if (DANCER_SK == 9 && getskilllv("DC_WINKCHARM") == 0) {
 			mes "[Canell]";
 			mes "Hm? Oh, I remember you!";
-			mes "A Gypsy now, I see~ That";
+			mes "An Idol now, I see~ That";
 			mes "look suits you. Now, I'm";
 			mes "sure you've forgotten a few";
 			mes "things since transcending,";

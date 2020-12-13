@@ -93,11 +93,9 @@ alberta,83,96,5	script	Necko	98,7,7,{
 			case 3:
 				mes "[Necko]";
 				mes "Crazy Uproar uses your loud voice";
-				mes "to boost battle spirit";
-				mes "With 8 SP, you get an additional";
-				mes "4 STR for 5 minutes!!!!!";
-				mes "If you use it repeatedly";
-				mes "it is 5 minutes from that point on.";
+				mes "to boost battle spirit for the";
+				mes "entire party! STR and ATK is";
+				mes "raised for 5 minutes!!!!!";
 				next;
 				mes "[Necko]";
 				mes "Stay casual in everyday life,";
@@ -124,10 +122,8 @@ alberta,83,96,5	script	Necko	98,7,7,{
 		mes "[Necko]";
 		mes "Crazy Uproar uses your loud voice";
 		mes "to boost battle spirit";
-		mes "With 8 sp, you get an additional";
-		mes "4 STR for 5 minutes!!!!!";
-		mes "If you use it repeatedly";
-		mes "it is 5 minutes from that point.";
+		mes "With 8 sp, your party gets";
+		mes "more STR and ATK for 5 minutes!!!!!";
 		next;
 		mes "[Necko]";
 		mes "Stay casual in everyday life,";

@@ -36,7 +36,7 @@ prontera,174,328,3	script	Young Man#bard_q1	89,3,3,{
 		if (Upper != 1)
 			mes "It's a freakin' Bard!";
 		else
-			mes "It's a freakin' Minstrel!";
+			mes "It's a freakin' Composer!";
 		mes "D-don't come any closer!";
 		mes "I... I don't like you guys!";
 		next;
@@ -127,7 +127,7 @@ prontera,174,328,3	script	Young Man#bard_q1	89,3,3,{
 							mes "[Timid Young Man]";
 							mes "Hmmm... Maybe.";
 							mes "Maybe all of you Bards";
-							mes "and Minstrels aren't that";
+							mes "and Composers aren't that";
 							mes "bad. But I can never forget";
 							mes "what that Bard did to me...";
 							next;
@@ -220,7 +220,7 @@ prontera,174,328,3	script	Young Man#bard_q1	89,3,3,{
 						case 2:
 							mes "[Timid Young Man]";
 							mes "^333333*Sigh*^000000 Well, maybe all Bards";
-							mes "and Minstrels aren't terrifying. But any Bard will remind me";
+							mes "and Composers aren't terrifying. But any Bard will remind me";
 							mes "of the one that I met during my";
 							mes "travels. Just thinking about";
 							mes "that time gives me goosebumps.";
@@ -359,7 +359,7 @@ prontera,174,328,3	script	Young Man#bard_q1	89,3,3,{
 		mes "Was that a Bard just";
 		mes "over there? Oh, I'm so";
 		mes "afraid of those guys!";
-		mes "And those Minstrels";
+		mes "And those Composers";
 		mes "are even worse!";
 		next;
 		mes "[Timid Young Man]";
@@ -888,7 +888,7 @@ morocc_in,169,72,7	script	Spiteful-Looking Bard#bs	741,3,3,{
 		mes "should really change that.";
 		next;
 		mes "[Riott]";
-		mes "Bards and Minstrels can";
+		mes "Bards and Composers can";
 		mes "make some pretty handy";
 		mes "friends if you give them";
 		mes "a chance. Here, why don't";
