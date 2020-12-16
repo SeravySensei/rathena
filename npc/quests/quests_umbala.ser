@@ -1308,6 +1308,7 @@ OnTouch_:
 			set um_wind,0;
 			set MISC_QUEST,MISC_QUEST | 32768;
 			getitem 610,1; //Leaf_Of_Yggdrasil
+			getexp 5000,0;
 			disablenpc "#unpc";
 			end;
 		}
@@ -1319,6 +1320,7 @@ OnTouch_:
 		next;
 		mes "[" + strcharinfo(0) + "]";
 		mes "Yeah, I'm a such good person.";
+		getexp 15000,0;
 		close2;
 		disablenpc "#unpc";
 	}

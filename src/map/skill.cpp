@@ -19835,7 +19835,7 @@ bool skill_produce_mix(struct map_session_data *sd, uint16 skill_id, unsigned sh
 						make_per = 100000; // Star Crumbs are 100% success crafting rate? (made 1000% so it succeeds even after penalties) [Skotlex]
 						break;
 					default: // Enchanted Stones
-						make_per += 1000+i*500; // Enchanted stone Craft bonus: +15/+20/+25/+30/+35
+						make_per += 1000+i*500 + status->dex * 20 + status->luk * 20; // Enchanted stone Craft bonus: +15/+20/+25/+30/+35
 						break;
 				}
 				break;

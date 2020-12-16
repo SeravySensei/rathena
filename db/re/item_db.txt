@@ -182,16 +182,16 @@
 683,Exorcize_Herb,Herb of Incantation,2,0,,50,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start SC_MATKPOTION,60000,30; },{},{}
 684,Durian,Durian,2,15000,,300,,,,,0xFFFFFFFF,63,2,,,,,,{ sc_start SC_ATKPOTION,60000,10; sc_start SC_MATKPOTION,60000,10; },{},{}
 685,RAMADAN,Ramadan,0,5000,,300,,,,,0xFFFFFFFF,63,2,,,,,,{ percentheal 100,50; },{},{}
-686,Earth_Scroll_1_3,Level 3 Earth Spike,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "WZ_EARTHSPIKE",3; },{},{}
-687,Earth_Scroll_1_5,Level 5 Earth Spike,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "WZ_EARTHSPIKE",5; },{},{}
-688,Cold_Scroll_1_3,Level 3 Cold Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_COLDBOLT",3; },{},{}
-689,Cold_Scroll_1_5,Level 5 Cold Bolt,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_COLDBOLT",5; },{},{}
-690,Fire_Scroll_1_3,Level 3 Fire Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBOLT",3; },{},{}
-691,Fire_Scroll_1_5,Level 5 Fire Bolt,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBOLT",5; },{},{}
-692,Wind_Scroll_1_3,Level 3 Lightening Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_LIGHTNINGBOLT",3; },{},{}
-693,Wind_Scroll_1_5,Level 5 Lightening Bolt,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_LIGHTNINGBOLT",5; },{},{}
-694,Ghost_Scroll_1_3,Level 3 Soul Strike,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_SOULSTRIKE",3; },{},{}
-695,Ghost_Scroll_1_5,Level 5 Soul Strike,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_SOULSTRIKE",5; },{},{}
+686,Earth_Scroll_1_3,Level 3 Earth Spike,11,500,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "WZ_EARTHSPIKE",3; },{},{}
+687,Earth_Scroll_1_5,Level 5 Earth Spike,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "WZ_EARTHSPIKE",5; },{},{}
+688,Cold_Scroll_1_3,Level 3 Cold Bolt,11,500,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_COLDBOLT",3; },{},{}
+689,Cold_Scroll_1_5,Level 5 Cold Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_COLDBOLT",5; },{},{}
+690,Fire_Scroll_1_3,Level 3 Fire Bolt,11,500,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBOLT",3; },{},{}
+691,Fire_Scroll_1_5,Level 5 Fire Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBOLT",5; },{},{}
+692,Wind_Scroll_1_3,Level 3 Lightening Bolt,11,500,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_LIGHTNINGBOLT",3; },{},{}
+693,Wind_Scroll_1_5,Level 5 Lightening Bolt,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_LIGHTNINGBOLT",5; },{},{}
+694,Ghost_Scroll_1_3,Level 3 Soul Strike,11,500,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_SOULSTRIKE",3; },{},{}
+695,Ghost_Scroll_1_5,Level 5 Soul Strike,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_SOULSTRIKE",5; },{},{}
 696,Fire_Scroll_2_1,Level 1 Fire Ball,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBALL",1; },{},{}
 697,Fire_Scroll_2_5,Level 5 Fire Ball,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREBALL",5; },{},{}
 698,Fire_Scroll_3_1,Level 1 Fire Wall,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FIREWALL",1; },{},{}
@@ -1864,7 +1864,7 @@
 2641,Fashionable_Sack,Fashion Hip Sack,4,20,,700,,0,,0,0xFFFFFFFE,63,2,136,,50,0,0,{ bonus bStr,2; },{},{}
 2642,Serin's_Gold_Ring,Serin's Gold Ring,4,20,,0,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{},{},{}
 2643,Serin's_Gold_Ring_,Serin's Gold Ring,4,45000,,100,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{},{},{}
-2644,The_Sign_,The Sign,4,2,,0,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus2 bAddClass,Class_All,5; bonus2 bMagicAddClass,Class_All,5; },{},{}
+2644,The_Sign_,The Sign,4,2,,0,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bAtkRate,5; bonus bMatkRate,5; },{},{}
 2645,Moonlight_Ring,Moonlight Ring,4,40000,,200,,0,,0,0x02021040,63,2,136,,60,0,0,{ bonus bMdef,2; },{},{}
 2646,Bunch_Of_Carnation,Bunch of Carnations,4,2,,100,,0,,0,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bAllStats,3; },{},{}
 2647,Nile_Rose,Nile Rose,4,2,,100,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bAllStats,5; },{},{}
@@ -1878,7 +1878,7 @@
 2655,Bloody_Iron_Ball,Bloodied Shackle Ball,4,50000,,4000,,0,,0,0xFFFFFFFE,63,2,136,,0,0,0,{},{},{}
 2656,Hyper_Changer,Armor Charm,4,20000,,1000,,1,,0,0x000654E2,63,2,136,,1,0,0,{ bonus bMaxHP,200; },{},{}
 2657,Lab_Passport,Laboratory Permit,4,20,,100,,0,,0,0xFFFFFFFF,63,2,136,,1,0,0,{},{},{}
-2658,Nile_Rose_,Nile Rose,4,50000,,100,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bMaxHPrate,2; },{},{}
+2658,Nile_Rose_,Nile Rose,4,50000,,100,,0,,1,0xFFFFFFFF,63,2,136,,0,0,0,{ bonus bMaxHPrate,5; },{},{}
 2659,Vesper_Core01,Vesper Core 01,4,20,,500,,3,,1,0x00CFFF80,18,2,136,,90,0,0,{ bonus bMdef,7; bonus bInt,2; bonus bMaxSPrate,5; },{},{}
 2660,Vesper_Core02,Vesper Core 02,4,20,,500,,3,,1,0x00CFFF80,18,2,136,,90,0,0,{ bonus bMdef,7; bonus bStr,2; bonus bBaseAtk,10; },{},{}
 2661,Vesper_Core03,Vesper Core 03,4,20,,500,,3,,1,0x00CFFF80,18,2,136,,90,0,0,{ bonus bMdef,7; bonus bAgi,3; bonus bFlee,5; },{},{}
@@ -6310,9 +6310,9 @@
 11713,Julia's_Candy,Julia's Candy,0,0,,30,,,,,0xFFFFFFFF,63,2,,,,,,{ itemheal rand(40,45),0; },{},{}
 //
 12000,Cold_Scroll_2_5,Level 5 Frost Diver,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "MG_FROSTDIVER",5; },{},{}
-12001,Holy_Scroll_1_3,Level 3 Heal,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "AL_HEAL",3; },{},{}
+12001,Holy_Scroll_1_3,Level 3 Heal,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "AL_HEAL",3; },{},{}
 12002,Holy_Scroll_1_5,Level 5 Heal,11,2000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "AL_HEAL",5; },{},{}
-12003,Holy_Scroll_2_1,Level 1 Teleport,11,1000,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "AL_TELEPORT",1; },{},{}
+12003,Holy_Scroll_2_1,Level 1 Teleport,11,150,,10,,,,,0xFFFFFFFF,63,2,,,,,,{ itemskill "AL_TELEPORT",1; },{},{}
 12004,Arrow_Container,Quiver,2,2,,250,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 1750,2500; },{},{}
 12005,Iron_Arrow_Container,Iron Arrow Quiver,2,2,,250,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 1770,2500; },{},{}
 12006,Steel_Arrow_Container,Steel Arrow Quiver,2,2,,250,,,,,0xFFFFFFFF,63,2,,,,,,{ getitem 1753,2500; },{},{}

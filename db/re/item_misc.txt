@@ -284,17 +284,11 @@ IG_Accesory,2602,11	// Earring
 IG_Accesory,2603,12	// Necklace
 IG_Accesory,2604,12	// Glove
 IG_Accesory,2605,12	// Brooch
-IG_Accesory,2607,12	// Clip
-IG_Accesory,2608,14	// Rosary
-IG_Accesory,2609,14	// Skull Ring
-IG_Accesory,2610,14	// Gold Ring
-IG_Accesory,2611,14	// Silver Ring
-IG_Accesory,2612,14	// Flower Ring
-IG_Accesory,2613,11	// Diamond Ring
+IG_Accesory,2613,3	// Diamond Ring
 IG_Accesory,2615,1	// Safety Ring
 IG_Accesory,2616,1	// Critical Ring
-IG_Accesory,2617,10	// Celebrant's Mitten
-IG_Accesory,2618,11	// Matyr's Leash
+IG_Accesory,2617,3	// Celebrant's Mitten
+IG_Accesory,2618,3	// Matyr's Leash
 IG_Accesory,2619,10	// Bow Thimble
 IG_Accesory,2621,1	// Ring
 IG_Accesory,2622,1	// Earring
@@ -302,8 +296,6 @@ IG_Accesory,2623,10	// Necklace
 IG_Accesory,2624,1	// Glove
 IG_Accesory,2625,1	// Brooch
 IG_Accesory,2626,1	// Rosary
-IG_Accesory,2627,10	// Belt
-IG_Accesory,2628,14	// Novice Armlet
 IG_Accesory,2654,1	// Shinobi Sash
 IG_Accesory,2656,1	// Armor Charm
 IG_Accesory,2658,10	// Nile Rose

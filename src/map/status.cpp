@@ -6403,6 +6403,7 @@ static unsigned short status_calc_batk(struct block_list *bl, struct status_chan
 		if (pc_checkskill(sd, NV_BREAKTHROUGH) > 0)
 			if (pc_checkskill(sd, NV_TRANSCENDENCE) <= 0)
 				batk += 10 * pc_checkskill(sd, NV_BREAKTHROUGH);
+		batk += batk * sd->bonus.atk_rate / 100;
 	}
 
 	if(!sc || !sc->count)
@@ -6505,6 +6506,9 @@ static unsigned short status_calc_watk(struct block_list *bl, struct status_chan
 			}
 			watk += (shield_def * pc_checkskill(sd, LG_SHIELDSPELL)) / 50;
 		}
+
+		watk += watk * sd->bonus.atk_rate / 100;
+
 	}
 
 	if(!sc || !sc->count)

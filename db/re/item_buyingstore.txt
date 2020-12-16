@@ -1091,25 +1091,25 @@
 682	//Realgar_Wine
 683	//Exorcize_Herb
 684	//Durian
-686	//Earth_Scroll_1_3
-687	//Earth_Scroll_1_5
-688	//Cold_Scroll_1_3
-689	//Cold_Scroll_1_5
-690	//Fire_Scroll_1_3
-691	//Fire_Scroll_1_5
-692	//Wind_Scroll_1_3
-693	//Wind_Scroll_1_5
-694	//Ghost_Scroll_1_3
-695	//Ghost_Scroll_1_5
+686  // Earth_Scroll_1_3
+687  // Earth_Scroll_1_5
+688  // Cold_Scroll_1_3
+689  // Cold_Scroll_1_5
+690  // Fire_Scroll_1_3
+691  // Fire_Scroll_1_5
+692  // Wind_Scroll_1_3
+693  // Wind_Scroll_1_5
+694  // Ghost_Scroll_1_3
+695  // Ghost_Scroll_1_5
 696	//Fire_Scroll_2_1
 697	//Fire_Scroll_2_5
 698	//Fire_Scroll_3_1
 699	//Fire_Scroll_3_5
 700	//Cold_Scroll_2_1
 12000	//Cold_Scroll_2_5
-12001	//Holy_Scroll_1_3
+12001  // Holy_Scroll_1_3
 12002	//Holy_Scroll_1_5
-12003	//Holy_Scroll_2_1
+12003  // Holy_Scroll_2_1
 12004  // Arrow_Container
 12005  // Iron_Arrow_Container
 12006  // Steel_Arrow_Container

@@ -318,6 +318,10 @@
 117,997,21,96,1,993,10
 //-- Great Nature <-- BS_ENCHANTEDSTONE & 10 Green Live
 118,996,21,96,1,992,10
+//-- Oridecon <-- BS_ENCHANTEDSTONE & 4 Rough Oridecon
+276,984,21,96,1,756,4
+//-- Elunium <-- BS_ENCHANTEDSTONE & 4 Rough Elunium
+276,985,21,96,1,757,4
 //----------------------------------------------
 
 //==============================================

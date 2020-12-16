@@ -18,11 +18,7 @@
 
 ra_san01,139,13,0	script	sanctuary01	45,1,1,{
 	if (ra_tem_q == 21) { warp "que_san04",119,110; end; }
-	switch(rand(3)) {
-		case 1:  warp "ra_san02",213,275; break;
-		case 2:  warp "ra_san03",119,283; break;
-		default: warp "ra_san04",119,110; break;
-	}
+		warp "ra_san02",213,275; end;
 }
 
 ra_san02,213,280,0	warp	sanctuary02	1,1,ra_san01,140,19

@@ -911,7 +911,6 @@
 6960,467,100	// Key_Air_Fortress
 //6993,475,100	//
 //6994,475,100	//
-7025,475,100	// Lucifer's_Lament
 7037,475,100	// Trade_Coupon
 7059,499,100	// Cargo_Free_Ticket
 7060,499,100	// Warp_Free_Ticket

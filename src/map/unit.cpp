@@ -7028,12 +7028,16 @@ TIMER_FUNC(unit_autopilot_homunculus_timer)
 		resettargets(); leaderdistance = 999; leaderID = -1;
 		map_foreachinmap(targetthischar, sd->bl.m, BL_PC, sd);
 		leaderID = foundtargetID;  
-		if (leaderID > -1) { leaderbl = targetbl; leadersd = (struct map_session_data*)targetbl; leaderdistance = distance_bl(leaderbl, bl);
+		if (leaderID > -1) { leaderbl = targetbl;
+		leadersd = (struct map_session_data*)targetbl;
+		leaderdistance = distance_bl(leaderbl, bl);
+		leaderdistadj = leadersd->state.autopilotdist;
 		}
 		else {
 			// Follow the master if party leader is absent
 			leadersd = mastersd; leaderID = mastersd->bl.id; leaderbl = &mastersd->bl;
 			leaderdistance = distance_bl(leaderbl, bl);
+			leaderdistadj = mastersd->state.autopilotdist;
 		}
 	}
 	int masterdistance = distance_bl(&mastersd->bl, bl);

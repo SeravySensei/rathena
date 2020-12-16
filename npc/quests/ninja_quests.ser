@@ -959,7 +959,7 @@ que_ng,72,34,3	script	Craftsman Kaibara	847,{
 				delitem 999,30;
 				delitem 7022,1;
 				set Zeny,Zeny-20000;
-				getitem 13007,1;
+				getitem 13008,1;
 				mes "[Kaibara]";
 				mes "Hmm, very well.";
 				mes "I've checked your ingredients and fees.";

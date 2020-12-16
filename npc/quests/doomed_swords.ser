@@ -446,11 +446,9 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "items. They'll make sense...";
 					next;
 					mes "[Mysterious Blacksmith]";
-					mes "^0099FF1 Young Twig^000000,";
 					mes "^0099FF1 Emperium^000000,";
-					mes "^0099FF1 Loki's Whispers^000000,";
-					mes "^0099FF1 Mother's Nightmare^000000 and";
-					mes "^0099FF1 Foolishness of the Blind^000000.";
+					mes "^0099FF3 Loki's Whispers^000000 and,";
+					mes "^0099FF3 Foolishness of the Blind^000000.";
 					mes "That is what I need.";
 					next;
 					mes "[Mysterious Blacksmith]";
@@ -514,7 +512,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "I will need...";
 					mes "^0099FF1 Emperium^000000,";
 					mes "^0099FF100 Ogre Teeth^000000,";
-					mes "^0099FF10 Blades of Darkness^000000,";
+					mes "^0099FF3 Blades of Darkness^000000,";
 					mes "^0099FF5 Cursed Rubies^000000 and";
 					mes "^0099FF1 Broken Sword Handle^000000.";
 					next;
@@ -621,11 +619,9 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 			case 1:
 				if ((dmdswrd_Q2 & 1) || (dmdswrd_Q2 & 8)) {
 					mes "[Mysterious Blacksmith]";
-					mes "^0099FF1 Young Twig^000000,";
 					mes "^0099FF1 Emperium^000000,";
-					mes "^0099FF1 Loki's Whispers^000000,";
-					mes "^0099FF1 Mother's Nightmare^000000 and";
-					mes "^0099FF1 Foolishness of the Blind^000000.";
+					mes "^0099FF3 Loki's Whispers^000000,";
+					mes "^0099FF3 Foolishness of the Blind^000000.";
 					mes "That is what I need.";
 					close;
 				}
@@ -642,7 +638,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "I will need...";
 					mes "^0099FF1 Emperium^000000,";
 					mes "^0099FF100 Ogre Teeth^000000,";
-					mes "^0099FF10 Blades of Darkness^000000,";
+					mes "^0099FF3 Blades of Darkness^000000,";
 					mes "^0099FF5 Cursed Rubies^000000 and";
 					mes "^0099FF1 Broken Sword Handle^000000.";
 					close;
@@ -696,36 +692,19 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "everything I need to";
 					mes "create this sword...";
 					next;
-					if (countitem(7018) < 1) {
-						mes "[Mysterious Blacksmith]";
-						mes "Well, well.";
-						mes "You've forgotten";
-						mes "to bring ^0099FF1 Young Twig^000000,";
-						mes "the embodiment of the";
-						mes "Mysteltainn twig used to kill Baldur. Hurry and bring it...";
-						close;
-					}
-					if (countitem(7019) < 1) {
+					if (countitem(7019) < 3) {
 						mes "[Mysterious Blacksmith]";
 						mes "Hm. You forgot to bring";
-						mes "^0099FF1 Loki's Whispers^000000. We need";
+						mes "^0099FF3 Loki's Whispers^000000. We need";
 						mes "that to imbue the sword with";
 						mes "immense, evil power. Go and";
 						mes "find that as quickly as you can!";
 						close;
 					}
-					if (countitem(7020) < 1) {
+					if (countitem(7021) < 3) {
 						mes "[Mysterious Blacksmith]";
 						mes "Hm, you still need to";
-						mes "bring ^0099FF1 Mother's Nightmare^000000";
-						mes "to instill the power of misery";
-						mes "and grave portent to this blade...";
-						close;
-					}
-					if (countitem(7021) < 1) {
-						mes "[Mysterious Blacksmith]";
-						mes "Hm, you still need to";
-						mes "bring ^0099FF1 Foolishness";
+						mes "bring ^0099FF3 Foolishness";
 						mes "of the Blind^000000 to instill the";
 						mes "energy of tragic regret into";
 						mes "the curse imbued into the blade...";
@@ -740,7 +719,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 						mes "of wielding it. Bring ^0099FF1 Emperium^000000 and I will recognize your worth.";
 						close;
 					}
-					if (countitem(7018) > 0 && countitem(7019) > 0 && countitem(7020) > 0 && countitem(7021) > 0 && countitem(714) > 0) {
+					if (&& countitem(7019) > 2 && countitem(7021) > 2 && countitem(714) > 0) {
 						mes "[Mysterious Blacksmith]";
 						mes "Well done, adventurer.";
 						mes "All seems to be in readiness.";
@@ -754,10 +733,8 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 						mes "sword again. Take it,";
 						mes "quickly! I d-don't want";
 						mes "to touch it if I can avoid it.";
-						delitem 7018,1; //Young_Twig
-						delitem 7019,1; //Loki's_Whispers
-						delitem 7020,1; //Mother's_Nightmare
-						delitem 7021,1; //Foolishness_Of_Blind
+						delitem 7019,3; //Loki's_Whispers
+						delitem 7021,3; //Foolishness_Of_Blind
 						delitem 714,1; //Emperium
 						getitem 1138,1; //Mysteltainn_
 						next;
@@ -862,11 +839,9 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "items. They'll make sense...";
 					next;
 					mes "[Mysterious Blacksmith]";
-					mes "^0099FF1 Young Twig^000000,";
 					mes "^0099FF1 Emperium^000000,";
-					mes "^0099FF1 Loki's Whispers^000000,";
-					mes "^0099FF1 Mother's Nightmare^000000 and";
-					mes "^0099FF1 Foolishness of the Blind^000000.";
+					mes "^0099FF3 Loki's Whispers^000000, and";
+					mes "^0099FF3 Foolishness of the Blind^000000.";
 					mes "That is what I need.";
 					next;
 					mes "[Mysterious Blacksmith]";
@@ -915,10 +890,10 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 						mes "and bring them to me soon.";
 						close;
 					}
-					if (countitem(7023) < 10) {
+					if (countitem(7023) < 3) {
 						mes "[Mysterious Blacksmith]";
 						mes "Hm. I still need";
-						mes "^0099FF10 Blades of Darkness^000000";
+						mes "^0099FF3 Blades of Darkness^000000";
 						mes "in order to for me to forge";
 						mes "the Grimtooth. Bring those";
 						mes "here as soon as you can.";
@@ -961,7 +936,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 						mes "soon enough once you use it...";
 						delitem 7002,100; //Ogre_Tooth
 						delitem 724,5; //Cardinal_Jewel_
-						delitem 7023,10; //Blade_Lost_In_Darkness
+						delitem 7023,3; //Blade_Lost_In_Darkness
 						delitem 7022,1; //Old_Hilt
 						delitem 714,1; //Emperium
 						getitem 1237,1; //Grimtooth_
@@ -1010,7 +985,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 					mes "I will need...";
 					mes "^0099FF1 Emperium^000000,";
 					mes "^0099FF100 Ogre Teeth^000000,";
-					mes "^0099FF10 Blades of Darkness^000000,";
+					mes "^0099FF3 Blades of Darkness^000000,";
 					mes "^0099FF5 Cursed Rubies^000000 and";
 					mes "^0099FF1 Broken Sword Handle^000000.";
 					next;

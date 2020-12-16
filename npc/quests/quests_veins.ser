@@ -294,7 +294,7 @@
 		mes "I hope you like these rocks...";
 		set veins_stone,8;
 		getexp (checkre(3))?30000:300000,0;
-		getitem 985,3; //Elunium
+		getitem 985,30; //Elunium
 		close;
 	}
 	else if (veins_stone > 7) {
@@ -3061,9 +3061,9 @@ veins,327,185,3	script	Kid#camelcamel	944,{
 			set rachel_camel,25;
 			specialeffect2 EF_ABSORBSPIRITS;
 			if (checkre(3))
-				getexp 100000,50000;
+				getexp 200000,100000;
 			else
-				getexp 1000000,700000;
+				getexp 2000000,700000;
 			close;
 		}
 		else {
@@ -4713,7 +4713,7 @@ veins,115,59,5	script	Saraman	847,{
 		mes "Good luck with getting";
 		mes "that soap you want made.";
 		changequest 3076,3077;
-		getitem 617,1; //Old_Violet_Box
+		getitem 617,3; //Old_Violet_Box
 		set rachel_camel,18;
 		close;
 	}
@@ -6091,13 +6091,13 @@ ve_in,281,214,3	script	Bookshelf#vol	111,{
 		set aru_vol,26;
 		set .@box_box,rand(1,20);
 		if (.@box_box < 7) {
-			getitem 12104,1; //Random_Quiver
+			getitem 12104,30; //Random_Quiver
 		}
 		else if ((.@box_box > 6) && (.@box_box < 9)) {
-			getitem 661,1; //Sway_Apron
+			getitem 604,100; //Dead Branch
 		}
-		else if ((.@box_box > 8) && (.@box_box < 20)) {
-			getitem 12027,5; //Giggling_Box
+		else if ((.@box_box > 8) && (.@box_box < 15)) {
+			getitem 607,5; //Ygg Berry
 		}
 		else {
 			getitem 12103,1; //Bloody_Dead_Branch
