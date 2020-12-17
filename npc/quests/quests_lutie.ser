@@ -93,7 +93,7 @@ xmas,117,295,4	script	Vending Machine Man	704,{
 			mes "[Titicupe]";
 			mes "Chef Hat?";
 			mes "120 Piece of Cake";
-			mes "1 White Dyestuffs";
+			mes "7 White Dyestuffs";
 			mes "330 Feather";
 			mes "450 Dragon Scale";
 			break;
@@ -277,7 +277,7 @@ xmas,115,297,4	script	Vending Machine	111,{
 			mes "^3355FFYou gingerly place the items into the snowman's mouth.^000000";
 			next;
 			delitem 539,120;  //Piece_Of_Cake
-			delitem 982,1;  //White_Dyestuffs
+			delitem 982,7;  //White_Dyestuffs
 			delitem 949,330;  //Feather
 			delitem 1036,450;  //Dragon_Scale
 			emotion ET_O;

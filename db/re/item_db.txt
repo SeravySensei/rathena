@@ -3211,7 +3211,7 @@
 5023,Hat_Of_Bundle,Parcel Hat,4,30000,,1000,,0,,1,0x00040420,63,2,256,,0,1,108,{},{},{}
 5024,Hat_Of_Cake,Cake Hat,4,30000,,1000,,2,,1,0xFFFFFFFF,63,2,256,,0,1,109,{},{},{}
 5025,Helm_Of_Angel,Helm of Angel,4,70000,,1600,,10,,1,0x00CFDF80,63,2,256,,74,1,110,{ bonus bAgi,1; bonus bLuk,1; bonus bMdef,7; },{},{}
-5026,Hat_Of_Cook,Chef Hat,4,30000,,300,,3,,1,0xFFFFFFFE,63,2,256,,50,1,111,{ bonus bDex,1; },{},{}
+5026,Hat_Of_Cook,Chef Hat,4,30000,,300,,3,,1,0xFFFFFFFE,63,2,256,,50,1,111,{ bonus bDex,1;bonus bAgi,1;bonus bLuk,1; },{},{}
 5027,Wizardry_Hat,Mage Hat,4,20,,300,,2,,1,0x00810204,63,2,256,,0,1,112,{ bonus bInt,2; bonus bMaxSP,150; },{},{}
 5028,Candle,Candle,4,30000,,150,,0,,1,0xFFFFFFFF,63,2,256,,0,1,113,{},{},{}
 5029,Spore_Hat,Spore Hat,4,30000,,900,,6,,1,0xFFFFFFFE,63,2,256,,20,1,114,{},{},{}
@@ -7437,7 +7437,7 @@
 13158,Butcher,Butcher,5,130000,,2500,75,,9,0,0x41000000,63,2,34,3,68,1,19,{ bonus2 bCriticalAddRace,RC_Brute,10; },{},{}
 13159,Butcher_,Butcher,5,130000,,2500,75,,9,1,0x41000000,63,2,34,3,68,1,19,{ bonus2 bCriticalAddRace,RC_Brute,10; },{},{}
 13160,Destroyer,Destroyer,5,110000,,1200,220,,9,0,0x41000000,63,2,34,2,52,1,21,{ bonus bBreakArmorRate,200; },{},{}
-13161,Destroyer_,Destroyer,5,110000,,1200,220,,9,1,0x41000000,63,2,34,2,52,1,21,{ bonus bBreakArmorRate,200; },{},{}
+13161,Destroyer_,Destroyer,5,110000,,1200,220,,9,2,0x41000000,63,2,34,2,52,1,21,{ bonus bBreakArmorRate,200; },{},{}
 13162,Inferno,Inferno,5,230000,,1250,280,,9,1,0x41000000,63,2,34,2,65,1,21,{},{},{}
 13163,Long_Barrel,Long Barrel,5,40000,,1000,150,,9,0,0x41000000,63,2,34,3,70,1,18,{ bonus bHit,10; bonus bCritical,20; bonus bAspdRate,-3; bonus3 bAutoSpell,"GS_TRACKING",5,20; },{},{}
 13164,Long_Barrel_,Long Barrel,5,40000,,1000,150,,9,1,0x41000000,63,2,34,3,70,1,18,{ bonus bHit,10; bonus bCritical,20; bonus bAspdRate,-3; bonus3 bAutoSpell,"GS_TRACKING",5,20; },{},{}

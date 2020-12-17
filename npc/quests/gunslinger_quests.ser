@@ -365,7 +365,7 @@ SubGarrison_:
 			}
 			mes "[Garrison]";
 			mes "Hmm, looks like the correct amount of materials and Zeny.";
-			mes "Here's a modified Garrison with a slot.";
+			mes "Here's a modified Garrison with an extra slot.";
 			mes "If you need one again, come and see me~";
 			delitem 999, 10;
 			delitem 1011, 10;
