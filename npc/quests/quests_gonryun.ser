@@ -374,6 +374,7 @@ gon_in,17,93,5	script	Chief#gon	775,{
 			delitem 1123,1; //Haedonggum
 			set b_sword,33;
 			getitem 2404,1; //Shoes_
+			getitem 2406,1; //Boots_
 			next;
 			mes "[Shi Yan Wen]";
 			mes "Thank you for all of your efforts.";

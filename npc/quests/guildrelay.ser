@@ -428,7 +428,7 @@
 						getitem 678,2; //Poison_Bottle
 					}
 					else if ((.@incen_item > 50) && (.@incen_item < 75)) {
-						getitem 644,5; //Gift_Box
+						getitem 644,12; //Gift_Box
 						getitem 678,2; //Poison_Bottle
 					}
 					else if ((.@incen_item > 74) && (.@incen_item < 101)) {
@@ -504,16 +504,16 @@
 					}
 					else if ((.@incen_item > 44) && (.@incen_item < 61)) {
 						getitem 644,4; //Gift_Box
-						getitem 603,2; //Old_Blue_Box
+						getitem 603,4; //Old_Blue_Box
 						getitem 678,3; //Poison_Bottle
 					}
 					else if ((.@incen_item > 59) && (.@incen_item < 76)) {
-						getitem 644,3; //Gift_Box
+						getitem 644,8; //Gift_Box
 						getitem 617,2; //Old_Violet_Box
 						getitem 678,3; //Poison_Bottle
 					}
 					else if ((.@incen_item > 74) && (.@incen_item < 91)) {
-						getitem 603,2; //Old_Blue_Box
+						getitem 603,3; //Old_Blue_Box
 						getitem 617,2; //Old_Violet_Box
 						getitem 678,3; //Poison_Bottle
 					}

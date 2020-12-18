@@ -65,13 +65,13 @@ payon,103,113,3	script	Ledrion#payon::RelayLedrion	109,{
 		getitem 644,6; //Gift_Box
 		getitem 603,3; //Old_Blue_Box
 		if (.@present == 2) {
-			getitem 1365,1; //Sabbath
+			getitem 31906,1; //Jobchange ticket
 		}
 		else if (.@present == 4) {
-			getitem 1367,1; //Slaughter
+			getitem 31908,5; // 500k Zeny
 		}
 		else if (.@present == 6) {
-			getitem 1527,1; //Quadrille
+			getitem 31857,1; //Look Better Box
 		}
 		else {
 			getitem 617,3; //Old_Violet_Box

@@ -480,7 +480,7 @@ airplane,47,61,7	script	Crewman	4_M_ZONDAOYAJI,{
 			completequest 2085;
 			kain_ticket = 15;
 			delitem 7276,1;// Picture_Letter
-			getitem 7311,4;// Free_Flying_Ship_Ticket
+			getitem 7311,20;// Free_Flying_Ship_Ticket
 		} else {
 			mes "^3355FFHmmm...";
 			mes "It would be better";

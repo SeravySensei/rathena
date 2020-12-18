@@ -272,7 +272,7 @@ alberta,117,135,0	script	Elin	96,{
 				mes "[Elin]";
 				mes "Here, since you gave me such a nicely made doll, I better give you something good too.";
 				next;
-				getitem 522,2; //Fruit_Of_Mastela
+				getitem 603,2; //Old Blue Box
 				mes "[Elin]";
 				mes "I found it when I secretly went to the forest. I took it because it has pretty colors!";
 				if (Sex == SEX_MALE) {
@@ -298,7 +298,7 @@ alberta,117,135,0	script	Elin	96,{
 				mes "[Elin]";
 				mes "It's so weird. It's cute but it's also scary at the same time. Well, since you gave me a pretty doll, I wanna give you something, too.";
 				next;
-				getitem 525,5; //Panacea
+				getitem 607,3; //Ygg. Berry
 				mes "[Elin]";
 				mes "My daddy gave me this when I was really sick. I'm not sick anymore so you can use it when you need to. Hehehe~";
 				next;
@@ -355,7 +355,7 @@ alberta,117,135,0	script	Elin	96,{
 				mes "I wanna give you";
 				mes "something, too!";
 				next;
-				getitem 608,1; //Seed_Of_Yggdrasil
+				getitem 608,3; //Seed_Of_Yggdrasil
 				mes "[Elin]";
 				mes "My daddy picked it up on his way to another town. It looks like some kind of seed. I tried planting it in front of our house but it won't grow. Do you want to try?";
 				next;
@@ -514,7 +514,7 @@ alberta_in,122,53,4	script	Cherokee	47,{
 // 'Bao Bao', 'Crescent Hairpin', 'Fashionable Glasses', 'Heart Hairpin' Quest
 //============================================================
 alberta,120,53,1	script	Stylish Merchant#new30	51,{
-	if ((countitem(10007) > 0) && (countitem(968) > 49)) {
+	if ((countitem(10007) > 0) && (countitem(968) > 1)) {
 		mes "[Zic]";
 		mes "I know I know, you just want to get a Bao Bao of your own. But I can't concentrate on my work if you keep rushing me like this.";
 		next;
@@ -523,7 +523,7 @@ alberta,120,53,1	script	Stylish Merchant#new30	51,{
 		mes "*Boom Boom!*^000000";
 		next;
 		delitem 10007,1;  //Silk_Ribbon
-		delitem 968,50;  //Voucher_Of_Orcish_Hero
+		delitem 968,2;  //Voucher_Of_Orcish_Hero
 		mes "[Zic]";
 		mes "Phew!";
 		mes "There you go~!";
@@ -608,7 +608,7 @@ alberta,120,53,1	script	Stylish Merchant#new30	51,{
 			mes "[Zic]";
 			mes "Let's see, I'll need...";
 			mes "1 ^0000FFSilk Ribbon^000000";
-			mes "50 ^0000FFHeroic Emlbem^000000";
+			mes "2 ^0000FFHeroic Emblem^000000";
 			mes "...Did you know this already?";
 			close;
 		case 2:
@@ -1541,9 +1541,10 @@ tur_dun01,160,81,4	script	Skull Stone#tur	111,{
 		next;
 		set MISC_QUEST,MISC_QUEST | 65536;
 		set TURTLE,0;
+		getexp 8000,0;
 		switch(rand(1,3)) {
 		case 1:
-			getitem 532,5; //Banana_Juice
+			getitem 31908,5; //Banana_Juice
 			mes "^3355FFYou've gained^000000";
 			mes "^3355FF5 Banana Juice^000000";
 			close;
@@ -1716,6 +1717,7 @@ tur_dun02,49,158,4	script	Turtle Pillar#tur	111,{
 		mes "^3355FFunder the pillar...^000000";
 		set MISC_QUEST,MISC_QUEST | 65536;
 		set TURTLE,0;
+		getexp 12000,0;
 		switch(rand(1,10)) {
 		case 1:
 			getitem 702,1; //Animal_Blood
@@ -1738,34 +1740,34 @@ tur_dun02,49,158,4	script	Turtle Pillar#tur	111,{
 			mes "^3355FFRed Scarf.^000000";
 			close;
 		case 5:
-			getitem 725,1; //Red_Jewel
+			getitem 7293,1; //Red_Jewel
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Sardonyx.^000000";
+			mes "^3355FFa Rose Quartz.^000000";
 			close;
 		case 6:
-			getitem 716,1; //Red_Gemstone
+			getitem 7291,1; //Red_Gemstone
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Red Gemstone.^000000";
+			mes "^3355FFan Agate.^000000";
 			close;
 		case 7:
-			getitem 716,1; //Red_Gemstone
+			getitem 7294,1; //Red_Gemstone
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Red Gemstone.^000000";
+			mes "^3355FFa Turquoise.^000000";
 			close;
 		case 8:
-			getitem 716,1; //Red_Gemstone
+			getitem 7292,1; //Red_Gemstone
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Red Gemstone.^000000";
+			mes "^3355FFa Muscovite.^000000";
 			close;
 		case 9:
-			getitem 716,1; //Red_Gemstone
+			getitem 7289,1; //Red_Gemstone
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Red Gemstone.^000000";
+			mes "^3355FFa Peridot.^000000";
 			close;
 		case 10:
-			getitem 725,1; //Red_Jewel
+			getitem 7297,1; //Red_Jewel
 			mes "^3355FFYou've gained^000000";
-			mes "^3355FFa Sardonyx.^000000";
+			mes "^3355FFa Biotite.^000000";
 			close;
 		}
 	}
@@ -1943,7 +1945,8 @@ tur_dun04,113,178,4	script	Turtle Statue#tur	111,{
 		next;
 		set MISC_QUEST,MISC_QUEST | 65536;
 		set TURTLE,0;
-		if (rand(1,20) == 7) {
+		getexp 14400,0;
+		if (rand(1,4) == 3) {
 			switch(rand(1,4)) {
 			case 1:
 				getitem 644,1; //Gift_Box
@@ -1971,10 +1974,10 @@ tur_dun04,113,178,4	script	Turtle Statue#tur	111,{
 				close;
 			}
 		}
-		getitem 604,1; //Branch_Of_Dead_Tree
+		getitem 604,5; //Branch_Of_Dead_Tree
 		mes "^3355FFInside the drawer,";
-		mes "is a Dead Branch.";
-		mes "It is now yours to keep.^000000";
+		mes "are some Dead Branches.";
+		mes "They are now yours to keep.^000000";
 		close;
 	}
 	mes "^3355FFIt is a turtle statue";
@@ -2262,12 +2265,12 @@ tur_dun03,67,130,4	script	Knight#tur4	105,{
 	mes "[Nysurea]";
 	mes "I'm beginning to think all my comrades have been killed by the monsters here...";
 	next;
-	if (BaseLevel <= 40) {
+	if (BaseLevel <= 80) {
 		mes "[Nysurea]";
 		mes "Having a";
 		mes "tough time?";
 		next;
-		if (Zeny <= 3000) {
+		if (Zeny <= 300000) {
 			mes "[Nysurea]";
 			mes "Even though you're pretty strong, sooner or later you might need a reprieve. I can send you back to Alberta right now if you want.";
 			next;
