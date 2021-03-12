@@ -719,7 +719,7 @@ pay_fild08,218,283,2	script	Mysterious Man#magum	89,{
 						mes "of wielding it. Bring ^0099FF1 Emperium^000000 and I will recognize your worth.";
 						close;
 					}
-					if (&& countitem(7019) > 2 && countitem(7021) > 2 && countitem(714) > 0) {
+					if (countitem(7019) > 2 && countitem(7021) > 2 && countitem(714) > 0) {
 						mes "[Mysterious Blacksmith]";
 						mes "Well done, adventurer.";
 						mes "All seems to be in readiness.";

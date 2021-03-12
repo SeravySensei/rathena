@@ -516,7 +516,6 @@
 6037,507,100	// Rough_File
 6038,499,100	// Neat_Report
 6039,499,100	// Piece_Of_Fish
-6040,499,100	// Some_Of_Report
 6042,499,100	// Ordinary_Branch
 6043,499,100	// Letter_From_Lugen
 6044,499,100	// Letter_From_Otto
@@ -1162,10 +1161,6 @@
 9058,467,100	// Snow_Rabbit_Egg
 11011,499,100	// Barmund_Note
 11012,499,100	// Expedition_Report
-11013,499,100	// Expedition_Report_Vol1
-11014,499,100	// Expedition_Report_Vol2
-11015,499,100	// Expedition_Report_Vol3
-11016,499,100	// Expedition_Report_Vol4
 11500,475,100	// Light_Yellow_Pot
 11501,475,100	// Light_White_Pot
 11502,475,100	// Light_Blue_Pot
@@ -1295,9 +1290,6 @@
 12311,467,100	// Large_Spray_Of_Flowers
 12313,499,100	// Protection_Of_Angel
 12314,507,100	// Noive_Box
-12319,467,100	// Strawberry_Cake
-12320,467,100	// Pineapple_Juice
-12321,467,100	// Spicy_Sandwich
 12322,499,100	// Chocolate_Pie
 12323,499,100	// N_Fly_Wing
 12324,499,100	// N_Butterfly_Wing

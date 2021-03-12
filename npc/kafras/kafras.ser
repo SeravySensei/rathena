@@ -718,3 +718,17 @@ alb2trea,59,69,5	script	Kafra Employee::kaf_alb2trea	117,{
 	savepoint "alb2trea",92,64,1,1;
 	callfunc "F_KafEnd",0,1,"at Sunken Ship";
 }
+
+// - Midgard Camp
+mid_camp,62,125,4	script	Kafra Employee::kaf_midcamp	117,{
+	cutin "kafra_01",2;
+	mes "[Kafra Employee]";
+	mes "Welcome to the";
+	mes "Kafra Corporation.";
+	mes "The Kafra services";
+	mes "are always on your side.";
+	mes "How may I assist you?";
+	callfunc "F_Kafra",5,0,1,220,0;
+	savepoint "mid_camp",59,120,1,1;
+	callfunc "F_KafEnd",0,1,"at Midgard Camp";
+}
