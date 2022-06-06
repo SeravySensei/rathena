@@ -1,0 +1,949 @@
+// Cat Paw Trading Post :: cat_yong
+//============================================================ 
+mid_camp,62,125,4	script	Cat Paw Agent	421,{
+function Catwarp;
+	if (ep13_yong1 < 1) {
+		mes "[Cat Paw Agent]";
+		mes "Welcome to Cat Trading.";
+		mes "I guess you're a first-time";
+		mes "customer, huh?";
+		next;
+		mes "[Cat Paw Agent]";
+		mes "How'd you like to make";
+		mes "a contract with us?";
+		mes "We'll guarantee that you'll";
+		mes "be provided with various";
+		mes "conveniences during your";
+		mes "stay at this expedition camp?";
+		next;
+		switch(select("Tell me more about your services.:No. thanks")) {
+		case 1:
+			mes "[Cat Paw Agent]";
+			mes "Before making a contract with us, youll have to go through a few steps to satisfy our terms and conditions.";
+			next;
+			mes "[Cat Paw Agent]";
+			mes "More clearly, you'll have to provide us something in return for our services.";
+			mes "You know what I mean, don't you?";
+			next;
+			mes "[Cat Paw Agent]";
+			mes "For more information, please speak to Agent Gyaruk standing down there.";
+			mes "I'm sure you'll find our business proposition to be very reasonable.";
+			set ep13_yong1,1;
+			close;
+		case 2:
+			mes "[Cat Paw Agent]";
+			mes "Well, feel free to come back whenever you change your mind.";
+			close;
+		}
+	}
+	else if (ep13_yong1 == 1) {
+		mes "[Cat Paw Agent]";
+		mes "For more information, please speak to Agent Gyaruk standing down there.";
+		mes "I'm sure you'll find our business proposition to be very reasonable.";
+		close;
+	}
+	else if (ep13_yong1 == 2) {
+		mes "[Cat Paw Agent]";
+		mes "Thank you for making an official contract with us.";
+		mes "You're now eligable to use our services.";
+		next;
+		mes "[Cat Paw Agent]";
+		mes "For our newcomers, we're offering a location-saving service with which you can save this camp as your returning location.";
+		mes "Would you like to save your location?";
+		set ep13_yong1,3;
+		next;
+		switch(select("Save your location:Cancel")) {
+		case 1:
+			savepoint "mid_camp",56,139,1,1;
+			mes "[Cat Paw Agent]";
+			mes "Thank you.";
+			mes "Your location has been saved.";
+			mes "You can now directly return to this camp.";
+			close;
+		case 2:
+			mes "[Cat Paw Agent]";
+			mes "Thank you for using our service.";
+			close;
+		}
+	}
+	else if ((ep13_yong1 > 2) && (ep13_yong1 < 20)) {
+		mes "[Cat Paw Agent]";
+		mes "Cat Trading's available services are as followed.";
+		mes "For additional services, please consult Agent Gyaruk.";
+		next;
+		switch(select("Save your location:Cancel")) {
+		case 1:
+			savepoint "mid_camp",56,139,1,1;
+			mes "[Cat Paw Agent]";
+			mes "Thank you.";
+			mes "Your location has been saved.";
+			mes "You can now directly return to this camp.";
+			close;
+		case 2:
+			mes "[Cat Paw Agent]";
+			mes "Thank you for using our service.";
+			close;
+		}
+	}
+	else if ((ep13_yong1 > 19) && (ep13_yong1 < 40)) {
+		mes "[Cat Paw Agent]";
+		mes "Cat Trading's available services are as followed.";
+		mes "For additional services, please consult Agent Gyaruk.";
+		next;
+		switch(select("Save your location:Use Storage:Use Guild Storage:Cancel")) {
+		case 1:
+			savepoint "mid_camp",56,139,1,1;
+			mes "[Cat Paw Agent]";
+			mes "Thank you.";
+			mes "Your location has been saved.";
+			mes "You can now directly return to this camp.";
+			close;
+		case 2:
+			if(!callfunc("F_CanOpenStorage")){
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you";
+				mes "need the Novice's";
+				mes "Basic Skill Level 6 to";
+				mes "use the Storage Service.";
+				close;
+			}
+			else if (Zeny >= 60) {
+				set Zeny, Zeny-60;
+				mes "[Cat Paw Agent]";
+				mes "Thank you.";
+				mes "Your storage will";
+				mes "be opened shortly.";
+				close2;
+				openstorage;
+				end;
+			}
+			else {
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you don't";
+				mes "have enough money?";
+				mes "Cat Trading's storage";
+				mes "service is 60 zeny.";
+				mes "It's cheap, isn't it?";
+				close;
+			}
+		case 3:
+			if (guildopenstorage()) {
+			mes "[Kafra Employee]";
+			mes "Guild storage currently in use by another member, or";
+			mes "otherwise not available.";
+			close3;
+			}
+		case 4:
+			mes "[Cat Paw Agent]";
+			mes "Thank you for using our service.";
+			close;
+		}
+	}
+	else if ((ep13_yong1 > 39) && (ep13_yong1 < 100)) {
+		mes "[Cat Paw Agent]";
+		mes "Cat Trading's available services are as followed.";
+		mes "For additional services, please consult Agent Gyaruk.";
+		next;
+		switch(select("Save your location:Use Storage:Use Guild Storage:Use Cat Warp (Midgard):Cancel")) {
+		case 1:
+			savepoint "mid_camp",56,139,1,1;
+			mes "[Cat Paw Agent]";
+			mes "Thank you.";
+			mes "Your location has been saved.";
+			mes "You can now directly return to this camp.";
+			close;
+		case 2:
+			if(!callfunc("F_CanOpenStorage")){
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you";
+				mes "need the Novice's";
+				mes "Basic Skill Level 6 to";
+				mes "use the Storage Service.";
+				close;
+			}
+			else if (Zeny >= 60) {
+				set Zeny, Zeny-60;
+				mes "[Cat Paw Agent]";
+				mes "Thank you.";
+				mes "Your storage will";
+				mes "be opened shortly.";
+				close2;
+				openstorage;
+				end;
+			}
+			else {
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you don't";
+				mes "have enough money?";
+				mes "Cat Trading's storage";
+				mes "service is 60 zeny.";
+				mes "It's cheap, isn't it?";
+				close;
+			}
+		case 3:
+			if (guildopenstorage()) {
+			mes "[Kafra Employee]";
+			mes "Guild storage currently in use by another member, or";
+			mes "otherwise not available.";
+			close3;
+			}
+		case 4:
+			mes "[Cat Paw Agent]";
+			mes "The warp service is only";
+			mes "available for customers with";
+			mes "40 or more Cat Trading Points.";
+			mes "Please remember, you can't come back easily once you move to Midgard.";
+			next;
+			if ((ep13_yong1 > 39) && (ep13_yong1 <= 49)) {
+				switch(select("Prontera -> 5500z:Cancel")) {
+					case 1: Catwarp(5500,2);
+					case 2: break;
+				}
+			}
+			else if ((ep13_yong1 > 49) && (ep13_yong1 < 60)) {
+				switch(select("Alberta -> 5500z:Prontera -> 5500z:Cancel")) {
+					case 1: Catwarp(5500,1);
+					case 2: Catwarp(5500,2);
+					case 3: break;
+				}
+			}
+			else if ((ep13_yong1 > 59) && (ep13_yong1 < 70)) {
+				switch(select("Alberta -> 5025z:Prontera -> 5025z:Izlude -> 5025z:Cancel")) {
+					case 1: Catwarp(5025,1);
+					case 2: Catwarp(5025,2);
+					case 3: Catwarp(5025,3);
+					case 4: break;
+				}
+			}
+			else if ((ep13_yong1 > 69) && (ep13_yong1 < 80)) {
+				switch(select("Alberta -> 5025z:Prontera -> 5025z:Izlude -> 5025z:Geffen -> 5025z:Cancel")) {
+					case 1: Catwarp(5025,1);
+					case 2: Catwarp(5025,2);
+					case 3: Catwarp(5025,3);
+					case 4: Catwarp(5025,4);
+					case 5: break;
+				}
+			}
+			else if ((ep13_yong1 > 79) && (ep13_yong1 < 90)) {
+				switch(select("Alberta -> 4765z:Prontera -> 4765z:Izlude -> 4765z:Geffen -> 4765z:Payon -> 4765z:Cancel")) {
+					case 1: Catwarp(4765,1);
+					case 2: Catwarp(4765,2);
+					case 3: Catwarp(4765,3);
+					case 4: Catwarp(4765,4);
+					case 5: Catwarp(4765,5);
+					case 6: break;
+				}
+			}
+			else if ((ep13_yong1 > 89) && (ep13_yong1 < 100)) {
+				switch(select("Alberta -> 4765z:Prontera -> 4765z:Izlude -> 4765z:Geffen -> 4765z:Payon -> 4765z:Morocc -> 4765z:Cancel")) {
+					case 1: Catwarp(4765,1);
+					case 2: Catwarp(4765,2);
+					case 3: Catwarp(4765,3);
+					case 4: Catwarp(4765,4);
+					case 5: Catwarp(4765,5);
+					case 6: Catwarp(4765,6);
+					case 7: break;
+				}
+			}
+			else if (ep13_yong1 > 99) {
+				switch(select("Alberta -> 4590z:Prontera -> 4590z:Izlude -> 4590z:Geffen -> 4590z:Payon -> 4590z:Morocc -> 4590z:Al De Baran -> 4590z:Cancel")) {
+					case 1: Catwarp(4590,1);
+					case 2: Catwarp(4590,2);
+					case 3: Catwarp(4590,3);
+					case 4: Catwarp(4590,4);
+					case 5: Catwarp(4590,5);
+					case 6: Catwarp(4590,6);
+					case 7: Catwarp(4590,7);
+					case 8: break;
+				}
+			}
+			else {
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you're not eligible to use the warp service. Please check your points, and then come back.";
+			}
+			close;
+		case 5:
+			mes "[Cat Paw Agent]";
+			mes "Thank you for using our service.";
+			close;
+		}
+	}
+	else if (ep13_yong1 > 99) {
+		mes "[Cat Paw Agent]";
+		mes "Cat Trading's available services are as followed.";
+		mes "For additional services, please consult Agent Gyaruk.";
+		next;
+		switch(select("Save your location:Use Storage:Use Guild Storage:Use Cat Warp (Midgard):Use Cat Warp (Jottunheim):Cancel")) {
+		case 1:
+			savepoint "mid_camp",56,139,1,1;
+			mes "[Cat Paw Agent]";
+			mes "Thank you.";
+			mes "Your location has been saved.";
+			mes "You can now directly return to this camp.";
+			close;
+		case 2:
+			if(!callfunc("F_CanOpenStorage")){
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you";
+				mes "need the Novice's";
+				mes "Basic Skill Level 6 to";
+				mes "use the Storage Service.";
+				close;
+			}
+			else if (Zeny >= 60) {
+				set Zeny, Zeny-60;
+				mes "[Cat Paw Agent]";
+				mes "Thank you.";
+				mes "Your storage will";
+				mes "be opened shortly.";
+				close2;
+				openstorage;
+				end;
+			}
+			else {
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you don't";
+				mes "have enough money?";
+				mes "Cat Trading's storage";
+				mes "service is 60 zeny.";
+				mes "It's cheap, isn't it?";
+				close;
+			}
+		case 3:
+			if (guildopenstorage()) {
+			mes "[Kafra Employee]";
+			mes "Guild storage currently in use by another member, or";
+			mes "otherwise not available.";
+			close3;
+			}
+		case 4:
+			mes "[Cat Paw Agent]";
+			mes "The warp service is only";
+			mes "available for customers with";
+			mes "40 or more Cat Trading Points.";
+			mes "Please remember, you can't come back easily once you move to Midgard.";
+			next;
+			if ((ep13_yong1 > 99) && (ep13_yong1 < 200)) {
+				switch(select("Alberta -> 4590z:Prontera -> 4590z:Izlude -> 4590z:Geffen -> 4590z:Payon -> 4590z:Morocc -> 4590z:Al De Baran -> 4590z:Cancel")) {
+					case 1: Catwarp(4590,1);
+					case 2: Catwarp(4590,2);
+					case 3: Catwarp(4590,3);
+					case 4: Catwarp(4590,4);
+					case 5: Catwarp(4590,5);
+					case 6: Catwarp(4590,6);
+					case 7: Catwarp(4590,7);
+					case 8: break;
+				}
+			}
+			else if ((ep13_yong1 > 199) && (ep13_yong1 < 250)) {
+				switch(select("Alberta -> 4170z:Prontera -> 4170z:Izlude -> 4170z:Geffen -> 4170z:Payon -> 4170z:Morocc -> 4170z:Al De Baran -> 4170z:Juno -> 4170z:Cancel")) {
+					case 1: Catwarp(4170,1);
+					case 2: Catwarp(4170,2);
+					case 3: Catwarp(4170,3);
+					case 4: Catwarp(4170,4);
+					case 5: Catwarp(4170,5);
+					case 6: Catwarp(4170,6);
+					case 7: Catwarp(4170,7);
+					case 8: Catwarp(4170,8);
+					case 9: break;
+				}
+			}
+			else if ((ep13_yong1 > 249) && (ep13_yong1 < 300)) {
+				switch(select("Alberta -> 4025z:Prontera -> 4025z:Izlude -> 4025z:Geffen -> 4025z:Payon -> 4025z:Morocc -> 4025z:Al De Baran -> 4025z:Juno -> 4025z:Einbroch -> 4025z:Cancel")) {
+					case 1: Catwarp(4025,1);
+					case 2: Catwarp(4025,2);
+					case 3: Catwarp(4025,3);
+					case 4: Catwarp(4025,4);
+					case 5: Catwarp(4025,5);
+					case 6: Catwarp(4025,6);
+					case 7: Catwarp(4025,7);
+					case 8: Catwarp(4025,8);
+					case 9: Catwarp(4025,9);
+					case 10: break;
+				}
+			}
+			else if (ep13_yong1 > 299) {
+				switch(select("Alberta -> 3970z:Prontera -> 3970z:Izlude -> 3970z:Geffen -> 3970z:Payon -> 3970z:Morocc -> 3970z:Al De Baran -> 3970z:Juno -> 3970z:Einbroch -> 3970z:Lighthalzen -> 3970z:Cancel")) {
+					case 1: Catwarp(3970,1);
+					case 2: Catwarp(3970,2);
+					case 3: Catwarp(3970,3);
+					case 4: Catwarp(3970,4);
+					case 5: Catwarp(3970,5);
+					case 6: Catwarp(3970,6);
+					case 7: Catwarp(3970,7);
+					case 8: Catwarp(3970,8);
+					case 9: Catwarp(3970,9);
+					case 10: Catwarp(3970,10);
+					case 11: break;
+				}
+			}
+			else {
+				mes "[Cat Paw Agent]";
+				mes "I'm sorry, but you're not eligible to use the warp service. Please check your points, and then come back.";
+			}
+			close;
+		case 5:
+			switch(select("Splendide Camp -> 5500z:Manuk Camp -> 5500z:Cancel")) {
+				case 1: Catwarp(5500,11);
+				case 2: Catwarp(5500,12);
+				case 3:
+					mes "[Cat Paw Agent]";
+					mes "Thank you for using our service.";
+					close;
+			}
+			close;
+		case 6:
+			mes "[Cat Paw Agent]";
+			mes "Thank you for using our service.";
+			close;
+		}
+	}
+	else {
+		mes "[Cat Paw Agent]";
+		mes "*Yawn...*";
+		mes "I want to eat fish.";
+		close;
+	}
+function Catwarp {
+	if (Zeny < getarg(0)) {
+		mes "[Cat Paw Agent]";
+		mes "Don't play with money.";
+		close;
+	}
+	close2;
+	set Zeny, Zeny-getarg(0);
+	switch(getarg(1)) {
+		case 1: warp "alberta",117,56; end;
+		case 2: warp "prontera",156,179; end;
+		case 3: if (checkre(0)) warp "izlude",128,98; else warp "izlude",91,105; end;
+		case 4: warp "geffen",119,67; end;
+		case 5: warp "payon",172,105; end;
+		case 6: warp "morocc",154,104; end;
+		case 7: warp "aldebaran",140,113; end;
+		case 8: warp "yuno",158,125; end;
+		case 9: warp "einbroch",158,301; end;
+		case 10: warp "lighthalzen",163,64; end;
+		case 11: warp "spl_fild02",32,225; end;
+		case 12: warp "man_fild02",129,61; end;
+	}
+}
+}
+
+mid_camp,72,94,4	script	Fluffy Gyaruk	421,{
+	if (ep13_yong1 < 1) {
+		mes "[Fluffy Gyaruk]";
+		mes "*Sniff Sniff* Can't you smell fish";
+		mes "around here?";
+		close;
+	}
+	else if (ep13_yong1 == 1) {
+		mes "[Fluffy Gyaruk]";
+		mes "Hmm?";
+		mes "Oh, did the Cat Paw Agent send you?";
+		next;
+		select("Yes.");
+		mes "[Fluffy Gyaruk]";
+		mes "Oh, okay...";
+		mes "Well, where should I begin.";
+		mes "(Mumble Mumble)";
+		next;
+		select("What do you guys do?");
+		mes "[Fluffy Gyaruk]";
+		mes "Oh, sure.";
+		mes "I can start from there.";
+		mes "You used Kafra Corporation services on the Midgard Continent, didn't you?";
+		next;
+		select("Yes.");
+		mes "[Fluffy Gyaruk]";
+		mes "Cat Trading is a new trading company based on this undeveloped continent.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "Well, frankly we wanted to join the Midgard Market, but it was too competitive...";
+		mes "Not only that, they don't have enough fish for all of us either... (Mumble Mumble)";
+		next;
+		select("What services do you offer?");
+		mes "[Fluffy Gyaruk]";
+		mes "*Purr* Oh, our service range is similar to the Kafra's Location Saving, Storage Service, Warp Service, and more.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "The only difference is that, our services are limited depending on the customer's credit.";
+		next;
+		select("Credit?");
+		mes "[Fluffy Gyaruk]";
+		mes "As you might know already, we're a considerably small company struggling to make ends meet in this niche market.";
+		mes "We desperately need your support to grow.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "You can increase your credit by helping us secure our food or by collecting minerals.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "The more credits you earn, the more services you can use. You can also apply for special events.";
+		mes "Say, how'd you like to make a membership contract with us?";
+		next;
+		switch(select("Sure.:I need to think it over.")) {
+		case 1:
+			mes "[Fluffy Gyaruk]";
+			mes "Excellent! Thank you for joining the Cat Trading membership service.";
+			mes "We hope you'll support our exploration of this unknown land.";
+			next;
+			mes "[Fluffy Gyaruk]";
+			mes "Please go speak to the Cat Paw Agent over there to use a basic service.";
+			mes "Oh, and please come back afterwards.";
+			set ep13_yong1,2;
+			close;
+		case 2:
+			mes "[Fluffy Gyaruk]";
+			mes "How disappointing!";
+			mes "But I understand.";
+			close;
+		}
+	}
+	else if (ep13_yong1 == 3) {
+		mes "[Fluffy Gyaruk]";
+		mes "We offer one service to new customers.";
+		mes "If you want to use more services, you must do some things for us.";
+		next;
+		select("What kind of things?");
+		mes "[Fluffy Gyaruk]";
+		mes "For now...";
+		mes "Please catch the main dish of the Cat Trading employees, fish, and collect minerals once every day.";
+		mes "Your credit will increase each day if you do those things.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "Of course, we'll reward you with a reasonable amount of EXP for the services.";
+		next;
+		mes "[Fluffy Gyaruk]";
+		mes "This is a good opportunity to increase your credit and EXP ate the same time.";
+		mes "Doesn't that sound like a win-win situation?";
+		mes "Would you like to start now?";
+		next;
+		switch(select("Sure.:I need to go prepare first.")) {
+		case 1:
+			mes "[Fluffy Gyaruk]";
+			mes "Excellent.";
+			mes "For more information about fishing and mining, please speak to the two Cat Agents standing at the river over there.";
+			set ep13_yong1,4;
+			close;
+		case 2:
+			mes "[Fluffy Gyaruk]";
+			mes "No problem.";
+			mes "Please take your time.";
+			close;
+		}
+	}
+	else if (ep13_yong1 == 4) {
+		mes "[Fluffy Gyaruk]";
+		mes "For more information about fishing and mining, please speak to the two Cat Agents standing at the river over there.";
+		close;
+	}
+	else {
+		mes "[Fluffy Gyaruk]";
+		mes "Your current credit points with us are ^0000FF" + ep13_yong1 + "^000000.";
+		next;
+		switch(select("How can I increase my points?:I'm not interested.")) {
+		case 1:
+			mes "[Cat Paw Agent]";
+			mes "You can increase them daily by fishing and mining, you need to submit caught Pieces of Fish to Gorurung and minerals to the Mining Agent.";
+			close;
+		case 2:
+			close;
+		}
+	}
+}
+
+mid_camp,69,144,0	script	Ferocious Gorurug	421,{
+	if (checkquest(12060,PLAYTIME) == -1) {
+		if (ep13_yong1 < 4) {
+			mes "[Ferocious Gorurug]";
+			mes "Grrr....";
+			next;
+			mes "A cat purring like a lion";
+			mes "is looking into the water.";
+			close;
+		}
+		else if (ep13_yong1 == 4) {
+			mes "[Ferocious Gorurug]";
+			mes "I'm busy.";
+			mes "I need to catch fish.";
+			next;
+			select("Gyaruk has sent me.");
+			mes "[Ferocious Gorurug]";
+			mes "Gyaruk sent you?";
+			mes "Oh, you are here to fish? *Purr*";
+			next;
+			select("What should I do?");
+			mes "[Ferocious Gorurug]";
+			mes "You need to catch fish. There are schools of fish in the waters.";
+			mes "It's hard to see them but if you use your cursor to click around, you should be able to catch them.";
+			next;
+			mes "[Ferocious Gorurug]";
+			mes "It's easier to fish in the water outside the town.";
+			mes "If you're not afraid of monsters, you can go fishing over there.";
+			mes "*Purr*";
+			next;
+			mes "[Ferocious Gorurug]";
+			mes "Now, let me teach you how to fish.";
+			mes "It's simple: bring your cursor to a school of fish, and then click it to grab them.";
+			next;
+			mes "[Ferocious Gorurug]";
+			mes "You'll have a hard time to catch them at first, but you'll get better.";
+			mes "It gets easier with a bit of practice.";
+			set ep13_yong1,5;
+			close;
+		}
+		else if (ep13_yong1 == 5) {
+			if (countitem(6039) > 9) {
+				mes "[Ferocious Gorurug]";
+				mes "You've brough Pieces of Fish!";
+				mes "GOOD JOB!";
+				delitem 6039,10; //Piece_Of_Fish
+				getexp (checkre(3))?20000:30000,0;
+				set ep13_yong1,10;
+				setquest 12060;
+				next;
+				mes "^0000ffYou gain EXP "+(checkre(3)?"20,000":"30,000")+"^000000";
+				close;
+			}
+			else {
+				mes "[Ferocious Gorurug]";
+				mes "Bring your cursor to a school of fish, then click it to grab them.";
+				mes "Don't move while doing it!";
+				close;
+			}
+		}
+		else if ((ep13_yong1 > 5) && (ep13_yong1 < 20)) {
+			if (countitem(6039) > 9) {
+				mes "[Ferocious Gorurug]";
+				mes "You've brough Pieces of Fish!";
+				mes "GOOD JOB!";
+				delitem 6039,10; //Piece_Of_Fish
+				getexp 15000,0;
+				setquest 12060;
+				set ep13_yong1,ep13_yong1+1;
+				next;
+				mes "^0000ffYou gain EXP 15,000^000000";
+				close;
+			}
+			else {
+				mes "[Ferocious Gorurug]";
+				mes "Do you want to fish again?";
+				mes "Don't forget to bring me";
+				mes "Pieces of Fish if you catch them.";
+				close;
+			}
+		}
+		else if ((ep13_yong1 > 19) && (ep13_yong1 < 40)) {
+			if (countitem(6039) > 9) {
+				mes "[Ferocious Gorurug]";
+				mes "You've brough Pieces of Fish!";
+				mes "GOOD JOB!";
+				delitem 6039,10; //Piece_Of_Fish
+				getexp 15000,0;
+				setquest 12060;
+				set ep13_yong1,ep13_yong1+1;
+				next;
+				mes "^0000ffYou gain EXP 15,000^000000";
+				close;
+			}
+			else {
+				mes "[Ferocious Gorurug]";
+				mes "Hey, I've been waiting for you!";
+				mes "Good luck fishing today!";
+				close;
+			}
+		}
+		else if ((ep13_yong1 > 39) && (ep13_yong1 < 60)) {
+			if (countitem(6039) > 9) {
+				mes "[Ferocious Gorurug]";
+				mes "You've brough Pieces of Fish!";
+				mes "GOOD JOB!";
+				delitem 6039,10; //Piece_Of_Fish
+				getexp 15000,0;
+				setquest 12060;
+				set ep13_yong1,ep13_yong1+1;
+				next;
+				mes "^0000ffYou gain EXP 15,000^000000";
+				close;
+			}
+			else {
+				mes "Gorurug looks happy to see you.";
+				next;
+				mes "[Ferocious Gorurug]";
+				mes "What do you want to catch today? *Purr*";
+				close;
+			}
+		}
+		else if (ep13_yong1 > 59) {
+			npcskill "AL_HEAL",8,50,50;
+			if (countitem(6039) > 9) {
+				mes "[Ferocious Gorurug]";
+				mes "You've brough Pieces of Fish!";
+				mes "GOOD JOB!";
+				delitem 6039,10; //Piece_Of_Fish
+				getexp 15000,0;
+				setquest 12060;
+				set ep13_yong1,ep13_yong1+1;
+				next;
+				mes "^0000ffYou gain EXP 1,500^000000";
+				close;
+			}
+			else {
+				mes "Gorurung welcomes you with a happy purr.";
+				next;
+				mes "[Ferocious Gorurug]";
+				mes "Welcome!";
+				mes "You're here to give me fishes, aren't you?";
+				close;
+			}
+		}
+		else {
+			mes "Ferocious Gorurug is asleep.";
+			close;
+		}
+	}
+	else if ((checkquest(12060,PLAYTIME) == 0) || (checkquest(12060,PLAYTIME) == 1)) {
+		mes "[Ferocious Gorurug]";
+		mes "*Yawn*";
+		mes "I'm sorry, but I'm off-duty.";
+		mes "I can't accept any fish right now.";
+		mes "Come back tomorrow, alright?";
+		close;
+	}
+	else {
+		erasequest 12060;
+		mes "[Ferocious Gorurug]";
+		mes "*Purr*";
+		mes "Another day has started, back to work!";
+		mes "You can now bring me fish if you catch them.";
+		close;
+	}
+}
+
+spl_fild02,314,165,0	script	School of Fish#1::Fishinghole	844,{
+	if ((checkquest(12060,PLAYTIME) == -1) && (countitem(6039) < 20)) {
+		specialeffect2 EF_BUBBLE;
+		specialeffect2 EF_INVENOM;
+		set .@fcast,15;
+		if (isequipped(2550)) //Fisher's_Muffler
+			set .@fcast,.@fcast - 2;
+		if (isequipped(2443)) //Fish_Shoes
+			set .@fcast,.@fcast - 2;
+		if (isequipped(2764)) //Small_Fishing_Rod
+			set .@fcast,.@fcast - 3;
+		if (isequipped(2775)) //Lure
+			set .@fcast,.@fcast - 1;
+		if (isequipped(1599)) //Ahura_Mazda
+			set .@fcast,.@fcast - 3;
+		if (isequipped(2199)) //Angra_Manyu
+			set .@fcast,.@fcast - 4;
+		progressbar "ffff00",.@fcast;
+		if (ep13_1_rhea == 13) {
+			if (rand(1,20) == 2) {
+				getitem 6037,1; //Rough_File
+				set ep13_1_rhea,14;
+				specialeffect EF_BUBBLE;
+				mapannounce strcharinfo(3),strcharinfo(0) + " has caught a Messy File!!",bc_map,"0xff77ff";
+			}
+		}
+		set .@rhea_ran,rand(1,70);
+		if (.@rhea_ran < 20) getitem 6039,1; //Piece_Of_Fish
+		else if (.@rhea_ran == 20) getitem 908,1; //Spawn
+		else if (.@rhea_ran == 21) getitem 909,1; //Jellopy
+		else if (.@rhea_ran == 22) getitem 963,1; //Sharp_Scale
+		else if (.@rhea_ran == 23) getitem 956,1; //Gill
+		else if (.@rhea_ran == 24) getitem 6049,1; //Marlin
+		else if (.@rhea_ran == 25) getitem 918,1; //Sticky_Webfoot
+		else if (.@rhea_ran == 26) getitem 960,1; //Nipper
+		else if (.@rhea_ran == 27) getitem 910,1; //Garlet
+		else if (.@rhea_ran == 28) getitem 938,1; //Sticky_Mucus
+		else if ((.@rhea_ran > 28) && (.@rhea_ran < 40)) getitem 7049,1; //Stone
+		else {
+			mes "Nothing was caught.";
+			close;
+		}
+		if (rand(1,200) == 3) {
+			getitem 644,1; //Gift_Box
+			mapannounce strcharinfo(3),strcharinfo(0) + " has caught a Gift Box!!",bc_map,"0x00ffff";
+		}
+		if (rand(1,500) == 3) {
+			getitem 603,1; //Old_Blue_Box
+			mapannounce strcharinfo(3),strcharinfo(0) + " has caught an Old Blue Box!!",bc_map,"0x00ffff";
+		}
+		if (rand(1,3000) == 3) {
+			getitem 617,1; //Old_Violet_Box
+			mapannounce strcharinfo(3),strcharinfo(0) + " has caught an Old Purple Box!!",bc_map,"0x44ff44";
+		}
+		end;
+	}
+	else {
+		mes "Fish are swimming in the water.";
+		close;
+	}
+}
+
+spl_fild02,321,169,0	duplicate(Fishinghole)	School of Fish#2	844
+spl_fild02,326,171,0	duplicate(Fishinghole)	School of Fish#3	844
+mid_camp,75,135,0	duplicate(Fishinghole)	School of Fish#4	844
+
+mid_camp,66,122,55	script	Henry Clifford	712,{
+	if (countitem(6049) > 0) {
+		mes "[Henry Clifford]";
+		mes "Congratulations, you've caught a precious Marlin.";
+		mes "I'll give you 2 Cat Trading Points in exchange for your Marlin.";
+		next;
+		mes "[Henry Clifford]";
+		mes "I got them from a black marketer,";
+		mes "but I guarantee the authenticity of these points.";
+		mes "Are you interested?";
+		next;
+		switch(select("Yes.:No, thanks.")) {
+		case 1:
+			delitem 6049,1; //Marlin
+			set ep13_yong1,ep13_yong1+2;
+			mes "[Henry Clifford]";
+			mes "Thank you for the Marlin.";
+			mes "I've given you the points in return.";
+			mes "You may go check your points through the Cat Paw Agent.";
+			close;
+		case 2:
+			mes "[Henry Clifford]";
+			mes "Alright, if you say so.";
+			mes "But feel free to come back if you change your mind.";
+			close;
+		}
+	}
+	else {
+		mes "[Henry Clifford]";
+		mes "You may have hear";
+		mes "about this already, but";
+		mes "this river is full of rare fish.";
+		mes "I've followed these cats";
+		mes "to see if the rumor is true.";
+		next;
+		mes "[Henry Clifford]";
+		mes "Marlin, the legendary silver";
+		mes "fish is the best prey of all.";
+		mes "You can also catch precious";
+		mes "treasure floating in the river.";
+		next;
+		mes "[Henry Clifford]";
+		mes "If you happen to catch a Marlin,";
+		mes "please trade it with me.";
+		mes "I'll give you something";
+		mes "nice in return.";
+		close;
+	}
+}
+
+mid_camp,88,100,55	script	Cat Paw Mining Agent	876,{
+	if (checkquest(12062,PLAYTIME) == -1) {
+		if ((countitem(6048) > 2) && (ep13_yong1 > 9)) {
+			mes "[Cat Paw Mining Agent]";
+			mes "Oh, wow~";
+			mes "Thank you for collecting minerals for me.";
+			next;
+			delitem 6048,3; //Unidentified_Mineral
+			getexp (checkre(3))?20000:30000,0;
+			setquest 12062;
+			set ep13_yong1,ep13_yong1+1;
+			select("I'm freezing! Take them quickly.");
+			mes "[Cat Paw Mining Agent]";
+			mes "Yes, yes~ I've received the mineral samples.";
+			mes "I'll go ahead and add points to your credit.";
+			close;
+		}
+		else {
+			mes "[Cat Paw Mining Agent]";
+			mes "To collect minerals,";
+			mes "we have to go to the";
+			mes "frozen land to the east.";
+			mes "But for short-haired cats";
+			mes "like me, the weather";
+			mes "is unbearable.";
+			next;
+			mes "[Cat Paw Mining Agent]";
+			mes "If the weather";
+			mes "is good tomorrow,";
+			mes "I might try to go,";
+			mes "but not today.";
+			mes "It looks freezing to";
+			mes "you too, doesn't it?";
+			close;
+		}
+	}
+	else if ((checkquest(12062,PLAYTIME) == 0) || (checkquest(12062,PLAYTIME) == 1)) {
+		mes "[Cat Paw Mining Agent]";
+		mes "I hope you'll bring me minerals again tomorrow...";
+		mes "If you can. It's much better to wait for you to do it than go there on my own.";
+		close;
+	}
+	else {
+		erasequest 12062;
+		mes "[Cat Paw Mining Agent]";
+		mes "Umm... It's time to collect minerals.";
+		mes "How'd you like to collect minerals for me?";
+		close;
+	}
+}
+
+
+-	script	Mysterious Rock#0::manukrock	-1,{
+	if ((countitem(6048) < 3) && (checkquest(12062,PLAYTIME) == -1)) {
+		specialeffect2 EF_REPAIRWEAPON;
+		progressbar "ffff00",10;
+		set .@rhea_ran,rand(1,20);
+		if (.@rhea_ran < 13) getitem 7049,1; //Stone
+		else if (.@rhea_ran == 13) getitem 990,1; //Boody_Red
+		else if (.@rhea_ran == 14) getitem 991,1; //Crystal_Blue
+		else if (.@rhea_ran == 15) getitem 992,1; //Wind_Of_Verdure
+		else if (.@rhea_ran == 16) getitem 993,1; //Yellow_Live
+		else getitem 6048,1; //Unidentified_Mineral
+		initnpctimer;
+		disablenpc strnpcinfo(0);
+		end;
+	}
+	else {
+		mes "This rock contains unidentified minerals.";
+		mes "It's not possible to mine more than the limit.";
+		close;
+	}
+	end;
+
+OnTimer120000:
+	enablenpc strnpcinfo(0);
+	stopnpctimer;
+	end;
+}
+man_fild01,180,170,0	duplicate(manukrock)	Mysterious Rock#1	844
+man_fild01,147,157,0	duplicate(manukrock)	Mysterious Rock#2	844
+man_fild01,114,174,0	duplicate(manukrock)	Mysterious Rock#3	844
+man_fild01,92,155,0	duplicate(manukrock)	Mysterious Rock#4	844
+man_fild01,170,318,0	duplicate(manukrock)	Mysterious Rock#5	844
+man_fild01,146,269,0	duplicate(manukrock)	Mysterious Rock#6	844
+man_fild01,118,238,0	duplicate(manukrock)	Mysterious Rock#7	844
+man_fild01,70,246,0	duplicate(manukrock)	Mysterious Rock#8	844
+man_fild01,64,197,0	duplicate(manukrock)	Mysterious Rock#9	844
+man_fild03,82,134,0	duplicate(manukrock)	Mysterious Rock#10	844
+man_fild03,67,160,0	duplicate(manukrock)	Mysterious Rock#11	844
+man_fild03,66,171,0	duplicate(manukrock)	Mysterious Rock#12	844
+man_fild03,81,198,0	duplicate(manukrock)	Mysterious Rock#13	844
+man_fild03,82,216,0	duplicate(manukrock)	Mysterious Rock#14	844
+man_fild03,98,226,0	duplicate(manukrock)	Mysterious Rock#15	844
+man_fild03,104,248,0	duplicate(manukrock)	Mysterious Rock#16	844
+man_fild03,91,272,0	duplicate(manukrock)	Mysterious Rock#17	844
+man_fild03,95,301,0	duplicate(manukrock)	Mysterious Rock#18	844
+
+sec_in02,80,171,0	script	Piece of crack#sec	406,{
+	callfunc "F_GM_NPC";
+	mes "1~3000";
+	input .@input;
+	next;
+	if (.@input < 1 || .@input > 3000) {
+		mes "Cat trading Point adjust";
+		mes "You can enter the number between 1~3000.";
+		close;
+	} else {
+		set ep13_yong1,.@input;
+		close;
+	}
+}

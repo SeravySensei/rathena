@@ -632,13 +632,13 @@ OnTouch_:
 	} else if (hg_herb == 9)
 		end;
 	else if (hg_herb == 12) {
-		mes "^3355FFYou find an";
-		mes "Old Blue Box deep";
+		mes "^3355FFYou find some";
+		mes "Old Blue Boxes deep";
 		mes "inside the drawer.^000000";
 		close2;
 		specialeffect EF_CONE;
 		set hg_herb,13;
-		getitem 603,1; //Old Blue Box
+		getitem 603,3; //Old Blue Box
 		getexp (checkre(3))?5000:50000,0;
 		completequest 8056;
 	} else {
@@ -2841,13 +2841,13 @@ hu_in01,256,40,3	script	Herico	897,{
 			switch(select("I brought Handcuffs:Regarding Sage Varmunt's documents")) {
 			case 1:
 				mes "[Herico]";
-				mes "I am willing to exchange 1 of level 4 food with 100 Handcuffs.";
+				mes "I am willing to exchange 1 of level 4 food with 20 Handcuffs.";
 				next;
 				if(select("Exchange:Cancel.") == 1) {
-					if (countitem(7345) > 99) {
+					if (countitem(7345) > 19) {
 						mes "[Herico]";
 						mes "There you go, thank you for your trouble.";
-						delitem 7345,100; //Handcuffs
+						delitem 7345,20; //Handcuffs
 						switch(rand(1,6)) {
 						case 1:
 							getitem 12044,1; //Herb Marinade Beef
@@ -2870,7 +2870,7 @@ hu_in01,256,40,3	script	Herico	897,{
 						}
 					} else {
 						mes "[Herico]";
-						mes "I don't think that you have brought me 100 Handcuffs.";
+						mes "I don't think that you have brought me 20 Handcuffs.";
 					}
 				}
 				close2;
@@ -4860,7 +4860,7 @@ hugel,196,164,3	script	El Schatt	50,{
 		set hg_memory,12;
 		getexp (checkre(3))?8000:50000,0;
 		completequest 8063;
-		getitem 603,1; //Old Blue Box
+		getitem 603,3; //Old Blue Box
 		mes "[El Schatt]";
 		mes "Oh... Oh dear";
 		mes "sweet God... My...";

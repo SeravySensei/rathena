@@ -1086,7 +1086,7 @@
 668	//Handsei
 669	//Rice_Cake_Soup
 678	//Poison_Bottle
-679	//Gold_Pill
+679  // Gold_Pill
 681	//Memory_Of_Wedding
 682	//Realgar_Wine
 683	//Exorcize_Herb
@@ -1345,7 +1345,7 @@
 580	//Bread
 581	//Mushroom
 582	//Orange
-584	//Fish_Ball_Soup
+584  // Fish_Ball_Soup
 587	//Prickly_Fruit_
 591	//Caviar_Pancake
 592	//Jam_Pancake

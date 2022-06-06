@@ -6160,8 +6160,9 @@ lhz_in01,286,226,3	script	Secretary Slierre#li	4_F_ZONDAGIRL,{
 			mes "our gratitude, adventurer.";
 			set lhz_curse,31;
 			changequest 2094,2095;
-			getitem 603,1; //Old_Blue_Box
-			getitem 12016,10; //Speed_Up_Potion
+			getitem 617,3; //Old Purple Box
+			getitem 603,10; //Old_Blue_Box
+			getitem 12016,25; //Speed_Up_Potion
 			next;
 			mes "[Sueii Slierre]";
 			mes "Let me promise you";
@@ -6942,7 +6943,7 @@ lighthalzen,179,170,4	script	Ordinary Man	4W_M_02,{
 		mes "we weren't able to accomplish";
 		mes "what we set out to do. Still...";
 		set lhz_boss,44;
-		getitem 617,1; //Old_Violet_Box
+		getitem 617,5; //Old_Violet_Box
 		getexp (checkre(3))?180000:1800000,0;
 		completequest 12028;
 		next;
